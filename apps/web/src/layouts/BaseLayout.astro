@@ -1,0 +1,37 @@
+---
+import Seo from '@/components/seo/Seo.astro';
+import SkipLink from '@/components/global/SkipLink.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import '@/styles/tokens.css';
+import '@/styles/reset.css';
+import '@/styles/global.css';
+import '@/styles/utilities.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  noindex?: boolean;
+}
+
+const { title, description, path = '/', noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <Seo title={title} description={description} path={path} noindex={noindex} />
+  </head>
+  <body>
+    <SkipLink />
+    <SiteHeader />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

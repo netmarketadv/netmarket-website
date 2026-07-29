@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Pagina non trovata"
+  description="La pagina richiesta non è disponibile."
+  path="/404/"
+  noindex
+>
+  <section class="simple-page" aria-labelledby="page-title">
+    <h1 id="page-title">Pagina non trovata</h1>
+    <p>La risorsa richiesta non è disponibile in questo ambiente.</p>
+    <a class="button-link" href="/">Torna alla home</a>
+  </section>
+</BaseLayout>

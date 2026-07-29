@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Ambiente di sviluppo"
+  description="Nuovo ambiente di sviluppo della piattaforma web Netmarket."
+  path="/"
+>
+  <section class="staging-hero" aria-labelledby="page-title">
+    <div class="staging-hero__content">
+      <p class="eyebrow">Piattaforma web headless</p>
+      <h1 id="page-title">Netmarket</h1>
+      <p class="payoff">Comunichiamo valore.</p>
+      <p class="lede">
+        Questo è il nuovo ambiente di sviluppo statico per la futura architettura Astro e WordPress
+        headless.
+      </p>
+      <dl class="status-list" aria-label="Stato tecnico iniziale">
+        <div>
+          <dt>Ambiente</dt>
+          <dd>staging/local</dd>
+        </div>
+        <div>
+          <dt>CMS previsto</dt>
+          <dd>cms.netmarket.it</dd>
+        </div>
+        <div>
+          <dt>Indicizzazione</dt>
+          <dd>disattivata fuori dalla produzione</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</BaseLayout>
