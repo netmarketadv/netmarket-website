@@ -1,0 +1,8 @@
+module.exports = {
+  singleQuote: true,
+  semi: true,
+  trailingComma: 'none',
+  printWidth: 100,
+  plugins: ['prettier-plugin-astro'],
+  overrides: [{ files: '*.astro', options: { parser: 'astro' } }]
+};
