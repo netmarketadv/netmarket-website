@@ -26,7 +26,7 @@ jobs:
           test "$TARGET_HOST" = "staging.netmarket.it"
           test "$PUBLIC_SITE_URL" = "https://staging.netmarket.it"
           test "$PUBLIC_DEPLOY_ENV" = "staging"
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11.13.0
       - uses: actions/setup-node@v4
