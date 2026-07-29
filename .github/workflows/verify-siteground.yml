@@ -8,7 +8,7 @@ jobs:
     environment: staging
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Read-only SSH verification
         run: infrastructure/scripts/verify-siteground-connection.sh
         env:
