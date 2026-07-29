@@ -20,7 +20,7 @@ jobs:
       PUBLIC_DEPLOY_ENV: ${{ vars.PUBLIC_DEPLOY_ENV }}
       TARGET_HOST: staging.netmarket.it
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Guard staging target
         run: |
           test "$TARGET_HOST" = "staging.netmarket.it"
