@@ -1,0 +1,55 @@
+name: Deploy Staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Esegui solo simulazione
+        required: true
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+jobs:
+  deploy:
+    environment: staging
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_CMS_URL: ${{ vars.PUBLIC_CMS_URL }}
+      PUBLIC_DEPLOY_ENV: ${{ vars.PUBLIC_DEPLOY_ENV }}
+      TARGET_HOST: staging.netmarket.it
+    steps:
+      - uses: actions/checkout@v4
+      - name: Guard staging target
+        run: |
+          test "$TARGET_HOST" = "staging.netmarket.it"
+          test "$PUBLIC_SITE_URL" = "https://staging.netmarket.it"
+          test "$PUBLIC_DEPLOY_ENV" = "staging"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      - name: Check SSH secrets
+        run: |
+          test -n "${{ secrets.SG_SSH_HOST }}"
+          test -n "${{ secrets.SG_SSH_PORT }}"
+          test -n "${{ secrets.SG_SSH_USER }}"
+          test -n "${{ secrets.SG_SSH_PRIVATE_KEY }}"
+          test -n "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
+          test -n "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+      - name: Dry-run deploy plan
+        if: ${{ inputs.dry_run == 'true' }}
+        run: infrastructure/scripts/deploy-staging.sh --dry-run --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+      - name: Deploy
+        if: ${{ inputs.dry_run == 'false' }}
+        run: infrastructure/scripts/deploy-staging.sh --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+      - name: Health check
+        run: infrastructure/scripts/health-check.sh --url https://staging.netmarket.it

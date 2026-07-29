@@ -1,0 +1,41 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          PUBLIC_SITE_URL: https://staging.netmarket.it
+          PUBLIC_CMS_URL: https://cms.netmarket.it
+          PUBLIC_DEPLOY_ENV: staging
+          CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      - run: pnpm php:lint
+      - name: Composer checks when dependencies are available
+        working-directory: apps/wordpress/plugins/netmarket-headless-core
+        run: |
+          if [ -f composer.lock ]; then
+            composer install --no-interaction --prefer-dist
+            composer run phpcs
+            composer run phpstan
+          else
+            echo "composer.lock non presente: PHPCS/PHPStan predisposti ma non eseguiti in CI."
+          fi
+      - run: pnpm secrets:scan
+      - run: git diff --exit-code
