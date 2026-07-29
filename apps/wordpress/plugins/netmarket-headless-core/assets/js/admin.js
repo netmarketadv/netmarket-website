@@ -1,0 +1,1 @@
+window.nmhc = window.nmhc || {};
