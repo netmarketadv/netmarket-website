@@ -1,22 +1,30 @@
 # Modello Contenuti
 
-CPT attivi:
+Il modello attivo e definito in `docs/content-architecture-v2.md`, `docs/content-relationship-map.md` e `docs/content-relations.md`.
 
-- `nm_service`: servizi.
-- `nm_case_study`: casi studio.
-- `nm_landing`: landing page.
+## CPT Attivi
 
-CPT predisposti:
+- `nm_service`: servizi, esposti dal frontend come `/servizi/[slug]/`.
+- `nm_case_study`: casi studio/progetti, esposti come `/progetti/[slug]/`.
+- `nm_client`: clienti, entita CMS non pubblicamente queryable.
+- `nm_person`: persone, team, autori e contributor.
+- `nm_landing`: landing controllate per campagne.
+- `nm_testimonial`: testimonianze editoriali.
+- `nm_resource`: risorse e download futuri.
 
-- `nm_testimonial`.
-- `nm_resource`.
+## Native WordPress
 
-Articoli e pagine istituzionali restano tipi nativi WordPress.
+- `page`: homepage, agenzia, contatti, legal e pagine istituzionali.
+- `post`: insight/articoli sotto `/insight/[slug]/`, con metadati custom solo per deck, Person autore, featured/priority e relazioni.
 
-Tassonomie:
+## Tassonomie
 
-- `nm_sector`: servizi e casi studio.
-- `nm_capability`: servizi e casi studio.
-- `nm_technology`: casi studio.
+- `nm_sector`: verticali reali, associata a service, case study, client, post e resource.
+- `nm_capability`: competenze/metodi, associata a service, case study, post e resource.
+- `nm_technology`: tecnologie/prodotti/piattaforme, associata a service, case study, post e resource.
 
-I campi custom sono definiti in modo dichiarativo e namespaced con prefisso meta `nmhc_`.
+I termini non vengono popolati automaticamente.
+
+## Relazioni
+
+Le relazioni multi-valore usano meta multiple WordPress, non array serializzati. La proprieta di ogni relazione e documentata in `docs/content-relationship-map.md`.

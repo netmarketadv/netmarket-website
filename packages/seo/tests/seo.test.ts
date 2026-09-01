@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { absoluteCanonical, buildTitle, organizationJsonLd, personJsonLd } from '../src/index';
+import {
+  absoluteCanonical,
+  articleJsonLd,
+  buildTitle,
+  caseStudyJsonLd,
+  organizationJsonLd,
+  personJsonLd,
+  serviceJsonLd
+} from '../src/index';
 
 describe('seo utilities', () => {
   it('builds titles', () => {
@@ -24,7 +32,8 @@ describe('seo utilities', () => {
         familyName: 'Toso',
         jobTitle: 'Digital Developer',
         sameAs: ['https://www.linkedin.com/in/enricopaolotoso/'],
-        image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/enrico-toso-digital-developer-netmarket.jpg'
+        image:
+          'https://cms.netmarket.it/wp-content/uploads/2026/09/enrico-toso-digital-developer-netmarket.jpg'
       })
     ).toMatchObject({
       '@type': 'Person',
@@ -34,5 +43,37 @@ describe('seo utilities', () => {
       },
       sameAs: ['https://www.linkedin.com/in/enricopaolotoso/']
     });
+  });
+
+  it('links service schema to the Netmarket organization', () => {
+    expect(
+      serviceJsonLd(
+        'https://staging.netmarket.it',
+        'Siti web',
+        'Siti aziendali chiari e veloci.',
+        'https://staging.netmarket.it/servizi/siti-web/'
+      )
+    ).toMatchObject({
+      '@type': 'Service',
+      provider: { '@id': 'https://staging.netmarket.it/#organization' },
+      areaServed: 'Italy'
+    });
+  });
+
+  it('creates article and case study structured data without fake schema types', () => {
+    expect(
+      articleJsonLd({
+        title: 'Black Friday 2025',
+        description: 'Guida per PMI.',
+        url: 'https://staging.netmarket.it/insight/black-friday-2025/'
+      })
+    ).toMatchObject({ '@type': 'Article' });
+    expect(
+      caseStudyJsonLd(
+        'Sirene Blu',
+        'App mobile e programma fedelta.',
+        'https://staging.netmarket.it/progetti/sirene-blu/'
+      )
+    ).toMatchObject({ '@type': 'CreativeWork' });
   });
 });

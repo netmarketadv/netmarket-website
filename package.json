@@ -16,6 +16,7 @@
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @netmarket/web test:e2e",
     "smoke:staging": "node infrastructure/scripts/smoke-staging.mjs",
+    "content:validate": "node infrastructure/scripts/content-validate.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "php:lint": "find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",

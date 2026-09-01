@@ -19,6 +19,22 @@ export interface PersonMeta {
   image?: string;
 }
 
+export interface OrganizationMeta {
+  name?: string;
+  legalName?: string;
+  url?: string;
+  vatId?: string;
+}
+
+export interface ArticleMeta {
+  title: string;
+  description: string;
+  url: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  author?: PersonMeta;
+}
+
 export function buildTitle(title: string, siteName = 'Netmarket'): string {
   return title === siteName ? siteName : `${title} | ${siteName}`;
 }
@@ -27,13 +43,18 @@ export function absoluteCanonical(siteUrl: string, path = '/'): string {
   return new URL(path, siteUrl).toString();
 }
 
-export function organizationJsonLd(siteUrl: string): Record<string, unknown> {
+export function organizationJsonLd(
+  siteUrl: string,
+  organization: OrganizationMeta = {}
+): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': absoluteCanonical(siteUrl, '/#organization'),
-    name: 'Netmarket',
-    url: siteUrl
+    name: organization.name ?? 'Netmarket',
+    ...(organization.legalName ? { legalName: organization.legalName } : {}),
+    ...(organization.vatId ? { vatID: organization.vatId } : {}),
+    url: organization.url ?? siteUrl
   };
 }
 
@@ -73,22 +94,44 @@ export function breadcrumbJsonLd(
 }
 
 export function serviceJsonLd(
+  siteUrl: string,
   name: string,
   description: string,
   url: string
 ): Record<string, unknown> {
-  return { '@context': 'https://schema.org', '@type': 'Service', name, description, url };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name,
+    description,
+    url,
+    provider: { '@id': absoluteCanonical(siteUrl, '/#organization') },
+    areaServed: 'Italy'
+  };
 }
 
-export function articleJsonLd(
+export function articleJsonLd(article: ArticleMeta, siteUrl?: string): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.description,
+    url: article.url,
+    ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
+    ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
+    ...(article.author && siteUrl ? { author: personJsonLd(siteUrl, article.author) } : {})
+  };
+}
+
+export function caseStudyJsonLd(
   title: string,
   description: string,
   url: string
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: title,
+    '@type': 'CreativeWork',
+    name: title,
     description,
     url
   };

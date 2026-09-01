@@ -10,9 +10,9 @@ final class Registry
     public function definitions(): array
     {
         return [
-            new TaxonomyDefinition('nm_sector', 'Settore', 'Settori', ['nm_service', 'nm_case_study'], true, ['rewrite' => ['slug' => 'nm/settori']]),
-            new TaxonomyDefinition('nm_capability', 'Competenza', 'Competenze', ['nm_service', 'nm_case_study'], false, ['rewrite' => ['slug' => 'nm/competenze']]),
-            new TaxonomyDefinition('nm_technology', 'Tecnologia', 'Tecnologie', ['nm_case_study'], false, ['rewrite' => ['slug' => 'nm/tecnologie']]),
+            new TaxonomyDefinition('nm_sector', 'Settore', 'Settori', ['nm_service', 'nm_case_study', 'nm_client', 'post', 'nm_resource'], true, ['public' => false, 'rewrite' => ['slug' => 'nm/settori']]),
+            new TaxonomyDefinition('nm_capability', 'Competenza', 'Competenze', ['nm_service', 'nm_case_study', 'post', 'nm_resource'], false, ['public' => false, 'rewrite' => ['slug' => 'nm/competenze']]),
+            new TaxonomyDefinition('nm_technology', 'Tecnologia', 'Tecnologie', ['nm_service', 'nm_case_study', 'post', 'nm_resource'], false, ['public' => false, 'rewrite' => ['slug' => 'nm/tecnologie']]),
         ];
     }
 

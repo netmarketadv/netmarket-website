@@ -45,8 +45,10 @@ final class Plugin
 
         add_action('init', [$content, 'register']);
         add_action('init', [$taxonomies, 'register']);
-        add_action('add_meta_boxes', [new MetaBoxes($content), 'register']);
-        add_action('save_post', [new MetaBoxes($content), 'save'], 10, 2);
-        add_action('rest_api_init', [new Routes($content, $taxonomies), 'register']);
+        $metaBoxes = new MetaBoxes($content);
+        add_action('add_meta_boxes', [$metaBoxes, 'register']);
+        add_action('save_post', [$metaBoxes, 'save'], 10, 2);
+        add_action('admin_enqueue_scripts', [$metaBoxes, 'enqueue']);
+        add_action('rest_api_init', [new Routes($taxonomies), 'register']);
     }
 }

@@ -7,6 +7,19 @@ class WP_Post
     public int $ID = 0;
     public string $post_type = '';
     public string $post_name = '';
+    public string $post_content = '';
+}
+
+class WP_Term
+{
+    public int $term_id = 0;
+    public string $slug = '';
+    public string $name = '';
+}
+
+class WP_Screen
+{
+    public string $post_type = '';
 }
 
 class WP_REST_Request implements ArrayAccess
@@ -61,6 +74,10 @@ class WP_Query
 
 function add_action(...$args): void {}
 function add_meta_box(...$args): void {}
+function wp_enqueue_media(...$args): void {}
+function wp_enqueue_style(...$args): void {}
+function wp_enqueue_script(...$args): void {}
+function wp_localize_script(...$args): void {}
 function register_activation_hook(...$args): void {}
 function register_deactivation_hook(...$args): void {}
 function register_post_type(...$args): void {}
@@ -68,6 +85,9 @@ function register_taxonomy(...$args): void {}
 function register_rest_route(...$args): void {}
 function load_plugin_textdomain(...$args): void {}
 function plugin_basename(string $file): string { return $file; }
+function plugins_url(string $path = '', string $plugin = ''): string { return $path; }
+function rest_url(string $path = ''): string { return $path; }
+function wp_create_nonce(string $action = ''): string { return 'nonce'; }
 function deactivate_plugins(string $plugin): void {}
 function wp_die(string $message): never { exit($message); }
 function flush_rewrite_rules(): void {}
@@ -75,6 +95,7 @@ function esc_html__(string $text, string $domain = ''): string { return $text; }
 function __(string $text, string $domain = ''): string { return $text; }
 function esc_html(string $text): string { return $text; }
 function esc_attr(string $text): string { return $text; }
+function esc_attr__(string $text, string $domain = ''): string { return $text; }
 function esc_textarea(string $text): string { return $text; }
 function esc_url_raw(string $text): string { return $text; }
 function sanitize_text_field(string $text): string { return $text; }
@@ -89,7 +110,9 @@ function wp_verify_nonce(string $nonce, string $action): bool { return true; }
 function current_user_can(string $capability, mixed ...$args): bool { return true; }
 function get_post_meta(int $postId, string $key, bool $single = false): mixed { return ''; }
 function update_post_meta(int $postId, string $key, mixed $value): int|bool { return true; }
-function wp_json_encode(mixed $value): string|false { return json_encode($value); }
+function delete_post_meta(int $postId, string $metaKey): bool { return true; }
+function add_post_meta(int $postId, string $metaKey, mixed $metaValue, bool $unique = false): int|false { return 1; }
+function wp_json_encode(mixed $value, int $flags = 0, int $depth = 512): string|false { return json_encode($value, $flags, $depth); }
 function checked(mixed $checked, mixed $current = true, bool $display = true): string { return ''; }
 function selected(mixed $selected, mixed $current = true, bool $display = true): string { return ''; }
 function absint(mixed $value): int { return abs((int) $value); }
@@ -100,3 +123,16 @@ function is_wp_error(mixed $thing): bool { return false; }
 function get_posts(array $args = []): array { return []; }
 function get_the_title(WP_Post $post): string { return ''; }
 function get_the_excerpt(WP_Post $post): string { return ''; }
+function get_post_type(int $postId): string|false { return 'post'; }
+function get_post_status(int $postId): string|false { return 'publish'; }
+function get_post_thumbnail_id(int $postId): int { return 0; }
+function wp_get_attachment_url(int $attachmentId): string|false { return ''; }
+function wp_get_attachment_metadata(int $attachmentId): array|false { return false; }
+function get_post_mime_type(int $attachmentId): string|false { return false; }
+function wp_get_attachment_image_srcset(int $attachmentId): string|false { return false; }
+function wp_get_attachment_image_sizes(int $attachmentId): string|false { return false; }
+function wp_get_attachment_image(int $attachmentId, string|array $size = 'thumbnail'): string { return ''; }
+function get_the_terms(int $postId, string $taxonomy): array|false { return []; }
+function wp_strip_all_tags(string $text, bool $removeBreaks = false): string { return $text; }
+function get_current_screen(): WP_Screen|null { return null; }
+function post_type_supports(string $postType, string $feature): bool { return true; }
