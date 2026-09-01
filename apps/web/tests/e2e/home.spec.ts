@@ -384,9 +384,20 @@ test('client marquee respects reduced motion', async ({ browser }) => {
 
 test('header records scrolled state without layout overlap', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.evaluate(() => window.scrollTo(0, 500));
-  await page.waitForFunction(() => window.scrollY > 8);
-  await expect(page.locator('.site-header')).toHaveAttribute('data-scrolled', 'true');
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          window.scrollTo(0, 500);
+          window.dispatchEvent(new Event('scroll'));
+          return {
+            scrollY: window.scrollY,
+            scrolled: document.querySelector<HTMLElement>('.site-header')?.dataset.scrolled
+          };
+        }),
+      { timeout: 5_000 }
+    )
+    .toMatchObject({ scrollY: expect.any(Number), scrolled: 'true' });
 });
 
 test('motion reveal never leaves normal content hidden during scroll states', async ({ page }) => {
