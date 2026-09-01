@@ -8,8 +8,12 @@ describe('environment validation', () => {
         PUBLIC_SITE_URL: 'http://localhost:4321',
         PUBLIC_CMS_URL: 'https://cms.netmarket.it',
         PUBLIC_DEPLOY_ENV: 'local'
-      }).PUBLIC_DEPLOY_ENV
-    ).toBe('local');
+      })
+    ).toMatchObject({
+      PUBLIC_DEPLOY_ENV: 'local',
+      PUBLIC_GOOGLE_MAPS_API_KEY: '',
+      PUBLIC_GOOGLE_PLACE_ID: ''
+    });
   });
 
   it('rejects staging URLs that do not target staging', () => {

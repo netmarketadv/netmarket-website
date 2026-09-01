@@ -3,6 +3,7 @@ import Seo from '@/components/seo/Seo.astro';
 import SkipLink from '@/components/global/SkipLink.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
+import MotionController from '@/components/motion/MotionController.astro';
 import '@/styles/tokens.css';
 import '@/styles/reset.css';
 import '@/styles/global.css';
@@ -13,9 +14,10 @@ interface Props {
   description: string;
   path?: string;
   noindex?: boolean;
+  structuredData?: Array<Record<string, unknown>>;
 }
 
-const { title, description, path = '/', noindex = false } = Astro.props;
+const { title, description, path = '/', noindex = false, structuredData = [] } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +26,10 @@ const { title, description, path = '/', noindex = false } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <Seo title={title} description={description} path={path} noindex={noindex} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <Seo title={title} description={description} path={path} noindex={noindex} structuredData={structuredData} />
   </head>
   <body>
     <SkipLink />
@@ -33,5 +38,6 @@ const { title, description, path = '/', noindex = false } = Astro.props;
       <slot />
     </main>
     <SiteFooter />
+    <MotionController />
   </body>
 </html>

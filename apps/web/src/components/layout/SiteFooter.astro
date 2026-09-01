@@ -1,5 +1,106 @@
+---
+import { IconBrandFacebook, IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-astro';
+import { cmsMedia } from '@/data/home';
+
+const footerColumns = [
+  {
+    title: 'Servizi',
+    links: [
+      ['Siti web', '/#servizi'],
+      ['E-commerce', '/#servizi'],
+      ['Marketing digitale', '/#servizi'],
+      ['Comunicazione', '/#servizi'],
+      ['Pubblicità', '/#servizi'],
+      ['Concorsi a premi', '/#servizi'],
+      ['SEO', '/#servizi']
+    ]
+  },
+  {
+    title: 'Netmarket',
+    links: [
+      ['Home', '/'],
+      ['Servizi', '/#servizi'],
+      ['Agenzia', '/#agenzia'],
+      ['Team', '/#team'],
+      ['Progetti', '/#progetti'],
+      ['Insight', '/#insight'],
+      ['NOD', '/nod/', 'new'],
+      ['Contatti', '/#contatti']
+    ]
+  },
+  {
+    title: 'Risorse',
+    links: [
+      ['Design system', '/design-system/'],
+      ['Google Business', 'https://share.google/DPsZDzWohdLvBMwmZ'],
+      ['Privacy', 'https://www.iubenda.com/privacy-policy/69986431'],
+      ['Cookie', 'https://www.iubenda.com/privacy-policy/69986431/cookie-policy']
+    ]
+  }
+] satisfies Array<{
+  title: string;
+  links: Array<[string, string, 'new'?]>;
+}>;
+
+const socialLinks = [
+  ['Instagram', 'http://www.instagram.com/netmarket.it/', IconBrandInstagram],
+  ['LinkedIn', 'https://www.linkedin.com/company/netmarket-s.r.l./', IconBrandLinkedin],
+  ['Facebook', 'https://www.facebook.com/Netmarket.adv/', IconBrandFacebook]
+] as const;
+---
+
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p>&copy; {new Date().getFullYear()} Netmarket. Ambiente tecnico riservato.</p>
+    <section class="site-footer__top" aria-label="Footer Netmarket">
+      <div class="site-footer__identity">
+        <a class="site-footer__brand" href="/" aria-label="Netmarket home">
+          <img src="/netmarket-logo.svg" alt="" width="150" height="43" />
+        </a>
+        <p>Comunichiamo valore dal 1986, con progetti web, marketing e comunicazione coordinata.</p>
+        <div class="site-footer__social" aria-label="Social Netmarket">
+          {socialLinks.map(([label, href, Icon]) => (
+            <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+              <Icon stroke={1.8} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {footerColumns.map((column) => (
+        <nav aria-label={column.title}>
+          <h2>{column.title}</h2>
+          {column.links.map(([label, href, badge]) => (
+            <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              <span>{label}</span>
+              {badge && <small>{badge}</small>}
+            </a>
+          ))}
+        </nav>
+      ))}
+    </section>
+
+    <section class="site-footer__trust" aria-label="Certificazioni e privacy">
+      <img src={cmsMedia.badges.iubendaGold} alt="iubenda Gold Partner" loading="lazy" decoding="async" />
+      <img src={cmsMedia.badges.brevo} alt="Brevo Partner Pioneer 2025" loading="lazy" decoding="async" />
+      <img src={cmsMedia.badges.woocommerce} alt="WooCommerce ecommerce partner" loading="lazy" decoding="async" />
+    </section>
+
+    <section class="site-footer__details" aria-label="Dati societari">
+      <div>
+        <h2>Netmarket Srl</h2>
+        <p>P.IVA e C.F. 03618730281</p>
+      </div>
+      <address>
+        <span>Viale della Navigazione Interna, 51/b<br />35129 Padova (PD)</span>
+      </address>
+      <p>
+        <span>Lunedì-venerdì<br />9:00-13:00, 14:00-18:00</span>
+      </p>
+      <a href="mailto:info@netmarket.it">info@netmarket.it</a>
+    </section>
+
+    <div class="site-footer__watermark" aria-hidden="true">
+      <img src={cmsMedia.brand.secondaryLogo} alt="" width="150" height="43" />
+    </div>
   </div>
 </footer>

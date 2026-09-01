@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  titleId?: string;
+  text: string;
+  items: [string, string][];
+}
+
+const { title, titleId, text, items } = Astro.props;
+const generatedId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const idBase = (titleId ?? generatedId) || 'faq';
+---
+
+<div class="faq-grid">
+  <div data-reveal="line">
+    <h2 id={titleId}>{title}</h2>
+    <p>{text}</p>
+  </div>
+  <div class="faq-list" data-reveal="up" data-reveal-stagger="1">
+    {items.map(([question, answer], index) => (
+      <div class="faq-list__item">
+        <button
+          class="faq-list__trigger"
+          type="button"
+          aria-expanded="false"
+          aria-controls={`${idBase}-panel-${index}`}
+          id={`${idBase}-trigger-${index}`}
+          data-accordion-trigger
+        >
+          <span>{question}</span>
+          <span class="faq-list__icon" aria-hidden="true"></span>
+        </button>
+        <div
+          class="faq-list__panel"
+          id={`${idBase}-panel-${index}`}
+          role="region"
+          aria-labelledby={`${idBase}-trigger-${index}`}
+          hidden
+        >
+          <p>{answer}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

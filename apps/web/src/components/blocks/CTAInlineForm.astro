@@ -1,0 +1,29 @@
+---
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  title: string;
+  titleId?: string;
+  highlight?: string;
+  placeholder?: string;
+  buttonLabel?: string;
+}
+
+const { title, titleId, highlight = '', placeholder = 'nome@azienda.it', buttonLabel = 'Parliamone' } = Astro.props;
+---
+
+<div class="inline-cta" data-reveal="scale">
+  <div>
+    <h2 id={titleId}>
+      {title}
+      {highlight && <span>{highlight}</span>}
+    </h2>
+  </div>
+  <form class="hero-form" action="#contatti" method="get">
+    <label for="inline-email">Email aziendale</label>
+    <div class="hero-form__row">
+      <input id="inline-email" name="email" type="email" autocomplete="email" placeholder={placeholder} />
+      <Button magnetic>{buttonLabel}</Button>
+    </div>
+  </form>
+</div>

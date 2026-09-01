@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  titleId?: string;
+  text: string;
+  items: [string, string, string][];
+}
+
+const { title, titleId, text, items } = Astro.props;
+---
+
+<div class="approval-section">
+  <div class="center-heading" data-reveal="line">
+    <h2 id={titleId}>{title}</h2>
+    <p>{text}</p>
+  </div>
+  <div class="approval-grid" data-reveal="up" data-reveal-stagger="1">
+    {items.map(([itemTitle, itemText, metric], index) => (
+      <article class:list={[index === 0 && 'is-strong']}>
+        <span>{itemTitle}</span>
+        <h3>{metric}</h3>
+        <p>{itemText}</p>
+      </article>
+    ))}
+  </div>
+</div>

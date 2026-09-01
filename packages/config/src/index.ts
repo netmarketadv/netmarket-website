@@ -13,7 +13,9 @@ export const publicEnvSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((value) => value === 'true'),
-  PUBLIC_GTM_ID: z.string().optional().default('')
+  PUBLIC_GTM_ID: z.string().optional().default(''),
+  PUBLIC_GOOGLE_MAPS_API_KEY: z.string().optional().default(''),
+  PUBLIC_GOOGLE_PLACE_ID: z.string().optional().default('')
 });
 
 export const serverEnvSchema = z.object({
@@ -40,7 +42,7 @@ export function validateServerEnv(input: Record<string, unknown>, deployEnv: Dep
 }
 
 export function robotsForEnv(env: DeployEnv, editorialNoindex = false): RobotsDirective {
-  if (editorialNoindex) return 'noindex, nofollow';
+  if (editorialNoindex) return 'noindex, nofollow, noarchive';
   if (env === 'staging') return 'noindex, nofollow, noarchive';
   if (env === 'local') return 'noindex, nofollow';
   return 'index, follow';

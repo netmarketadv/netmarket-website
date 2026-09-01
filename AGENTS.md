@@ -47,6 +47,10 @@ Ogni modifica deve aggiornare test e documentazione quando cambia comportamento.
 
 Target WCAG 2.2 AA, senza dichiarare conformità finché non verificata manualmente. Local e staging sono sempre noindex. Budget iniziali in `docs/performance-budgets.md`.
 
+## Motion
+
+`docs/motion-system.md` è la source of truth per animazioni, easing, durate, distanze e preset. Non creare easing arbitrari o nuove animazioni non documentate. Usare i preset esistenti, rispettare sempre `prefers-reduced-motion`, e dare priorità a performance, accessibilità e contenuto visibile senza JavaScript.
+
 ## Sicurezza
 
 Nessun secret versionato. Gli script distruttivi devono richiedere parametri espliciti, usare `set -Eeuo pipefail`, supportare dry-run e rifiutare target non autorizzati.

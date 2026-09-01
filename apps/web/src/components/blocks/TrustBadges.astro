@@ -1,0 +1,22 @@
+---
+import IconBubble from '@/components/ui/IconBubble.astro';
+
+interface Props {
+  items: [string, string][];
+}
+
+const { items } = Astro.props;
+const iconNames = ['google', 'shield', 'users', 'check'] as const;
+---
+
+<div class="trust-badges" data-reveal="up" data-reveal-stagger="1">
+  {items.map(([title, text], index) => (
+    <article>
+      <IconBubble name={iconNames[index % iconNames.length] ?? 'check'} size="sm" />
+      <div>
+        <h3>{title}</h3>
+        <p>{text}</p>
+      </div>
+    </article>
+  ))}
+</div>

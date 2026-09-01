@@ -1,0 +1,35 @@
+---
+import IconBubble from '@/components/ui/IconBubble.astro';
+
+interface Props {
+  rating: string;
+  reviewCount: string;
+  href: string;
+  compact?: boolean;
+  live?: boolean;
+}
+
+const { rating, reviewCount, href, compact = false, live = false } = Astro.props;
+---
+
+<a
+  class:list={['google-trust', compact && 'google-trust--compact']}
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={`Netmarket su Google, ${rating} stelle su ${reviewCount} recensioni`}
+  data-google-trust
+>
+  <IconBubble name="google" size="sm" />
+  <span>
+    <strong data-google-rating>{rating}</strong>
+    <span class="google-stars" aria-hidden="true">
+      <IconBubble name="star" size="sm" />
+      <IconBubble name="star" size="sm" />
+      <IconBubble name="star" size="sm" />
+      <IconBubble name="star" size="sm" />
+      <IconBubble name="star" size="sm" />
+    </span>
+    <span><span data-google-review-count>{reviewCount}</span> {live ? 'recensioni live' : 'recensioni Google'}</span>
+  </span>
+</a>

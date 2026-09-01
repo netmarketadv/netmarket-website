@@ -1,6 +1,10 @@
 name: Deploy Staging
 
 on:
+  push:
+    branches:
+      - main
+      - chore/bootstrap-netmarket-platform
   workflow_dispatch:
     inputs:
       dry_run:
@@ -14,10 +18,14 @@ jobs:
   deploy:
     environment: staging
     runs-on: ubuntu-latest
+    concurrency:
+      group: staging-deploy
+      cancel-in-progress: true
     env:
       PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
       PUBLIC_CMS_URL: ${{ vars.PUBLIC_CMS_URL }}
       PUBLIC_DEPLOY_ENV: ${{ vars.PUBLIC_DEPLOY_ENV }}
+      CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
       TARGET_HOST: staging.netmarket.it
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +42,13 @@ jobs:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-        env:
-          CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      - name: Install Composer dependencies
+        working-directory: apps/wordpress/plugins/netmarket-headless-core
+        run: composer install --no-interaction --prefer-dist
+      - run: pnpm validate
+      - name: Install Playwright browser
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
       - name: Check SSH secrets
         run: |
           test -n "${{ secrets.SG_SSH_HOST }}"
@@ -46,10 +58,23 @@ jobs:
           test -n "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
           test -n "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
       - name: Dry-run deploy plan
-        if: ${{ inputs.dry_run == 'true' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
         run: infrastructure/scripts/deploy-staging.sh --dry-run --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
       - name: Deploy
-        if: ${{ inputs.dry_run == 'false' }}
-        run: infrastructure/scripts/deploy-staging.sh --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: infrastructure/scripts/deploy-staging.sh --execute --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
       - name: Health check
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
         run: infrastructure/scripts/health-check.sh --url https://staging.netmarket.it

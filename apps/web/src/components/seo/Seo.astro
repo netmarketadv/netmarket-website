@@ -14,9 +14,10 @@ interface Props {
   description: string;
   path?: string;
   noindex?: boolean;
+  structuredData?: Array<Record<string, unknown>>;
 }
 
-const { title, description, path = '/', noindex = false } = Astro.props;
+const { title, description, path = '/', noindex = false, structuredData = [] } = Astro.props;
 const env = getPublicEnv();
 const pageTitle = buildTitle(title);
 const canonical = absoluteCanonical(env.PUBLIC_SITE_URL, path);
@@ -30,7 +31,8 @@ const jsonLd = [
     canonicalPath: path,
     siteUrl: env.PUBLIC_SITE_URL,
     robots
-  })
+  }),
+  ...structuredData
 ];
 ---
 

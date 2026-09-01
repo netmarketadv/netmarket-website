@@ -1,0 +1,47 @@
+---
+import {
+  IconArrowsMaximize,
+  IconBolt,
+  IconBrandGoogle,
+  IconBriefcase,
+  IconChartBar,
+  IconCheck,
+  IconCircleArrowRight,
+  IconDeviceDesktop,
+  IconPalette,
+  IconSearch,
+  IconShieldCheck,
+  IconSparkles,
+  IconStarFilled,
+  IconUsersGroup
+} from '@tabler/icons-astro';
+
+interface Props {
+  name?: 'arrows' | 'bolt' | 'briefcase' | 'chart' | 'check' | 'desktop' | 'google' | 'palette' | 'search' | 'shield' | 'sparkles' | 'star' | 'users' | 'arrow';
+  size?: 'sm' | 'md' | 'lg';
+  label?: string;
+}
+
+const { name = 'sparkles', size = 'md', label } = Astro.props;
+const icons = {
+  arrows: IconArrowsMaximize,
+  bolt: IconBolt,
+  briefcase: IconBriefcase,
+  chart: IconChartBar,
+  check: IconCheck,
+  desktop: IconDeviceDesktop,
+  google: IconBrandGoogle,
+  palette: IconPalette,
+  search: IconSearch,
+  shield: IconShieldCheck,
+  sparkles: IconSparkles,
+  star: IconStarFilled,
+  users: IconUsersGroup,
+  arrow: IconCircleArrowRight
+};
+const Icon = icons[name];
+---
+
+<span class:list={['icon-bubble', `icon-bubble--${size}`]} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+  <Icon stroke={name === 'star' ? 0 : 1.7} />
+</span>

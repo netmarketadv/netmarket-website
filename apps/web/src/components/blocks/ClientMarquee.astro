@@ -1,0 +1,58 @@
+---
+import type { ClientLogo } from '@/data/home';
+
+interface Props {
+  title?: string;
+  text?: string;
+  clients: ClientLogo[];
+  speed?: 'slow' | 'calm';
+  direction?: 'left' | 'right';
+}
+
+const {
+  title = 'Clienti e progetti seguiti da Netmarket.',
+  text = 'Una selezione di marchi e realtà presenti nello storico lavori.',
+  clients,
+  speed = 'slow',
+  direction = 'left'
+} = Astro.props;
+---
+
+<div class:list={['client-marquee', `client-marquee--${speed}`, `client-marquee--${direction}`]} data-reveal="up">
+  <div class="client-marquee__heading">
+    <h2>{title}</h2>
+    <p>{text}</p>
+  </div>
+
+  <div class="client-marquee__viewport" aria-label="Loghi clienti Netmarket">
+    <div class="client-marquee__track">
+      <div class="client-marquee__group">
+        {
+          clients.map((client) => (
+            <div class="client-marquee__item" style={`--client-logo-scale: ${client.visualScale ?? 1};`}>
+              {
+                client.href ? (
+                  <a href={client.href}>
+                    <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
+                  </a>
+                ) : (
+                  <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
+                )
+              }
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="client-marquee__group" aria-hidden="true">
+        {
+          clients.map((client) => (
+            <div class="client-marquee__item" style={`--client-logo-scale: ${client.visualScale ?? 1};`}>
+              <img src={client.logo} alt="" loading="lazy" decoding="async" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,10 +9,21 @@ for var in "${required[@]}"; do
   fi
 done
 
-if [[ "$SG_SSH_HOST" != "staging.netmarket.it" && "$SG_SSH_HOST" != "cms.netmarket.it" ]]; then
+if [[ "$SG_SSH_HOST" == *"netmarket.it"* && "$SG_SSH_HOST" != "staging.netmarket.it" && "$SG_SSH_HOST" != "cms.netmarket.it" ]]; then
   echo "Host rifiutato: $SG_SSH_HOST"
   exit 1
 fi
 
-echo "Comandi read-only previsti: whoami, pwd, php -v, git --version, wp --version se disponibile."
-echo "Esecuzione SSH da completare quando saranno autorizzati dettagli di connessione."
+KEY_FILE="$(mktemp)"
+KNOWN_HOSTS_FILE="$(mktemp)"
+trap 'rm -f "$KEY_FILE" "$KNOWN_HOSTS_FILE"' EXIT
+printf '%s\n' "$SG_SSH_PRIVATE_KEY" >"$KEY_FILE"
+printf '%s\n' "$SG_SSH_KNOWN_HOSTS" >"$KNOWN_HOSTS_FILE"
+chmod 600 "$KEY_FILE" "$KNOWN_HOSTS_FILE"
+
+ssh -p "$SG_SSH_PORT" \
+  -i "$KEY_FILE" \
+  -o "UserKnownHostsFile=$KNOWN_HOSTS_FILE" \
+  -o "StrictHostKeyChecking=yes" \
+  "$SG_SSH_USER@$SG_SSH_HOST" \
+  'whoami && pwd && php -v | head -n 1 && git --version && (wp --version || true)'

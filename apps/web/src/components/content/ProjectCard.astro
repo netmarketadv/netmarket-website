@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+  alt: string;
+  large?: boolean;
+  loading?: 'eager' | 'lazy';
+  href?: string;
+}
+
+const { title, category, description, image, alt, large = false, loading = 'lazy', href = '#contatti' } = Astro.props;
+---
+
+<a class:list={['project-card', large && 'project-card--large']} href={href} data-cursor-label="Guarda" data-reveal="scale">
+  <div class="project-card__media">
+    <img src={image} alt={alt} loading={loading} decoding="async" />
+  </div>
+  <div class="project-card__body">
+    <p class="nm-meta">{category}</p>
+    <h3>{title}</h3>
+    <p>{description}</p>
+  </div>
+</a>

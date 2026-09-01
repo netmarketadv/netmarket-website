@@ -1,6 +1,114 @@
+---
+import Button from '@/components/ui/Button.astro';
+import IconBubble from '@/components/ui/IconBubble.astro';
+
+type IconName = 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'sparkles' | 'users';
+
+interface NavItem {
+  label: string;
+  href?: string;
+  description?: string;
+  children?: Array<{
+    label: string;
+    href: string;
+    description: string;
+    icon: IconName;
+  }>;
+}
+
+const navItems: NavItem[] = [
+  {
+    label: 'Servizi',
+    description: 'Web, marketing, contenuti e pubblicità lavorano meglio quando hanno una regia unica.',
+    children: [
+      { label: 'Siti web ed ecommerce', description: 'Pagine, cataloghi e percorsi di conversione.', href: '/#servizi', icon: 'desktop' },
+      { label: 'Marketing digitale', description: 'SEO, advertising, social e contenuti misurabili.', href: '/#servizi', icon: 'search' },
+      { label: 'Brand e comunicazione', description: 'Identità, messaggi e materiali coordinati.', href: '/#servizi', icon: 'palette' },
+      { label: 'Pubblicità tradizionale', description: 'Media, campagne radio e promozioni integrate.', href: '/#servizi', icon: 'briefcase' }
+    ]
+  },
+  {
+    label: 'Agenzia',
+    description: 'Un partner a Padova per costruire comunicazione coerente online e offline.',
+    children: [
+      { label: 'Metodo', description: 'Come analizziamo, progettiamo e ottimizziamo.', href: '/#agenzia', icon: 'chart' },
+      { label: 'Team', description: 'Persone reali dietro sviluppo, design, marketing e direzione.', href: '/#team', icon: 'users' },
+      { label: 'Progetti', description: 'Casi e lavori pubblicati da usare come riferimento.', href: '/#progetti', icon: 'sparkles' },
+      { label: 'Insight', description: 'Guide e contenuti per PMI e aziende.', href: '/#insight', icon: 'users' }
+    ]
+  },
+  { href: '/#progetti', label: 'Progetti' },
+  { href: '/#insight', label: 'Insight' },
+  { href: '/#contatti', label: 'Contatti' }
+];
+---
+
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-header__brand" href="/" aria-label="Netmarket home">Netmarket</a>
-    <p class="site-header__env">Nuovo ambiente di sviluppo</p>
+    <a class="site-header__brand" href="/" aria-label="Netmarket home">
+      <img src="/netmarket-logo.svg" alt="" width="140" height="40" />
+    </a>
+    <nav class="site-header__nav" aria-label="Navigazione principale">
+      {navItems.map((item) => (
+        item.children ? (
+          <details class="mega-menu">
+            <summary>{item.label}</summary>
+            <div class="mega-menu__scrim"></div>
+            <div class:list={['mega-menu__panel', item.children.length <= 3 && 'mega-menu__panel--compact']}>
+              <div>
+                <h2>{item.label === 'Servizi' ? 'Servizi integrati' : 'Netmarket dal 1986'}</h2>
+                <p>{item.description}</p>
+              </div>
+              <div class="mega-menu__grid">
+                {item.children.map((child) => (
+                  <a href={child.href}>
+                    <IconBubble name={child.icon} size="sm" />
+                    <span>
+                      <strong>{child.label}</strong>
+                      <span>{child.description}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </details>
+        ) : (
+          <a href={item.href}>{item.label}</a>
+        )
+      ))}
+    </nav>
+    <div class="site-header__actions">
+      <Button href="/#contatti" variant="primary" magnetic>Parliamone</Button>
+    </div>
+    <details class="site-header__mobile">
+      <summary aria-label="Apri menu">
+        <span></span>
+        <span></span>
+      </summary>
+      <nav class="site-header__mobile-panel" aria-label="Navigazione mobile">
+        <div class="site-header__mobile-links">
+          {navItems.map((item) => (
+            item.children ? (
+              <details class="mobile-submenu">
+                <summary>{item.label}</summary>
+                <div class="mobile-submenu__panel">
+                  {item.children.map((child) => (
+                    <a href={child.href}>
+                      <span>{child.label}</span>
+                      <small>{child.description}</small>
+                    </a>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <a href={item.href}>{item.label}</a>
+            )
+          ))}
+        </div>
+        <div class="site-header__mobile-actions">
+          <Button href="/#contatti" variant="primary" magnetic>Parliamone</Button>
+        </div>
+      </nav>
+    </details>
   </div>
 </header>

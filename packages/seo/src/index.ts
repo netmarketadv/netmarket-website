@@ -9,6 +9,16 @@ export interface PageMeta {
   image?: string;
 }
 
+export interface PersonMeta {
+  id: string;
+  name: string;
+  givenName: string;
+  familyName: string;
+  jobTitle: string;
+  sameAs: string[];
+  image?: string;
+}
+
 export function buildTitle(title: string, siteName = 'Netmarket'): string {
   return title === siteName ? siteName : `${title} | ${siteName}`;
 }
@@ -21,6 +31,7 @@ export function organizationJsonLd(siteUrl: string): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': absoluteCanonical(siteUrl, '/#organization'),
     name: 'Netmarket',
     url: siteUrl
   };
@@ -80,5 +91,22 @@ export function articleJsonLd(
     headline: title,
     description,
     url
+  };
+}
+
+export function personJsonLd(siteUrl: string, person: PersonMeta): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': absoluteCanonical(siteUrl, `/#person-${person.id}`),
+    name: person.name,
+    givenName: person.givenName,
+    familyName: person.familyName,
+    jobTitle: person.jobTitle,
+    worksFor: {
+      '@id': absoluteCanonical(siteUrl, '/#organization')
+    },
+    sameAs: person.sameAs,
+    ...(person.image ? { image: person.image } : {})
   };
 }

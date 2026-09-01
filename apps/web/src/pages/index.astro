@@ -1,35 +1,328 @@
 ---
+import Metric from '@/components/content/Metric.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
+import ApprovalSteps from '@/components/blocks/ApprovalSteps.astro';
+import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
+import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import FeatureIconGrid from '@/components/blocks/FeatureIconGrid.astro';
+import GoogleTrustBadge from '@/components/blocks/GoogleTrustBadge.astro';
+import OperationsBento from '@/components/blocks/OperationsBento.astro';
+import PainPointPanel from '@/components/blocks/PainPointPanel.astro';
+import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
+import TeamSection from '@/components/blocks/TeamSection.astro';
+import TrustBadges from '@/components/blocks/TrustBadges.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Stack from '@/components/layout/Stack.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { approvalSteps, clientLogos, cmsMedia, featureHighlights, googleTrust, insights, painPoints, proof, questions, serviceCards, trustBadges, workSteps } from '@/data/home';
+import { teamMembers } from '@/data/team';
+import { personJsonLd } from '@netmarket/seo';
+import { getPublicEnv } from '@/lib/env';
+
+const env = getPublicEnv();
+const teamJsonLd = teamMembers.map((person) =>
+  personJsonLd(env.PUBLIC_SITE_URL, {
+    id: person.id,
+    name: person.fullName,
+    givenName: person.givenName,
+    familyName: person.familyName,
+    jobTitle: person.role,
+    sameAs: [person.linkedin],
+    image: person.image
+  })
+);
 ---
 
 <BaseLayout
-  title="Ambiente di sviluppo"
-  description="Nuovo ambiente di sviluppo della piattaforma web Netmarket."
+  title="Agenzia web, marketing e comunicazione a Padova"
+  description="Netmarket progetta siti web, ecommerce, SEO, advertising, branding e comunicazione coordinata per aziende e PMI."
   path="/"
+  structuredData={teamJsonLd}
 >
-  <section class="staging-hero" aria-labelledby="page-title">
-    <div class="staging-hero__content">
-      <p class="eyebrow">Piattaforma web headless</p>
-      <h1 id="page-title">Netmarket</h1>
-      <p class="payoff">Comunichiamo valore.</p>
-      <p class="lede">
-        Questo è il nuovo ambiente di sviluppo statico per la futura architettura Astro e WordPress
-        headless.
-      </p>
-      <dl class="status-list" aria-label="Stato tecnico iniziale">
-        <div>
-          <dt>Ambiente</dt>
-          <dd>staging/local</dd>
+  <section class="home-hero" aria-labelledby="page-title">
+    <Container wide>
+      <div class="aw-hero-grid">
+        <div class="aw-hero-copy">
+          <div class="tag-row" data-reveal="down">
+            <Badge>Padova, dal 1986</Badge>
+            <GoogleTrustBadge rating={googleTrust.rating} reviewCount={googleTrust.reviewCount} href={googleTrust.profileHref} compact />
+          </div>
+          <h1 id="page-title">Comunicazione e marketing digitale a Padova</h1>
+          <p class="home-hero__payoff" data-reveal="up">Comunichiamo valore.</p>
         </div>
-        <div>
-          <dt>CMS previsto</dt>
-          <dd>cms.netmarket.it</dd>
-        </div>
-        <div>
-          <dt>Indicizzazione</dt>
-          <dd>disattivata fuori dalla produzione</dd>
-        </div>
-      </dl>
-    </div>
+
+        <aside class="hero-request" aria-label="Richiesta progetto" data-reveal="scale" data-reveal-delay="2">
+          <p>Strategia, digitale e pubblicità per aziende che vogliono crescere con un approccio strutturato.</p>
+          <form class="hero-form" action="#contatti" method="get">
+            <label for="hero-email">Email aziendale</label>
+            <div class="hero-form__row">
+              <input id="hero-email" name="email" type="email" autocomplete="email" placeholder="nome@azienda.it" />
+              <button type="submit">Parliamone</button>
+            </div>
+          </form>
+        </aside>
+      </div>
+
+      <div class="hero-showcase" aria-label="Servizi Netmarket" data-reveal="up" data-reveal-stagger="1">
+        <article class="hero-showcase__card hero-showcase__card--dark">
+          <h2>Siti web, ecommerce, SEO e campagne</h2>
+          <ul>
+            <li>Strategia</li>
+            <li>Design</li>
+            <li>Sviluppo</li>
+            <li>Marketing</li>
+          </ul>
+        </article>
+        <article class="hero-showcase__card hero-showcase__card--image">
+          <img src={cmsMedia.projects.sireneBlu} alt="Progetto Sirene Blu" width="1024" height="576" decoding="async" />
+        </article>
+        <article class="hero-showcase__card hero-showcase__card--image small">
+          <img src={cmsMedia.projects.albertini} alt="Progetto Albertini Allestimenti" width="1024" height="576" decoding="async" />
+        </article>
+        <article class="hero-showcase__card hero-showcase__card--blue">
+          <h2>Il metodo tiene insieme strumenti e obiettivi.</h2>
+        </article>
+      </div>
+
+      <div class="proof-strip" aria-label="Punti di forza Netmarket" data-reveal="up" data-reveal-stagger="1">
+        {proof.map(([value, label]) => <p><strong>{value}</strong><span>{label}</span></p>)}
+      </div>
+    </Container>
   </section>
+
+  <Section compact labelledby="feature-title">
+    <Container wide>
+      <FeatureIconGrid titleId="feature-title" title="Perché costruire il sito con noi?" items={featureHighlights} />
+    </Container>
+  </Section>
+
+  <Section compact class="plan-block" id="agenzia" labelledby="plan-title">
+    <Container>
+        <div class="plan-card" data-reveal="scale">
+        <div>
+          <h2 id="plan-title">Trova il piano che tiene tutto collegato.</h2>
+          <p>La comunicazione funziona quando sito, marketing, social, pubblicità e materiali commerciali lavorano nella stessa direzione.</p>
+        </div>
+        <div class="plan-list" aria-label="Percorso di lavoro">
+          {workSteps.map(([title, text]) => (
+            <article>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section class="pain-section" labelledby="pain-title">
+    <Container>
+      <PainPointPanel
+        titleId="pain-title"
+        title="Risolviamo i problemi che rallentano crescita e comunicazione."
+        items={painPoints}
+      />
+    </Container>
+  </Section>
+
+  <Section class="work-section" id="progetti" labelledby="work-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading">
+          <h2 id="work-title">Progetti Netmarket, non promesse astratte.</h2>
+          <p>Alcuni lavori pubblicati: identità, siti, campagne e materiali costruiti con continuità tra strategia e produzione.</p>
+        </div>
+        <div class="project-rail" data-reveal="up" data-reveal-stagger="1">
+          <ProjectCard
+            title="Sirene Blu"
+            category="Brand e comunicazione"
+            description="Un progetto visivo con forte riconoscibilità, costruito attorno a identità e materiali coordinati."
+            image={cmsMedia.projects.sireneBlu}
+            alt="Anteprima del progetto Sirene Blu"
+            large
+          />
+          <ProjectCard
+            title="Albertini Allestimenti"
+            category="Sito web aziendale"
+            description="Presenza digitale istituzionale, progettata per rendere chiari servizi, settore e solidità aziendale."
+            image={cmsMedia.projects.albertini}
+            alt="Anteprima del progetto Albertini Allestimenti"
+          />
+          <ProjectCard
+            title="Progettoe"
+            category="Sito web e identità"
+            description="Un impianto visivo digitale coerente, pensato per presentare competenze e casi con ordine."
+            image={cmsMedia.projects.progettoe}
+            alt="Anteprima del progetto Progettoe"
+          />
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section class="approval-band" labelledby="approval-title">
+    <Container wide>
+      <ApprovalSteps
+        titleId="approval-title"
+        title="Solo ciò che serve arriva online."
+        text="Ogni passaggio filtra rumore, urgenze e attività scollegate. Restano priorità, contenuti e strumenti davvero utili."
+        items={approvalSteps}
+      />
+    </Container>
+  </Section>
+
+  <Section id="servizi" labelledby="services-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="services-title">Un sistema di competenze, non reparti isolati.</h2>
+          <p>Il principio è lo stesso: un unico sistema operativo per decidere, produrre, misurare e migliorare.</p>
+        </div>
+        <div class="service-bento" data-reveal="up" data-reveal-stagger="1">
+          {serviceCards.map(([title, text, image], index) => (
+            <article class:list={['service-tile', index === 0 && 'wide']}>
+              <img src={image} alt="" loading="lazy" decoding="async" />
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section labelledby="operations-title">
+    <Container>
+      <OperationsBento
+        titleId="operations-title"
+        title="Ogni team lavora sull'ultima versione."
+        text="Un sistema condiviso riduce passaggi, dubbi e rifacimenti: contenuti, design e tracking restano allineati."
+      />
+    </Container>
+  </Section>
+
+  <Section id="team" class="team-band" labelledby="team-title">
+    <Container wide>
+      <TeamSection
+        titleId="team-title"
+        title="Persone, competenze, valore."
+        text="Un team interno e riconoscibile: sviluppo, design, marketing e direzione lavorano dentro lo stesso metodo."
+        people={teamMembers}
+      />
+    </Container>
+  </Section>
+
+  <Section class="landscape-cta" labelledby="consultation-title">
+    <Container wide>
+      <div class="landscape-cta__image" data-reveal="media">
+        <img src="/media/generated/netmarket-flow-hills.png" alt="" loading="eager" decoding="async" />
+        <div>
+          <h2 id="consultation-title">Una consulenza per mettere ordine nel tuo progetto.</h2>
+          <Button href="#contatti" variant="inverse" magnetic>Parliamone</Button>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section class="inline-cta-section" labelledby="inline-cta-title">
+    <Container wide>
+      <CTAInlineForm titleId="inline-cta-title" title="Mettiamo ordine al progetto," highlight="senza perdere velocità." />
+    </Container>
+  </Section>
+
+  <Section class="trust-section" labelledby="trust-title">
+    <Container>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="trust-title">Perché le aziende scelgono Netmarket.</h2>
+          <p>Esperienza lunga, produzione concreta e un metodo che tiene insieme creatività, tecnologia e comunicazione.</p>
+        </div>
+        <div class="trust-grid" data-reveal="up" data-reveal-stagger="1">
+          <Metric value="1986" label="anno di nascita dell'agenzia" />
+          <Metric value="40+" label="anni di esperienza nella comunicazione" />
+          <Metric value="5/5" label="valutazione Google pubblicata" />
+          <Metric value="1" label="regia unica tra web, marketing e pubblicità" />
+        </div>
+        <TrustBadges items={trustBadges} />
+        <ClientMarquee clients={clientLogos} />
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section labelledby="reviews-title">
+    <Container>
+      <ReviewsSection
+        titleId="reviews-title"
+        title="Recensioni e segnali di fiducia."
+        text="Recensioni pubbliche dal profilo Google verificato di Netmarket SRL, rese statiche nel sito per performance, SEO e affidabilità."
+        rating={googleTrust.rating}
+        reviewCount={googleTrust.reviewCount}
+        googleHref={googleTrust.profileHref}
+      />
+    </Container>
+  </Section>
+
+  <Section class="process-section" labelledby="process-title">
+    <Container>
+      <div class="process-card" data-reveal="scale">
+        <div>
+          <h2 id="process-title">Come lavoriamo.</h2>
+          <p>Un percorso semplice da capire, utile a ridurre indecisione e dispersione operativa.</p>
+        </div>
+        <div class="process-tabs">
+          {workSteps.map(([title, text]) => (
+            <article>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section id="insight" labelledby="insight-title">
+    <Container>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="insight-title">Insight per PMI e aziende.</h2>
+          <p>Approfondimenti reali su marketing, accessibilità, social e trasformazioni digitali.</p>
+        </div>
+        <div class="insight-list" data-reveal="up" data-reveal-stagger="1">
+          {insights.map(([title, text, image]) => (
+            <a class="insight-card" href="#contatti">
+              <img src={image} alt="" loading="lazy" decoding="async" />
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <span>Dal magazine Netmarket</span>
+            </a>
+          ))}
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section class="faq-section" labelledby="faq-title">
+    <Container>
+      <FAQBlock titleId="faq-title" title="FAQ" text="Le prime risposte per capire se il percorso è quello giusto." items={questions} />
+    </Container>
+  </Section>
+
+  <Section id="contatti" class="cta-section" labelledby="contact-title">
+    <Container>
+      <Stack gap="var(--nm-space-lg)">
+        <h2 id="contact-title">Hai un progetto in mente?</h2>
+        <p class="nm-lead">Partiamo da obiettivi, vincoli e opportunità. Poi costruiamo il percorso giusto.</p>
+        <div class="nm-cluster" style="justify-content: center;">
+          <Button href="mailto:info@netmarket.it" magnetic>Parliamone</Button>
+        </div>
+      </Stack>
+    </Container>
+  </Section>
 </BaseLayout>

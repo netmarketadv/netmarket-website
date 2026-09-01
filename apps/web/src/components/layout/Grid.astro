@@ -1,0 +1,12 @@
+---
+interface Props {
+  cols?: number;
+  class?: string;
+}
+
+const { cols = 12, class: className = '' } = Astro.props;
+---
+
+<div class:list={['nm-grid', className]} style={`--grid-cols: ${cols};`}>
+  <slot />
+</div>

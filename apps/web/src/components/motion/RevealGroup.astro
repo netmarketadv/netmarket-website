@@ -1,0 +1,16 @@
+---
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  variant?: 'fade' | 'up' | 'down' | 'scale' | 'media';
+  stagger?: number;
+  class?: string;
+}
+
+const { as = 'div', variant = 'up', stagger = 2, class: className = '' } = Astro.props;
+const Tag = as;
+void ({} as Props);
+---
+
+<Tag data-reveal={variant} data-reveal-stagger={stagger} class={className}>
+  <slot />
+</Tag>
