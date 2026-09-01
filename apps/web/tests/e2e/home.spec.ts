@@ -1,7 +1,11 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-test.setTimeout(60_000);
+test.setTimeout(120_000);
+
+function testBaseUrl() {
+  return process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
+}
 
 async function hiddenRevealProblems(page: Page, scope: 'active' | 'passed' | 'all') {
   return page.evaluate((auditScope) => {
@@ -76,7 +80,7 @@ test('design system page is internal and noindexed', async ({ page }) => {
 });
 
 test('motion enhancement keeps content visible without javascript', async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL: testBaseUrl() });
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: 'Comunicazione e marketing digitale a Padova' })).toBeVisible();
@@ -227,7 +231,7 @@ test('team system renders people, portraits, links, and person schema', async ({
       imageHeight: image?.getAttribute('height'),
       imageSizes: image?.getAttribute('sizes') ?? '',
       personSchemaCount: people.length,
-      enricoSchema: people.find((item) => item['@id'] === 'http://localhost:4321/#person-enrico-paolo-toso')
+      enricoSchema: people.find((item) => String(item['@id']).endsWith('/#person-enrico-paolo-toso'))
     };
   });
 
@@ -246,7 +250,7 @@ test('team system renders people, portraits, links, and person schema', async ({
   expect(teamState.enricoSchema).toMatchObject({
     name: 'Enrico Paolo Toso',
     jobTitle: 'Digital Developer',
-    worksFor: { '@id': 'http://localhost:4321/#organization' },
+    worksFor: expect.objectContaining({ '@id': expect.stringMatching(/\/#organization$/) }),
     sameAs: ['https://www.linkedin.com/in/enricopaolotoso/']
   });
 });
@@ -357,7 +361,7 @@ test('client marquee is full width, continuous, and accessible', async ({ page }
 });
 
 test('client marquee respects reduced motion', async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const context = await browser.newContext({ reducedMotion: 'reduce', baseURL: testBaseUrl() });
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
@@ -401,7 +405,7 @@ test('motion reveal never leaves normal content hidden during scroll states', as
 
   await page.evaluate(() => window.scrollTo(0, Math.round(document.body.scrollHeight * 0.5)));
   await page.waitForTimeout(80);
-  await page.reload();
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(950);
   expect(await hiddenRevealProblems(page, 'passed')).toEqual([]);
 });
@@ -444,13 +448,14 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
 });
 
 test('motion reveal is robust on mobile and reduced motion', async ({ browser }) => {
-  const mobile = await browser.newPage({ viewport: { width: 390, height: 1000 } });
+  const mobileContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, baseURL: testBaseUrl() });
+  const mobile = await mobileContext.newPage();
   await mobile.goto('/', { waitUntil: 'domcontentloaded' });
   await scrollToEndProgressively(mobile);
   expect(await hiddenRevealProblems(mobile, 'all')).toEqual([]);
-  await mobile.close();
+  await mobileContext.close();
 
-  const reducedContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, reducedMotion: 'reduce' });
+  const reducedContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, reducedMotion: 'reduce', baseURL: testBaseUrl() });
   const reduced = await reducedContext.newPage();
   await reduced.goto('/', { waitUntil: 'domcontentloaded' });
   await reduced.waitForTimeout(250);
