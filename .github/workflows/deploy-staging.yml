@@ -3,8 +3,18 @@ name: Deploy Staging
 on:
   push:
     branches:
-      - main
+      - develop
       - chore/bootstrap-netmarket-platform
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'infrastructure/scripts/deploy-staging.sh'
+      - 'infrastructure/scripts/health-check.sh'
+      - 'infrastructure/scripts/smoke-staging.mjs'
+      - '.github/workflows/deploy-staging.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -14,26 +24,34 @@ on:
         type: choice
         options: ['true', 'false']
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
+    name: Build, Deploy, Smoke
     environment: staging
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     concurrency:
       group: staging-deploy
       cancel-in-progress: true
     env:
-      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
-      PUBLIC_CMS_URL: ${{ vars.PUBLIC_CMS_URL }}
-      PUBLIC_DEPLOY_ENV: ${{ vars.PUBLIC_DEPLOY_ENV }}
+      PUBLIC_SITE_URL: https://staging.netmarket.it
+      PUBLIC_CMS_URL: https://cms.netmarket.it
+      PUBLIC_DEPLOY_ENV: staging
+      PUBLIC_BUILD_SHA: ${{ github.sha }}
       CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
       TARGET_HOST: staging.netmarket.it
     steps:
       - uses: actions/checkout@v4
+
       - name: Guard staging target
         run: |
           test "$TARGET_HOST" = "staging.netmarket.it"
           test "$PUBLIC_SITE_URL" = "https://staging.netmarket.it"
           test "$PUBLIC_DEPLOY_ENV" = "staging"
+
       - name: Check SSH secrets
         run: |
           missing=0
@@ -55,21 +73,27 @@ jobs:
           check_secret "SG_STAGING_DEPLOY_PATH" "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
 
           exit "$missing"
+
       - uses: pnpm/action-setup@v4
         with:
-          version: 11.13.0
+          version: 11.13.1
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
+
+      - name: Stamp build time
+        run: echo "PUBLIC_BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
       - run: pnpm install --frozen-lockfile
-      - name: Install Composer dependencies
-        working-directory: apps/wordpress/plugins/netmarket-headless-core
-        run: composer install --no-interaction --prefer-dist
-      - run: pnpm validate
-      - name: Install Playwright browser
-        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
-      - run: pnpm test:e2e
+
+      - name: Fast frontend tests
+        run: pnpm --filter @netmarket/web test
+
+      - name: Build Astro frontend
+        run: pnpm --filter @netmarket/web build
+
       - name: Dry-run deploy plan
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
         run: infrastructure/scripts/deploy-staging.sh --dry-run --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
@@ -79,6 +103,7 @@ jobs:
           SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
           SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
           SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+
       - name: Deploy
         if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
         run: infrastructure/scripts/deploy-staging.sh --execute --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
@@ -88,6 +113,10 @@ jobs:
           SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
           SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
           SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
-      - name: Health check
+
+      - name: Smoke staging
         if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
-        run: infrastructure/scripts/health-check.sh --url https://staging.netmarket.it
+        run: pnpm smoke:staging
+        env:
+          EXPECTED_BUILD_SHA: ${{ github.sha }}
+          EXPECTED_BUILD_ENV: staging

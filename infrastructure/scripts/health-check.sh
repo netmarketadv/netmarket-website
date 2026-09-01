@@ -3,6 +3,8 @@ set -Eeuo pipefail
 
 URL=""
 BASIC_AUTH=""
+EXPECTED_BUILD_SHA="${EXPECTED_BUILD_SHA:-}"
+EXPECTED_BUILD_ENV="${EXPECTED_BUILD_ENV:-staging}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --url) URL="${2:-}"; shift 2 ;;
@@ -31,30 +33,49 @@ fi
 
 BODY="$(curl "${CURL_ARGS[@]}" "$CHECK_URL")"
 
+read_meta() {
+  local name="$1"
+  sed -nE "s/.*<meta[[:space:]]+name=[\"']${name}[\"'][[:space:]]+content=[\"']([^\"']+)[\"'].*/\\1/p" <<<"$BODY" | head -n 1
+}
+
 if [[ "$URL" == "https://staging.netmarket.it" ]]; then
   if grep -qiE 'under construction|awesome site in the making' <<<"$BODY"; then
     echo "Staging non valido: pagina placeholder SiteGround rilevata."
     exit 1
   fi
-  if ! grep -qi 'netmarket' <<<"$BODY"; then
-    echo "Staging non valido: contenuto Netmarket non rilevato."
+  if ! grep -qiE '<!doctype html>|<html[[:space:]>]' <<<"$BODY"; then
+    echo "Staging non valido: documento HTML non riconosciuto."
     exit 1
   fi
   if grep -q 'http://localhost:4321' <<<"$BODY"; then
     echo "Staging non valido: metadata localhost rilevati."
     exit 1
   fi
-  required_markers=(
-    "Clienti e progetti seguiti da Netmarket."
-    "Persone, competenze, valore."
-    "Recensioni e segnali di fiducia."
-  )
+  build_sha="$(read_meta "netmarket-build")"
+  build_env="$(read_meta "netmarket-environment")"
+
+  if [[ -z "$build_sha" ]]; then
+    echo "Staging non valido: meta netmarket-build mancante."
+    exit 1
+  fi
+  if [[ "$build_env" != "$EXPECTED_BUILD_ENV" ]]; then
+    echo "Staging non valido: environment '$build_env' diverso da '$EXPECTED_BUILD_ENV'."
+    exit 1
+  fi
+  if [[ -n "$EXPECTED_BUILD_SHA" && "$build_sha" != "$EXPECTED_BUILD_SHA" ]]; then
+    echo "Staging non valido: build '$build_sha' diversa da '$EXPECTED_BUILD_SHA'."
+    exit 1
+  fi
+
+  required_markers=("<head" "<body" "site-header" "site-footer")
   for marker in "${required_markers[@]}"; do
-    if ! grep -q "$marker" <<<"$BODY"; then
-      echo "Staging non valido: marker homepage mancante: $marker"
+    if ! grep -qi "$marker" <<<"$BODY"; then
+      echo "Staging non valido: marker strutturale mancante: $marker"
       exit 1
     fi
   done
+
+  echo "Staging valido: build $build_sha su $build_env."
 fi
 
 if [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" ]]; then

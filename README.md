@@ -1,6 +1,6 @@
 # Netmarket Website
 
-Nuova piattaforma web Netmarket: frontend statico Astro, WordPress headless su `cms.netmarket.it`, staging futuro su `staging.netmarket.it` e produzione futura su `netmarket.it`.
+Nuova piattaforma web Netmarket: frontend statico Astro, WordPress headless su `cms.netmarket.it`, staging su `staging.netmarket.it` e produzione futura su `netmarket.it`.
 
 Il sito WordPress attuale in produzione non deve essere modificato da questo repository.
 
@@ -11,7 +11,7 @@ Il sito WordPress attuale in produzione non deve essere modificato da questo rep
 - `packages/schemas`: schemi Zod condivisi per le risposte REST.
 - `packages/seo`: utility SEO e JSON-LD tipizzate.
 - `packages/analytics`: eventi `dataLayer` tipizzati.
-- `infrastructure`: workflow e script futuri per SiteGround, inattivi di default.
+- `infrastructure`: workflow e script SiteGround per staging e CMS, con guard rail anti-produzione.
 - `docs`: guide operative e ADR.
 
 ## Requisiti
@@ -31,6 +31,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:e2e
+pnpm smoke:staging
 pnpm format
 pnpm validate
 ```
@@ -41,10 +42,14 @@ I controlli PHP statici completi richiedono Composer e le dipendenze del plugin.
 
 Copie locali partono da `.env.example`. In staging e production le variabili obbligatorie devono essere esplicite; i token non devono mai essere versionati.
 
-## Deploy
+## CI/CD
 
-Il deploy reale non è attivo. Gli script e i workflow rifiutano target diversi da `staging.netmarket.it` o `cms.netmarket.it` secondo lo scopo.
+`develop` pubblica automaticamente il frontend su `staging.netmarket.it` con una pipeline rapida: install, test essenziali web, build Astro, rsync e smoke test con verifica dello SHA pubblicato. Durante la migrazione anche `chore/bootstrap-netmarket-platform` pubblica staging.
+
+`quality.yml` resta separato e contiene i controlli approfonditi: lint, typecheck, unit test, build, controlli PHP, secret scan e Playwright E2E completo.
+
+Il CMS su `cms.netmarket.it` ha workflow dedicato. `netmarket.it` non viene mai usato come target operativo da questo repository.
 
 ## Stato
 
-Bootstrap tecnico iniziale: frontend minimale di staging, plugin headless installabile, schemi condivisi, documentazione, workflow e script di verifica.
+Piattaforma staging attiva: frontend Astro statico, plugin headless, schemi condivisi, design system, workflow staging rapido e quality pipeline separata.

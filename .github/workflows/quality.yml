@@ -1,41 +1,141 @@
 name: Quality
 
 on:
-  push:
   pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'fix/**'
+      - chore/bootstrap-netmarket-platform
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PUBLIC_SITE_URL: https://staging.netmarket.it
+  PUBLIC_CMS_URL: https://cms.netmarket.it
+  PUBLIC_DEPLOY_ENV: staging
+  PUBLIC_BUILD_SHA: ${{ github.sha }}
+  PUBLIC_BUILD_TIME: 1970-01-01T00:00:00Z
+  CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
 
 jobs:
-  validate:
+  lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          version: 11.13.0
+          version: 11.13.1
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
+
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm test
+
+  astro-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
-        env:
-          PUBLIC_SITE_URL: https://staging.netmarket.it
-          PUBLIC_CMS_URL: https://cms.netmarket.it
-          PUBLIC_DEPLOY_ENV: staging
-          CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
-      - run: pnpm php:lint
-      - name: Composer checks when dependencies are available
+
+  wordpress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache
+            apps/wordpress/plugins/netmarket-headless-core/vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('apps/wordpress/plugins/netmarket-headless-core/composer.lock') }}
+      - name: Install Composer dependencies
         working-directory: apps/wordpress/plugins/netmarket-headless-core
-        run: |
-          if [ -f composer.lock ]; then
-            composer install --no-interaction --prefer-dist
-            composer run phpcs
-            composer run phpstan
-          else
-            echo "composer.lock non presente: PHPCS/PHPStan predisposti ma non eseguiti in CI."
-          fi
+        run: composer install --no-interaction --prefer-dist
+      - name: PHP lint
+        run: find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
+      - name: PHPCS
+        working-directory: apps/wordpress/plugins/netmarket-headless-core
+        run: composer run phpcs
+      - name: PHPStan
+        working-directory: apps/wordpress/plugins/netmarket-headless-core
+        run: composer run phpstan
+
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm secrets:scan
       - run: git diff --exit-code
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Playwright browser
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e

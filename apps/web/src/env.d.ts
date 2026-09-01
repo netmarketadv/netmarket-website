@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_CMS_URL?: string;
   readonly PUBLIC_DEPLOY_ENV?: 'local' | 'staging' | 'production';
   readonly PUBLIC_ANALYTICS_ENABLED?: 'true' | 'false';
+  readonly PUBLIC_BUILD_SHA?: string;
+  readonly PUBLIC_BUILD_TIME?: string;
   readonly PUBLIC_GTM_ID?: string;
   readonly PUBLIC_GOOGLE_MAPS_API_KEY?: string;
   readonly PUBLIC_GOOGLE_PLACE_ID?: string;

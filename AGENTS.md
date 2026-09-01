@@ -8,6 +8,16 @@ Netmarket è un'agenzia italiana attiva dal 1986. Questo repository prepara la n
 
 Non modificare, testare deploy, connettersi o usare come target operativo `netmarket.it`. Target consentiti: `staging.netmarket.it` e `cms.netmarket.it`.
 
+## Branch E Deploy
+
+- `develop` pubblica automaticamente il frontend su `staging.netmarket.it` tramite `Deploy Staging`.
+- `chore/bootstrap-netmarket-platform` resta temporaneamente abilitato per la migrazione dello staging.
+- `main` è riservato al futuro production deploy, ma oggi non deve pubblicare su `netmarket.it`.
+- Branch `feature/*` e `fix/*` eseguono quality checks; non pubblicano su SiteGround.
+- Il deploy frontend e il deploy CMS sono separati: una modifica Astro non deve deployare automaticamente il plugin WordPress.
+- Ogni build staging deve esporre `netmarket-build`, `netmarket-build-time` e `netmarket-environment`; lo smoke test deve verificare lo SHA online.
+- Prima di un deploy staging reale viene salvato uno snapshot rollback `before-<sha>.tgz` sullo stesso hosting.
+
 ## Comandi
 
 - `pnpm install`
@@ -17,6 +27,7 @@ Non modificare, testare deploy, connettersi o usare come target operativo `netma
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm test:e2e`
+- `pnpm smoke:staging`
 - `pnpm validate`
 
 ## Standard
@@ -41,7 +52,7 @@ Usare branch dedicati, commit piccoli, niente force push, niente merge diretto s
 
 ## Qualità
 
-Ogni modifica deve aggiornare test e documentazione quando cambia comportamento. Prima di chiudere: lint, typecheck, test, build, PHP lint, secret scan e controllo diff.
+Ogni modifica deve aggiornare test e documentazione quando cambia comportamento. Per sviluppo quotidiano: test/typecheck/build rilevanti e smoke staging dopo deploy. La full QA completa vive in `.github/workflows/quality.yml` e include lint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E.
 
 ## Accessibilità, SEO, Performance
 
