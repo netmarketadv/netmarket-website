@@ -14,10 +14,18 @@ interface Props {
   description: string;
   path?: string;
   noindex?: boolean;
+  canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
 }
 
-const { title, description, path = '/', noindex = false, structuredData = [] } = Astro.props;
+const {
+  title,
+  description,
+  path = '/',
+  noindex = false,
+  canonicalSiteUrl,
+  structuredData = []
+} = Astro.props;
 const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
 const buildTime =
   import.meta.env.PUBLIC_BUILD_TIME ?? process.env.PUBLIC_BUILD_TIME ?? new Date().toISOString();
@@ -41,6 +49,7 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       description={description}
       path={path}
       noindex={noindex}
+      canonicalSiteUrl={canonicalSiteUrl}
       structuredData={structuredData}
     />
   </head>

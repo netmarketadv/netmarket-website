@@ -55,6 +55,8 @@ describe('seo utilities', () => {
       )
     ).toMatchObject({
       '@type': 'Service',
+      '@id': 'https://staging.netmarket.it/servizi/siti-web/#service',
+      serviceType: 'Siti web',
       provider: { '@id': 'https://staging.netmarket.it/#organization' },
       areaServed: 'Italy'
     });

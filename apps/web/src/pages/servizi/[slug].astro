@@ -1,0 +1,127 @@
+---
+import type { Service } from '@netmarket/schemas';
+import { absoluteCanonical, breadcrumbJsonLd, serviceJsonLd } from '@netmarket/seo';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import ServiceCTA from '@/components/services/ServiceCTA.astro';
+import ServiceDetailHero from '@/components/services/ServiceDetailHero.astro';
+import ServiceIntro from '@/components/services/ServiceIntro.astro';
+import ServiceProcess from '@/components/services/ServiceProcess.astro';
+import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
+import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getServiceArchiveData, resolveRelated, serviceDescription } from '@/lib/services/content';
+
+interface Props {
+  service: Service;
+  source: 'cms' | 'fallback';
+}
+
+export async function getStaticPaths() {
+  const { services, source } = await getServiceArchiveData();
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service, source }
+  }));
+}
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const { service, source } = Astro.props;
+const related =
+  source === 'cms'
+    ? await resolveRelated(service)
+    : {
+        caseStudies: [],
+        insights: [],
+        resources: [],
+        services: service.relatedServices.slice(0, 4)
+      };
+const path = `/servizi/${service.slug}/`;
+const description = serviceDescription(service);
+const title = service.seo.title || service.title;
+const faqItems = service.faq
+  .map((item) => {
+    if (!item || typeof item !== 'object') return null;
+    const record = item as Record<string, unknown>;
+    const question = typeof record.question === 'string' ? record.question : '';
+    const answer = typeof record.answer === 'string' ? record.answer : '';
+    return question && answer ? [question, answer] : null;
+  })
+  .filter((item): item is [string, string] => Boolean(item))
+  .slice(0, 6);
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Servizi', url: `${canonicalSiteUrl}/servizi/` },
+  { name: service.title, url: absoluteCanonical(canonicalSiteUrl, path) }
+]);
+const serviceSchema = serviceJsonLd(
+  canonicalSiteUrl,
+  service.title,
+  description,
+  absoluteCanonical(canonicalSiteUrl, path)
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  noindex={service.seo.noindex}
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, serviceSchema]}
+>
+  <Container wide>
+    <ServiceDetailHero service={service} />
+  </Container>
+
+  <Section compact labelledby="service-intro-title">
+    <Container>
+      <ServiceIntro service={service} />
+    </Container>
+  </Section>
+
+  <Section labelledby="service-process-title">
+    <Container>
+      <ServiceProcess service={service} />
+    </Container>
+  </Section>
+
+  <Section compact>
+    <Container>
+      <ServiceTaxonomyList service={service} />
+    </Container>
+  </Section>
+
+  <Section>
+    <Container wide>
+      <ServiceRelatedContent
+        caseStudies={related.caseStudies}
+        insights={related.insights}
+        resources={related.resources}
+        services={related.services}
+      />
+    </Container>
+  </Section>
+
+  {
+    faqItems.length > 0 && (
+      <Section class="faq-section" labelledby="service-faq-title">
+        <Container>
+          <FAQBlock
+            titleId="service-faq-title"
+            title="FAQ"
+            text={`Risposte essenziali sul servizio ${service.title}.`}
+            items={faqItems}
+          />
+        </Container>
+      </Section>
+    )
+  }
+
+  <Section class="inline-cta-section" labelledby="service-cta-title">
+    <Container wide>
+      <ServiceCTA />
+    </Container>
+  </Section>
+</BaseLayout>

@@ -14,22 +14,31 @@ interface Props {
   description: string;
   path?: string;
   noindex?: boolean;
+  canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
 }
 
-const { title, description, path = '/', noindex = false, structuredData = [] } = Astro.props;
+const {
+  title,
+  description,
+  path = '/',
+  noindex = false,
+  canonicalSiteUrl,
+  structuredData = []
+} = Astro.props;
 const env = getPublicEnv();
 const pageTitle = buildTitle(title);
-const canonical = absoluteCanonical(env.PUBLIC_SITE_URL, path);
+const seoSiteUrl = canonicalSiteUrl ?? env.PUBLIC_SITE_URL;
+const canonical = absoluteCanonical(seoSiteUrl, path);
 const robots = currentRobots(noindex);
 const jsonLd = [
-  organizationJsonLd(env.PUBLIC_SITE_URL),
-  webSiteJsonLd(env.PUBLIC_SITE_URL),
+  organizationJsonLd(seoSiteUrl),
+  webSiteJsonLd(seoSiteUrl),
   webPageJsonLd({
     title: pageTitle,
     description,
     canonicalPath: path,
-    siteUrl: env.PUBLIC_SITE_URL,
+    siteUrl: seoSiteUrl,
     robots
   }),
   ...structuredData

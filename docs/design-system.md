@@ -53,6 +53,15 @@ Pattern principali homepage:
 - Insight cards: tre card editoriali con immagine, titolo e descrizione.
 - FAQ accordion: domande brevi, risposte sintetiche.
 
+Pattern servizi:
+
+- Service archive hero: messaggio editoriale ampio con CTA verso l'indice.
+- Service index: righe grandi con preview media, indice numerico discreto, descrizione e chip tassonomici solo se esistono dati reali.
+- Service detail hero: breadcrumb, H1, lead, CTA e media opzionale.
+- Service needs: blocco scuro usato solo quando problemi/esigenze hanno contenuto reale.
+- Service process: step data-driven in card leggere, senza label generiche tipo "fase".
+- Service related links: link crawlable verso servizi, progetti, insight e risorse.
+
 ## 5. Spacing System
 
 Scala fluida: `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`. Usare i token in `apps/web/src/styles/tokens.css`; non introdurre valori ad hoc salvo casi documentati.

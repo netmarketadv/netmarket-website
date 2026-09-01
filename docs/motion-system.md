@@ -59,9 +59,7 @@ Distanze:
 Il sistema preferisce data attribute per restare leggero:
 
 ```html
-<section data-reveal="up" data-reveal-stagger="2">
-  ...
-</section>
+<section data-reveal="up" data-reveal-stagger="2">...</section>
 ```
 
 Attributi supportati:
@@ -86,6 +84,7 @@ Attributi supportati:
 - Mega menu: apertura piu lenta della chiusura, overlay leggero, delayed close su pointer.
 - Mobile: niente magnetic e niente cursor label, durata/distanza ridotte.
 - Media scroll: immagini importanti possono avere scale/brightness scrub leggero, senza pinning obbligatorio e senza bloccare la navigazione.
+- Services: l'archivio usa reveal progressivo sulle righe del service index; il dettaglio usa line reveal sull'H1, media reveal sul visual, stagger leggero su processo e related content.
 
 ## Reduced Motion
 

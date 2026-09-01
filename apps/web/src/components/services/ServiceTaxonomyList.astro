@@ -1,0 +1,37 @@
+---
+import type { Service } from '@netmarket/schemas';
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+{
+  (service.capabilities.length > 0 || service.technologies.length > 0) && (
+    <div class="service-taxonomies" data-reveal="up">
+      {service.capabilities.length > 0 && (
+        <section aria-labelledby="capability-title">
+          <h2 id="capability-title">Capability collegate</h2>
+          <ul>
+            {service.capabilities.slice(0, 8).map((capability) => (
+              <li>{capability.name}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {service.technologies.length > 0 && (
+        <section aria-labelledby="technology-title">
+          <h2 id="technology-title">Tecnologie</h2>
+          <ul>
+            {service.technologies.slice(0, 8).map((technology) => (
+              <li>{technology.name}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,38 @@
+---
+import type { Service } from '@netmarket/schemas';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const image = service.hero?.image ?? service.image;
+const lead = service.shortDescription || service.excerpt || service.subtitle;
+---
+
+<section class="service-detail-hero" aria-labelledby="page-title">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span aria-hidden="true">/</span>
+    <a href="/servizi/">Servizi</a>
+    <span aria-hidden="true">/</span>
+    <span>{service.title}</span>
+  </nav>
+
+  <div class="service-detail-hero__grid">
+    <div class="service-detail-hero__copy" data-reveal="line">
+      <p class="nm-meta">Servizio</p>
+      <h1 id="page-title">{service.title}</h1>
+      {lead && <p>{lead}</p>}
+      <Button href="#contatti" magnetic>Parliamone</Button>
+    </div>
+    {
+      image && (
+        <figure class="service-detail-hero__media" data-reveal="media">
+          <img src={image.url} alt={image.alt} loading="eager" decoding="async" />
+        </figure>
+      )
+    }
+  </div>
+</section>

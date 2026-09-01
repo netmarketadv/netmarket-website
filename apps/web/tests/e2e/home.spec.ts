@@ -10,13 +10,16 @@ function testBaseUrl() {
 async function hiddenRevealProblems(page: Page, scope: 'active' | 'passed' | 'all') {
   return page.evaluate((auditScope) => {
     const allowedHidden = (element: Element) =>
-      element.closest('.faq-list__panel[hidden], .site-header__mobile-panel, .mega-menu__panel, .mega-menu__scrim, [hidden]');
+      element.closest(
+        '.faq-list__panel[hidden], .site-header__mobile-panel, .mega-menu__panel, .mega-menu__scrim, [hidden]'
+      );
     const viewportHeight = window.innerHeight;
     return Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
       .map((element, index) => {
         const style = window.getComputedStyle(element);
         const rect = element.getBoundingClientRect();
-        const invisible = style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none';
+        const invisible =
+          style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none';
         const relevant =
           auditScope === 'active'
             ? rect.top < viewportHeight && rect.bottom > 0
@@ -63,7 +66,9 @@ test('homepage exposes staging essentials', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Parliamone' }).first()).toBeVisible();
   await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
-  await expect(page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')).toHaveCount(12);
+  await expect(
+    page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
+  ).toHaveCount(12);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: /Salta al contenuto/ })).toBeFocused();
@@ -72,10 +77,14 @@ test('homepage exposes staging essentials', async ({ page }) => {
 
 test('design system page is internal and noindexed', async ({ page }) => {
   await page.goto('/design-system/', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { level: 1, name: 'Netmarket design system' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Netmarket design system' })
+  ).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'Motion.' })).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
-  await expect(page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')).toHaveCount(12);
+  await expect(
+    page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
+  ).toHaveCount(12);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
 });
 
@@ -83,7 +92,9 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL: testBaseUrl() });
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { level: 1, name: 'Comunicazione e marketing digitale a Padova' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Comunicazione e marketing digitale a Padova' })
+  ).toBeVisible();
   await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
   await context.close();
 });
@@ -100,7 +111,10 @@ test('interactive motion controls remain accessible', async ({ page }) => {
   await faqTrigger.click();
   await expect(faqTrigger).toHaveAttribute('aria-expanded', 'true');
   await expect(faqTrigger.locator('.faq-list__icon')).toBeVisible();
-  await expect(faqTrigger.locator('.faq-list__icon')).toHaveCSS('background-color', 'rgb(14, 81, 254)');
+  await expect(faqTrigger.locator('.faq-list__icon')).toHaveCSS(
+    'background-color',
+    'rgb(14, 81, 254)'
+  );
   const faqStyles = await faqTrigger.evaluate((element) => {
     const triggerStyle = window.getComputedStyle(element);
     const icon = element.querySelector('.faq-list__icon');
@@ -133,14 +147,16 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(panel).toHaveCSS('height', '900px');
 
   await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
-  await expect(panel.getByRole('link', { name: /Siti web ed ecommerce/ })).toBeVisible();
+  await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.getByRole('contentinfo').scrollIntoViewIfNeeded();
   await expect(page.getByRole('contentinfo')).toContainText('P.IVA e C.F. 03618730281');
-  await expect(page.getByRole('contentinfo')).toContainText('Viale della Navigazione Interna, 51/b');
+  await expect(page.getByRole('contentinfo')).toContainText(
+    'Viale della Navigazione Interna, 51/b'
+  );
   await expect(page.getByRole('contentinfo')).toContainText('Lunedì-venerdì');
   await expect(page.getByRole('link', { name: /NOD new/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
@@ -201,20 +217,24 @@ test('team system renders people, portraits, links, and person schema', async ({
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.locator('.team-section').scrollIntoViewIfNeeded();
 
-  await expect(page.getByRole('heading', { level: 2, name: 'Persone, competenze, valore.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 2, name: 'Persone, competenze, valore.' })
+  ).toBeVisible();
   await expect(page.locator('.person-card')).toHaveCount(5);
   await expect(page.getByRole('img', { name: 'Ritratto di Enrico Paolo Toso' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Profilo LinkedIn di Enrico Paolo Toso' })).toHaveAttribute(
-    'href',
-    'https://www.linkedin.com/in/enricopaolotoso/'
-  );
+  await expect(
+    page.getByRole('link', { name: 'Profilo LinkedIn di Enrico Paolo Toso' })
+  ).toHaveAttribute('href', 'https://www.linkedin.com/in/enricopaolotoso/');
 
   const teamState = await page.evaluate(() => {
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.person-card'));
     const figures = Array.from(document.querySelectorAll<HTMLElement>('.person-card__figure'));
-    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.person-card__content a'));
-    const jsonLd = Array.from(document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]'))
-      .flatMap((script) => JSON.parse(script.textContent || '[]') as Array<Record<string, unknown>>);
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('.person-card__content a')
+    );
+    const jsonLd = Array.from(
+      document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]')
+    ).flatMap((script) => JSON.parse(script.textContent || '[]') as Array<Record<string, unknown>>);
     const people = jsonLd.filter((item) => item['@type'] === 'Person');
     const firstFigure = figures[0]?.getBoundingClientRect();
     const image = document.querySelector<HTMLImageElement>('.person-card__figure img');
@@ -223,7 +243,12 @@ test('team system renders people, portraits, links, and person schema', async ({
       cardCount: cards.length,
       figureCount: figures.length,
       linkCount: links.length,
-      externalLinks: links.every((link) => link.target === '_blank' && link.rel.includes('noopener') && link.rel.includes('noreferrer')),
+      externalLinks: links.every(
+        (link) =>
+          link.target === '_blank' &&
+          link.rel.includes('noopener') &&
+          link.rel.includes('noreferrer')
+      ),
       aspectRatio: firstFigure ? firstFigure.width / firstFigure.height : 0,
       objectFit: image ? window.getComputedStyle(image).objectFit : '',
       objectPosition: image ? window.getComputedStyle(image).objectPosition : '',
@@ -231,7 +256,9 @@ test('team system renders people, portraits, links, and person schema', async ({
       imageHeight: image?.getAttribute('height'),
       imageSizes: image?.getAttribute('sizes') ?? '',
       personSchemaCount: people.length,
-      enricoSchema: people.find((item) => String(item['@id']).endsWith('/#person-enrico-paolo-toso'))
+      enricoSchema: people.find((item) =>
+        String(item['@id']).endsWith('/#person-enrico-paolo-toso')
+      )
     };
   });
 
@@ -318,7 +345,11 @@ test('client marquee is full width, continuous, and accessible', async ({ page }
     const viewport = document.querySelector<HTMLElement>('.client-marquee__viewport');
     const track = document.querySelector<HTMLElement>('.client-marquee__track');
     const groups = Array.from(document.querySelectorAll<HTMLElement>('.client-marquee__group'));
-    const firstItems = Array.from(document.querySelectorAll<HTMLElement>('.client-marquee__group:not([aria-hidden]) .client-marquee__item'));
+    const firstItems = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        '.client-marquee__group:not([aria-hidden]) .client-marquee__item'
+      )
+    );
     const firstItem = firstItems[0];
     const firstItemStyle = firstItem ? window.getComputedStyle(firstItem) : null;
     const viewportStyle = viewport ? window.getComputedStyle(viewport) : null;
@@ -330,8 +361,12 @@ test('client marquee is full width, continuous, and accessible', async ({ page }
       windowWidth: window.innerWidth,
       groupCount: groups.length,
       cloneHidden: groups[1]?.getAttribute('aria-hidden') === 'true',
-      semanticLogoCount: document.querySelectorAll('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])').length,
-      decorativeLogoCount: document.querySelectorAll('.client-marquee__group[aria-hidden="true"] img[alt=""]').length,
+      semanticLogoCount: document.querySelectorAll(
+        '.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])'
+      ).length,
+      decorativeLogoCount: document.querySelectorAll(
+        '.client-marquee__group[aria-hidden="true"] img[alt=""]'
+      ).length,
       linkCount: document.querySelectorAll('.client-marquee__item a').length,
       rowCount: new Set(tops).size,
       itemBorder: firstItemStyle?.borderTopWidth,
@@ -429,14 +464,17 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   expect(['gsap', 'css']).toContain(engine);
 
   const visiblePreset = async (variant: string) =>
-    page.locator(`[data-reveal="${variant}"].is-visible`).first().evaluate((element) => {
-      const style = window.getComputedStyle(element);
-      return {
-        state: element.getAttribute('data-motion-state'),
-        animationName: style.animationName,
-        animationDuration: style.animationDuration
-      };
-    });
+    page
+      .locator(`[data-reveal="${variant}"].is-visible`)
+      .first()
+      .evaluate((element) => {
+        const style = window.getComputedStyle(element);
+        return {
+          state: element.getAttribute('data-motion-state'),
+          animationName: style.animationName,
+          animationDuration: style.animationDuration
+        };
+      });
 
   await expect.poll(() => visiblePreset('down')).toMatchObject({ state: 'revealed' });
   await expect.poll(() => visiblePreset('up')).toMatchObject({ state: 'revealed' });
@@ -454,19 +492,28 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'none' });
   } else {
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'nm-reveal-up' });
-    await expect.poll(() => visiblePreset('media')).toMatchObject({ animationName: 'nm-reveal-media' });
+    await expect
+      .poll(() => visiblePreset('media'))
+      .toMatchObject({ animationName: 'nm-reveal-media' });
   }
 });
 
 test('motion reveal is robust on mobile and reduced motion', async ({ browser }) => {
-  const mobileContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, baseURL: testBaseUrl() });
+  const mobileContext = await browser.newContext({
+    viewport: { width: 390, height: 1000 },
+    baseURL: testBaseUrl()
+  });
   const mobile = await mobileContext.newPage();
   await mobile.goto('/', { waitUntil: 'domcontentloaded' });
   await scrollToEndProgressively(mobile);
   expect(await hiddenRevealProblems(mobile, 'all')).toEqual([]);
   await mobileContext.close();
 
-  const reducedContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, reducedMotion: 'reduce', baseURL: testBaseUrl() });
+  const reducedContext = await browser.newContext({
+    viewport: { width: 390, height: 1000 },
+    reducedMotion: 'reduce',
+    baseURL: testBaseUrl()
+  });
   const reduced = await reducedContext.newPage();
   await reduced.goto('/', { waitUntil: 'domcontentloaded' });
   await reduced.waitForTimeout(250);

@@ -7,6 +7,8 @@
 - Staging sempre `noindex, nofollow, noarchive`.
 - Production indicizzabile salvo override editoriale.
 - Service usa Schema.org `Service` solo su pagine servizio reali, collegato a Organization.
+- Le pagine servizio emettono canonical assoluti verso il dominio pubblico finale, mentre staging resta noindex via robots environment.
+- Ogni dettaglio servizio emette breadcrumb `Home > Servizi > Nome servizio` e `Service` con `@id` stabile `#service`.
 - Article usa `Article`; se esiste una Person editoriale collegata, quella Person e l'autore.
 - Person usa `worksFor` verso Netmarket e `sameAs` LinkedIn quando presente.
 - Case Study viene modellato come `CreativeWork`/`WebPage`, senza inventare tipi Schema.org non pertinenti.

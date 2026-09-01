@@ -23,6 +23,10 @@ Il modello attivo e definito in `docs/content-architecture-v2.md`, `docs/content
 - `nm_capability`: competenze/metodi, associata a service, case study, post e resource.
 - `nm_technology`: tecnologie/prodotti/piattaforme, associata a service, case study, post e resource.
 
+## Frontend Services
+
+Il sistema frontend dei servizi è documentato in `docs/service-system.md`. Le pagine `/servizi/` e `/servizi/[slug]/` usano il CPT `nm_service` come fonte primaria e un fallback locale validato solo per build/staging quando il CMS non espone ancora servizi pubblicati.
+
 I termini non vengono popolati automaticamente.
 
 ## Relazioni

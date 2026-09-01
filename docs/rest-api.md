@@ -45,6 +45,8 @@ Filtri whitelisted:
 - case studies: `service`, `client`;
 - insights: `service`, `author`.
 
+Il frontend Services usa `per_page=50&sort=priority` per generare l'archivio statico e usa `service={slug}` per recuperare case study, insight e resource collegati quando non sono già embedded nel payload del servizio.
+
 Le relazioni nelle response sono summary:
 
 ```json

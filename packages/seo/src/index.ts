@@ -97,14 +97,17 @@ export function serviceJsonLd(
   siteUrl: string,
   name: string,
   description: string,
-  url: string
+  url: string,
+  serviceType = name
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    '@id': `${url}#service`,
     name,
     description,
     url,
+    serviceType,
     provider: { '@id': absoluteCanonical(siteUrl, '/#organization') },
     areaServed: 'Italy'
   };
