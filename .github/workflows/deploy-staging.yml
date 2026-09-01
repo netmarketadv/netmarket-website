@@ -34,6 +34,27 @@ jobs:
           test "$TARGET_HOST" = "staging.netmarket.it"
           test "$PUBLIC_SITE_URL" = "https://staging.netmarket.it"
           test "$PUBLIC_DEPLOY_ENV" = "staging"
+      - name: Check SSH secrets
+        run: |
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required staging secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "SG_SSH_HOST" "${{ secrets.SG_SSH_HOST }}"
+          check_secret "SG_SSH_PORT" "${{ secrets.SG_SSH_PORT }}"
+          check_secret "SG_SSH_USER" "${{ secrets.SG_SSH_USER }}"
+          check_secret "SG_SSH_PRIVATE_KEY" "${{ secrets.SG_SSH_PRIVATE_KEY }}"
+          check_secret "SG_SSH_KNOWN_HOSTS" "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
+          check_secret "SG_STAGING_DEPLOY_PATH" "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+
+          exit "$missing"
       - uses: pnpm/action-setup@v4
         with:
           version: 11.13.0
@@ -49,14 +70,6 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
-      - name: Check SSH secrets
-        run: |
-          test -n "${{ secrets.SG_SSH_HOST }}"
-          test -n "${{ secrets.SG_SSH_PORT }}"
-          test -n "${{ secrets.SG_SSH_USER }}"
-          test -n "${{ secrets.SG_SSH_PRIVATE_KEY }}"
-          test -n "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
-          test -n "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
       - name: Dry-run deploy plan
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
         run: infrastructure/scripts/deploy-staging.sh --dry-run --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
