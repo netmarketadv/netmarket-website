@@ -1,6 +1,6 @@
 # Deployment
 
-Il deploy reale è attivo solo per ambienti non produttivi. `deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`. Durante la transizione resta abilitato anche il branch `chore/bootstrap-netmarket-platform`, così il lavoro già avviato continua a pubblicare senza cambi forzati. `main` è riservato al futuro deploy production e non pubblica staging.
+Il deploy reale è attivo solo per ambienti non produttivi. `deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`. `main` è riservato al futuro deploy production e non pubblica staging.
 
 Lo staging statico viene pubblicato con `infrastructure/scripts/deploy-staging.sh`, che richiede build Astro già generata, SSH con known hosts espliciti e path assoluto.
 
@@ -16,7 +16,7 @@ Ogni build pubblicata espone metadata verificabili:
 
 Lo smoke test verifica che `https://staging.netmarket.it` serva lo stesso SHA della run GitHub appena pubblicata, evitando deploy stale o cache non aggiornate senza dipendere da testi editoriali fragili.
 
-La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su PR, push verso branch stabili, branch `feature/*` e `fix/*`, e manualmente.
+La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su Pull Request verso `develop`/`main`, push diretti a `develop`/`main`, e manualmente. Non parte automaticamente a ogni push su `feature/*` o `fix/*`.
 
 Rollback staging:
 
@@ -66,5 +66,5 @@ Ordine operativo:
 4. Eseguire `deploy-cms.yml` in dry-run.
 5. Eseguire `deploy-cms.yml` con `dry_run=false`.
 6. Eseguire `deploy-staging.yml` in dry-run.
-7. Eseguire `deploy-staging.yml` con `dry_run=false`, oppure fare push su `develop` o sul branch di transizione abilitato.
+7. Eseguire `deploy-staging.yml` con `dry_run=false`, oppure fare push su `develop`.
 8. Verificare health check staging e CMS.

@@ -7,7 +7,7 @@
 
 Il CMS remoto non è necessario per la homepage iniziale. Le chiamate CMS future devono passare dal client tipizzato.
 
-Per lo sviluppo quotidiano usare branch dedicati (`feature/*` o `fix/*`) e aprire PR verso `develop`. I push su `develop` aggiornano staging automaticamente; i push su branch feature eseguono solo i controlli di qualità configurati, senza deploy.
+Per lo sviluppo quotidiano usare branch dedicati (`feature/*` o `fix/*`) e aprire PR verso `develop`. I push su `develop` aggiornano staging automaticamente; i push su branch feature non pubblicano su SiteGround e non avviano la full QA completa finché non esiste una Pull Request verso `develop` o `main`.
 
 Prima di chiedere o fare merge su `develop`, eseguire almeno i controlli rilevanti:
 

@@ -12,8 +12,8 @@ Build e deploy devono essere ripetibili.
 
 Usare GitHub Actions con due percorsi distinti:
 
-- deploy staging rapido su `develop`, con branch `chore/bootstrap-netmarket-platform` abilitato solo durante la transizione;
-- quality workflow completo su PR, branch stabili e avvio manuale.
+- deploy staging rapido solo su `develop`;
+- quality workflow completo su Pull Request verso `develop`/`main`, push diretti a `develop`/`main` e avvio manuale.
 
 Il deploy staging genera metadata di build nel frontend e verifica lo SHA pubblicato dopo rsync.
 

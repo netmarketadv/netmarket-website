@@ -44,9 +44,9 @@ Copie locali partono da `.env.example`. In staging e production le variabili obb
 
 ## CI/CD
 
-`develop` pubblica automaticamente il frontend su `staging.netmarket.it` con una pipeline rapida: install, test essenziali web, build Astro, rsync e smoke test con verifica dello SHA pubblicato. Durante la migrazione anche `chore/bootstrap-netmarket-platform` pubblica staging.
+`develop` pubblica automaticamente il frontend su `staging.netmarket.it` con una pipeline rapida: install, test essenziali web, build Astro, rsync e smoke test con verifica dello SHA pubblicato.
 
-`quality.yml` resta separato e contiene i controlli approfonditi: lint, typecheck, unit test, build, controlli PHP, secret scan e Playwright E2E completo.
+`quality.yml` resta separato e contiene i controlli approfonditi: lint, typecheck, unit test, build, controlli PHP, secret scan e Playwright E2E completo. Parte su Pull Request verso `develop`/`main`, push diretti a `develop`/`main` e avvio manuale.
 
 Il CMS su `cms.netmarket.it` ha workflow dedicato. `netmarket.it` non viene mai usato come target operativo da questo repository.
 

@@ -2,13 +2,31 @@ name: Quality
 
 on:
   pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - 'apps/web/**'
+      - 'apps/wordpress/**'
+      - 'packages/**'
+      - 'infrastructure/scripts/**'
+      - '.github/workflows/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
   push:
     branches:
       - main
       - develop
-      - 'feature/**'
-      - 'fix/**'
-      - chore/bootstrap-netmarket-platform
+    paths:
+      - 'apps/web/**'
+      - 'apps/wordpress/**'
+      - 'packages/**'
+      - 'infrastructure/scripts/**'
+      - '.github/workflows/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
   workflow_dispatch:
 
 permissions:

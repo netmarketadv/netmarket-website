@@ -17,7 +17,6 @@
 Branch strategy:
 
 - `develop` pubblica automaticamente `staging.netmarket.it`.
-- `chore/bootstrap-netmarket-platform` resta abilitato temporaneamente come branch di transizione.
 - `main` è riservato alla produzione futura e non va collegato a staging.
 
 ## Production

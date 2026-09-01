@@ -11,12 +11,13 @@ Non modificare, testare deploy, connettersi o usare come target operativo `netma
 ## Branch E Deploy
 
 - `develop` pubblica automaticamente il frontend su `staging.netmarket.it` tramite `Deploy Staging`.
-- `chore/bootstrap-netmarket-platform` resta temporaneamente abilitato per la migrazione dello staging.
 - `main` è riservato al futuro production deploy, ma oggi non deve pubblicare su `netmarket.it`.
-- Branch `feature/*` e `fix/*` eseguono quality checks; non pubblicano su SiteGround.
+- Branch `feature/*` e `fix/*` non pubblicano su SiteGround; la full QA automatica passa dalle Pull Request verso `develop` o `main`.
 - Il deploy frontend e il deploy CMS sono separati: una modifica Astro non deve deployare automaticamente il plugin WordPress.
 - Ogni build staging deve esporre `netmarket-build`, `netmarket-build-time` e `netmarket-environment`; lo smoke test deve verificare lo SHA online.
 - Prima di un deploy staging reale viene salvato uno snapshot rollback `before-<sha>.tgz` sullo stesso hosting.
+- La source of truth operativa è `Git -> GitHub -> GitHub Actions -> SiteGround`. Non usare normalmente FTP, SCP, rsync locale diretto, modifiche file server o upload manuali SiteGround se la pipeline ufficiale funziona.
+- Se una modifica deve essere pubblicata su staging, porta il codice corretto su `develop`, verifica push, `Deploy Staging`, smoke test, build SHA online e `https://staging.netmarket.it` prima di dichiararla pubblicata.
 
 ## Comandi
 
