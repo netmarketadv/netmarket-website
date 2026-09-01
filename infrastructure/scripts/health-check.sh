@@ -22,7 +22,7 @@ if [[ "$URL" == "https://staging.netmarket.it" ]]; then
   CHECK_URL="${URL}?nm_health=$(date +%s)"
 fi
 
-CURL_ARGS=(--fail --silent --show-error --max-time 10)
+CURL_ARGS=(--fail --location --silent --show-error --max-time 10)
 if [[ -n "$BASIC_AUTH" ]]; then
   CURL_ARGS+=(-u "$BASIC_AUTH")
 elif [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" && -n "${CMS_BASIC_AUTH_USER:-}" && -n "${CMS_BASIC_AUTH_PASSWORD:-}" ]]; then
