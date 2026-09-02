@@ -75,5 +75,8 @@ describe('service system', () => {
     expect(detail).toContain('getStaticPaths');
     expect(detail).toContain('serviceJsonLd');
     expect(header).toContain('/servizi/siti-web/');
+    expect(header).toContain("menuVariant: 'wide'");
+    expect(header).toContain("menuVariant: 'compact'");
+    expect(header).toContain('/servizi/concorsi-a-premi/');
   });
 });

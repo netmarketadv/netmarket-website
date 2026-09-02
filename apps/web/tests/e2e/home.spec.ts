@@ -140,6 +140,16 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(page.locator('.site-header')).toHaveCSS('border-bottom-width', '0px');
   await expect(page.locator('.site-header')).toHaveCSS('box-shadow', 'none');
 
+  const servicesMenu = page.locator('.mega-menu').filter({ hasText: 'Servizi' }).first();
+  await servicesMenu.locator('summary').click();
+  await expect(servicesMenu.locator('.mega-menu__panel--wide')).toBeVisible();
+  await expect(servicesMenu.locator('.mega-menu__scrim')).toHaveCSS('top', '0px');
+  await expect(servicesMenu.getByRole('link', { name: /Concorsi a premi/ })).toBeVisible();
+
+  const agencyMenu = page.locator('.mega-menu').filter({ hasText: 'Agenzia' }).first();
+  await agencyMenu.locator('summary').click();
+  await expect(agencyMenu.locator('.mega-menu__panel--compact')).toBeVisible();
+
   await page.setViewportSize({ width: 390, height: 900 });
   await page.getByLabel('Apri menu').click();
   const panel = page.locator('.site-header__mobile-panel');

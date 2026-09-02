@@ -2,12 +2,13 @@
 import Button from '@/components/ui/Button.astro';
 import IconBubble from '@/components/ui/IconBubble.astro';
 
-type IconName = 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'sparkles' | 'users';
+type IconName = 'bolt' | 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'shield' | 'sparkles' | 'users';
 
 interface NavItem {
   label: string;
   href?: string;
   description?: string;
+  menuVariant?: 'compact' | 'wide';
   children?: Array<{
     label: string;
     href: string;
@@ -19,15 +20,10 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: 'Servizi',
+    menuVariant: 'wide',
     description:
       'Web, marketing, contenuti e pubblicità lavorano meglio quando hanno una regia unica.',
     children: [
-      {
-        label: 'Tutti i servizi',
-        description: 'Archivio editoriale completo dei servizi Netmarket.',
-        href: '/servizi/',
-        icon: 'sparkles'
-      },
       {
         label: 'Siti web',
         description: 'Pagine, contenuti e percorsi di conversione.',
@@ -41,21 +37,52 @@ const navItems: NavItem[] = [
         icon: 'briefcase'
       },
       {
-        label: 'SEO e advertising',
-        description: 'Visibilità, campagne, dati e ottimizzazione.',
+        label: 'Software e integrazioni',
+        description: 'Gestionale, automazioni, API e strumenti su misura.',
+        href: '/servizi/software-e-integrazioni/',
+        icon: 'bolt'
+      },
+      {
+        label: 'SEO',
+        description: 'Architettura, contenuti e visibilità organica.',
         href: '/servizi/seo/',
         icon: 'search'
       },
       {
-        label: 'Brand e contenuti',
+        label: 'Advertising',
+        description: 'Campagne, dati, tracciamenti e ottimizzazione.',
+        href: '/servizi/advertising/',
+        icon: 'chart'
+      },
+      {
+        label: 'Social media',
+        description: 'Piani editoriali, contenuti e gestione canali.',
+        href: '/servizi/social-media/',
+        icon: 'users'
+      },
+      {
+        label: 'Branding e comunicazione',
         description: 'Identità, messaggi e materiali coordinati.',
         href: '/servizi/branding-e-comunicazione/',
         icon: 'palette'
+      },
+      {
+        label: 'Content production',
+        description: 'Foto, video, copy e asset per campagne e sito.',
+        href: '/servizi/content-production/',
+        icon: 'sparkles'
+      },
+      {
+        label: 'Concorsi a premi',
+        description: 'Meccaniche, sviluppo, gestione e conformità.',
+        href: '/servizi/concorsi-a-premi/',
+        icon: 'shield'
       }
     ]
   },
   {
     label: 'Agenzia',
+    menuVariant: 'compact',
     description: 'Un partner a Padova per costruire comunicazione coerente online e offline.',
     children: [
       {
@@ -86,6 +113,7 @@ const navItems: NavItem[] = [
   },
   { href: '/progetti/', label: 'Progetti' },
   { href: '/insight/', label: 'Insight' },
+  { href: '/nod/', label: 'NØD' },
   { href: '/contatti/', label: 'Contatti' }
 ];
 ---
@@ -105,10 +133,11 @@ const navItems: NavItem[] = [
               <div
                 class:list={[
                   'mega-menu__panel',
-                  item.children.length <= 3 && 'mega-menu__panel--compact'
+                  item.menuVariant === 'compact' && 'mega-menu__panel--compact',
+                  item.menuVariant === 'wide' && 'mega-menu__panel--wide'
                 ]}
               >
-                <div>
+                <div class="mega-menu__intro">
                   <h2>{item.label === 'Servizi' ? 'Servizi integrati' : 'Netmarket dal 1986'}</h2>
                   <p>{item.description}</p>
                 </div>
