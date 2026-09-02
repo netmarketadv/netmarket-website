@@ -58,11 +58,11 @@ test('homepage exposes staging essentials', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const homeHeading = page.locator('#page-title');
   await expect(homeHeading).toBeVisible();
-  await expect(homeHeading.locator('.nm-heading-o')).toHaveCount(3);
-  await expect(page.locator('.hero-request p .nm-heading-o')).toHaveCount(0);
-  await expect(page).toHaveTitle(/Agenzia web/);
-  await expect(page.getByRole('link', { name: 'Parliamone' }).first()).toBeVisible();
-  await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
+  await expect(homeHeading).toContainText('Comunichiamo valore');
+  await expect(page).toHaveTitle(/Agenzia comunicazione/);
+  await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Guarda i progetti' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /Vedi tutti i servizi/ })).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
@@ -91,9 +91,12 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Comunicazione e marketing digitale a Padova' })
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Comunichiamo valore tra marketing, tecnologia e contenuti.'
+    })
   ).toBeVisible();
-  await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
   await context.close();
 });
 
@@ -240,7 +243,7 @@ test('team system renders people, portraits, links, and person schema', async ({
   await page.locator('.team-section').scrollIntoViewIfNeeded();
 
   await expect(
-    page.getByRole('heading', { level: 2, name: 'Persone, competenze, valore.' })
+    page.getByRole('heading', { level: 2, name: 'Competenze diverse. Una sola direzione.' })
   ).toBeVisible();
   await expect(page.locator('.person-card')).toHaveCount(5);
   await expect(page.getByRole('img', { name: 'Ritratto di Enrico Paolo Toso' })).toBeVisible();
