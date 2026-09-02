@@ -1,12 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { collectCriticalConsoleErrors } from './helpers';
 
 test.setTimeout(120_000);
 
 test('services archive renders the editorial index', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
+  const errors = collectCriticalConsoleErrors(page);
 
   await page.goto('/servizi/', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: /Servizi integrati/ })).toBeVisible();

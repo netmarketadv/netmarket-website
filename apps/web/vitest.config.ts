@@ -8,6 +8,6 @@ export default defineConfig({
     }
   },
   test: {
-    exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**']
+    exclude: ['tests/e2e/**', 'tests/e2e-smoke/**', 'node_modules/**', 'dist/**']
   }
 });

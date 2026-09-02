@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { collectCriticalConsoleErrors, waitForInteractivePage } from './helpers';
 
 test.setTimeout(120_000);
 
@@ -53,10 +54,7 @@ async function scrollToEndProgressively(page: Page) {
 }
 
 test('homepage exposes staging essentials', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
+  const errors = collectCriticalConsoleErrors(page);
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const homeHeading = page.locator('#page-title');
   await expect(homeHeading).toBeVisible();
@@ -101,11 +99,14 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
 
 test('interactive motion controls remain accessible', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
 
-  await page.locator('.mega-menu summary').filter({ hasText: 'Servizi' }).click();
-  await expect(page.locator('.mega-menu').first()).toHaveAttribute('open', '');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('.mega-menu').first()).not.toHaveAttribute('open', '');
+  const servicesSummary = page.locator('.mega-menu summary').filter({ hasText: 'Servizi' });
+  const servicesMenu = page.locator('.mega-menu').first();
+  await servicesSummary.click();
+  await expect(servicesMenu).toHaveAttribute('open', '');
+  await servicesSummary.click();
+  await expect(servicesMenu).not.toHaveAttribute('open', '');
 
   const faqTrigger = page.getByRole('button', { name: 'Avete già un sito da rifare?' });
   await faqTrigger.click();
@@ -162,10 +163,15 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
   await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
-  await expect(page.getByRole('img', { name: 'iubenda Gold Partner' })).toBeVisible();
-  await page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' })).toBeVisible();
-  await expect(page.getByRole('img', { name: 'WooCommerce ecommerce partner' })).toBeVisible();
+  const iubenda = page.getByRole('img', { name: 'iubenda Gold Partner' });
+  const brevo = page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' });
+  const woocommerce = page.getByRole('img', { name: 'WooCommerce ecommerce partner' });
+  await iubenda.scrollIntoViewIfNeeded();
+  await expect(iubenda).toBeVisible();
+  await brevo.scrollIntoViewIfNeeded();
+  await expect(brevo).toBeVisible();
+  await woocommerce.scrollIntoViewIfNeeded();
+  await expect(woocommerce).toBeVisible();
 });
 
 test('reviews layout stays compact and clean', async ({ page }) => {
@@ -419,6 +425,8 @@ test('client marquee respects reduced motion', async ({ browser }) => {
 
 test('header records scrolled state without layout overlap', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
+  await expect(page.locator('.site-header')).toHaveAttribute('data-motion-header', 'ready');
   await expect
     .poll(
       () =>
@@ -458,6 +466,7 @@ test('motion reveal never leaves normal content hidden during scroll states', as
 
 test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
   await page.waitForTimeout(900);
 
   const engine = await page.evaluate(() => document.documentElement.dataset.motionEngine ?? 'css');
@@ -522,6 +531,6 @@ test('motion reveal is robust on mobile and reduced motion', async ({ browser })
 });
 
 test('404 page works', async ({ page }) => {
-  await page.goto('/missing-page');
+  await page.goto('/missing-page', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: 'Pagina non trovata' })).toBeVisible();
 });

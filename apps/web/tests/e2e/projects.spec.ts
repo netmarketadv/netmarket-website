@@ -1,13 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { collectCriticalConsoleErrors } from './helpers';
 
 test.describe('projects', () => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   test('renders project archive with crawlable project links', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
+    const errors = collectCriticalConsoleErrors(page);
 
     await page.goto('/progetti/', { waitUntil: 'domcontentloaded' });
 

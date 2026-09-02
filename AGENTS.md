@@ -20,6 +20,8 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 - Prima di un deploy staging reale viene salvato uno snapshot rollback `before-<sha>.tgz` sullo stesso hosting.
 - La source of truth operativa è `Git -> GitHub -> GitHub Actions -> SiteGround`. Non usare normalmente FTP, SCP, rsync locale diretto, modifiche file server o upload manuali SiteGround se la pipeline ufficiale funziona.
 - Se una modifica deve essere pubblicata su staging, porta il codice corretto su `develop`, verifica push, `Deploy Staging`, smoke test, build SHA online e `https://staging.netmarket.it` prima di dichiararla pubblicata.
+- Loop quotidiano: `edit -> targeted checks -> commit -> push develop -> Deploy Staging (check:fast -> deploy -> smoke)`.
+- Non aspettare o lanciare automaticamente la full E2E suite durante sviluppo normale, salvo rischio reale o richiesta esplicita.
 
 ## Comandi
 
@@ -29,6 +31,8 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
+- `pnpm check:fast`
+- `pnpm test:e2e:smoke`
 - `pnpm test:e2e`
 - `pnpm smoke:staging`
 - `pnpm validate`
@@ -55,7 +59,16 @@ Usare branch dedicati, commit piccoli, niente force push, niente merge diretto s
 
 ## Qualità
 
-Ogni modifica deve aggiornare test e documentazione quando cambia comportamento. Per sviluppo quotidiano: test/typecheck/build rilevanti e smoke staging dopo deploy. La full QA completa vive in `.github/workflows/quality.yml` e include lint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E.
+Ogni modifica deve aggiornare test e documentazione quando cambia comportamento. Scegliere sempre il livello minimo di validazione sufficiente:
+
+- small change: lint/build mirati o controllo del package interessato;
+- medium change: lint, typecheck, unit e build;
+- functional/routing/form/navigation change: aggiungere smoke E2E mirato;
+- release o merge verso `main`: full validation e full Playwright E2E.
+
+Per sviluppo quotidiano preferire `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm check:fast` o comandi filtrati. Non lanciare automaticamente `pnpm test:e2e` per copy, CSS, spacing, colore, piccole animazioni o refactor locali non critici. Usare `pnpm test:e2e:smoke` per controlli funzionali rapidi. Usare `pnpm test:e2e` solo quando richiesto, prima di release, su modifiche E2E, routing, navigazione, form, flussi critici o quando il rischio lo giustifica.
+
+`Quality Fast` gira su PR verso `develop` e manual trigger: frontend fast checks, WordPress fast checks solo se cambiano file pertinenti, secret scan e path filtering. Su push `develop`, `Deploy Staging` esegue direttamente `pnpm check:fast`, deploy e smoke per evitare workflow duplicati. `Quality Full` vive in `.github/workflows/quality.yml` e gira su PR verso `main`, push `main` o manual trigger: lint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo.
 
 ## Accessibilità, SEO, Performance
 

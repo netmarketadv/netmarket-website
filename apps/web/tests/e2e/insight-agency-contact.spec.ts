@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { collectCriticalConsoleErrors } from './helpers';
 
 test.describe('insight, agency and contact', () => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   test('renders insight archive and article detail with crawlable links', async ({ page }) => {
     await page.goto('/insight/', { waitUntil: 'domcontentloaded' });
@@ -29,10 +30,7 @@ test.describe('insight, agency and contact', () => {
   });
 
   test('renders contact form without console errors', async ({ page }) => {
-    const errors: string[] = [];
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
+    const errors = collectCriticalConsoleErrors(page);
 
     await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
 

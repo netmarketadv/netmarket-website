@@ -13,6 +13,7 @@
     ".astro/types.d.ts",
     "astro.config.ts",
     "playwright.config.ts",
+    "playwright.smoke.config.ts",
     "vitest.config.ts",
     "src/**/*.ts",
     "src/**/*.astro",
