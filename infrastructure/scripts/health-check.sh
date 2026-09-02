@@ -24,7 +24,7 @@ if [[ "$URL" == "https://staging.netmarket.it" ]]; then
   CHECK_URL="${URL}?nm_health=$(date +%s)"
 fi
 
-CURL_ARGS=(--fail --location --silent --show-error --max-time 10)
+CURL_ARGS=(--location --silent --show-error --max-time 10)
 if [[ -n "$BASIC_AUTH" ]]; then
   CURL_ARGS+=(-u "$BASIC_AUTH")
 elif [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" && -n "${CMS_BASIC_AUTH_USER:-}" && -n "${CMS_BASIC_AUTH_PASSWORD:-}" ]]; then
@@ -34,7 +34,17 @@ elif [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" ]]; the
   exit 1
 fi
 
-BODY="$(curl "${CURL_ARGS[@]}" "$CHECK_URL")"
+HEADER_FILE="$(mktemp)"
+trap 'rm -f "$HEADER_FILE"' EXIT
+BODY="$(curl "${CURL_ARGS[@]}" --dump-header "$HEADER_FILE" --write-out '\n%{http_code}' "$CHECK_URL")"
+HTTP_STATUS="${BODY##*$'\n'}"
+BODY="${BODY%$'\n'*}"
+CONTENT_TYPE="$(awk 'BEGIN { IGNORECASE = 1 } /^content-type:/ { sub(/\r$/, ""); print $0 }' "$HEADER_FILE" | tail -n 1)"
+
+if [[ "$HTTP_STATUS" -lt 200 || "$HTTP_STATUS" -ge 400 ]]; then
+  echo "Health check non valido: HTTP $HTTP_STATUS ${CONTENT_TYPE:-content-type sconosciuto}."
+  exit 1
+fi
 
 read_meta() {
   local name="$1"
@@ -84,6 +94,8 @@ fi
 if [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" ]]; then
   if ! grep -q '"status"[[:space:]]*:[[:space:]]*"ok"' <<<"$BODY"; then
     echo "CMS non valido: health endpoint proprietario non risponde status ok."
+    echo "CMS HTTP: $HTTP_STATUS ${CONTENT_TYPE:-content-type sconosciuto}."
+    printf 'CMS body preview: %s\n' "$(tr '\n\r' '  ' <<<"$BODY" | cut -c 1-240)"
     exit 1
   fi
 fi
