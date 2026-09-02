@@ -10,6 +10,7 @@ on:
       - 'infrastructure/scripts/deploy-staging.sh'
       - 'infrastructure/scripts/health-check.sh'
       - 'infrastructure/scripts/pull-cms-cache.mjs'
+      - 'infrastructure/scripts/detect-staging-challenge.mjs'
       - 'infrastructure/scripts/smoke-staging.mjs'
       - 'apps/web/playwright.smoke.config.ts'
       - 'apps/web/tests/e2e-smoke/**'
@@ -152,19 +153,24 @@ jobs:
           EXPECTED_BUILD_SHA: ${{ github.sha }}
           EXPECTED_BUILD_ENV: staging
 
-      - name: Cache Playwright browsers
+      - name: Detect SiteGround runner challenge
+        id: sg_challenge
         if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: node infrastructure/scripts/detect-staging-challenge.mjs
+
+      - name: Cache Playwright browsers
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright smoke browser
-        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
 
       - name: Playwright smoke on staging
-        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
         run: pnpm test:e2e:smoke
         env:
           PLAYWRIGHT_BASE_URL: https://staging.netmarket.it
