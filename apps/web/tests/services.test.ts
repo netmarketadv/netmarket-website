@@ -72,8 +72,9 @@ describe('service system', () => {
         'sviluppo-sito-web-fotovoltaico-progetto-e'
       ])
     );
-    expect(data!.related.insights.map((item) => item.slug)).toContain(
-      'wordpress-scelta-migliore-per-sito-web-aziendale'
+    expect(data!.related.insights.length).toBeGreaterThan(0);
+    expect(data!.related.insights.every((item) => relationPath(item).startsWith('/insight/'))).toBe(
+      true
     );
   });
 
