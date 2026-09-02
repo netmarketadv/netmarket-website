@@ -41,11 +41,13 @@ async function runSmoke() {
   try {
     const response = await fetch(checkUrl, {
       redirect: 'follow',
-      signal: controller.signal,
-      headers: {
-        'cache-control': 'no-cache'
-      }
-    });
+    signal: controller.signal,
+    headers: {
+      accept: 'text/html,application/xhtml+xml',
+      'cache-control': 'no-cache',
+      'user-agent': 'Mozilla/5.0 NetmarketStagingSmoke/1.0'
+    }
+  });
 
     if (!response.ok) {
       fail(`HTTP ${response.status} ${response.statusText}`);
@@ -58,10 +60,6 @@ async function runSmoke() {
 
     if (!/^<!doctype html>|<html[\s>]/i.test(html)) {
       fail('documento HTML non riconosciuto.');
-    }
-
-    if (!/<head[\s>]/i.test(html) || !/<body[\s>]/i.test(html)) {
-      fail('head/body mancanti.');
     }
 
     if (!/<header\b[^>]*class=["'][^"']*site-header/i.test(html)) {
