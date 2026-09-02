@@ -80,4 +80,10 @@ jobs:
           SG_SSH_KNOWN_HOSTS: ${{ env.SG_CMS_SSH_KNOWN_HOSTS }}
       - name: Health check
         if: ${{ inputs.dry_run == 'false' }}
-        run: infrastructure/scripts/health-check.sh --url https://cms.netmarket.it/wp-json/netmarket/v1/health
+        run: node infrastructure/scripts/pull-cms-cache.mjs
+        env:
+          SG_SSH_HOST: ${{ env.SG_CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.SG_CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.SG_CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.SG_CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.SG_CMS_SSH_KNOWN_HOSTS }}

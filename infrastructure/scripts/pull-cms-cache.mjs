@@ -88,10 +88,18 @@ echo wp_json_encode($data);
       `UserKnownHostsFile=${knownHostsFile}`,
       '-o',
       'StrictHostKeyChecking=yes',
+      '-o',
+      'BatchMode=yes',
+      '-o',
+      'ConnectTimeout=30',
+      '-o',
+      'ServerAliveInterval=15',
+      '-o',
+      'ServerAliveCountMax=2',
       `${process.env.SG_SSH_USER}@${process.env.SG_SSH_HOST}`,
       remote
     ],
-    { encoding: 'utf8' }
+    { encoding: 'utf8', timeout: 45_000 }
   );
 
   if (result.status !== 0) {
