@@ -71,10 +71,12 @@ cat > .htaccess <<'EOF'
 <IfModule mod_setenvif.c>
   SetEnvIf Request_URI \"^/robots\\.txt$\" NMHC_NO_AUTH=1
   SetEnvIf Request_URI \"^/wp-content/uploads/\" NMHC_NO_AUTH=1
-  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/health/?$\" NMHC_NO_AUTH=1
-  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/forms/contact/?$\" NMHC_NO_AUTH=1
-  SetEnvIfNoCase THE_REQUEST \"^[A-Z]+[[:space:]]+/wp-json/netmarket/v1/health/?([[:space:]?]|$)\" NMHC_NO_AUTH=1
-  SetEnvIfNoCase THE_REQUEST \"^[A-Z]+[[:space:]]+/wp-json/netmarket/v1/forms/contact/?([[:space:]?]|$)\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase Request_URI \"netmarket/v1/health\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase Request_URI \"netmarket/v1/forms/contact\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase Query_String \"rest_route=/netmarket/v1/health\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase Query_String \"rest_route=/netmarket/v1/forms/contact\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase THE_REQUEST \"netmarket/v1/health\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase THE_REQUEST \"netmarket/v1/forms/contact\" NMHC_NO_AUTH=1
 </IfModule>
 
 AuthType Basic
