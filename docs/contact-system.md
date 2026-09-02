@@ -23,7 +23,8 @@ Il payload include:
 - `website` honeypot;
 - `utm`;
 - `sourceUrl`;
-- `referrer`.
+- `referrer`;
+- `elapsedMs`.
 
 ## Validazione Server
 
@@ -36,9 +37,25 @@ Il plugin WordPress valida:
 - messaggio 10-3000 caratteri;
 - consenso privacy obbligatorio;
 - pattern spam di base;
-- rate limit per IP + email, massimo 3 invii ogni 10 minuti.
+- rate limit per IP + email, massimo 3 invii ogni 10 minuti;
+- tempo minimo opzionale tramite `elapsedMs`, per intercettare invii automatici troppo rapidi senza dipendere dall'orologio del device.
 
-Il destinatario attuale e `admin_email` WordPress. Non vengono salvati dati personali nel repository.
+I destinatari sono configurati server-side nel plugin:
+
+- TO: `segreteria@netmarket.it`;
+- CC: `enrico@netmarket.it`;
+- From: `Netmarket <segreteria@netmarket.it>`;
+- Reply-To: nome/email inseriti dall'utente, dopo sanitizzazione.
+
+Il frontend non puo scegliere destinatari. Il plugin non salva lead nel database e logga solo request ID, timestamp implicito del server e stato tecnico.
+
+Quando `wp_mail()` fallisce, l'endpoint risponde con errore `mail_failed` e il frontend non effettua redirect.
+
+## Success
+
+Dopo una risposta positiva reale dal backend, il frontend invia `contact_form_success` e reindirizza a `/grazie/`. Il redirect non contiene dati personali in query string.
+
+`/grazie/` e pubblica, non compare in navigazione o sitemap, e in produzione deve restare `noindex, follow`. In staging/local la policy globale resta piu restrittiva.
 
 ## Analytics
 
@@ -50,3 +67,5 @@ Il form spinge eventi `dataLayer`:
 - `contact_form_error`.
 
 Gli ID di tracking non sono configurati nel repository e staging non carica script marketing di default.
+
+La conversione primaria e `contact_form_success`. La thank-you page puo essere usata come pagina di conferma, ma non deve introdurre un secondo evento conversione equivalente senza deduplica.

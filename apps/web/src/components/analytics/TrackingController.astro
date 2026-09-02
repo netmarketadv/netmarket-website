@@ -1,0 +1,36 @@
+<script>
+  const keys = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_content',
+    'utm_term',
+    'gclid',
+    'fbclid',
+    'ttclid',
+    'oppref'
+  ];
+  const params = new URLSearchParams(window.location.search);
+  const stored = JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}') as Record<
+    string,
+    string
+  >;
+  const next = { ...stored };
+
+  for (const key of keys) {
+    const value = params.get(key);
+    if (value) next[key] = value;
+  }
+
+  if (!next.referrer && document.referrer) {
+    next.referrer = document.referrer;
+  }
+
+  if (!next.sourceUrl) {
+    next.sourceUrl = window.location.href;
+  }
+
+  if (Object.keys(next).length > 0) {
+    sessionStorage.setItem('nm_contact_tracking', JSON.stringify(next));
+  }
+</script>

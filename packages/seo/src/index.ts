@@ -1,4 +1,8 @@
-export type Robots = 'index, follow' | 'noindex, nofollow' | 'noindex, nofollow, noarchive';
+export type Robots =
+  | 'index, follow'
+  | 'noindex, follow'
+  | 'noindex, nofollow'
+  | 'noindex, nofollow, noarchive';
 
 export interface PageMeta {
   title: string;

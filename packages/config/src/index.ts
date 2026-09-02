@@ -3,7 +3,10 @@ import { z } from 'zod';
 export const deployEnvSchema = z.enum(['local', 'staging', 'production']);
 export type DeployEnv = z.infer<typeof deployEnvSchema>;
 export type RobotsDirective =
-  'index, follow' | 'noindex, nofollow' | 'noindex, nofollow, noarchive';
+  | 'index, follow'
+  | 'noindex, follow'
+  | 'noindex, nofollow'
+  | 'noindex, nofollow, noarchive';
 
 export const publicEnvSchema = z.object({
   PUBLIC_SITE_URL: z.string().url(),
@@ -48,7 +51,12 @@ export function validateServerEnv(input: Record<string, unknown>, deployEnv: Dep
   return server;
 }
 
-export function robotsForEnv(env: DeployEnv, editorialNoindex = false): RobotsDirective {
+export function robotsForEnv(
+  env: DeployEnv,
+  editorialNoindex = false,
+  editorialFollow = false
+): RobotsDirective {
+  if (editorialNoindex && editorialFollow && env === 'production') return 'noindex, follow';
   if (editorialNoindex) return 'noindex, nofollow, noarchive';
   if (env === 'staging') return 'noindex, nofollow, noarchive';
   if (env === 'local') return 'noindex, nofollow';

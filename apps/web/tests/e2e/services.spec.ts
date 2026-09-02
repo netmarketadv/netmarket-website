@@ -35,9 +35,8 @@ test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
     'href',
     'https://www.netmarket.it/servizi/siti-web/'
   );
-  await expect(
-    page.getByRole('button', { name: 'Possiamo rifare un sito già online?' })
-  ).toBeVisible();
+  await expect(page.locator('#service-faq-title')).toBeVisible();
+  await expect(page.locator('.faq-list__trigger').first()).toBeVisible();
   await expect(page.getByRole('button', { name: 'Parliamone' }).first()).toBeVisible();
 });
 

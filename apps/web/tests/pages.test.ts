@@ -13,6 +13,7 @@ describe('agency and contact pages', () => {
 
   it('registers contact with a real form endpoint and tracking fields', () => {
     const contact = readFileSync(new URL('../src/pages/contatti.astro', import.meta.url), 'utf8');
+    const thanks = readFileSync(new URL('../src/pages/grazie.astro', import.meta.url), 'utf8');
     const form = readFileSync(
       new URL('../src/components/forms/ContactForm.astro', import.meta.url),
       'utf8'
@@ -22,7 +23,12 @@ describe('agency and contact pages', () => {
     expect(contact).toContain('ContactPage');
     expect(form).toContain('submitContactForm');
     expect(form).toContain('contact_form_success');
+    expect(form).toContain("window.location.assign('/grazie/')");
     expect(form).toContain('privacyConsent');
+    expect(form).toContain('elapsedMs');
+    expect(thanks).toContain('Richiesta ricevuta');
+    expect(thanks).toContain('data-confetti-canvas');
+    expect(thanks).toContain('noindexFollow');
   });
 
   it('registers NOD as a product page with CMS visuals and schema', () => {

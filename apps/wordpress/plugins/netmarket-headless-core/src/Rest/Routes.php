@@ -13,6 +13,10 @@ use WP_REST_Response;
 final class Routes
 {
     public const NAMESPACE = 'netmarket/v1';
+    private const CONTACT_TO_EMAIL = 'segreteria@netmarket.it';
+    private const CONTACT_CC_EMAIL = 'enrico@netmarket.it';
+    private const CONTACT_FROM_EMAIL = 'segreteria@netmarket.it';
+    private const CONTACT_FROM_NAME = 'Netmarket';
 
     public function __construct(private readonly TaxonomyRegistry $taxonomies)
     {
@@ -78,8 +82,10 @@ final class Routes
 
     public function contactForm(WP_REST_Request $request): WP_REST_Response
     {
+        $requestId = function_exists('wp_generate_uuid4') ? wp_generate_uuid4() : uniqid('nmhc_', true);
         $payload = $request->get_json_params();
         if (! is_array($payload)) {
+            $this->logContactEvent($requestId, 'invalid_payload');
             return new WP_REST_Response(['code' => 'invalid_payload', 'message' => 'Richiesta non valida.'], 400);
         }
 
@@ -95,6 +101,7 @@ final class Routes
         $sourceUrl = esc_url_raw((string) ($payload['sourceUrl'] ?? ''));
         $referrer = esc_url_raw((string) ($payload['referrer'] ?? ''));
         $utm = is_array($payload['utm'] ?? null) ? $payload['utm'] : [];
+        $elapsedMs = isset($payload['elapsedMs']) ? (int) $payload['elapsedMs'] : 0;
 
         $errors = [];
         if ($website !== '') {
@@ -106,8 +113,26 @@ final class Routes
         if ($email === '' || ! is_email($email)) {
             $errors['email'] = 'invalid_email';
         }
+        if (mb_strlen($company) > 120) {
+            $errors['company'] = 'invalid_company';
+        }
+        if (mb_strlen($phone) > 40) {
+            $errors['phone'] = 'invalid_phone';
+        }
+        if ($service !== '' && ! preg_match('/^[a-z0-9-]{1,120}$/', $service)) {
+            $errors['service'] = 'invalid_service';
+        }
         if (mb_strlen($message) < 10 || mb_strlen($message) > 3000) {
             $errors['message'] = 'invalid_message';
+        }
+        if ($sourceUrl === '' || mb_strlen($sourceUrl) > 500) {
+            $errors['sourceUrl'] = 'invalid_source';
+        }
+        if ($referrer !== '' && mb_strlen($referrer) > 500) {
+            $errors['referrer'] = 'invalid_referrer';
+        }
+        if ($elapsedMs > 0 && $elapsedMs < 1800) {
+            $errors['website'] = 'too_fast';
         }
         if (! $privacy) {
             $errors['privacyConsent'] = 'privacy_required';
@@ -116,6 +141,7 @@ final class Routes
             $errors['message'] = 'spam_pattern';
         }
         if ($errors !== []) {
+            $this->logContactEvent($requestId, 'validation_failed');
             return new WP_REST_Response(['code' => 'validation_failed', 'message' => 'Controlla i campi evidenziati.', 'fields' => $errors], 422);
         }
 
@@ -123,28 +149,46 @@ final class Routes
         $rateKey = 'nmhc_contact_' . md5($ip . '|' . strtolower($email));
         $attempts = (int) get_transient($rateKey);
         if ($attempts >= 3) {
+            $this->logContactEvent($requestId, 'rate_limited');
             return new WP_REST_Response(['code' => 'rate_limited', 'message' => 'Troppe richieste ravvicinate.'], 429);
         }
         set_transient($rateKey, $attempts + 1, 10 * MINUTE_IN_SECONDS);
 
-        $recipient = get_option('admin_email');
-        $subject = sprintf('Nuova richiesta dal sito Netmarket - %s', $name);
-        $lines = [
-            'Nome: ' . $name,
-            'Email: ' . $email,
-            'Azienda: ' . $company,
-            'Telefono: ' . $phone,
-            'Interesse: ' . $service,
-            'Marketing: ' . ($marketing ? 'si' : 'no'),
-            'Source URL: ' . $sourceUrl,
-            'Referrer: ' . $referrer,
-            'UTM: ' . wp_json_encode($this->sanitizeStringMap($utm)),
-            '',
-            $message,
+        $recipient = $this->contactToEmail();
+        $cc = $this->contactCcEmail();
+        $from = $this->contactFromEmail();
+        $subject = sprintf('Nuova richiesta dal sito Netmarket - %s', $this->sanitizeHeaderValue($name));
+        $body = $this->contactEmailBody([
+            'Nome' => $name,
+            'Email' => $email,
+            'Azienda' => $company,
+            'Telefono' => $phone,
+            'Servizio' => $service,
+            'Marketing' => $marketing ? 'si' : 'no',
+            'Pagina di provenienza' => $sourceUrl,
+            'Referrer' => $referrer,
+            'UTM' => $this->sanitizeStringMap($utm),
+            'Data/ora' => gmdate('c'),
+            'Request ID' => $requestId,
+            'Messaggio' => $message,
+        ]);
+        $headers = [
+            'Content-Type: text/plain; charset=UTF-8',
+            'From: ' . self::CONTACT_FROM_NAME . ' <' . $from . '>',
+            'Reply-To: ' . $this->sanitizeHeaderValue($name) . ' <' . $email . '>',
         ];
-        wp_mail($recipient, $subject, implode("\n", $lines), ['Reply-To: ' . $name . ' <' . $email . '>']);
+        if ($cc !== '') {
+            $headers[] = 'Cc: ' . $cc;
+        }
 
-        return $this->json(['ok' => true]);
+        $sent = wp_mail($recipient, $subject, $body, $headers);
+        if (! $sent) {
+            $this->logContactEvent($requestId, 'mail_failed');
+            return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);
+        }
+
+        $this->logContactEvent($requestId, 'sent');
+        return $this->json(['success' => true]);
     }
 
     public function collection(WP_REST_Request $request, string $postType): WP_REST_Response
@@ -541,16 +585,81 @@ final class Routes
         return (bool) preg_match('~\[(url|link)=|<a\s|viagra|casino|crypto\s+investment~i', $value);
     }
 
+    private function contactToEmail(): string
+    {
+        $email = sanitize_email((string) apply_filters('nmhc_contact_to_email', self::CONTACT_TO_EMAIL));
+        return $email !== '' ? $email : self::CONTACT_TO_EMAIL;
+    }
+
+    private function contactCcEmail(): string
+    {
+        $email = sanitize_email((string) apply_filters('nmhc_contact_cc_email', self::CONTACT_CC_EMAIL));
+        return $email !== '' ? $email : self::CONTACT_CC_EMAIL;
+    }
+
+    private function contactFromEmail(): string
+    {
+        $from = sanitize_email((string) apply_filters('nmhc_contact_from_email', self::CONTACT_FROM_EMAIL));
+        return $from !== '' ? $from : self::CONTACT_TO_EMAIL;
+    }
+
+    private function sanitizeHeaderValue(string $value): string
+    {
+        return trim(str_replace(["\r", "\n"], ' ', sanitize_text_field($value)));
+    }
+
+    /** @param array<string, mixed> $fields */
+    private function contactEmailBody(array $fields): string
+    {
+        $lines = [];
+        foreach ($fields as $label => $value) {
+            if (is_array($value)) {
+                if ($value === []) {
+                    continue;
+                }
+                $value = wp_json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            $text = trim((string) $value);
+            if ($text === '') {
+                continue;
+            }
+            if ($label === 'Messaggio') {
+                $lines[] = '';
+                $lines[] = 'Messaggio:';
+                $lines[] = $text;
+                continue;
+            }
+            $lines[] = $label . ': ' . $text;
+        }
+        return implode("\n", $lines);
+    }
+
+    private function logContactEvent(string $requestId, string $status): void
+    {
+        error_log(sprintf('[netmarket contact] request_id=%s status=%s', $requestId, $status));
+    }
+
     /** @param array<mixed> $values @return array<string, string> */
     private function sanitizeStringMap(array $values): array
     {
+        $allowedKeys = [
+            'utm_source' => true,
+            'utm_medium' => true,
+            'utm_campaign' => true,
+            'utm_content' => true,
+            'utm_term' => true,
+            'gclid' => true,
+            'fbclid' => true,
+            'ttclid' => true,
+            'oppref' => true,
+        ];
         $sanitized = [];
         foreach ($values as $key => $value) {
             $safeKey = sanitize_key((string) $key);
-            if ($safeKey === '') {
+            if ($safeKey === '' || ! isset($allowedKeys[$safeKey])) {
                 continue;
             }
-            $sanitized[$safeKey] = sanitize_text_field((string) $value);
+            $sanitized[$safeKey] = mb_substr(sanitize_text_field((string) $value), 0, 180);
         }
         return $sanitized;
     }

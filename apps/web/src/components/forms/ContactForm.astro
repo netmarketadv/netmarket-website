@@ -4,7 +4,7 @@ import { getServiceArchiveData } from '@/lib/services/content';
 const { services } = await getServiceArchiveData();
 ---
 
-<form class="contact-form" data-contact-form aria-describedby="contact-form-status">
+<form class="contact-form" data-contact-form aria-describedby="contact-form-status" novalidate>
   <div class="contact-form__field contact-form__field--hidden" aria-hidden="true">
     <label for="contact-website">Sito web</label>
     <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
@@ -13,7 +13,7 @@ const { services } = await getServiceArchiveData();
   <div class="contact-form__grid">
     <label>
       <span>Nome</span>
-      <input name="name" type="text" autocomplete="name" required minlength="2" />
+      <input name="name" type="text" autocomplete="name" required minlength="2" maxlength="120" />
     </label>
     <label>
       <span>Email</span>
@@ -59,7 +59,7 @@ const { services } = await getServiceArchiveData();
   </p>
 
   <button type="submit" class="button button--primary" data-motion-magnetic>Invia richiesta</button>
-  <p id="contact-form-status" class="contact-form__status" role="status" aria-live="polite"></p>
+  <p id="contact-form-status" class="contact-form__status" role="status" aria-live="polite" tabindex="-1"></p>
 </form>
 
 <script>
@@ -68,25 +68,65 @@ const { services } = await getServiceArchiveData();
 
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   const status = form?.querySelector<HTMLElement>('.contact-form__status');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const startedAt = Date.now();
   let started = false;
+  let submitting = false;
+
+  const trackingKeys = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_content',
+    'utm_term',
+    'gclid',
+    'fbclid',
+    'ttclid',
+    'oppref'
+  ];
+
+  function persistTracking() {
+    const params = new URLSearchParams(window.location.search);
+    const stored = JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}') as Record<
+      string,
+      string
+    >;
+    const next = { ...stored };
+    for (const key of trackingKeys) {
+      const value = params.get(key);
+      if (value) next[key] = value;
+    }
+    if (!next.referrer && document.referrer) next.referrer = document.referrer;
+    if (Object.keys(next).length > 0) {
+      sessionStorage.setItem('nm_contact_tracking', JSON.stringify(next));
+    }
+  }
 
   function collectTracking() {
+    const stored = JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}') as Record<
+      string,
+      string
+    >;
     const params = new URLSearchParams(window.location.search);
-    const keys = [
-      'utm_source',
-      'utm_medium',
-      'utm_campaign',
-      'utm_content',
-      'utm_term',
-      'gclid',
-      'fbclid',
-      'ttclid',
-      'oppref'
-    ];
     return Object.fromEntries(
-      keys.map((key) => [key, params.get(key) || '']).filter(([, value]) => value)
+      trackingKeys
+        .map((key) => [key, params.get(key) || stored[key] || ''])
+        .filter(([, value]) => value)
     );
   }
+
+  function setInvalidState(input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) {
+    const label = input.closest('label');
+    label?.classList.toggle('contact-form__field--invalid', !input.validity.valid);
+  }
+
+  function firstInvalidControl() {
+    return form?.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      'input:invalid, textarea:invalid, select:invalid'
+    );
+  }
+
+  persistTracking();
 
   form?.addEventListener('input', () => {
     if (started) return;
@@ -94,18 +134,44 @@ const { services } = await getServiceArchiveData();
     pushEvent({ event: 'contact_form_start', form_id: 'contact-page' });
   });
 
+  form?.addEventListener('input', (event) => {
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      setInvalidState(target);
+    }
+  });
+
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!form || !status) return;
+    if (!form || !status || !button || submitting) return;
     if (!form.checkValidity()) {
+      const invalid = firstInvalidControl();
+      status.textContent = 'Controlla i campi richiesti prima di inviare.';
+      status.dataset.state = 'error';
+      invalid?.focus();
       form.reportValidity();
       return;
     }
-    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     const data = new FormData(form);
+    const hasPrivacyConsent = data.get('privacyConsent') === 'on';
+    if (!hasPrivacyConsent) {
+      status.textContent = 'Devi accettare la privacy policy per inviare la richiesta.';
+      status.dataset.state = 'error';
+      form.querySelector<HTMLInputElement>('input[name="privacyConsent"]')?.focus();
+      return;
+    }
     status.textContent = '';
+    status.dataset.state = '';
     pushEvent({ event: 'contact_form_submit', form_id: 'contact-page' });
-    button?.setAttribute('disabled', 'true');
+    submitting = true;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const originalLabel = button.textContent || 'Invia richiesta';
+    button.textContent = 'Invio in corso';
     try {
       await submitContactForm({
         name: String(data.get('name') || ''),
@@ -119,18 +185,28 @@ const { services } = await getServiceArchiveData();
         website: String(data.get('website') || ''),
         utm: collectTracking(),
         sourceUrl: window.location.href,
-        referrer: document.referrer || undefined
+        referrer:
+          document.referrer ||
+          JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}').referrer ||
+          undefined,
+        elapsedMs: Date.now() - startedAt
       });
-      form.reset();
-      status.textContent = 'Grazie, abbiamo ricevuto la richiesta.';
-      status.focus();
       pushEvent({ event: 'contact_form_success', form_id: 'contact-page' });
+      window.location.assign('/grazie/');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'contact_form_failed';
       status.textContent = 'Non siamo riusciti a inviare il messaggio. Puoi scriverci via email.';
+      status.dataset.state = 'error';
+      status.focus();
       pushEvent({ event: 'contact_form_error', form_id: 'contact-page', error_code: message });
+      submitting = false;
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = originalLabel;
     } finally {
-      button?.removeAttribute('disabled');
+      if (!submitting) {
+        button.removeAttribute('aria-busy');
+      }
     }
   });
 </script>

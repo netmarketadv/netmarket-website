@@ -3,6 +3,7 @@ import Seo from '@/components/seo/Seo.astro';
 import SkipLink from '@/components/global/SkipLink.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
+import TrackingController from '@/components/analytics/TrackingController.astro';
 import MotionController from '@/components/motion/MotionController.astro';
 import '@/styles/tokens.css';
 import '@/styles/reset.css';
@@ -14,6 +15,7 @@ interface Props {
   description: string;
   path?: string;
   noindex?: boolean;
+  noindexFollow?: boolean;
   canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
 }
@@ -23,6 +25,7 @@ const {
   description,
   path = '/',
   noindex = false,
+  noindexFollow = false,
   canonicalSiteUrl,
   structuredData = []
 } = Astro.props;
@@ -49,6 +52,7 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       description={description}
       path={path}
       noindex={noindex}
+      noindexFollow={noindexFollow}
       canonicalSiteUrl={canonicalSiteUrl}
       structuredData={structuredData}
     />
@@ -60,6 +64,7 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       <slot />
     </main>
     <SiteFooter />
+    <TrackingController />
     <MotionController />
   </body>
 </html>

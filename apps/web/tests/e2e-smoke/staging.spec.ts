@@ -40,6 +40,10 @@ test('staging critical path is published and crawlable', async ({ page }) => {
   await expect(page.getByLabel('Email')).toBeVisible();
   await expect(page.getByLabel('Messaggio')).toBeVisible();
 
+  await page.goto('/grazie/', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByRole('heading', { level: 1, name: 'Grazie.' })).toBeVisible();
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+
   expect(errors).toEqual([]);
 
   await page.goto('/missing-page', { waitUntil: 'domcontentloaded' });

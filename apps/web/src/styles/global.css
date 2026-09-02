@@ -5212,6 +5212,13 @@ main {
   font: inherit;
 }
 
+.contact-form__field--invalid input,
+.contact-form__field--invalid textarea,
+.contact-form__field--invalid select,
+.contact-form__check.contact-form__field--invalid input {
+  border-color: var(--nm-color-error);
+}
+
 .contact-form textarea {
   resize: vertical;
 }
@@ -5245,6 +5252,16 @@ main {
   color: var(--nm-color-muted);
 }
 
+.contact-form__status[data-state='error'] {
+  color: var(--nm-color-error);
+}
+
+.contact-form button[disabled] {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
 .contact-info dl {
   display: grid;
   gap: var(--nm-space-md);
@@ -5258,6 +5275,64 @@ main {
 
 .contact-info dd {
   margin: 0.25rem 0 0;
+}
+
+.thank-you {
+  position: relative;
+  display: grid;
+  min-height: calc(100vh - var(--site-header-height, 5rem));
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--nm-color-primary) 10%, transparent), transparent 30rem),
+    var(--nm-color-surface);
+}
+
+.thank-you__confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.thank-you .nm-container {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-items: center;
+}
+
+.thank-you__panel {
+  display: grid;
+  gap: var(--nm-space-md);
+  max-width: 49rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 5rem);
+  text-align: center;
+}
+
+.thank-you__panel h1 {
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 0.9;
+  font-weight: 500;
+  letter-spacing: var(--nm-tracking-display);
+}
+
+.thank-you__lead {
+  max-width: 40rem;
+  margin: 0 auto;
+  color: var(--nm-color-muted);
+  font-size: clamp(1.1rem, 1.45vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.thank-you__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--nm-space-sm);
+  margin-top: var(--nm-space-sm);
 }
 
 @media (max-width: 900px) {
@@ -5298,5 +5373,14 @@ main {
   .contact-info,
   .agency-cta {
     border-radius: 1.1rem;
+  }
+
+  .thank-you__panel {
+    padding-inline: 0;
+  }
+
+  .thank-you__actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

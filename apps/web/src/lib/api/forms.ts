@@ -1,19 +1,20 @@
 import { z } from 'zod';
 
 export const contactFormSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().trim().min(2).max(120),
   company: z.string().max(120).optional(),
-  email: z.string().email(),
+  email: z.string().trim().email(),
   phone: z.string().max(40).optional(),
   service: z.string().max(120).optional(),
-  message: z.string().min(10),
+  message: z.string().trim().min(10).max(3000),
   privacyConsent: z.literal(true),
   marketingConsent: z.boolean().optional(),
   website: z.string().max(0).optional(),
   turnstileToken: z.string().optional(),
   utm: z.record(z.string()).optional(),
   sourceUrl: z.string().url(),
-  referrer: z.string().optional()
+  referrer: z.string().optional(),
+  elapsedMs: z.number().int().nonnegative().optional()
 });
 
 export type ContactFormPayload = z.infer<typeof contactFormSchema>;
