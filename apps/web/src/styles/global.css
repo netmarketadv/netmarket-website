@@ -3829,7 +3829,7 @@ main {
 }
 
 .home-system__list > article > span,
-.home-method__steps span {
+.home-method__steps article > span {
   color: var(--nm-color-blue);
   font-size: 0.82rem;
   font-weight: 600;
@@ -3893,8 +3893,8 @@ main {
 
 .home-system {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
-  gap: clamp(2rem, 6vw, 6rem);
+  grid-template-columns: minmax(18rem, 0.58fr) minmax(0, 1.42fr);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
 }
 
@@ -3949,15 +3949,63 @@ main {
 
 .home-system__list {
   display: grid;
-  border-top: 1px solid rgb(9 10 15 / 0.1);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.85rem, 1.3vw, 1.2rem);
+  border-top: 0;
 }
 
 .home-system__list article {
+  position: relative;
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
-  gap: clamp(1rem, 2vw, 1.8rem);
-  border-bottom: 1px solid rgb(9 10 15 / 0.1);
-  padding-block: clamp(1.35rem, 2.5vw, 2.15rem);
+  grid-template-rows: auto 1fr;
+  gap: clamp(1rem, 1.6vw, 1.4rem);
+  min-height: clamp(25rem, 30vw, 31rem);
+  overflow: hidden;
+  border: 1px solid rgb(9 10 15 / 0.08);
+  border-radius: clamp(1.25rem, 2vw, 1.9rem);
+  background: #f4f5f7;
+  padding: clamp(0.85rem, 1.35vw, 1.15rem);
+}
+
+.home-system__list article > span {
+  position: absolute;
+  z-index: 2;
+  top: clamp(1rem, 1.5vw, 1.25rem);
+  left: clamp(1rem, 1.5vw, 1.25rem);
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0.8rem 2rem rgb(9 10 15 / 0.08);
+}
+
+.home-system__list figure {
+  display: grid;
+  place-items: center;
+  min-height: clamp(11rem, 15vw, 15.5rem);
+  margin: 0;
+  overflow: hidden;
+  border-radius: clamp(0.95rem, 1.5vw, 1.35rem);
+  background: #eef1f5;
+}
+
+.home-system__list figure img {
+  width: min(88%, 18rem);
+  height: min(88%, 14rem);
+  object-fit: contain;
+  filter: drop-shadow(0 1.2rem 1.8rem rgb(9 10 15 / 0.11));
+  transition: transform var(--nm-motion-duration-slow) var(--nm-motion-ease-emphasized);
+}
+
+.home-system__list article:hover figure img {
+  transform: translateY(-0.3rem) scale(1.035);
+}
+
+.home-system__list article > div {
+  display: grid;
+  align-content: start;
 }
 
 .home-system__list h3 {
@@ -4043,9 +4091,9 @@ main {
 .home-case-card {
   flex: 0 0 clamp(17rem, 23vw, 25rem);
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: minmax(0, 1fr) clamp(5.4rem, 6vw, 6.2rem);
   gap: 0.85rem;
-  min-height: clamp(25rem, 32vw, 32rem);
+  height: clamp(28rem, 32vw, 33rem);
   color: inherit;
   text-decoration: none;
 }
@@ -4068,15 +4116,7 @@ main {
   overflow: hidden;
   border-radius: clamp(1.25rem, 2vw, 1.9rem);
   background: #111827;
-  aspect-ratio: 4 / 5;
-}
-
-.home-case-card--wide .home-case-card__media {
-  aspect-ratio: 16 / 9;
-}
-
-.home-case-card--info .home-case-card__media {
-  aspect-ratio: 1 / 1;
+  min-height: 0;
 }
 
 .home-case-card__media img {
@@ -4121,6 +4161,7 @@ main {
   display: grid;
   align-content: start;
   gap: 0.38rem;
+  min-height: 0;
   padding-inline: 0.15rem;
 }
 
@@ -4201,7 +4242,7 @@ main {
   line-height: 1.45;
 }
 
-.home-method__steps span {
+.home-method__steps article > span {
   display: inline-grid;
   place-items: center;
   width: 1.65rem;
@@ -4610,6 +4651,8 @@ main {
 .nm-motion-word {
   display: inline-block;
   overflow: clip;
+  margin: -0.14em -0.18em -0.26em;
+  padding: 0.14em 0.18em 0.26em;
   vertical-align: baseline;
 }
 
@@ -5043,8 +5086,8 @@ main {
   }
 
   .client-marquee {
-    --client-logo-height: clamp(3.1rem, 15vw, 4.6rem);
-    --client-logo-gap: clamp(1rem, 5vw, 1.95rem);
+    --client-logo-height: clamp(4.2rem, 20vw, 6rem);
+    --client-logo-gap: clamp(0.9rem, 4.6vw, 1.7rem);
     --client-marquee-fade: clamp(1.5rem, 12vw, 3.5rem);
     --client-marquee-duration: 36s;
   }
@@ -5054,8 +5097,8 @@ main {
   }
 
   .client-marquee__item {
-    min-width: clamp(4.9rem, 24vw, 7rem);
-    block-size: clamp(4.5rem, 22vw, 6.25rem);
+    min-width: clamp(6.2rem, 30vw, 8.6rem);
+    block-size: clamp(5.8rem, 28vw, 7.8rem);
   }
 
   .team-section {
@@ -6186,7 +6229,15 @@ main {
   }
 
   .home-system__list article {
-    grid-template-columns: 2.4rem minmax(0, 1fr);
+    min-height: auto;
+  }
+
+  .home-system__list {
+    grid-template-columns: 1fr;
+  }
+
+  .home-system__list figure {
+    min-height: 12rem;
   }
 
   .home-system__list h3,
@@ -6204,12 +6255,7 @@ main {
   .home-case-card--portrait,
   .home-case-card--info {
     flex-basis: clamp(16.5rem, 78vw, 22rem);
-    min-height: auto;
-  }
-
-  .home-case-card--wide .home-case-card__media,
-  .home-case-card__media {
-    aspect-ratio: 4 / 5;
+    height: clamp(27rem, 114vw, 31rem);
   }
 
   .home-work-section__actions {

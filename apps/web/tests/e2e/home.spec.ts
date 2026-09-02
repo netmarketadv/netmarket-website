@@ -268,6 +268,7 @@ test('team system renders people, portraits, links, and person schema', async ({
 
     return {
       cardCount: cards.length,
+      personIds: cards.map((card) => card.dataset.personId),
       figureCount: figures.length,
       linkCount: links.length,
       externalLinks: links.every(
@@ -290,6 +291,13 @@ test('team system renders people, portraits, links, and person schema', async ({
   });
 
   expect(teamState.cardCount).toBe(5);
+  expect(teamState.personIds).toEqual([
+    'mattia-graziotti',
+    'greta-negro',
+    'enrico-paolo-toso',
+    'giacomo-galanti',
+    'marco-toso'
+  ]);
   expect(teamState.figureCount).toBe(5);
   expect(teamState.linkCount).toBe(5);
   expect(teamState.externalLinks).toBe(true);

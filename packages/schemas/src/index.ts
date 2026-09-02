@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+const assetUrlSchema = z.string().url().or(z.string().regex(/^\/(?!\/)/));
+
 export const mediaAssetSchema = z.object({
   id: z.number().int().nonnegative(),
-  url: z.string().url(),
+  url: assetUrlSchema,
   alt: z.string(),
   width: z.number().int().positive().nullable().optional(),
   height: z.number().int().positive().nullable().optional(),

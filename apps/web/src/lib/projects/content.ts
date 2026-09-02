@@ -3,7 +3,6 @@ import { resolve } from 'node:path';
 import type { CaseStudy, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { caseStudySchema } from '@netmarket/schemas';
 import { getCaseStudies, getCaseStudy } from '@/lib/api/client';
-import { getPublicEnv } from '@/lib/env';
 
 type ProjectSource = 'cms' | 'migration-snapshot';
 
@@ -197,11 +196,10 @@ function mediaFromEntry(
 }
 
 function mediaAsset(item: MigrationProject, sourceUrl: string, alt: string, offset = 0): MediaAsset {
-  const env = getPublicEnv();
   const filename = new URL(sourceUrl).pathname.split('/').pop() || 'media';
   return {
     id: item.migration.legacyId + offset,
-    url: new URL(`/media/case-studies/legacy/${item.migration.legacyId}-${filename}`, env.PUBLIC_SITE_URL).toString(),
+    url: `/media/case-studies/legacy/${item.migration.legacyId}-${filename}`,
     alt,
     width: null,
     height: null,

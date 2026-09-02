@@ -37,21 +37,29 @@ const serviceGroups = [
   {
     title: 'Web & ecommerce',
     text: 'Siti web, ecommerce e percorsi digitali progettati per essere chiari, veloci e misurabili.',
+    image: cmsMedia.services.websites,
+    imageAlt: 'Visual siti web Netmarket',
     slugs: ['siti-web', 'ecommerce', 'seo']
   },
   {
     title: 'Marketing',
     text: 'SEO, advertising, social ed email lavorano dentro un piano coordinato, non come attività isolate.',
+    image: cmsMedia.services.marketing,
+    imageAlt: 'Visual marketing digitale Netmarket',
     slugs: ['seo', 'advertising', 'social-media']
   },
   {
     title: 'Comunicazione & contenuti',
     text: 'Branding, copy, fotografia, video e materiali commerciali rendono riconoscibile il valore dell’azienda.',
+    image: cmsMedia.services.branding,
+    imageAlt: 'Visual branding e comunicazione Netmarket',
     slugs: ['branding-e-comunicazione', 'content-production', 'concorsi-a-premi']
   },
   {
     title: 'Tecnologia & integrazioni',
     text: 'Software, automazioni e sistemi collegati riducono lavoro manuale e dispersione tra strumenti.',
+    image: cmsMedia.services.ecommerce,
+    imageAlt: 'Visual ecommerce e integrazioni Netmarket',
     slugs: ['software-e-integrazioni', 'ecommerce', 'siti-web']
   }
 ].map((group) => ({
@@ -164,7 +172,7 @@ const teamJsonLd = teamMembers.map((person) =>
       <div class="home-system">
         <div class="home-system__intro" data-reveal="line">
           <p class="nm-meta">Cosa facciamo</p>
-          <h2 id="system-title">Non vendiamo canali. Costruiamo un sistema.</h2>
+          <h2 id="system-title">Servizi integrati, non attività scollegate.</h2>
           <p>
             Un sito più chiaro aiuta le campagne. Le campagne indicano quali contenuti servono.
             I dati guidano le scelte successive.
@@ -176,6 +184,9 @@ const teamJsonLd = teamMembers.map((person) =>
             serviceGroups.map((group, index) => (
               <article>
                 <span>{String(index + 1).padStart(2, '0')}</span>
+                <figure>
+                  <img src={group.image} alt={group.imageAlt} loading="lazy" decoding="async" />
+                </figure>
                 <div>
                   <h3>{group.title}</h3>
                   <p>{group.text}</p>
@@ -249,7 +260,7 @@ const teamJsonLd = teamMembers.map((person) =>
       <div class="home-method">
         <div class="home-method__heading" data-reveal="line">
           <p class="nm-meta">Metodo</p>
-          <h2 id="method-title">Eliminiamo i colli di bottiglia che rallentano crescita e comunicazione.</h2>
+          <h2 id="method-title">Metodo chiaro. Lavoro coordinato.</h2>
           <p>
             Il metodo Netmarket nasce per trasformare richieste sparse in priorità chiare, responsabilità definite e attività coordinate.
           </p>

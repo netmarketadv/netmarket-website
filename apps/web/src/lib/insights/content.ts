@@ -3,7 +3,6 @@ import { basename, resolve } from 'node:path';
 import type { Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { insightSchema } from '@netmarket/schemas';
 import { getInsight, getInsights } from '@/lib/api/client';
-import { getPublicEnv } from '@/lib/env';
 
 export type InsightSource = 'cms' | 'migration-snapshot';
 
@@ -181,13 +180,12 @@ function toInsight(item: MigrationInsight): Insight {
 }
 
 function mediaAsset(id: number, sourceUrl: string, alt: string): MediaAsset | null {
-  const env = getPublicEnv();
   const filename = `${id}-${basename(new URL(sourceUrl).pathname)}`;
   const localPath = resolve(process.cwd(), `public/media/insights/legacy/${filename}`);
   if (!existsSync(localPath)) return null;
   return {
     id,
-    url: new URL(`/media/insights/legacy/${filename}`, env.PUBLIC_SITE_URL).toString(),
+    url: `/media/insights/legacy/${filename}`,
     alt,
     width: null,
     height: null,
