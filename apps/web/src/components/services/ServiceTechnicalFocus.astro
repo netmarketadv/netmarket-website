@@ -1,0 +1,32 @@
+---
+import type { Service } from '@netmarket/schemas';
+import { serviceTechnicalFocus } from '@/data/service-pilots';
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const items = serviceTechnicalFocus(service);
+---
+
+{
+  items.length > 0 && (
+    <div class="service-technical-focus" data-reveal="up" data-reveal-stagger="1">
+      <div class="service-technical-focus__copy">
+        <p class="nm-meta">Performance, CMS, integrazioni</p>
+        <h2>
+          La tecnologia conta quando rende il sito <span class="nm-heading-accent">più utile</span>.
+        </h2>
+      </div>
+      <div class="service-technical-focus__items">
+        {items.map((item) => (
+          <article>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  )
+}

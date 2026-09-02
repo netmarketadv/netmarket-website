@@ -120,7 +120,7 @@ export async function getInsightDetailData(slug: string): Promise<InsightDetailD
     related: insights
       .filter((item) => item.slug !== slug)
       .slice(0, 3)
-      .map(toRelation)
+      .map(toInsightRelation)
   };
 }
 
@@ -129,7 +129,7 @@ async function relatedFor(slug: string): Promise<RelationSummary[]> {
   return insights
     .filter((insight) => insight.slug !== slug)
     .slice(0, 3)
-    .map(toRelation);
+    .map(toInsightRelation);
 }
 
 function fallbackInsights(): Insight[] {
@@ -205,7 +205,7 @@ function removeMissingImages(markup: string): string {
   );
 }
 
-function toRelation(insight: Insight): RelationSummary {
+export function toInsightRelation(insight: Insight): RelationSummary {
   return {
     id: insight.id,
     slug: insight.slug,

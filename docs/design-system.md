@@ -59,7 +59,9 @@ Pattern servizi:
 - Service index: righe grandi con preview media, indice numerico discreto, descrizione e chip tassonomici solo se esistono dati reali.
 - Service detail hero: breadcrumb, H1, lead, CTA e media opzionale.
 - Service needs: blocco scuro usato solo quando problemi/esigenze hanno contenuto reale.
+- Service proof: blocco editoriale con massimo tre proof point, usato solo con dati verificabili o fonti interne reali.
 - Service process: step data-driven in card leggere, senza label generiche tipo "fase".
+- Service technical focus: blocco grigio per decisioni tecniche citabili, non una lista di feature o loghi.
 - Service related links: link crawlable verso servizi, progetti, insight e risorse.
 
 ## 5. Spacing System

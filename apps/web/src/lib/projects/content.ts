@@ -115,7 +115,7 @@ export async function getProjectDetailData(slug: string): Promise<ProjectDetailD
   return {
     project,
     source: 'migration-snapshot',
-    nextProject: next ? toRelation(next) : undefined
+    nextProject: next ? toProjectRelation(next) : undefined
   };
 }
 
@@ -123,7 +123,7 @@ async function nextProjectFor(slug: string): Promise<RelationSummary | undefined
   const { projects } = await getProjectArchiveData();
   const index = projects.findIndex((project) => project.slug === slug);
   const next = projects[(index + 1) % projects.length];
-  return next && next.slug !== slug ? toRelation(next) : undefined;
+  return next && next.slug !== slug ? toProjectRelation(next) : undefined;
 }
 
 function fallbackProjects(): CaseStudy[] {
@@ -209,7 +209,7 @@ function mediaAsset(item: MigrationProject, sourceUrl: string, alt: string, offs
   };
 }
 
-function toRelation(project: CaseStudy): RelationSummary {
+export function toProjectRelation(project: CaseStudy): RelationSummary {
   return {
     id: project.id,
     slug: project.slug,

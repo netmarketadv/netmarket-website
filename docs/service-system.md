@@ -61,8 +61,10 @@ La pagina dettaglio è statica tramite `getStaticPaths`. Ogni sezione è opziona
 
 - `ServiceDetailHero`;
 - `ServiceIntro`;
+- `ServiceProof`;
 - `ServiceProcess`;
 - `ServiceTaxonomyList`;
+- `ServiceTechnicalFocus`;
 - `ServiceRelatedContent`;
 - `FAQBlock`;
 - `ServiceCTA`.
@@ -85,6 +87,14 @@ Limiti frontend:
 - related service: 4.
 
 I link sono normali `<a>` e restano crawlable.
+
+Quando il CMS non espone ancora relazioni complete, il dettaglio servizio puo usare snapshot reali gia validati come fallback per case study e insight, ordinati per pertinenza editoriale del servizio. Questo fallback non deve introdurre contenuti inventati e va sostituito da relazioni CMS appena disponibili.
+
+## Service Pilot
+
+`/servizi/siti-web/` e il modello pilota per le future pagine servizio. Usa un content pack transitorio in `apps/web/src/data/service-pilots.ts` per arricchire il payload CMS con copy, proof, FAQ, capability, tecnologie e related prioritizzati. Il template resta generalizzabile: i componenti leggono solo dati strutturati e non contengono copy hardcoded del servizio.
+
+Il content pack deve essere migrato in `nm_service` quando il CMS dispone di una pipeline contenuti sicura o di editing manuale approvato.
 
 ## SEO
 

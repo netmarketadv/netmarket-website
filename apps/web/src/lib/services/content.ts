@@ -15,6 +15,9 @@ import {
 } from '@/lib/api/client';
 import { cmsMedia } from '@/data/home';
 import { serviceFallbacks } from '@/data/service-fallbacks';
+import { applyServicePilot } from '@/data/service-pilots';
+import { getInsightArchiveData, toInsightRelation } from '@/lib/insights/content';
+import { getProjectArchiveData, toProjectRelation } from '@/lib/projects/content';
 
 export type ServiceSource = 'cms' | 'fallback';
 
@@ -44,6 +47,26 @@ const relationLimits = {
   insights: 3,
   resources: 3,
   services: 4
+};
+
+const fallbackCaseStudyPriority: Record<string, string[]> = {
+  'siti-web': [
+    'sviluppo-sito-web-allestimenti-fieristici-albertini',
+    'sviluppo-sito-web-fotovoltaico-progetto-e',
+    'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
+    'casi-studio-strategia-digitale-ecommerce-brb',
+    'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
+  ]
+};
+
+const fallbackInsightPriority: Record<string, string[]> = {
+  'siti-web': [
+    'wordpress-scelta-migliore-per-sito-web-aziendale',
+    'accessibilita-siti-web-obbligatoria-dal-2025',
+    'migliore-web-agency-padova',
+    'sfide-opportunita-vantaggi-sito-web',
+    'importanza-del-mobile-friendly-design'
+  ]
 };
 
 const serviceVisuals: Record<string, { id: number; url: string; alt: string }> = {
@@ -115,6 +138,7 @@ async function fromCms(): Promise<Service[]> {
   return collection.data
     .filter((service) => service.slug && service.title)
     .map(withServiceVisual)
+    .map(applyServicePilot)
     .sort(byPriority);
 }
 
@@ -132,12 +156,15 @@ async function loadServiceArchiveData(): Promise<ServiceArchiveData> {
       `[services] CMS services unavailable, using local build fallback: ${warningMessage(error)}`
     );
   }
-  return { services: serviceFallbacks.map(withServiceVisual).sort(byPriority), source: 'fallback' };
+  return {
+    services: serviceFallbacks.map(withServiceVisual).map(applyServicePilot).sort(byPriority),
+    source: 'fallback'
+  };
 }
 
 export async function getServiceDetailData(slug: string): Promise<ServiceDetailData | undefined> {
   try {
-    const service = withServiceVisual(await getService(slug));
+    const service = applyServicePilot(withServiceVisual(await getService(slug)));
     return {
       service,
       source: 'cms',
@@ -149,17 +176,15 @@ export async function getServiceDetailData(slug: string): Promise<ServiceDetailD
     );
   }
 
-  const service = serviceFallbacks.map(withServiceVisual).find((item) => item.slug === slug);
+  const service = serviceFallbacks
+    .map(withServiceVisual)
+    .map(applyServicePilot)
+    .find((item) => item.slug === slug);
   if (!service) return undefined;
   return {
     service,
     source: 'fallback',
-    related: {
-      caseStudies: [],
-      insights: [],
-      resources: [],
-      services: service.relatedServices.slice(0, relationLimits.services)
-    }
+    related: await resolveRelated(service)
   };
 }
 
@@ -188,13 +213,14 @@ async function resolveCaseStudies(service: Service): Promise<RelationSummary[]> 
       perPage: relationLimits.caseStudies,
       sort: 'priority'
     });
-    return collection.data.slice(0, relationLimits.caseStudies).map(toRelation);
+    const related = collection.data.slice(0, relationLimits.caseStudies).map(toRelation);
+    if (related.length > 0) return related;
   } catch (error) {
     console.warn(
       `[services] Related case studies unavailable for "${service.slug}": ${warningMessage(error)}`
     );
-    return [];
   }
+  return fallbackCaseStudies(service.slug);
 }
 
 async function resolveInsights(slug: string): Promise<RelationSummary[]> {
@@ -204,11 +230,12 @@ async function resolveInsights(slug: string): Promise<RelationSummary[]> {
       perPage: relationLimits.insights,
       sort: 'priority'
     });
-    return collection.data.slice(0, relationLimits.insights).map(toRelation);
+    const related = collection.data.slice(0, relationLimits.insights).map(toRelation);
+    if (related.length > 0) return related;
   } catch (error) {
     console.warn(`[services] Related insights unavailable for "${slug}": ${warningMessage(error)}`);
-    return [];
   }
+  return fallbackInsights(slug);
 }
 
 async function resolveResources(slug: string): Promise<RelationSummary[]> {
@@ -223,6 +250,47 @@ async function resolveResources(slug: string): Promise<RelationSummary[]> {
     console.warn(
       `[services] Related resources unavailable for "${slug}": ${warningMessage(error)}`
     );
+    return [];
+  }
+}
+
+async function fallbackCaseStudies(slug: string): Promise<RelationSummary[]> {
+  try {
+    const { projects } = await getProjectArchiveData();
+    const priority = fallbackCaseStudyPriority[slug] ?? [];
+    return projects
+      .filter((project) => project.services.some((service) => service.slug === slug))
+      .sort((a, b) => priorityIndex(a.slug, priority) - priorityIndex(b.slug, priority))
+      .slice(0, relationLimits.caseStudies)
+      .map(toProjectRelation);
+  } catch (error) {
+    console.warn(
+      `[services] Fallback case studies unavailable for "${slug}": ${warningMessage(error)}`
+    );
+    return [];
+  }
+}
+
+function priorityIndex(slug: string, priority: string[]): number {
+  const index = priority.indexOf(slug);
+  return index >= 0 ? index : Number.MAX_SAFE_INTEGER;
+}
+
+async function fallbackInsights(slug: string): Promise<RelationSummary[]> {
+  try {
+    const { insights } = await getInsightArchiveData();
+    const priority = fallbackInsightPriority[slug] ?? [];
+    return insights
+      .filter(
+        (insight) =>
+          insight.relatedServices.some((service) => service.slug === slug) ||
+          priority.includes(insight.slug)
+      )
+      .sort((a, b) => priorityIndex(a.slug, priority) - priorityIndex(b.slug, priority))
+      .slice(0, relationLimits.insights)
+      .map(toInsightRelation);
+  } catch (error) {
+    console.warn(`[services] Fallback insights unavailable for "${slug}": ${warningMessage(error)}`);
     return [];
   }
 }

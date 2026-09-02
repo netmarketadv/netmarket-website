@@ -8,8 +8,10 @@ import ServiceCTA from '@/components/services/ServiceCTA.astro';
 import ServiceDetailHero from '@/components/services/ServiceDetailHero.astro';
 import ServiceIntro from '@/components/services/ServiceIntro.astro';
 import ServiceProcess from '@/components/services/ServiceProcess.astro';
+import ServiceProof from '@/components/services/ServiceProof.astro';
 import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
 import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
+import ServiceTechnicalFocus from '@/components/services/ServiceTechnicalFocus.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getServiceArchiveData, resolveRelated, serviceDescription } from '@/lib/services/content';
 
@@ -27,16 +29,8 @@ export async function getStaticPaths() {
 }
 
 const canonicalSiteUrl = 'https://www.netmarket.it';
-const { service, source } = Astro.props;
-const related =
-  source === 'cms'
-    ? await resolveRelated(service)
-    : {
-        caseStudies: [],
-        insights: [],
-        resources: [],
-        services: service.relatedServices.slice(0, 4)
-      };
+const { service } = Astro.props;
+const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;
 const description = serviceDescription(service);
 const title = service.seo.title || service.title;
@@ -61,6 +55,7 @@ const serviceSchema = serviceJsonLd(
   description,
   absoluteCanonical(canonicalSiteUrl, path)
 );
+const hasProof = service.results.length > 0;
 ---
 
 <BaseLayout
@@ -81,6 +76,16 @@ const serviceSchema = serviceJsonLd(
     </Container>
   </Section>
 
+  {
+    hasProof && (
+      <Section labelledby="service-proof-title">
+        <Container>
+          <ServiceProof items={service.results} />
+        </Container>
+      </Section>
+    )
+  }
+
   <Section labelledby="service-process-title">
     <Container>
       <ServiceProcess service={service} />
@@ -89,6 +94,7 @@ const serviceSchema = serviceJsonLd(
 
   <Section compact>
     <Container>
+      <ServiceTechnicalFocus service={service} />
       <ServiceTaxonomyList service={service} />
     </Container>
   </Section>

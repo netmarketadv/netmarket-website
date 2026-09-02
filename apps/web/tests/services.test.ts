@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { serviceFallbacks } from '../src/data/service-fallbacks';
 import {
+  getServiceDetailData,
   relationPath,
   serviceDescription,
   servicePath,
@@ -51,10 +52,29 @@ describe('service system', () => {
     expect(textItems(['Voce libera'])).toEqual([{ title: 'Voce libera' }]);
   });
 
-  it('uses SEO description before controlled fallbacks', () => {
-    const service = serviceFallbacks[0];
-    expect(service).toBeDefined();
-    expect(serviceDescription(service!)).toBe(service!.seo.description);
+  it('uses SEO description before controlled fallbacks', async () => {
+    const data = await getServiceDetailData('siti-web');
+    expect(data).toBeDefined();
+    const description = serviceDescription(data!.service);
+    expect(description).toContain('Siti web aziendali');
+    expect(description).toContain('Netmarket');
+  });
+
+  it('enriches the Siti web pilot with proof, FAQ and real related content', async () => {
+    const data = await getServiceDetailData('siti-web');
+    expect(data).toBeDefined();
+    expect(data!.service.subtitle).toContain('contenuti, tecnologia e marketing');
+    expect(data!.service.results).toHaveLength(3);
+    expect(data!.service.faq).toHaveLength(6);
+    expect(data!.related.caseStudies.map((item) => item.slug)).toEqual(
+      expect.arrayContaining([
+        'sviluppo-sito-web-allestimenti-fieristici-albertini',
+        'sviluppo-sito-web-fotovoltaico-progetto-e'
+      ])
+    );
+    expect(data!.related.insights.map((item) => item.slug)).toContain(
+      'wordpress-scelta-migliore-per-sito-web-aziendale'
+    );
   });
 
   it('uses dedicated CMS transparent service visuals in the build fallback', () => {
@@ -92,6 +112,8 @@ describe('service system', () => {
     expect(archive).toContain('ServiceIndex');
     expect(detail).toContain('getStaticPaths');
     expect(detail).toContain('serviceJsonLd');
+    expect(detail).toContain('ServiceProof');
+    expect(detail).toContain('ServiceTechnicalFocus');
     expect(header).toContain('/servizi/siti-web/');
     expect(header).toContain("menuVariant: 'wide'");
     expect(header).toContain("menuVariant: 'compact'");

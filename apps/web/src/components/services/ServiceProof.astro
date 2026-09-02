@@ -1,0 +1,43 @@
+---
+import type { Service } from '@netmarket/schemas';
+
+interface Props {
+  items: Service['results'];
+}
+
+const { items } = Astro.props;
+const proofItems = items
+  .map((item) => {
+    if (!item || typeof item !== 'object') return null;
+    const record = item as Record<string, unknown>;
+    const label = typeof record.label === 'string' ? record.label : '';
+    const value = typeof record.value === 'string' ? record.value : '';
+    const context = typeof record.context === 'string' ? record.context : '';
+    return label && value ? { label, value, context } : null;
+  })
+  .filter((item): item is { label: string; value: string; context: string } => Boolean(item))
+  .slice(0, 3);
+---
+
+{
+  proofItems.length > 0 && (
+    <div class="service-proof" data-reveal="up" data-reveal-stagger="1">
+      <div class="service-proof__heading">
+        <h2 id="service-proof-title">Prove prima delle promesse.</h2>
+        <p>
+          Usiamo esperienza, casi pubblicati e scelte tecniche verificabili per spiegare il valore
+          del lavoro.
+        </p>
+      </div>
+      <div class="service-proof__grid">
+        {proofItems.map((item) => (
+          <article>
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+            {item.context && <p>{item.context}</p>}
+          </article>
+        ))}
+      </div>
+    </div>
+  )
+}
