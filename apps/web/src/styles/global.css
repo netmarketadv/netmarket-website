@@ -381,6 +381,27 @@ main {
   line-height: 1.45;
 }
 
+.mega-menu__overview {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 2.15rem;
+  margin-top: 1rem;
+  padding: 0.62rem 0.85rem;
+  border: 1px solid rgb(9 10 15 / 0.08);
+  border-radius: var(--nm-radius-pill);
+  background: #f8f9fb;
+  color: var(--nm-color-ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.mega-menu__overview:hover {
+  background: var(--nm-color-blue);
+  color: #ffffff;
+}
+
 .mega-menu__panel h2 {
   max-width: 18ch;
   font-size: 1.05rem;

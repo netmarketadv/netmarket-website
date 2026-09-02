@@ -20,6 +20,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: 'Servizi',
+    href: '/servizi/',
     menuVariant: 'wide',
     description:
       'Web, marketing, contenuti e pubblicità lavorano meglio quando hanno una regia unica.',
@@ -140,6 +141,7 @@ const navItems: NavItem[] = [
                 <div class="mega-menu__intro">
                   <h2>{item.label === 'Servizi' ? 'Servizi integrati' : 'Netmarket dal 1986'}</h2>
                   <p>{item.description}</p>
+                  {item.href && <a class="mega-menu__overview" href={item.href}>Tutti i servizi</a>}
                 </div>
                 <div class="mega-menu__grid">
                   {item.children.map((child) => (
