@@ -39,6 +39,7 @@ const relationLimits = {
 };
 
 let archiveDataPromise: Promise<ServiceArchiveData> | undefined;
+let fallbackServiceCache: Service[] | undefined;
 
 function byPriority(a: Service, b: Service): number {
   return a.priority - b.priority || a.title.localeCompare(b.title, 'it');
@@ -87,20 +88,24 @@ async function loadServiceArchiveData(): Promise<ServiceArchiveData> {
 }
 
 export async function getServiceDetailData(slug: string): Promise<ServiceDetailData | undefined> {
-  try {
-    const service = await getService(slug);
-    return {
-      service,
-      source: 'cms',
-      related: await resolveRelated(service)
-    };
-  } catch (error) {
-    console.warn(
-      `[services] CMS service "${slug}" unavailable, trying local build fallback: ${warningMessage(error)}`
-    );
+  const archive = await getServiceArchiveData();
+  if (archive.source === 'cms') {
+    try {
+      const service = await getService(slug);
+      return {
+        service,
+        source: 'cms',
+        related: await resolveRelated(service)
+      };
+    } catch (error) {
+      console.warn(
+        `[services] CMS service "${slug}" unavailable, trying local build fallback: ${warningMessage(error)}`
+      );
+    }
   }
 
-  const service = serviceFallbacks.find((item) => item.slug === slug);
+  const fallbackServices = archive.source === 'fallback' ? archive.services : fallbackServicesSorted();
+  const service = fallbackServices.find((item) => item.slug === slug);
   if (!service) return undefined;
   return {
     service,
@@ -112,6 +117,11 @@ export async function getServiceDetailData(slug: string): Promise<ServiceDetailD
       services: service.relatedServices.slice(0, relationLimits.services)
     }
   };
+}
+
+function fallbackServicesSorted(): Service[] {
+  fallbackServiceCache ??= [...serviceFallbacks].sort(byPriority);
+  return fallbackServiceCache;
 }
 
 export async function resolveRelated(service: Service): Promise<ServiceDetailData['related']> {

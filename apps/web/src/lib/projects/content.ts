@@ -68,6 +68,7 @@ const serviceTitles: Record<string, string> = {
 };
 
 let archiveDataPromise: Promise<ProjectArchiveData> | undefined;
+let fallbackProjectCache: CaseStudy[] | undefined;
 
 function warningMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -98,16 +99,19 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
 }
 
 export async function getProjectDetailData(slug: string): Promise<ProjectDetailData | undefined> {
-  try {
-    const project = await getCaseStudy(slug);
-    return { project, source: 'cms', nextProject: await nextProjectFor(slug) };
-  } catch (error) {
-    console.warn(
-      `[projects] CMS case study "${slug}" unavailable, trying migration snapshot fallback: ${warningMessage(error)}`
-    );
+  const archive = await getProjectArchiveData();
+  if (archive.source === 'cms') {
+    try {
+      const project = await getCaseStudy(slug);
+      return { project, source: 'cms', nextProject: await nextProjectFor(slug) };
+    } catch (error) {
+      console.warn(
+        `[projects] CMS case study "${slug}" unavailable, trying migration snapshot fallback: ${warningMessage(error)}`
+      );
+    }
   }
 
-  const projects = fallbackProjects().sort(byPriority);
+  const projects = archive.source === 'migration-snapshot' ? archive.projects : fallbackProjects().sort(byPriority);
   const index = projects.findIndex((project) => project.slug === slug);
   const project = projects[index];
   if (!project) return undefined;
@@ -127,9 +131,11 @@ async function nextProjectFor(slug: string): Promise<RelationSummary | undefined
 }
 
 function fallbackProjects(): CaseStudy[] {
+  if (fallbackProjectCache) return fallbackProjectCache;
   const file = resolve(process.cwd(), '../../data/migrations/case-studies/case-study-transform-dry-run.json');
   const raw = JSON.parse(readFileSync(file, 'utf8')) as MigrationProject[];
-  return raw.map(toCaseStudy);
+  fallbackProjectCache = raw.map(toCaseStudy);
+  return fallbackProjectCache;
 }
 
 function toCaseStudy(item: MigrationProject): CaseStudy {

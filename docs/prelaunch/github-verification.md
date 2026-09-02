@@ -34,14 +34,33 @@ Errore deploy:
 rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)
 ```
 
+Dry-run successivo dopo hardening:
+
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619`
+- Branch/SHA: `chore/prelaunch-hardening`, `2c8c73b474ced6f4049cabf66de338eae14f2278`
+- Esito: success.
+- `Check CMS credentials`: success.
+- `Dry-run deploy plan`: success.
+- Nota: durante la build il CMS ha risposto `404` sugli endpoint contenuto `services` e `insights`; il frontend ha usato i fallback/snapshot previsti.
+
+Deploy reale rilanciato:
+
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
+- Branch/SHA iniziale: `chore/prelaunch-hardening`, `2c8c73b474ced6f4049cabf66de338eae14f2278`
+- Stato durante l'audit: in progress nello step `Build Astro frontend`.
+
 ## Secret GitHub Rilevati
 
 Repository secrets:
 
+- `CMS_BASIC_AUTH_PASSWORD`
+- `CMS_BASIC_AUTH_USER`
 - `SG_STAGING_DEPLOY_PATH`
 
 Environment `staging` secrets:
 
+- `CMS_BASIC_AUTH_PASSWORD`
+- `CMS_BASIC_AUTH_USER`
 - `SG_SSH_HOST`
 - `SG_SSH_PORT`
 - `SG_SSH_USER`
@@ -49,10 +68,10 @@ Environment `staging` secrets:
 - `SG_SSH_KNOWN_HOSTS`
 - `SG_STAGING_DEPLOY_PATH`
 
-Secret CMS mancanti:
+Workflow non ancora registrati su GitHub Actions perche presenti nel branch ma non nel default branch:
 
-- `CMS_BASIC_AUTH_USER`
-- `CMS_BASIC_AUTH_PASSWORD`
+- `Deploy CMS Plugin`
+- `Verify SiteGround`
 
 ## Local Verification
 
@@ -70,12 +89,16 @@ Esiti locali sul branch `chore/prelaunch-hardening`:
 - `pnpm secrets:scan`: success.
 - `pnpm --dir apps/web exec playwright test`: success, 26 test passati in circa 8 minuti.
 - `pnpm content:validate`: failure atteso, CMS raggiungibile ma `401` senza Basic Auth.
+- `pnpm --filter @netmarket/web typecheck`: success dopo cache fallback.
+- `pnpm --filter @netmarket/web build`: success dopo cache fallback.
+- `pnpm --filter @netmarket/web test`: success, 26 test passati.
 
 ## Hardening CI Applicato
 
 - `deploy-staging.yml` blocca il deploy se mancano le credenziali Basic Auth CMS.
 - `verify-siteground.yml` verifica anche `SG_STAGING_DEPLOY_PATH`.
 - Lo script deploy esegue preflight remoto read/write prima di `rsync`.
+- I loader contenuti evitano richieste dettaglio CMS ripetute quando l'archivio ha gia scelto fallback/snapshot.
 
 ## Comandi Utili
 

@@ -14,12 +14,14 @@ Verifica prelaunch del nuovo sito Netmarket su target consentiti:
 
 ## Stato Sintetico
 
-Stato corrente: `NOT READY`
+Stato corrente: `STAGING READY WITH WARNINGS`
 
 Motivi:
 
-- Deploy staging fallito su GitHub Actions con `rsync: change_dir#1 ... Permission denied (13)`.
-- `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` non risultano configurati nei secret GitHub letti dai workflow.
+- Il dry-run del deploy staging sul branch `chore/prelaunch-hardening` e verde e conferma che il problema `rsync change_dir` e stato risolto.
+- Il deploy reale staging e stato rilanciato dalla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`; durante l'audit risultava ancora in build sul commit precedente alla cache fallback.
+- `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` risultano configurati sia come repository secret sia nell'environment `staging`.
+- Il CMS risponde, ma gli endpoint contenuto `services` e `insights` documentati tornano `404`; il frontend continua quindi a usare fallback/snapshot reali finche il plugin/API CMS online non viene riallineato.
 - La Quality GitHub del commit `53b5a99` e completata con successo, E2E incluso.
 - `staging.netmarket.it` e raggiungibile ma serve ancora la build `6117c244cd3c1159f901c149c94e178f36bde8f0`, quindi e stale rispetto a `53b5a99`.
 
@@ -27,21 +29,23 @@ Motivi:
 
 ### Critical
 
-- **Deploy staging non operativo**  
-  Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33611336296`  
-  Esito: failure nello step `Deploy`.  
-  Evidenza: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`.  
-  Impatto: le modifiche su `develop` non arrivano su `staging.netmarket.it`.
+- **CMS headless online non allineato alle route contenuto**  
+  Run dry-run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619`  
+  Esito deploy dry-run: success.  
+  Evidenza build: `CMS endpoint /services?per_page=50&sort=priority ha risposto con status 404` e warning analoghi su `/insights`.  
+  Impatto: servizi, progetti e insight possono essere generati dagli snapshot/fallback invece che dalla fonte CMS primaria. Il sito resta deployabile, ma la content source non e ancora production-ready.
 
 ### High
 
-- **CMS Basic Auth non configurata nei workflow**  
-  Evidenza: nei log del workflow `Deploy Staging`, `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` sono vuoti. `gh secret list --repo netmarketadv/netmarket-website` mostra solo `SG_STAGING_DEPLOY_PATH`; `gh secret list --repo netmarketadv/netmarket-website --env staging` mostra gli SSH secret ma non i due secret CMS.  
-  Impatto: la build usa fallback/snapshot invece dei contenuti reali quando il CMS e protetto da Basic Auth.
+- **Deploy staging precedente non operativo, ora corretto in dry-run**  
+  Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33611336296`  
+  Esito: failure nello step `Deploy`.  
+  Evidenza: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`.  
+  Correzione verificata: dry-run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619` completato con successo nello step `Dry-run deploy plan`.
 
 - **Staging remoto stale**  
   Evidenza: health check read-only su `https://staging.netmarket.it` valido, ma meta `netmarket-build` uguale a `6117c244cd3c1159f901c149c94e178f36bde8f0`.  
-  Impatto: le ultime modifiche presenti su `develop` non sono verificabili online.
+  Impatto: fino al completamento del deploy reale, le ultime modifiche presenti su `chore/prelaunch-hardening` non sono verificabili online.
 
 ### Medium
 
@@ -59,10 +63,11 @@ Motivi:
 - `verify-siteground-connection.sh` verifica anche accesso read/write al path staging quando il secret e presente.
 - Le canonical e gli URL JSON-LD hardcoded nelle pagine editoriali sono stati normalizzati su `https://www.netmarket.it`, coerenti con homepage, servizi e sitemap production.
 - `content-validate.mjs` e `health-check.sh` ora producono errori leggibili quando il CMS protetto richiede Basic Auth.
+- I loader di servizi, progetti e insight riutilizzano l'archivio gia caricato quando la source e fallback/snapshot, evitando chiamate CMS ripetute sui dettagli e riducendo tempi/rumore CI.
 
-## Secret CMS Da Configurare
+## Secret CMS
 
-Usare valori reali, non placeholder:
+I secret sono presenti su GitHub. Per rigenerarli usare valori reali, non placeholder:
 
 ```bash
 gh auth status
@@ -79,6 +84,6 @@ gh secret set CMS_BASIC_AUTH_PASSWORD --repo netmarketadv/netmarket-website --en
 
 ## Prossime Verifiche
 
-- Rilanciare `Verify SiteGround` dopo il push dell'hardening per avere un controllo diretto sul deploy path.
-- Rilanciare `Deploy Staging` dopo configurazione secret CMS e correzione permessi/path.
+- Portare `deploy-cms.yml` e `verify-siteground.yml` sul default branch oppure registrarli in GitHub Actions, poi rilanciare il deploy CMS per riallineare le route `/netmarket/v1/services` e `/netmarket/v1/insights`.
+- Rilanciare `Deploy Staging` dopo la cache fallback per ridurre il tempo di build quando il CMS non e allineato.
 - Eseguire smoke remoto su `staging.netmarket.it` e verificare meta `netmarket-build` uguale allo SHA atteso.

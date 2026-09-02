@@ -4,7 +4,7 @@ Data audit: 2026-09-02
 
 ## Stato Corrente
 
-Esito: `NOT READY`
+Esito: `STAGING READY WITH WARNINGS`
 
 ## Checklist
 
@@ -20,25 +20,27 @@ Esito: `NOT READY`
 - [x] Health check staging read-only eseguito: build online valida ma stale (`6117c244cd3c1159f901c149c94e178f36bde8f0`).
 - [x] Health check CMS read-only tentato: richiede Basic Auth.
 - [x] GitHub secrets audit eseguito per nomi, senza leggere valori.
+- [x] `CMS_BASIC_AUTH_USER` configurato su GitHub.
+- [x] `CMS_BASIC_AUTH_PASSWORD` configurato su GitHub.
 - [x] Quality GitHub completata con E2E verde per `53b5a99`.
 - [x] Hardening deploy path applicato.
 - [x] Hardening verifica SiteGround applicato.
 - [x] Hardening CMS credentials applicato nel deploy workflow.
 - [x] Content validation CMS reale tentata: fallisce con `401` per Basic Auth mancante.
-- [ ] `CMS_BASIC_AUTH_USER` configurato su GitHub.
-- [ ] `CMS_BASIC_AUTH_PASSWORD` configurato su GitHub.
-- [ ] `Verify SiteGround` rilanciato con controllo path.
-- [ ] `Deploy Staging` completato con successo.
+- [x] Deploy Staging dry-run completato con successo: run `33615147619`.
+- [x] Cache fallback contenuti applicata per evitare chiamate dettaglio CMS ripetute.
+- [ ] `Verify SiteGround` registrato/rilanciato con controllo path.
+- [ ] `Deploy Staging` reale completato con successo.
 - [ ] Smoke staging completato con SHA atteso.
-- [ ] Content validation CMS reale completata con credenziali.
+- [ ] Content validation CMS reale completata con credenziali e route contenuto disponibili.
 - [ ] Visual QA staging completata.
 - [ ] Performance/Lighthouse staging completata.
 
 ## Bloccanti
 
-- Deploy path remoto non accessibile: `Permission denied (13)`.
-- Credenziali CMS Basic Auth mancanti nei secret GitHub.
+- Endpoint CMS contenuto `services` e `insights` non disponibili online (`404`), nonostante il plugin locale li registri.
 - Staging online ancora fermo alla build `6117c244cd3c1159f901c149c94e178f36bde8f0`.
+- Workflow `Deploy CMS Plugin` e `Verify SiteGround` presenti nel branch ma non ancora registrati su GitHub Actions.
 
 ## Comandi Per Secret CMS
 

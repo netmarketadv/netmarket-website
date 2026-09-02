@@ -5,21 +5,21 @@ Data audit: 2026-09-02
 ## Target
 
 - URL: `https://staging.netmarket.it`
-- Build attesa piu recente: `53b5a99`
+- Build attesa piu recente: `2c8c73b474ced6f4049cabf66de338eae14f2278` oppure commit successivo del branch `chore/prelaunch-hardening`
 - Ambiente atteso: `staging`
 
 ## Stato
 
-Esito corrente: `NOT VERIFIED`
+Esito corrente: `DEPLOY IN PROGRESS`
 
-Il deploy del commit `53b5a99` non e arrivato allo smoke test remoto per fallimento nello step `Deploy`.
+Il deploy del commit `53b5a99` non era arrivato allo smoke test remoto per fallimento nello step `Deploy`. Dopo hardening, il dry-run del branch `chore/prelaunch-hardening` e verde e il deploy reale e stato rilanciato con run `33615441326`.
 
 Health check remoto read-only eseguito su `https://staging.netmarket.it`:
 
 - Esito HTTP/strutturale: valido.
 - Build online rilevata: `6117c244cd3c1159f901c149c94e178f36bde8f0`.
 - Environment online rilevato: `staging`.
-- Stato: ambiente raggiungibile ma stale rispetto al commit atteso `53b5a99`.
+- Stato: ambiente raggiungibile ma stale rispetto al commit atteso finche la run reale non completa lo smoke.
 
 ## Evidenze
 
@@ -29,6 +29,19 @@ Health check remoto read-only eseguito su `https://staging.netmarket.it`:
 - Step fallito: `Deploy`
 - Errore: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`
 - Step `Smoke staging`: skipped
+
+Dry-run corretto:
+
+- Workflow: `Deploy Staging`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619`
+- Conclusione: `success`
+- Step `Dry-run deploy plan`: success
+
+Deploy reale rilanciato:
+
+- Workflow: `Deploy Staging`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
+- Stato durante audit: in progress.
 
 ## Criteri Da Verificare Dopo Deploy
 
@@ -50,5 +63,5 @@ Health check remoto read-only eseguito su `https://staging.netmarket.it`:
 ## Comando Smoke
 
 ```bash
-EXPECTED_BUILD_SHA=53b5a998ad4ec540587cc1b729ef3f6d35c36506 EXPECTED_BUILD_ENV=staging pnpm smoke:staging
+EXPECTED_BUILD_SHA=2c8c73b474ced6f4049cabf66de338eae14f2278 EXPECTED_BUILD_ENV=staging pnpm smoke:staging
 ```

@@ -50,6 +50,7 @@ const serviceTitles: Record<string, string> = {
 };
 
 let archivePromise: Promise<InsightArchiveData> | undefined;
+let fallbackInsightCache: Insight[] | undefined;
 
 function warningMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -103,15 +104,18 @@ export async function getInsightPage(page = 1): Promise<InsightArchiveData> {
 }
 
 export async function getInsightDetailData(slug: string): Promise<InsightDetailData | undefined> {
-  try {
-    const insight = await getInsight(slug);
-    return { insight, source: 'cms', related: await relatedFor(slug) };
-  } catch (error) {
-    console.warn(
-      `[insights] CMS insight "${slug}" unavailable, trying snapshot fallback: ${warningMessage(error)}`
-    );
+  const archive = await getInsightArchiveData();
+  if (archive.source === 'cms') {
+    try {
+      const insight = await getInsight(slug);
+      return { insight, source: 'cms', related: await relatedFor(slug) };
+    } catch (error) {
+      console.warn(
+        `[insights] CMS insight "${slug}" unavailable, trying snapshot fallback: ${warningMessage(error)}`
+      );
+    }
   }
-  const insights = fallbackInsights().sort(byDate);
+  const insights = archive.source === 'migration-snapshot' ? archive.insights : fallbackInsights().sort(byDate);
   const insight = insights.find((item) => item.slug === slug);
   if (!insight) return undefined;
   return {
@@ -133,12 +137,14 @@ async function relatedFor(slug: string): Promise<RelationSummary[]> {
 }
 
 function fallbackInsights(): Insight[] {
+  if (fallbackInsightCache) return fallbackInsightCache;
   const file = resolve(
     process.cwd(),
     '../../data/migrations/insights/insight-transform-dry-run.json'
   );
   const raw = JSON.parse(readFileSync(file, 'utf8')) as MigrationInsight[];
-  return raw.map(toInsight);
+  fallbackInsightCache = raw.map(toInsight);
+  return fallbackInsightCache;
 }
 
 function toInsight(item: MigrationInsight): Insight {
