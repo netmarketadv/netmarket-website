@@ -99,8 +99,8 @@ I titoli possono usare parole evidenziate quando serve guidare la lettura, ma l'
 
 - `.nm-heading-accent`: parola o breve frase in blu Netmarket `#0E51FE`, usata per evidenziare il concetto principale del titolo.
 - `.nm-heading-muted`: parola o breve frase in grigio soft, per il pattern gia usato scuro + grigio.
-- `.nm-heading-marker`: evidenziatore tipografico blu chiaro sotto la parola, utile quando il titolo deve mantenere colore ink ma dare enfasi.
-- `.nm-heading-marker--strong`: variante piu evidente, riservata a hero o sezioni prodotto.
+- `.nm-heading-marker`: selezione tipografica in stile testo selezionato, con fondo azzurro chiaro, bordi laterali blu e piccoli handle. Utile quando il titolo deve mantenere colore ink ma dare enfasi.
+- `.nm-heading-marker--strong`: variante con selezione leggermente piu intensa, riservata a hero o sezioni prodotto.
 
 Regole:
 
@@ -108,7 +108,7 @@ Regole:
 - Evidenziare parole brevi o sintagmi chiari, non frasi intere.
 - Non combinare nello stesso titolo blu pieno, grigio e marker salvo casi editoriali approvati.
 - Gli accent devono funzionare dentro `h1`, `h2`, `h3`, `h4` e classi heading dedicate senza rompere la regola della "o" obliqua.
-- Il marker deve restare decorativo: non sostituisce link, badge o CTA.
+- Il marker deve sembrare una selezione intenzionale, non un evidenziatore a pennarello. Non sostituisce link, badge o CTA.
 
 ### 6.3 Netmarket Italic O
 

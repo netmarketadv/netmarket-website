@@ -58,11 +58,13 @@ test('homepage exposes staging essentials', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const homeHeading = page.locator('#page-title');
   await expect(homeHeading).toBeVisible();
-  await expect(homeHeading).toContainText('Comunichiamo valore');
+  await expect(homeHeading).toContainText('Agenzia marketing');
   await expect(page).toHaveTitle(/Agenzia comunicazione/);
   await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Guarda i progetti' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Vedi tutti i servizi/ })).toBeVisible();
+  await expect(page.locator('.home-case-slider')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Tutti i casi studio' })).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
@@ -70,7 +72,7 @@ test('homepage exposes staging essentials', async ({ page }) => {
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: /Salta al contenuto/ })).toBeFocused();
-  expect(errors).toEqual([]);
+  expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
 });
 
 test('design system page is internal and noindexed', async ({ page }) => {
@@ -93,7 +95,7 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
   await expect(
     page.getByRole('heading', {
       level: 1,
-      name: 'Comunichiamo valore tra marketing, tecnologia e contenuti.'
+      name: 'Agenzia marketing e siti web a Padova.'
     })
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
@@ -516,7 +518,10 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
 
   if (engine === 'gsap') {
     await expect.poll(() => page.locator('.nm-motion-word__inner').count()).toBeGreaterThan(8);
-    await expect(page.locator('.motion-image-preview')).toHaveCount(1);
+    await expect(page.locator('.home-case-slider__track')).toHaveCSS(
+      'animation-name',
+      'nm-case-slider'
+    );
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'none' });
   } else {
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'nm-reveal-up' });

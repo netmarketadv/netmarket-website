@@ -6,14 +6,15 @@ describe('homepage source', () => {
     const source = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
     const dataSource = readFileSync(new URL('../src/data/home.ts', import.meta.url), 'utf8');
     expect(source).toContain('Netmarket');
-    expect(source).toContain('Comunichiamo valore tra');
+    expect(source).toContain('Agenzia marketing e siti web a');
     expect(source).toContain('Netmarket, Padova dal 1986');
     expect(source).toContain('Agenzia comunicazione, marketing e tecnologia a Padova');
-    expect(source).toContain('nm-heading-accent');
+    expect(source).toContain('nm-heading-marker');
     expect(source).toContain('Non vendiamo canali. Costruiamo un sistema.');
     expect(source).toContain('servicePath(service.slug)');
-    expect(source).toContain('projectPath(featuredProject.slug)');
-    expect(source).toContain('insightPath(insight.slug)');
+    expect(source).toContain('home-case-slider');
+    expect(source).toContain('projectPath(project.slug)');
+    expect(source).not.toContain('insightPath(insight.slug)');
     expect(source).toContain('href="/contatti/"');
     expect(source).toContain('href="/progetti/"');
     expect(source).toContain('href="/servizi/"');
@@ -44,6 +45,7 @@ describe('homepage source', () => {
     expect(sectionSource).toContain('googleReviews');
     expect(sectionSource).toContain('ReviewsCarousel');
     expect(dataSource).toContain('Svetlana Soboleva');
+    expect(dataSource).not.toContain('Emma Toso');
     expect(dataSource).toContain("source: 'Google'");
     expect(dataSource).toContain('reviewsSchema.parse');
     expect(clientSource).toContain('initReviewsCarousel');

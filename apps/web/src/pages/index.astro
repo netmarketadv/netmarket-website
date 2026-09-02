@@ -3,7 +3,6 @@ import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
 import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
 import TeamSection from '@/components/blocks/TeamSection.astro';
-import ProjectCard from '@/components/content/ProjectCard.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import Stack from '@/components/layout/Stack.astro';
@@ -11,7 +10,6 @@ import Button from '@/components/ui/Button.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { clientLogos, cmsMedia, googleTrust, questions, workSteps } from '@/data/home';
 import { teamMembers } from '@/data/team';
-import { getInsightArchiveData, insightDescription, insightPath } from '@/lib/insights/content';
 import {
   getProjectArchiveData,
   projectCategory,
@@ -26,17 +24,14 @@ import type { Service } from '@netmarket/schemas';
 const canonicalSiteUrl = 'https://www.netmarket.it';
 const { services } = await getServiceArchiveData();
 const { projects } = await getProjectArchiveData();
-const { insights: allInsights } = await getInsightArchiveData();
 
 const serviceBySlug = new Map(services.map((service) => [service.slug, service]));
 const serviceLink = (slug: string) => serviceBySlug.get(slug);
 const isService = (service: Service | undefined): service is Service => Boolean(service);
 const visibleProjects = projects
   .filter((project) => project.projectStatus === 'published' && project.cover)
-  .slice(0, 3);
+  .slice(0, 8);
 const featuredProject = visibleProjects[0];
-const secondaryProjects = visibleProjects.slice(1, 3);
-const visibleInsights = allInsights.slice(0, 3);
 
 const serviceGroups = [
   {
@@ -64,9 +59,18 @@ const serviceGroups = [
   links: group.slugs.map(serviceLink).filter(isService)
 }));
 
-const heroServices = ['siti-web', 'ecommerce', 'advertising', 'branding-e-comunicazione']
-  .map(serviceLink)
-  .filter(isService);
+const heroPrimaryImage = {
+  url: cmsMedia.services.websites,
+  alt: 'Visual sviluppo siti web Netmarket'
+};
+const heroSecondaryImage = {
+  url: cmsMedia.services.marketing,
+  alt: 'Visual marketing digitale Netmarket'
+};
+const heroTertiaryImage = {
+  url: cmsMedia.services.ecommerce,
+  alt: 'Visual sviluppo ecommerce Netmarket'
+};
 
 const teamJsonLd = teamMembers.map((person) =>
   personJsonLd(canonicalSiteUrl, {
@@ -83,7 +87,7 @@ const teamJsonLd = teamMembers.map((person) =>
 
 <BaseLayout
   title="Agenzia comunicazione, marketing e tecnologia a Padova"
-  description="Netmarket è un'agenzia di comunicazione a Padova attiva dal 1986: siti web, ecommerce, marketing, branding, contenuti, software e integrazioni per PMI e aziende."
+  description="Netmarket è un'agenzia di comunicazione, marketing e siti web a Padova attiva dal 1986: strategia, branding, ecommerce, SEO, advertising, social e software per aziende."
   path="/"
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={teamJsonLd}
@@ -93,34 +97,47 @@ const teamJsonLd = teamMembers.map((person) =>
       <div class="home-hero__grid">
         <div class="home-hero__copy">
           <p class="home-hero__eyebrow" data-reveal="down">Netmarket, Padova dal 1986</p>
-          <h1 id="page-title">
-            Comunichiamo valore tra <span class="nm-heading-accent">marketing</span>, tecnologia e contenuti.
+          <h1 id="page-title" data-reveal="line">
+            Agenzia marketing e siti web a <span class="nm-heading-marker">Padova.</span>
           </h1>
           <p class="home-hero__lead" data-reveal="up">
-            Affianchiamo PMI e aziende con siti web, campagne, identità e sistemi digitali costruiti dentro una regia unica.
+            Dal 1986 aiutiamo aziende e PMI a chiarire il messaggio, costruire presenza digitale e far lavorare insieme brand, contenuti, campagne e tecnologia.
           </p>
-          <div class="home-hero__actions" aria-label="Azioni principali">
+          <div class="home-hero__actions" aria-label="Azioni principali" data-reveal="up" data-reveal-delay="1">
             <Button href="/contatti/" magnetic>Raccontaci il progetto</Button>
             <Button href="/progetti/" variant="secondary">Guarda i progetti</Button>
           </div>
         </div>
 
-        <aside class="home-hero__panel" aria-label="Sistema Netmarket" data-reveal="scale">
-          <div class="home-hero__panel-head" data-reveal="up">
-            <span>01</span>
-            <p>Comunicazione, marketing e tecnologia nello stesso progetto.</p>
+        <div class="home-hero__visual" aria-label="Sistema Netmarket">
+          <div class="home-hero__orbit" aria-hidden="true"></div>
+          <figure class="home-hero__device" data-reveal="media">
+            <img
+              src={heroPrimaryImage.url}
+              alt={heroPrimaryImage.alt || 'Visual siti web Netmarket'}
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </figure>
+          <figure class="home-hero__tile home-hero__tile--marketing" data-reveal="scale" data-reveal-delay="1">
+            <img src={heroSecondaryImage.url} alt={heroSecondaryImage.alt || 'Visual marketing Netmarket'} loading="eager" decoding="async" />
+            <figcaption>Strategia digitale</figcaption>
+          </figure>
+          <figure class="home-hero__tile home-hero__tile--ecommerce" data-reveal="scale" data-reveal-delay="2">
+            <img src={heroTertiaryImage.url} alt={heroTertiaryImage.alt || 'Visual ecommerce Netmarket'} loading="eager" decoding="async" />
+            <figcaption>Ecommerce</figcaption>
+          </figure>
+          <div class="home-hero__rating" data-reveal="up" data-reveal-delay="3" aria-label={`${googleTrust.rating} stelle su Google`}>
+            <span aria-hidden="true">★★★★★</span>
+            <strong>{googleTrust.rating}</strong>
+            <small>{googleTrust.reviewCount} recensioni Google</small>
           </div>
-          <div class="home-hero__service-list">
-            {
-              heroServices.map((service) => (
-                <a href={servicePath(service.slug)}>
-                  <span>{service.title}</span>
-                  <small>{service.shortDescription || service.excerpt}</small>
-                </a>
-              ))
-            }
+          <div class="home-hero__mini-card" data-reveal="up" data-reveal-delay="4">
+            <strong>1986</strong>
+            <span>comunicazione, web e marketing per aziende</span>
           </div>
-        </aside>
+        </div>
       </div>
 
       <div class="home-hero__proof" aria-label="Informazioni principali Netmarket" data-reveal="up" data-reveal-stagger="1">
@@ -132,8 +149,9 @@ const teamJsonLd = teamMembers.map((person) =>
     </Container>
   </section>
 
-  <Section compact class="home-client-proof">
+  <Section compact class="home-client-proof" labelledby="client-title">
     <ClientMarquee
+      titleId="client-title"
       title="Clienti e progetti seguiti da Netmarket."
       text="Una selezione di marchi e realtà presenti nello storico lavori."
       clients={clientLogos}
@@ -182,49 +200,44 @@ const teamJsonLd = teamMembers.map((person) =>
           <Stack gap="var(--nm-space-xl)">
             <div class="home-section-heading" data-reveal="line">
               <p class="nm-meta">Progetti</p>
-              <h2 id="work-title">Il lavoro reale, prima delle promesse.</h2>
+              <h2 id="work-title">Case study e progetti reali.</h2>
               <p>
-                Case study pubblicati con clienti, contenuti e media disponibili nel nuovo sistema
-                editoriale Netmarket.
+                Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne e comunicazione.
               </p>
             </div>
-            <div class="home-work-feature" data-reveal="up">
-              <a
-                class="home-work-feature__media"
-                href={projectPath(featuredProject.slug)}
-                data-cursor-label="Guarda"
-                data-reveal="media"
-              >
-                <img
-                  src={featuredProject.cover!.url}
-                  alt={featuredProject.cover!.alt || featuredProject.title}
-                  loading="eager"
-                  decoding="async"
-                  fetchpriority="high"
-                />
-                <span>{projectCategory(featuredProject)}</span>
-              </a>
-              <div class="home-work-feature__body">
-                <p class="nm-meta">{projectClient(featuredProject)}</p>
-                <h3>{featuredProject.title}</h3>
-                <p>{projectDescription(featuredProject)}</p>
-                <a href={projectPath(featuredProject.slug)}>Guarda il progetto completo</a>
-              </div>
-            </div>
-            {secondaryProjects.length > 0 && (
-              <div class="project-rail home-project-rail" data-reveal="up" data-reveal-stagger="1">
-                {secondaryProjects.map((project) => (
-                  <ProjectCard
-                    title={projectClient(project)}
-                    category={projectCategory(project)}
-                    description={projectDescription(project)}
-                    image={project.cover?.url || cmsMedia.projects.sireneBlu}
-                    alt={project.cover?.alt || project.title}
+            <div class="home-case-slider" aria-label="Slider case study Netmarket" data-reveal="up">
+              <div class="home-case-slider__track">
+                {[...visibleProjects, ...visibleProjects].map((project, index) => (
+                  <a
+                    class:list={[
+                      'home-case-card',
+                      index % 5 === 0 && 'home-case-card--info',
+                      index % 5 === 1 && 'home-case-card--portrait',
+                      index % 5 === 2 && 'home-case-card--wide'
+                    ]}
                     href={projectPath(project.slug)}
-                  />
+                    data-cursor-label="Guarda"
+                  >
+                    <div class="home-case-card__media">
+                      <img
+                        src={project.cover!.url}
+                        alt={project.cover!.alt || project.title}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                      <span>{projectCategory(project)}</span>
+                    </div>
+                    <div class="home-case-card__body">
+                      <h3>{projectClient(project)}</h3>
+                      <p>{projectDescription(project)}</p>
+                    </div>
+                  </a>
                 ))}
               </div>
-            )}
+            </div>
+            <div class="home-work-section__actions">
+              <Button href="/progetti/" variant="secondary">Tutti i casi studio</Button>
+            </div>
           </Stack>
         </Container>
       </Section>
@@ -236,9 +249,9 @@ const teamJsonLd = teamMembers.map((person) =>
       <div class="home-method">
         <div class="home-method__heading" data-reveal="line">
           <p class="nm-meta">Metodo</p>
-          <h2 id="method-title">Prima ordine. Poi produzione.</h2>
+          <h2 id="method-title">Eliminiamo i colli di bottiglia che rallentano crescita e comunicazione.</h2>
           <p>
-            Il metodo serve a ridurre attività scollegate, passaggi inutili e decisioni prese troppo tardi.
+            Il metodo Netmarket nasce per trasformare richieste sparse in priorità chiare, responsabilità definite e attività coordinate.
           </p>
         </div>
         <div class="home-method__steps" data-reveal="up" data-reveal-stagger="1">
@@ -279,35 +292,6 @@ const teamJsonLd = teamMembers.map((person) =>
       />
     </Container>
   </Section>
-
-  {
-    visibleInsights.length > 0 && (
-      <Section class="home-insight-section" labelledby="insight-title">
-        <Container wide>
-          <div class="home-insight">
-            <div class="home-section-heading" data-reveal="line">
-              <p class="nm-meta">Insight</p>
-              <h2 id="insight-title">Approfondimenti per decidere meglio.</h2>
-              <p>
-                Articoli e guide dal magazine Netmarket su marketing, web, accessibilità, social e
-                trasformazione digitale.
-              </p>
-              <a href="/insight/">Vai al magazine</a>
-            </div>
-            <div class="home-insight__list" data-reveal="up" data-reveal-stagger="1">
-              {visibleInsights.map((insight) => (
-                <a href={insightPath(insight.slug)}>
-                  <span>{insight.categories[0]?.name || 'Insight'}</span>
-                  <h3>{insight.title}</h3>
-                  <p>{insightDescription(insight)}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </Section>
-    )
-  }
 
   <Section class="faq-section home-faq-section" labelledby="faq-title">
     <Container>
