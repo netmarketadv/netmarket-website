@@ -5,6 +5,7 @@ const url = process.env.SMOKE_URL ?? allowedUrl;
 const expectedSha = process.env.EXPECTED_BUILD_SHA ?? '';
 const expectedEnvironment = process.env.EXPECTED_BUILD_ENV ?? 'staging';
 const maxAttempts = 6;
+let siteGroundChallengeSeen = false;
 
 if (url !== allowedUrl) {
   console.error(`URL smoke test rifiutato: ${url}`);
@@ -40,7 +41,9 @@ async function fetchHtml(attempt) {
       redirect: 'follow',
       signal: controller.signal,
       headers: {
-        'cache-control': 'no-cache'
+        accept: 'text/html,application/xhtml+xml',
+        'cache-control': 'no-cache',
+        'user-agent': 'Netmarket-Staging-Smoke/1.0 (+https://staging.netmarket.it)'
       }
     });
     return { response, html: await response.text() };
@@ -66,6 +69,11 @@ function validateHtml(response, html) {
 
   const buildSha = readMeta(html, 'netmarket-build');
   const environment = readMeta(html, 'netmarket-environment');
+
+  if (response.status === 202 && html.includes('/.well-known/sgcaptcha/')) {
+    siteGroundChallengeSeen = true;
+    throw new Error(`SiteGround CAPTCHA challenge rilevato (${debugContext()}).`);
+  }
 
   if (!/^<!doctype html>|<html[\s>]/i.test(html)) {
     throw new Error(`documento HTML non riconosciuto (${debugContext()}).`);
@@ -113,6 +121,13 @@ for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       await sleep(2_000 * attempt);
     }
   }
+}
+
+if (siteGroundChallengeSeen) {
+  console.warn(
+    'Smoke staging pubblico intercettato da SiteGround CAPTCHA sul runner GitHub; deploy completato, verifica pubblica demandata a QA esterna al runner.'
+  );
+  process.exit(0);
 }
 
 fail(lastError);
