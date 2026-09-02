@@ -56,8 +56,8 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   } else if (env.CMS_BASIC_AUTH_USER && env.CMS_BASIC_AUTH_PASSWORD) {
     headers.Authorization = `Basic ${btoa(`${env.CMS_BASIC_AUTH_USER}:${env.CMS_BASIC_AUTH_PASSWORD}`)}`;
   }
-  if (!headers.Authorization && publicEnv.PUBLIC_DEPLOY_ENV === 'local') {
-    throw new Error(`CMS endpoint ${path} skipped locally because CMS credentials are not configured.`);
+  if (!headers.Authorization && endpoint.includes('cms.netmarket.it')) {
+    throw new Error(`CMS endpoint ${path} skipped because CMS credentials are not configured.`);
   }
 
   const controller = new AbortController();
