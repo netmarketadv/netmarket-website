@@ -37,8 +37,13 @@ export function validatePublicEnv(input: Record<string, unknown>): PublicEnv {
 
 export function validateServerEnv(input: Record<string, unknown>, deployEnv: DeployEnv): ServerEnv {
   const server = serverEnvSchema.parse(input);
-  if (deployEnv !== 'local' && !server.CMS_API_BASE_URL.includes('cms.netmarket.it')) {
-    throw new Error('CMS_API_BASE_URL deve puntare a cms.netmarket.it in staging o production.');
+  if (
+    deployEnv !== 'local' &&
+    !server.CMS_API_BASE_URL.startsWith('https://cms.netmarket.it/wp-json/netmarket/v1/')
+  ) {
+    throw new Error(
+      'CMS_API_BASE_URL deve puntare a https://cms.netmarket.it/wp-json/netmarket/v1/ in staging o production.'
+    );
   }
   return server;
 }

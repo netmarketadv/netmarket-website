@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { robotsForEnv, validatePublicEnv } from '../src/index';
+import { robotsForEnv, validatePublicEnv, validateServerEnv } from '../src/index';
 
 describe('environment validation', () => {
   it('allows local defaults', () => {
@@ -29,5 +29,35 @@ describe('environment validation', () => {
   it('returns safe robots directives by environment', () => {
     expect(robotsForEnv('staging')).toContain('noarchive');
     expect(robotsForEnv('production')).toBe('index, follow');
+  });
+
+  it('requires the proprietary CMS REST namespace outside local', () => {
+    expect(() =>
+      validateServerEnv(
+        {
+          CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/',
+          CMS_GRAPHQL_URL: '',
+          CMS_BUILD_TOKEN: '',
+          CMS_BASIC_AUTH_USER: '',
+          CMS_BASIC_AUTH_PASSWORD: ''
+        },
+        'staging'
+      )
+    ).toThrow(/wp-json\/netmarket\/v1/);
+
+    expect(
+      validateServerEnv(
+        {
+          CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/netmarket/v1/',
+          CMS_GRAPHQL_URL: '',
+          CMS_BUILD_TOKEN: '',
+          CMS_BASIC_AUTH_USER: '',
+          CMS_BASIC_AUTH_PASSWORD: ''
+        },
+        'staging'
+      )
+    ).toMatchObject({
+      CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/netmarket/v1/'
+    });
   });
 });

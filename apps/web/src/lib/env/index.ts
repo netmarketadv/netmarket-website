@@ -8,7 +8,7 @@ const localFallback = {
   PUBLIC_GTM_ID: '',
   PUBLIC_GOOGLE_MAPS_API_KEY: '',
   PUBLIC_GOOGLE_PLACE_ID: '',
-  CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/',
+  CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/netmarket/v1/',
   CMS_GRAPHQL_URL: 'https://cms.netmarket.it/graphql',
   CMS_BUILD_TOKEN: '',
   CMS_BASIC_AUTH_USER: '',

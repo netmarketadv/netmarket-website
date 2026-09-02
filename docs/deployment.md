@@ -66,7 +66,7 @@ Variables richieste:
 - `PUBLIC_DEPLOY_ENV=staging`
 - `PUBLIC_BUILD_SHA` generato automaticamente dalla GitHub Action
 - `PUBLIC_BUILD_TIME` generato automaticamente dalla GitHub Action
-- `CMS_API_BASE_URL=https://cms.netmarket.it/wp-json/`
+- `CMS_API_BASE_URL=https://cms.netmarket.it/wp-json/netmarket/v1/`
 - `NODE_VERSION=22` o `24`
 
 Ordine operativo:
