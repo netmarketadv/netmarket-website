@@ -18,6 +18,8 @@ Gli smoke test verificano che `https://staging.netmarket.it` serva lo stesso SHA
 
 `Quality Fast` vive in `quality-fast.yml`: gira su PR verso `develop` e manualmente. Usa path filtering, cancella run obsolete sullo stesso ref e include controlli rapidi proporzionati. Su push `develop`, `deploy-staging.yml` esegue direttamente `pnpm check:fast` prima del deploy per evitare una doppia installazione/build in workflow separati.
 
+Misura del 2026-09-02: il deploy staging del commit `eece167d74da38772218ce02fea53c9e6e30ea7e` ha completato in 2m56s, includendo pull cache CMS, install, `pnpm check:fast`, deploy, smoke HTTP e Playwright smoke post deploy.
+
 La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su Pull Request verso `main`, push diretti a `main`, e manualmente. Non parte automaticamente a ogni push su `develop`, `feature/*` o `fix/*`.
 
 Rollback staging:
