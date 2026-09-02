@@ -1,0 +1,89 @@
+---
+import { breadcrumbJsonLd, organizationJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import NodAutomationAi from '@/components/nod/NodAutomationAi.astro';
+import NodBeta from '@/components/nod/NodBeta.astro';
+import NodBridge from '@/components/nod/NodBridge.astro';
+import NodCTA from '@/components/nod/NodCTA.astro';
+import NodHero from '@/components/nod/NodHero.astro';
+import NodIntegrations from '@/components/nod/NodIntegrations.astro';
+import NodLeadDetail from '@/components/nod/NodLeadDetail.astro';
+import NodProblem from '@/components/nod/NodProblem.astro';
+import NodProductNav from '@/components/nod/NodProductNav.astro';
+import NodProductTour from '@/components/nod/NodProductTour.astro';
+import NodRevenueAudience from '@/components/nod/NodRevenueAudience.astro';
+import NodWorkspace from '@/components/nod/NodWorkspace.astro';
+import { nodFaqItems } from '@/data/nod';
+import '@/styles/nod.css';
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const title = 'NØD | Lead, pipeline e follow-up';
+const description =
+  'NØD collega lead, pipeline, follow-up, automazioni e dati in un unico sistema commerciale sviluppato da Netmarket per le PMI.';
+const pageUrl = `${canonicalSiteUrl}/nod/`;
+const organization = organizationJsonLd(canonicalSiteUrl, {
+  name: 'Netmarket',
+  legalName: 'Netmarket Srl',
+  vatId: '03618730281',
+  url: canonicalSiteUrl
+});
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'NØD', url: pageUrl }
+]);
+const softwareApplication = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${pageUrl}#software`,
+  name: 'NØD',
+  description,
+  url: pageUrl,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  provider: { '@id': `${canonicalSiteUrl}/#organization` }
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: nodFaqItems.map(([question, answer]) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/nod/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[organization, breadcrumb, softwareApplication, faqSchema]}
+>
+  <NodProductNav />
+  <NodHero />
+  <NodProblem />
+  <NodBridge />
+  <NodProductTour />
+  <NodLeadDetail />
+  <NodAutomationAi />
+  <NodIntegrations />
+  <NodRevenueAudience />
+  <NodWorkspace />
+  <NodBeta />
+  <section class="nod-section nod-faq" aria-labelledby="nod-faq-title">
+    <div class="nod-container">
+      <FAQBlock
+        title="Domande frequenti su NØD."
+        titleId="nod-faq-title"
+        text="Risposte rapide per capire se la beta può essere adatta al tuo processo commerciale."
+        items={nodFaqItems}
+      />
+    </div>
+  </section>
+  <NodCTA />
+</BaseLayout>

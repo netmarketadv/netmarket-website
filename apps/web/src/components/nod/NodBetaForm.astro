@@ -1,0 +1,149 @@
+---
+---
+
+<form class="nod-beta-form" data-nod-beta-form aria-describedby="nod-beta-form-status">
+  <div class="contact-form__field contact-form__field--hidden" aria-hidden="true">
+    <label for="nod-website">Sito web</label>
+    <input id="nod-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="nod-beta-form__grid">
+    <label>
+      <span>Nome e cognome</span>
+      <input name="name" type="text" autocomplete="name" required minlength="2" />
+    </label>
+    <label>
+      <span>Azienda</span>
+      <input name="company" type="text" autocomplete="organization" required maxlength="120" />
+    </label>
+    <label>
+      <span>Email aziendale</span>
+      <input name="email" type="email" autocomplete="email" required />
+    </label>
+    <label>
+      <span>Telefono</span>
+      <input name="phone" type="tel" autocomplete="tel" maxlength="40" />
+    </label>
+  </div>
+
+  <label>
+    <span>Come gestite oggi i lead?</span>
+    <select name="leadManagement" required>
+      <option value="">Seleziona una risposta</option>
+      <option>Email</option>
+      <option>Excel / Google Sheets</option>
+      <option>CRM</option>
+      <option>WhatsApp / telefono</option>
+      <option>Più strumenti</option>
+      <option>Altro</option>
+    </select>
+  </label>
+
+  <fieldset>
+    <legend>Quali canali utilizzate per acquisire contatti?</legend>
+    <div class="nod-beta-form__checks">
+      {['Sito', 'Google Ads', 'Meta Ads', 'Social', 'Email', 'Eventi', 'Altro'].map((channel) => (
+        <label>
+          <input name="channels" type="checkbox" value={channel} />
+          <span>{channel}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <label class="nod-beta-form__check">
+    <input name="privacyConsent" type="checkbox" required />
+    <span>Ho letto l’informativa privacy e autorizzo il trattamento dei dati per essere ricontattato.</span>
+  </label>
+  <label class="nod-beta-form__check">
+    <input name="marketingConsent" type="checkbox" />
+    <span>Autorizzo l’invio di comunicazioni informative e commerciali Netmarket.</span>
+  </label>
+
+  <p><a href="https://www.iubenda.com/privacy-policy/69986431">Privacy policy</a></p>
+
+  <button type="submit" class="nm-button nm-button--primary" data-motion-magnetic>
+    Richiedi accesso alla beta
+  </button>
+  <p id="nod-beta-form-status" class="contact-form__status" role="status" aria-live="polite" tabindex="-1"></p>
+</form>
+
+<script>
+  import { pushEvent } from '@netmarket/analytics';
+  import { submitContactForm } from '@/lib/api/forms';
+
+  const form = document.querySelector<HTMLFormElement>('[data-nod-beta-form]');
+  const status = form?.querySelector<HTMLElement>('#nod-beta-form-status');
+  let started = false;
+
+  function collectTracking() {
+    const params = new URLSearchParams(window.location.search);
+    const keys = [
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_content',
+      'utm_term',
+      'gclid',
+      'fbclid',
+      'ttclid',
+      'oppref'
+    ];
+    return Object.fromEntries(
+      keys.map((key) => [key, params.get(key) || '']).filter(([, value]) => value)
+    );
+  }
+
+  form?.addEventListener('input', () => {
+    if (started) return;
+    started = true;
+    pushEvent({ event: 'contact_form_start', form_id: 'nod-beta' });
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form || !status) return;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const data = new FormData(form);
+    const channels = data.getAll('channels').map(String).filter(Boolean);
+    const leadManagement = String(data.get('leadManagement') || '');
+    status.textContent = '';
+    pushEvent({ event: 'contact_form_submit', form_id: 'nod-beta' });
+    button?.setAttribute('disabled', 'true');
+
+    try {
+      await submitContactForm({
+        name: String(data.get('name') || ''),
+        email: String(data.get('email') || ''),
+        company: String(data.get('company') || ''),
+        phone: String(data.get('phone') || ''),
+        service: 'nod-beta',
+        message: [
+          'Richiesta accesso beta NØD.',
+          `Gestione lead attuale: ${leadManagement}.`,
+          `Canali acquisizione: ${channels.length > 0 ? channels.join(', ') : 'non indicati'}.`
+        ].join('\n'),
+        privacyConsent: true,
+        marketingConsent: data.get('marketingConsent') === 'on',
+        website: String(data.get('website') || ''),
+        utm: collectTracking(),
+        sourceUrl: window.location.href,
+        referrer: document.referrer || undefined
+      });
+      form.reset();
+      status.textContent = 'Grazie, abbiamo ricevuto la richiesta per la beta NØD.';
+      status.focus();
+      pushEvent({ event: 'contact_form_success', form_id: 'nod-beta' });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'contact_form_failed';
+      status.textContent = 'Non siamo riusciti a inviare la richiesta. Puoi scriverci via email.';
+      pushEvent({ event: 'contact_form_error', form_id: 'nod-beta', error_code: message });
+    } finally {
+      button?.removeAttribute('disabled');
+    }
+  });
+</script>

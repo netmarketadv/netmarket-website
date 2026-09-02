@@ -10,10 +10,17 @@ on:
         type: choice
         options: ['true', 'false']
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     environment: staging
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: cms-deploy-staging
+      cancel-in-progress: true
     env:
       TARGET_HOST: cms.netmarket.it
       SG_CMS_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST || secrets.SG_SSH_HOST }}
@@ -27,7 +34,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Guard CMS target
-        run: test "$TARGET_HOST" = "cms.netmarket.it"
+        run: |
+          test "$TARGET_HOST" = "cms.netmarket.it"
+          test "$SG_CMS_WORDPRESS_PATH" != "/"
+          case "$SG_CMS_WORDPRESS_PATH" in
+            *cms.netmarket.it*) ;;
+            *) echo "::error::SG_CMS_WORDPRESS_PATH must target cms.netmarket.it"; exit 1 ;;
+          esac
       - name: Check SSH secrets
         run: |
           missing=0

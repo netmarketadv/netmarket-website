@@ -1,0 +1,38 @@
+---
+const audience = [
+  'PMI B2B',
+  'aziende con richieste preventivo',
+  'reti commerciali',
+  'showroom',
+  'servizi professionali',
+  'clienti con valore medio alto',
+  'team che usano più strumenti',
+  'clienti Netmarket con campagne lead generation'
+];
+---
+
+<section class="nod-section" aria-labelledby="nod-revenue-title">
+  <div class="nod-container nod-revenue-audience">
+    <div class="nod-revenue" data-reveal="scale">
+      <h2 id="nod-revenue-title">Il marketing diventa più vicino ai numeri che contano.</h2>
+      <p>
+        Non fermarti a impression, clic e lead. NØD permette di seguire ciò che succede dopo e
+        collegare progressivamente acquisizione e opportunità commerciali.
+      </p>
+      <div class="nod-revenue__demo" aria-label="Esempio dimostrativo di percorso commerciale">
+        <span>Campagna <strong>demo</strong></span>
+        <span>47 lead</span>
+        <span>18 qualificati</span>
+        <span>9 preventivi</span>
+        <span>4 clienti</span>
+        <span>valore generato demo</span>
+      </div>
+    </div>
+    <div class="nod-audience" data-reveal="up">
+      <h2>Utile quando un lead vale troppo per essere dimenticato.</h2>
+      <div>
+        {audience.map((item) => <span>{item}</span>)}
+      </div>
+    </div>
+  </div>
+</section>

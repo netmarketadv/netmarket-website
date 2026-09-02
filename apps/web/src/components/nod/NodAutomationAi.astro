@@ -1,0 +1,40 @@
+---
+const flow = [
+  'Nuovo lead',
+  'Assegna commerciale',
+  'Genera riepilogo',
+  'Crea task',
+  'Programma follow-up',
+  'Aggiorna pipeline'
+];
+
+const aiUses = [
+  'riassume una richiesta lunga',
+  'evidenzia informazioni mancanti',
+  'suggerisce una priorità',
+  'propone la prossima azione',
+  'prepara una risposta',
+  'supporta il team'
+];
+---
+
+<section class="nod-section" aria-labelledby="nod-automation-title">
+  <div class="nod-container nod-automation-ai">
+    <div class="nod-automation-ai__flow" data-reveal="up">
+      <h2 id="nod-automation-title">Il processo continua anche quando nessuno lo sta controllando.</h2>
+      <ol>
+        {flow.map((step) => <li>{step}</li>)}
+      </ol>
+    </div>
+    <div class="nod-automation-ai__ai" data-reveal="scale">
+      <h2>L’AI interviene dove può essere utile.</h2>
+      <p>
+        NØD non aggiunge un chatbot al tuo lavoro. Integra l’AI nei passaggi in cui può ridurre
+        tempo e dispersione.
+      </p>
+      <ul>
+        {aiUses.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>

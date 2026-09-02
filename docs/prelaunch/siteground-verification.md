@@ -4,63 +4,52 @@ Data audit: 2026-09-02
 
 ## Stato
 
-Esito corrente: `READY FOR STAGING`
+Esito corrente: `VERIFIED`
 
-L'accesso SSH risulta configurato nei secret dell'environment `staging`. Il deploy path remoto aveva fallito nel workflow precedente, ma dry-run, deploy reale e smoke staging sono completati con successo dopo l'hardening dello script.
+L'accesso SSH e il deploy path staging risultano configurati e funzionanti nell'environment GitHub `staging`.
 
-## Evidenza
+## Evidenze
 
-Workflow `Deploy Staging`, run `33611336296`:
+Verify dedicato:
 
-```text
-rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)
-```
+- Workflow: `Verify SiteGround`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629193220`
+- Stato: success.
 
-Il valore del path e mascherato da GitHub perche proviene da secret, quindi non va riportato nei log.
+Deploy staging:
 
-Workflow `Deploy Staging`, run `33615147619`:
+- Workflow: `Deploy Staging`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629259420`
+- Stato: success.
+- `Deploy`: success.
+- `Smoke staging`: success.
 
-```text
-Dry-run deploy plan: success
-```
+Deploy CMS:
 
-Workflow `Deploy Staging`, run `33616676522`:
+- Workflow: `Deploy CMS Plugin`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629190214`
+- Stato: success.
+- `Deploy and activate CMS plugin`: success.
+- `Harden CMS access and indexing`: success.
+- `Health check`: success.
 
-```text
-Deploy: success
-Smoke staging: success
-```
+## Guardrails Confermati
 
-## Hardening Applicato
+- `TARGET_HOST` staging deve essere `staging.netmarket.it`.
+- `TARGET_HOST` CMS deve essere `cms.netmarket.it`.
+- `SG_CMS_WORDPRESS_PATH` non puo essere `/` e deve puntare a un path contenente `cms.netmarket.it`.
+- `SG_STAGING_DEPLOY_PATH` viene verificato prima del deploy.
+- Lo script deploy rifiuta path non assoluti o con `..`.
+- Lo script deploy verifica read/execute/write prima di `rsync`.
 
-`infrastructure/scripts/verify-siteground-connection.sh` ora verifica, quando `SG_STAGING_DEPLOY_PATH` e disponibile:
+## Note Operative
 
-- path assoluto;
-- assenza di `..`;
-- directory esistente;
-- permessi read;
-- permessi execute;
-- permessi write.
+Il path remoto e mascherato da GitHub perche proviene da secret e non deve essere riportato nei log pubblici.
 
-`infrastructure/scripts/deploy-staging.sh` esegue lo stesso preflight prima di backup e `rsync`.
+Se un futuro deploy fallisce, verificare in questo ordine:
 
-Il deploy script ora sincronizza con:
-
-```text
---rsync-path "cd <deploy-path> && rsync"
-```
-
-In questo modo il processo remoto entra prima nel document root e poi riceve i file su `.`, riducendo i casi in cui SiteGround consente `cd` via shell ma `rsync` fallisce il `change_dir` sul path assoluto.
-
-## Azione Richiesta
-
-Portare `verify-siteground.yml` sul default branch o registrarlo in GitHub Actions, poi rilanciarlo per avere un controllo diretto e dedicato sul path. Il deploy staging principale e comunque gia verificato dalla run `33616676522`.
-
-Se il deploy reale fallisce ancora, correggere uno di questi elementi in GitHub Environment `staging`:
-
-- `SG_STAGING_DEPLOY_PATH`;
-- ownership della directory remota;
-- permessi della directory remota;
-- utente SSH associato al path.
-
-Il path deve puntare al document root effettivamente scrivibile di `staging.netmarket.it`, non a una directory di produzione.
+1. `SG_STAGING_DEPLOY_PATH`
+2. ownership della directory remota;
+3. permessi della directory remota;
+4. utente SSH associato al path;
+5. coerenza tra host SiteGround, known hosts e porta SSH.

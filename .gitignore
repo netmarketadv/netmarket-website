@@ -4,6 +4,7 @@ node_modules/
 vendor/
 dist/
 .astro/
+.cms-cache/
 coverage/
 playwright-report/
 test-results/

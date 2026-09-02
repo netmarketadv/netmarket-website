@@ -5,76 +5,76 @@ Data audit: 2026-09-02
 ## Target
 
 - URL: `https://staging.netmarket.it`
-- Build attesa piu recente: `2c8c73b474ced6f4049cabf66de338eae14f2278` oppure commit successivo del branch `chore/prelaunch-hardening`
+- Build attesa: `99d79ffcfb38449a864d1e1f1b59c437e382098a`
 - Ambiente atteso: `staging`
 
 ## Stato
 
 Esito corrente: `VERIFIED WITH WARNINGS`
 
-Il deploy del commit `53b5a99` non era arrivato allo smoke test remoto per fallimento nello step `Deploy`. Dopo hardening, il branch `chore/prelaunch-hardening` e stato deployato correttamente su staging.
+Il deploy staging reale del branch `chore/prelaunch-hardening` e completato con successo.
 
-Health check remoto read-only eseguito su `https://staging.netmarket.it`:
-
-- Esito HTTP/strutturale: valido.
-- Build online rilevata: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`.
-- Environment online rilevato: `staging`.
-- Stato: ambiente raggiungibile e aggiornato allo SHA atteso.
-
-## Evidenze
+Evidenze:
 
 - Workflow: `Deploy Staging`
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33611336296`
-- Conclusione: `failure`
-- Step fallito: `Deploy`
-- Errore: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`
-- Step `Smoke staging`: skipped
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629259420`
+- Conclusione: success.
+- `Pull CMS API cache`: success.
+- `Fast frontend tests`: success.
+- `Build Astro frontend`: success.
+- `Deploy`: success.
+- `Smoke staging`: success.
 
-Dry-run corretto:
+Smoke remoto:
 
-- Workflow: `Deploy Staging`
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619`
-- Conclusione: `success`
-- Step `Dry-run deploy plan`: success
+```text
+Smoke staging ok: build 99d79ffcfb38449a864d1e1f1b59c437e382098a su staging.
+```
 
-Deploy reale rilanciato:
-
-- Workflow: `Deploy Staging`
-- Run annullata: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
-- Motivo: commit superato da patch cache fallback.
-
-Deploy reale verificato:
-
-- Workflow: `Deploy Staging`
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33616676522`
-- Conclusione: `success`
-- Step `Deploy`: success
-- Step `Smoke staging`: success
-- SHA online: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`
-
-Warning:
-
-- Il CMS risponde `404` sugli endpoint contenuto headless, quindi le pagine editoriali deployate usano fallback/snapshot reali.
-
-## Criteri Da Verificare Dopo Deploy
-
-- HTTP 200 su `https://staging.netmarket.it`.
-- Documento HTML reale, non placeholder hosting.
-- `meta[name="netmarket-build"]` uguale allo SHA della run.
-- `meta[name="netmarket-environment"]` uguale a `staging`.
-- `meta[name="robots"]` con `noindex`.
-- Header e footer presenti.
-- Nessun riferimento a `localhost`.
-- Pagine chiave navigabili:
-  - `/`
-  - `/servizi/`
-  - `/progetti/`
-  - `/insight/`
-  - `/agenzia/`
-  - `/contatti/`
-
-## Comando Smoke
+Smoke locale read-only:
 
 ```bash
-EXPECTED_BUILD_SHA=a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc EXPECTED_BUILD_ENV=staging pnpm smoke:staging
+EXPECTED_BUILD_SHA=99d79ffcfb38449a864d1e1f1b59c437e382098a EXPECTED_BUILD_ENV=staging pnpm smoke:staging
 ```
+
+Esito: success.
+
+## Pagine Verificate
+
+- `/`: smoke tramite script.
+- `/nod/`: HTTP 200.
+- `/robots.txt`: `User-agent: *` e `Disallow: /`.
+
+Header `/nod/`:
+
+```text
+HTTP/2 200
+cache-control: no-store, max-age=0
+x-robots-tag: noindex, nofollow, noarchive
+```
+
+## Crawl Staging
+
+Comando:
+
+```bash
+pnpm audit:final:crawl:staging
+pnpm audit:final:maps
+```
+
+Esito:
+
+- 53 URL inventariati.
+- 53 URL ok.
+- 0 errori.
+- 0 redirect.
+- 0 title mancanti.
+- 0 description mancanti.
+- 0 H1 mancanti.
+- `/nod/` presente nell'inventario con HTTP 200.
+
+## Warning Aperti
+
+- Staging e correttamente noindex.
+- Restano immagini con `alt=""` da classificare manualmente come decorative o contenuto.
+- Alcune aree editoriali possono usare fallback/snapshot reali se il CMS non contiene ancora la source finale.
