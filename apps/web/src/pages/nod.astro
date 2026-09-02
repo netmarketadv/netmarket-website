@@ -1,0 +1,684 @@
+---
+import {
+  IconArrowRight,
+  IconCalendar,
+  IconChartLine,
+  IconMessageCircle,
+  IconRobot,
+  IconRoute,
+  IconSparkles,
+  IconUsers
+} from '@tabler/icons-astro';
+import { absoluteCanonical, breadcrumbJsonLd } from '@netmarket/seo';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const cmsUploadsBase = 'https://cms.netmarket.it/wp-content/uploads/2026/09';
+const nodLogo = `${cmsUploadsBase}/nod-logo.svg`;
+const nodLogoWhite = `${cmsUploadsBase}/nod-logo_white.svg`;
+const nodImages = {
+  dashboard: `${cmsUploadsBase}/dashboard-scaled.webp`,
+  leads: `${cmsUploadsBase}/leads-scaled.webp`,
+  leadDetail: `${cmsUploadsBase}/lead-detail-scaled.webp`,
+  pipeline: `${cmsUploadsBase}/pipeline-scaled.webp`,
+  calendar: `${cmsUploadsBase}/calendar-scaled.webp`,
+  automations: `${cmsUploadsBase}/automations-scaled.webp`,
+  aiAssistant: `${cmsUploadsBase}/ai-assistant-scaled.webp`,
+  reports: `${cmsUploadsBase}/reports-scaled.webp`
+} as const;
+
+const pageDescription =
+  'NØD è la piattaforma Netmarket per gestire lead, pipeline, task, automazioni e report in un unico ambiente operativo.';
+const pageUrl = absoluteCanonical(canonicalSiteUrl, '/nod/');
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'NØD', url: pageUrl }
+]);
+const softwareSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${pageUrl}#software`,
+  name: 'NØD',
+  description: pageDescription,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: pageUrl,
+  provider: {
+    '@id': `${canonicalSiteUrl}/#organization`
+  }
+};
+
+const featureCards = [
+  {
+    title: 'Lead e contatti',
+    text: 'Schede chiare per seguire richieste, attività e storico commerciale senza disperdere informazioni.',
+    image: nodImages.leads,
+    alt: 'Elenco lead nella piattaforma NOD',
+    icon: IconUsers
+  },
+  {
+    title: 'Pipeline commerciale',
+    text: 'Stati, opportunità e follow-up restano leggibili per chi vende e per chi coordina il lavoro.',
+    image: nodImages.pipeline,
+    alt: 'Vista pipeline commerciale nella piattaforma NOD',
+    icon: IconRoute
+  },
+  {
+    title: 'Calendario operativo',
+    text: 'Task e appuntamenti diventano parte dello stesso flusso, con priorità più facili da leggere.',
+    image: nodImages.calendar,
+    alt: 'Calendario attività nella piattaforma NOD',
+    icon: IconCalendar
+  }
+] as const;
+
+const operatingItems = [
+  ['Acquisizione', 'Lead e fonti raccolti in una vista condivisa.'],
+  ['Qualifica', 'Schede dettaglio per capire priorità e prossime azioni.'],
+  ['Gestione', 'Pipeline, task e calendario tengono ordinato il processo.'],
+  ['Misura', 'Report e insight aiutano a migliorare le decisioni.']
+] as const;
+---
+
+<BaseLayout
+  title="NØD"
+  description={pageDescription}
+  path="/nod/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, softwareSchema]}
+>
+  <div class="nod-page">
+    <section class="nod-hero" aria-labelledby="nod-title">
+      <Container wide>
+        <div class="nod-hero__grid">
+          <div class="nod-hero__copy" data-reveal="up">
+            <img class="nod-wordmark" src={nodLogo} alt="NØD by Netmarket" width="220" height="64" decoding="async" />
+            <h1 id="nod-title">Il CRM operativo per seguire lead, task e pipeline.</h1>
+            <p>
+              NØD aiuta le aziende a trasformare contatti, attività commerciali e dati in un flusso
+              di lavoro più chiaro.
+            </p>
+            <div class="nod-hero__actions">
+              <Button href="/contatti/" magnetic>Parliamone</Button>
+              <a class="nod-link" href="#piattaforma">
+                Vedi la piattaforma
+                <IconArrowRight stroke={1.8} />
+              </a>
+            </div>
+          </div>
+
+          <div class="nod-hero__visual" data-reveal="media">
+            <img
+              src={nodImages.dashboard}
+              alt="Dashboard NOD con metriche, lead e andamento commerciale"
+              width="2560"
+              height="1530"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <Section compact labelledby="nod-system-title">
+      <Container>
+        <div class="nod-system" data-reveal="up">
+          <h2 id="nod-system-title">Un ambiente unico per lavorare sui contatti.</h2>
+          <p>
+            La piattaforma tiene insieme marketing, vendita e follow-up. Il team vede cosa è successo,
+            cosa va fatto e dove intervenire.
+          </p>
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="piattaforma" labelledby="nod-platform-title">
+      <Container wide>
+        <div class="nod-platform">
+          <div class="nod-platform__intro" data-reveal="line">
+            <h2 id="nod-platform-title">La UI resta semplice anche quando il processo cresce.</h2>
+            <p>
+              Lead, pipeline, calendario e report mantengono la stessa grammatica visiva: pochi livelli,
+              informazioni leggibili e azioni vicine al contesto.
+            </p>
+          </div>
+
+          <div class="nod-feature-grid" data-reveal="up" data-reveal-stagger="1">
+            {
+              featureCards.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <article class="nod-feature-card">
+                    <div class="nod-feature-card__icon" aria-hidden="true">
+                      <Icon stroke={1.8} />
+                    </div>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </div>
+                    <div class="nod-feature-card__media">
+                      <img src={item.image} alt={item.alt} width="1600" height="1000" loading="lazy" decoding="async" />
+                    </div>
+                  </article>
+                );
+              })
+            }
+          </div>
+        </div>
+      </Container>
+    </Section>
+
+    <Section compact labelledby="nod-flow-title">
+      <Container wide>
+        <div class="nod-flow">
+          <div class="nod-flow__copy" data-reveal="up">
+            <h2 id="nod-flow-title">Dalla richiesta al prossimo passo.</h2>
+            <p>
+              NØD non sostituisce il metodo commerciale. Lo rende più visibile, così ogni persona sa
+              cosa seguire e quando farlo.
+            </p>
+            <div class="nod-flow__steps" aria-label="Flusso operativo NOD">
+              {
+                operatingItems.map(([title, text]) => (
+                  <article>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="nod-flow__media" data-reveal="media">
+            <img
+              src={nodImages.leadDetail}
+              alt="Scheda dettaglio lead con informazioni, attività e stato commerciale"
+              width="1600"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </Container>
+    </Section>
+
+    <Section labelledby="nod-automation-title">
+      <Container wide>
+        <div class="nod-automation">
+          <article class="nod-deep-card nod-deep-card--blue" data-reveal="scale">
+            <div>
+              <IconRobot stroke={1.8} aria-hidden="true" />
+              <h2 id="nod-automation-title">AI Assistant e automazioni.</h2>
+              <p>
+                I processi ripetitivi diventano più leggeri: template, suggerimenti e automazioni
+                aiutano il team a mantenere il ritmo.
+              </p>
+            </div>
+            <img src={nodImages.aiAssistant} alt="AI Assistant dentro NOD" width="1600" height="1000" loading="lazy" decoding="async" />
+          </article>
+
+          <article class="nod-deep-card" data-reveal="scale" data-reveal-delay="1">
+            <div>
+              <IconSparkles stroke={1.8} aria-hidden="true" />
+              <h3>Automazioni operative</h3>
+              <p>Trigger e azioni collegano fonti, task e follow-up senza appesantire il lavoro quotidiano.</p>
+            </div>
+            <img src={nodImages.automations} alt="Automazioni operative nella piattaforma NOD" width="1600" height="1000" loading="lazy" decoding="async" />
+          </article>
+        </div>
+      </Container>
+    </Section>
+
+    <Section compact labelledby="nod-reports-title">
+      <Container wide>
+        <div class="nod-reports" data-reveal="media">
+          <div class="nod-reports__copy">
+            <IconChartLine stroke={1.8} aria-hidden="true" />
+            <h2 id="nod-reports-title">Report leggibili, decisioni più rapide.</h2>
+            <p>
+              Le viste di report collegano andamento dei lead, attività e risultati. Non servono
+              dati decorativi: servono segnali chiari.
+            </p>
+          </div>
+          <img
+            src={nodImages.reports}
+            alt="Report della piattaforma NOD con dati commerciali e grafici"
+            width="1600"
+            height="1000"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </Container>
+    </Section>
+
+    <Section class="nod-final-section" labelledby="nod-cta-title">
+      <Container>
+        <div class="nod-final" data-reveal="scale">
+          <img src={nodLogoWhite} alt="NØD" width="160" height="48" loading="lazy" decoding="async" />
+          <div>
+            <h2 id="nod-cta-title">Vuoi capire se NØD è adatto al tuo processo?</h2>
+            <p>Partiamo da lead, canali e metodo commerciale già attivi. Poi costruiamo il flusso utile.</p>
+          </div>
+          <Button href="/contatti/" variant="inverse" magnetic>
+            <span>Contattaci</span>
+            <IconMessageCircle stroke={1.8} />
+          </Button>
+        </div>
+      </Container>
+    </Section>
+  </div>
+</BaseLayout>
+
+<style>
+  .nod-page {
+    --nod-surface: #f3f4f6;
+    --nod-panel: #ffffff;
+    --nod-panel-soft: #f8f9fb;
+    --nod-line: rgb(9 10 15 / 0.1);
+    --nod-blue: var(--nm-color-blue);
+    --nod-muted: #68707c;
+    background:
+      linear-gradient(180deg, #ffffff 0%, var(--nod-surface) 22%, var(--nod-surface) 100%);
+  }
+
+  .nod-hero {
+    padding: clamp(3.25rem, 7vw, 7rem) 0 var(--nm-space-2xl);
+  }
+
+  .nod-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(2rem, 5vw, 5.5rem);
+    align-items: center;
+  }
+
+  .nod-hero__copy {
+    display: grid;
+    gap: var(--nm-space-md);
+    align-content: center;
+  }
+
+  .nod-wordmark {
+    width: clamp(8.8rem, 13vw, 13rem);
+    height: auto;
+    margin-bottom: var(--nm-space-sm);
+  }
+
+  .nod-hero h1 {
+    max-width: 9.5ch;
+    font-size: clamp(3.5rem, 7vw, 7.4rem);
+    line-height: 0.94;
+    letter-spacing: var(--nm-tracking-display);
+  }
+
+  .nod-hero p,
+  .nod-system p,
+  .nod-platform__intro p,
+  .nod-flow__copy > p,
+  .nod-deep-card p,
+  .nod-reports__copy p,
+  .nod-final p {
+    color: var(--nod-muted);
+    font-size: var(--nm-text-lead);
+    line-height: 1.45;
+  }
+
+  .nod-hero__copy > p {
+    max-width: 34rem;
+  }
+
+  .nod-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nm-space-sm);
+    align-items: center;
+    margin-top: var(--nm-space-sm);
+  }
+
+  .nod-link {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+    min-height: 3rem;
+    color: var(--nm-color-ink);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .nod-link svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    transition: transform var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
+  }
+
+  .nod-link:hover svg {
+    transform: translateX(0.18rem);
+  }
+
+  .nod-hero__visual,
+  .nod-feature-card,
+  .nod-flow,
+  .nod-deep-card,
+  .nod-reports,
+  .nod-final {
+    border: 1px solid var(--nod-line);
+    background: var(--nod-panel);
+    box-shadow: 0 24px 80px rgb(15 23 42 / 0.08);
+  }
+
+  .nod-hero__visual {
+    overflow: hidden;
+    border-radius: 2rem;
+    padding: clamp(0.45rem, 1vw, 0.8rem);
+  }
+
+  .nod-hero__visual img,
+  .nod-feature-card__media img,
+  .nod-flow__media img,
+  .nod-deep-card img,
+  .nod-reports > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 1.45rem;
+    object-fit: cover;
+  }
+
+  .nod-system {
+    display: grid;
+    gap: var(--nm-space-md);
+    max-width: 48rem;
+  }
+
+  .nod-system h2,
+  .nod-platform__intro h2,
+  .nod-flow h2,
+  .nod-deep-card h2,
+  .nod-reports h2,
+  .nod-final h2 {
+    font-size: clamp(2.2rem, 4.6vw, 4.5rem);
+    line-height: var(--nm-leading-tight);
+  }
+
+  .nod-platform {
+    display: grid;
+    gap: var(--nm-space-xl);
+  }
+
+  .nod-platform__intro {
+    display: grid;
+    gap: var(--nm-space-md);
+    max-width: 58rem;
+  }
+
+  .nod-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--nm-space-md);
+  }
+
+  .nod-feature-card {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: clamp(1rem, 2vw, 1.35rem);
+    display: grid;
+    gap: var(--nm-space-md);
+  }
+
+  .nod-feature-card__icon,
+  .nod-deep-card svg,
+  .nod-reports__copy svg {
+    width: 2.7rem;
+    height: 2.7rem;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 0.9rem;
+    background: rgb(14 81 254 / 0.08);
+    color: var(--nod-blue);
+  }
+
+  .nod-feature-card__icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .nod-feature-card h3,
+  .nod-deep-card h3,
+  .nod-flow__steps h3 {
+    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+    line-height: var(--nm-leading-title);
+  }
+
+  .nod-feature-card p,
+  .nod-flow__steps p {
+    color: var(--nod-muted);
+    line-height: 1.5;
+    margin-top: 0.35rem;
+  }
+
+  .nod-feature-card__media {
+    aspect-ratio: 1.28 / 1;
+    overflow: hidden;
+    border-radius: 1.45rem;
+    background: var(--nod-panel-soft);
+  }
+
+  .nod-flow {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
+    align-items: stretch;
+    border-radius: 1.75rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .nod-flow__copy {
+    display: grid;
+    gap: var(--nm-space-md);
+    align-content: center;
+    padding: clamp(0.5rem, 2vw, 2rem);
+  }
+
+  .nod-flow__steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--nm-space-sm);
+    margin-top: var(--nm-space-sm);
+  }
+
+  .nod-flow__steps article {
+    border-radius: 1rem;
+    background: var(--nod-panel-soft);
+    padding: var(--nm-space-md);
+  }
+
+  .nod-flow__media {
+    min-height: 31rem;
+    overflow: hidden;
+    border-radius: 1.45rem;
+    background: var(--nod-panel-soft);
+  }
+
+  .nod-automation {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--nm-space-md);
+  }
+
+  .nod-deep-card {
+    display: grid;
+    gap: var(--nm-space-lg);
+    align-content: space-between;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .nod-deep-card--blue {
+    background:
+      radial-gradient(circle at 88% 0%, rgb(255 255 255 / 0.34), transparent 32%),
+      linear-gradient(135deg, #0e51fe 0%, #0735b9 100%);
+    color: #ffffff;
+  }
+
+  .nod-deep-card--blue h2,
+  .nod-deep-card--blue p {
+    color: #ffffff;
+  }
+
+  .nod-deep-card--blue svg {
+    background: rgb(255 255 255 / 0.16);
+    color: #ffffff;
+  }
+
+  .nod-deep-card > div {
+    display: grid;
+    gap: var(--nm-space-sm);
+    max-width: 42rem;
+  }
+
+  .nod-deep-card img {
+    aspect-ratio: 16 / 10;
+    background: var(--nod-panel-soft);
+  }
+
+  .nod-reports {
+    display: grid;
+    grid-template-columns: minmax(17rem, 0.35fr) minmax(0, 0.65fr);
+    gap: var(--nm-space-lg);
+    overflow: hidden;
+    border-radius: 1.75rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    align-items: center;
+  }
+
+  .nod-reports__copy {
+    display: grid;
+    gap: var(--nm-space-sm);
+  }
+
+  .nod-reports > img {
+    min-height: 28rem;
+    background: var(--nod-panel-soft);
+  }
+
+  .nod-final-section {
+    padding-bottom: var(--nm-space-2xl);
+  }
+
+  .nod-final {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--nm-space-lg);
+    align-items: center;
+    border-radius: 1.75rem;
+    background:
+      radial-gradient(circle at 92% 14%, rgb(255 255 255 / 0.18), transparent 34%),
+      #081229;
+    color: #ffffff;
+    padding: clamp(1.25rem, 4vw, 2.75rem);
+  }
+
+  .nod-final h2,
+  .nod-final p {
+    color: #ffffff;
+  }
+
+  .nod-final img {
+    width: clamp(6rem, 10vw, 9rem);
+    height: auto;
+  }
+
+  .nod-final .nm-button {
+    white-space: nowrap;
+  }
+
+  .nod-final .nm-button svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  @media (width <= 1120px) {
+    .nod-hero__grid,
+    .nod-flow,
+    .nod-reports {
+      grid-template-columns: 1fr;
+    }
+
+    .nod-hero h1 {
+      max-width: 12ch;
+    }
+
+    .nod-hero__visual img {
+      aspect-ratio: 16 / 10;
+    }
+
+    .nod-feature-grid,
+    .nod-automation {
+      grid-template-columns: 1fr;
+    }
+
+    .nod-flow__media,
+    .nod-reports > img {
+      min-height: auto;
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (width <= 720px) {
+    .nod-hero {
+      padding-top: var(--nm-space-xl);
+    }
+
+    .nod-hero h1 {
+      max-width: 9ch;
+      font-size: clamp(3.05rem, 15vw, 4.8rem);
+    }
+
+    .nod-hero__visual,
+    .nod-flow,
+    .nod-deep-card,
+    .nod-reports,
+    .nod-final {
+      border-radius: 1.25rem;
+    }
+
+    .nod-hero__visual {
+      width: calc(100% + 1rem);
+      margin-inline: -0.5rem;
+    }
+
+    .nod-hero__actions,
+    .nod-final {
+      align-items: stretch;
+    }
+
+    .nod-hero__actions .nm-button,
+    .nod-link,
+    .nod-final .nm-button {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .nod-flow__steps,
+    .nod-final {
+      grid-template-columns: 1fr;
+    }
+
+    .nod-flow__copy {
+      padding: 0;
+    }
+
+    .nod-feature-card__media,
+    .nod-deep-card img,
+    .nod-reports > img {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

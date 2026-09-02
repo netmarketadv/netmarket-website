@@ -24,4 +24,15 @@ describe('agency and contact pages', () => {
     expect(form).toContain('contact_form_success');
     expect(form).toContain('privacyConsent');
   });
+
+  it('registers NOD as a product page with CMS visuals and schema', () => {
+    const nod = readFileSync(new URL('../src/pages/nod.astro', import.meta.url), 'utf8');
+
+    expect(nod).toContain('nod-logo.svg');
+    expect(nod).toContain('dashboard-scaled.webp');
+    expect(nod).toContain('ai-assistant-scaled.webp');
+    expect(nod).toContain('reports-scaled.webp');
+    expect(nod).toContain('SoftwareApplication');
+    expect(nod).toContain('canonicalSiteUrl');
+  });
 });

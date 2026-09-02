@@ -41,6 +41,24 @@ test.describe('insight, agency and contact', () => {
     expect(errors).toEqual([]);
   });
 
+  test('renders NOD product page with CMS screenshots and crawlable SEO', async ({ page }) => {
+    const errors = collectCriticalConsoleErrors(page);
+
+    await page.goto('/nod/', { waitUntil: 'domcontentloaded' });
+
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('CRM operativo');
+    await expect(page.getByAltText('NØD by Netmarket')).toBeVisible();
+    await expect(page.getByAltText(/Dashboard NOD/)).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://www.netmarket.it/nod/'
+    );
+    const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
+    expect(structuredData).toContain('SoftwareApplication');
+    expect(errors).toEqual([]);
+  });
+
   for (const viewport of [
     { width: 390, height: 844 },
     { width: 1440, height: 1000 }
@@ -48,7 +66,7 @@ test.describe('insight, agency and contact', () => {
     test(`keeps new pages usable at ${viewport.width}px`, async ({ page }) => {
       await page.setViewportSize(viewport);
 
-      for (const path of ['/insight/', '/agenzia/', '/contatti/']) {
+      for (const path of ['/insight/', '/agenzia/', '/contatti/', '/nod/']) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
         const horizontalOverflow = await page.evaluate(
