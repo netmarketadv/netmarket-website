@@ -82,6 +82,10 @@ AuthUserFile $HTPASSWD_PATH
 <IfModule mod_authz_core.c>
   <RequireAny>
     Require env NMHC_NO_AUTH
+    Require expr "%{REQUEST_URI} =~ m#^/robots\\.txt$#"
+    Require expr "%{REQUEST_URI} =~ m#^/wp-content/uploads/#"
+    Require expr "%{REQUEST_URI} =~ m#^/wp-json/netmarket/v1/health/?$#"
+    Require expr "%{REQUEST_URI} =~ m#^/wp-json/netmarket/v1/forms/contact/?$#"
     Require valid-user
   </RequireAny>
 </IfModule>
