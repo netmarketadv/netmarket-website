@@ -1736,10 +1736,13 @@ main {
 
 .service-tile img {
   width: 100%;
+  box-sizing: border-box;
   aspect-ratio: 16 / 9;
+  display: block;
   border-radius: 1rem;
-  background: #090b12;
-  object-fit: cover;
+  background: #eef0f3;
+  object-fit: contain;
+  padding: clamp(1rem, 2vw, 2rem);
   transition: transform var(--nm-motion-duration-slow) var(--nm-motion-ease-emphasized);
 }
 
@@ -2788,17 +2791,20 @@ main {
 }
 
 .service-index__media {
-  display: block;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
   overflow: hidden;
   aspect-ratio: 4 / 3;
   border-radius: var(--nm-radius-lg);
-  background: var(--nm-color-blue-soft);
+  background: #eef0f3;
+  padding: clamp(1rem, 2vw, 2rem);
 }
 
 .service-index__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform var(--nm-motion-duration-overlay) var(--nm-motion-ease-emphasized);
 }
 
@@ -2963,15 +2969,17 @@ main {
 
 .service-detail-hero__media {
   overflow: hidden;
+  box-sizing: border-box;
   aspect-ratio: 4 / 3;
   border-radius: var(--nm-radius-xl);
-  background: var(--nm-color-canvas);
+  background: #eef0f3;
+  padding: clamp(1.25rem, 3vw, 3rem);
 }
 
 .service-detail-hero__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .service-intro {

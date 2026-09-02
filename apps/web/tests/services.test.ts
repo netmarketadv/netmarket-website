@@ -57,6 +57,24 @@ describe('service system', () => {
     expect(serviceDescription(service!)).toBe(service!.seo.description);
   });
 
+  it('uses dedicated CMS transparent service visuals in the build fallback', () => {
+    const imageBySlug = Object.fromEntries(
+      serviceFallbacks.map((service) => [service.slug, service.image])
+    );
+    expect(imageBySlug['siti-web']?.url).toContain(
+      'sviluppo-realizzazione-siti-web_netmarket.png'
+    );
+    expect(imageBySlug.ecommerce?.url).toContain('sviluppo-ecommerce_netmarket-1.png');
+    expect(imageBySlug['branding-e-comunicazione']?.url).toContain(
+      'comunicazione-grafica-branding_netmarket.png'
+    );
+    expect(imageBySlug.advertising?.url).toContain(
+      'pubblicita-tradizionale-radio_netmarket-1.png'
+    );
+    expect(imageBySlug['social-media']?.url).toContain('social-media-management_netmarket.png');
+    expect(imageBySlug['concorsi-a-premi']?.mimeType).toBe('image/png');
+  });
+
   it('registers archive, detail and navigation entry points', () => {
     const archive = readFileSync(
       new URL('../src/pages/servizi/index.astro', import.meta.url),

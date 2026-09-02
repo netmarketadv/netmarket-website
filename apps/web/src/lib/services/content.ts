@@ -1,4 +1,11 @@
-import type { CaseStudy, Insight, RelationSummary, Resource, Service } from '@netmarket/schemas';
+import type {
+  CaseStudy,
+  Insight,
+  MediaAsset,
+  RelationSummary,
+  Resource,
+  Service
+} from '@netmarket/schemas';
 import {
   getCaseStudies,
   getInsights,
@@ -6,6 +13,7 @@ import {
   getService,
   getServices
 } from '@/lib/api/client';
+import { cmsMedia } from '@/data/home';
 import { serviceFallbacks } from '@/data/service-fallbacks';
 
 export type ServiceSource = 'cms' | 'fallback';
@@ -38,6 +46,44 @@ const relationLimits = {
   services: 4
 };
 
+const serviceVisuals: Record<string, { id: number; url: string; alt: string }> = {
+  'siti-web': {
+    id: 99101,
+    url: cmsMedia.services.websites,
+    alt: 'Visual servizio sviluppo e realizzazione siti web Netmarket'
+  },
+  ecommerce: {
+    id: 99102,
+    url: cmsMedia.services.ecommerce,
+    alt: 'Visual servizio sviluppo ecommerce Netmarket'
+  },
+  seo: {
+    id: 99104,
+    url: cmsMedia.services.marketing,
+    alt: 'Visual servizio SEO e marketing digitale Netmarket'
+  },
+  advertising: {
+    id: 99105,
+    url: cmsMedia.services.advertising,
+    alt: 'Visual servizio advertising e pubblicità Netmarket'
+  },
+  'social-media': {
+    id: 99106,
+    url: cmsMedia.services.social,
+    alt: 'Visual servizio social media management Netmarket'
+  },
+  'branding-e-comunicazione': {
+    id: 99107,
+    url: cmsMedia.services.branding,
+    alt: 'Visual servizio comunicazione grafica e branding Netmarket'
+  },
+  'concorsi-a-premi': {
+    id: 99109,
+    url: cmsMedia.services.contests,
+    alt: 'Visual servizio concorsi a premi Netmarket'
+  }
+};
+
 let archiveDataPromise: Promise<ServiceArchiveData> | undefined;
 
 function byPriority(a: Service, b: Service): number {
@@ -66,7 +112,10 @@ function contentTypeFor(content: CaseStudy | Insight | Resource): string {
 
 async function fromCms(): Promise<Service[]> {
   const collection = await getServices({ perPage: 50, sort: 'priority' });
-  return collection.data.filter((service) => service.slug && service.title).sort(byPriority);
+  return collection.data
+    .filter((service) => service.slug && service.title)
+    .map(withServiceVisual)
+    .sort(byPriority);
 }
 
 export async function getServiceArchiveData(): Promise<ServiceArchiveData> {
@@ -83,12 +132,12 @@ async function loadServiceArchiveData(): Promise<ServiceArchiveData> {
       `[services] CMS services unavailable, using local build fallback: ${warningMessage(error)}`
     );
   }
-  return { services: [...serviceFallbacks].sort(byPriority), source: 'fallback' };
+  return { services: serviceFallbacks.map(withServiceVisual).sort(byPriority), source: 'fallback' };
 }
 
 export async function getServiceDetailData(slug: string): Promise<ServiceDetailData | undefined> {
   try {
-    const service = await getService(slug);
+    const service = withServiceVisual(await getService(slug));
     return {
       service,
       source: 'cms',
@@ -100,7 +149,7 @@ export async function getServiceDetailData(slug: string): Promise<ServiceDetailD
     );
   }
 
-  const service = serviceFallbacks.find((item) => item.slug === slug);
+  const service = serviceFallbacks.map(withServiceVisual).find((item) => item.slug === slug);
   if (!service) return undefined;
   return {
     service,
@@ -188,6 +237,36 @@ export function relationPath(relation: RelationSummary): string {
   if (relation.type === 'nm_resource') return `/risorse/${relation.slug}/`;
   if (relation.type === 'nm_service') return servicePath(relation.slug);
   return '#contatti';
+}
+
+function serviceVisualAsset(slug: string): MediaAsset | null {
+  const visual = serviceVisuals[slug];
+  if (!visual) return null;
+  return {
+    id: visual.id,
+    url: visual.url,
+    alt: visual.alt,
+    width: 1400,
+    height: 900,
+    mimeType: 'image/png'
+  };
+}
+
+function withServiceVisual(service: Service): Service {
+  const visual = serviceVisualAsset(service.slug);
+  if (!visual) return service;
+  return {
+    ...service,
+    image: visual,
+    hero: {
+      ...service.hero,
+      image: visual
+    },
+    seo: {
+      ...service.seo,
+      socialImage: service.seo.socialImage ?? visual
+    }
+  };
 }
 
 export function serviceDescription(service: Service): string {

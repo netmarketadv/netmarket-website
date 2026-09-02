@@ -22,6 +22,8 @@ La sorgente ufficiale resta WordPress `nm_service`. Il frontend chiama:
 
 Se il CMS risponde senza contenuti pubblicati o non è raggiungibile durante la build, Astro usa `apps/web/src/data/service-fallbacks.ts`. Il fallback contiene solo i nove servizi iniziali approvati per il progetto e deve essere rimosso o ridotto quando il CMS sarà completo.
 
+Le immagini servizio caricate nel CMS sono normalizzate per slug dal frontend finche l'API non espone in modo definitivo tutti i media principali. Gli asset trasparenti vengono trattati come visual di servizio su fondo grigio, non come cover fotografiche.
+
 ## Initial Services
 
 Ordine preliminare:
