@@ -16,52 +16,68 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_HOST: cms.netmarket.it
+      SG_CMS_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST || secrets.SG_SSH_HOST }}
+      SG_CMS_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT || secrets.SG_SSH_PORT }}
+      SG_CMS_SSH_USER: ${{ secrets.SG_CMS_SSH_USER || secrets.SG_SSH_USER }}
+      SG_CMS_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY || secrets.SG_SSH_PRIVATE_KEY }}
+      SG_CMS_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS || secrets.SG_SSH_KNOWN_HOSTS }}
+      SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+      CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
+      CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - name: Guard CMS target
         run: test "$TARGET_HOST" = "cms.netmarket.it"
       - name: Check SSH secrets
         run: |
-          test -n "${{ secrets.SG_CMS_SSH_HOST }}"
-          test -n "${{ secrets.SG_CMS_SSH_PORT }}"
-          test -n "${{ secrets.SG_CMS_SSH_USER }}"
-          test -n "${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}"
-          test -n "${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}"
-          test -n "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
-          test -n "${{ secrets.CMS_BASIC_AUTH_USER }}"
-          test -n "${{ secrets.CMS_BASIC_AUTH_PASSWORD }}"
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required CMS deploy secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "SG_CMS_SSH_HOST or SG_SSH_HOST" "$SG_CMS_SSH_HOST"
+          check_secret "SG_CMS_SSH_PORT or SG_SSH_PORT" "$SG_CMS_SSH_PORT"
+          check_secret "SG_CMS_SSH_USER or SG_SSH_USER" "$SG_CMS_SSH_USER"
+          check_secret "SG_CMS_SSH_PRIVATE_KEY or SG_SSH_PRIVATE_KEY" "$SG_CMS_SSH_PRIVATE_KEY"
+          check_secret "SG_CMS_SSH_KNOWN_HOSTS or SG_SSH_KNOWN_HOSTS" "$SG_CMS_SSH_KNOWN_HOSTS"
+          check_secret "SG_CMS_WORDPRESS_PATH" "$SG_CMS_WORDPRESS_PATH"
+          check_secret "CMS_BASIC_AUTH_USER" "$CMS_BASIC_AUTH_USER"
+          check_secret "CMS_BASIC_AUTH_PASSWORD" "$CMS_BASIC_AUTH_PASSWORD"
+
+          exit "$missing"
       - name: Dry-run CMS plugin deploy
         if: ${{ inputs.dry_run == 'true' }}
-        run: infrastructure/scripts/bootstrap-wordpress.sh --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
+        run: infrastructure/scripts/bootstrap-wordpress.sh --domain cms.netmarket.it --path "$SG_CMS_WORDPRESS_PATH"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
+          SG_SSH_HOST: ${{ env.SG_CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.SG_CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.SG_CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.SG_CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.SG_CMS_SSH_KNOWN_HOSTS }}
       - name: Deploy and activate CMS plugin
         if: ${{ inputs.dry_run == 'false' }}
-        run: infrastructure/scripts/bootstrap-wordpress.sh --execute --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
+        run: infrastructure/scripts/bootstrap-wordpress.sh --execute --domain cms.netmarket.it --path "$SG_CMS_WORDPRESS_PATH"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
+          SG_SSH_HOST: ${{ env.SG_CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.SG_CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.SG_CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.SG_CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.SG_CMS_SSH_KNOWN_HOSTS }}
       - name: Harden CMS access and indexing
         if: ${{ inputs.dry_run == 'false' }}
-        run: infrastructure/scripts/harden-cms.sh --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
+        run: infrastructure/scripts/harden-cms.sh --domain cms.netmarket.it --path "$SG_CMS_WORDPRESS_PATH"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
-          CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
-          CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
+          SG_SSH_HOST: ${{ env.SG_CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.SG_CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.SG_CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.SG_CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.SG_CMS_SSH_KNOWN_HOSTS }}
       - name: Health check
         if: ${{ inputs.dry_run == 'false' }}
         run: infrastructure/scripts/health-check.sh --url https://cms.netmarket.it/wp-json/netmarket/v1/health
-        env:
-          CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
-          CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}

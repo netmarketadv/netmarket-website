@@ -93,6 +93,9 @@ jobs:
 
           exit "$missing"
 
+      - name: Check CMS API auth
+        run: infrastructure/scripts/health-check.sh --url https://cms.netmarket.it/wp-json/netmarket/v1/health
+
       - uses: pnpm/action-setup@v4
         with:
           version: 11.13.1
