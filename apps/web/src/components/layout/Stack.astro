@@ -1,0 +1,12 @@
+---
+interface Props {
+  gap?: string;
+  class?: string;
+}
+
+const { gap, class: className = '' } = Astro.props;
+---
+
+<div class:list={['nm-stack', className]} style={gap ? `--stack-gap: ${gap};` : undefined}>
+  <slot />
+</div>

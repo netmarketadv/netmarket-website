@@ -1,0 +1,33 @@
+---
+import IconBubble from '@/components/ui/IconBubble.astro';
+
+interface Props {
+  title: string;
+  titleId?: string;
+  quote?: string;
+  quoteAuthor?: string;
+  items: string[];
+}
+
+const { title, titleId, quote, quoteAuthor, items } = Astro.props;
+---
+
+<div class="pain-panel">
+  <div class="pain-panel__copy" data-reveal="line">
+    <h2 id={titleId}>{title}</h2>
+    {quote && (
+      <figure class="review-mini">
+        <blockquote>{quote}</blockquote>
+        {quoteAuthor && <figcaption>{quoteAuthor}</figcaption>}
+      </figure>
+    )}
+  </div>
+  <div class="pain-panel__list" data-reveal="scale" data-reveal-stagger="1">
+    {items.map((item) => (
+      <p>
+        <IconBubble name="arrow" size="sm" />
+        <span>{item}</span>
+      </p>
+    ))}
+  </div>
+</div>

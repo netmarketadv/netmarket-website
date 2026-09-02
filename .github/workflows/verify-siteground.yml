@@ -1,0 +1,20 @@
+name: Verify SiteGround
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    environment: staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only SSH verification
+        run: infrastructure/scripts/verify-siteground-connection.sh
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_STAGING_DEPLOY_PATH: ${{ secrets.SG_STAGING_DEPLOY_PATH }}

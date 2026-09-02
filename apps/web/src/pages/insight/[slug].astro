@@ -1,0 +1,118 @@
+---
+import { articleJsonLd, breadcrumbJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import {
+  formatDate,
+  getInsightArchiveData,
+  getInsightDetailData,
+  insightDescription,
+  insightPath
+} from '@/lib/insights/content';
+
+export async function getStaticPaths() {
+  const { insights } = await getInsightArchiveData();
+  return insights.map((insight) => ({
+    params: { slug: insight.slug }
+  }));
+}
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const { slug } = Astro.params;
+const data = slug ? await getInsightDetailData(slug) : undefined;
+if (!data) return Astro.redirect('/404/');
+const { insight, related } = data;
+const description = insightDescription(insight);
+const canonicalPath = insightPath(insight.slug);
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Insight', url: `${canonicalSiteUrl}/insight/` },
+  { name: insight.title, url: `${canonicalSiteUrl}${canonicalPath}` }
+]);
+const schema = articleJsonLd({
+  title: insight.title,
+  description,
+  url: `${canonicalSiteUrl}${canonicalPath}`,
+  ...(insight.publishedAt ? { publishedAt: insight.publishedAt } : {}),
+  ...(insight.modifiedAt ? { updatedAt: insight.modifiedAt } : {})
+});
+---
+
+<BaseLayout
+  title={insight.seo.title || insight.title}
+  description={description}
+  path={canonicalPath}
+  noindex={insight.seo.noindex}
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, schema]}
+>
+  <Section labelledby="article-title" class="article-hero">
+    <Container>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/insight/">Insight</a>
+        <span aria-hidden="true">/</span>
+        <span>{insight.categories[0]?.name || 'Articolo'}</span>
+      </nav>
+      <div data-reveal="line">
+        <p class="nm-meta">{insight.categories[0]?.name || 'Insight'}</p>
+        <h1 id="article-title">{insight.title}</h1>
+      </div>
+      <p class="article-hero__lead" data-reveal="up">{description}</p>
+      <div class="article-meta" data-reveal="up">
+        <span>{formatDate(insight.publishedAt)}</span>
+        <span>{insight.readingTime} min lettura</span>
+        <span>{insight.authorPerson?.title || 'Netmarket'}</span>
+      </div>
+    </Container>
+  </Section>
+
+  {
+    insight.image && (
+      <Section compact>
+        <Container wide>
+          <figure class="article-cover" data-reveal="media">
+            <img src={insight.image.url} alt={insight.image.alt} loading="eager" decoding="async" />
+          </figure>
+        </Container>
+      </Section>
+    )
+  }
+
+  <Section labelledby="article-content-title">
+    <Container>
+      <h2 id="article-content-title" class="sr-only">Contenuto articolo</h2>
+      <article class="article-content" set:html={insight.content || insight.excerpt || ''} />
+    </Container>
+  </Section>
+
+  {
+    (insight.relatedServices.length > 0 || related.length > 0) && (
+      <Section compact labelledby="article-related-title">
+        <Container>
+          <div class="article-related" data-reveal="up">
+            <h2 id="article-related-title">Collegamenti utili.</h2>
+            {insight.relatedServices.length > 0 && (
+              <div>
+                <h3>Servizi</h3>
+                {insight.relatedServices.map((service) => (
+                  <a href={`/servizi/${service.slug}/`}>{service.title}</a>
+                ))}
+              </div>
+            )}
+            {related.length > 0 && (
+              <div>
+                <h3>Altri insight</h3>
+                {related.map((item) => (
+                  <a href={insightPath(item.slug)}>{item.title}</a>
+                ))}
+              </div>
+            )}
+          </div>
+        </Container>
+      </Section>
+    )
+  }
+</BaseLayout>

@@ -1,0 +1,153 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'infrastructure/scripts/deploy-staging.sh'
+      - 'infrastructure/scripts/health-check.sh'
+      - 'infrastructure/scripts/smoke-staging.mjs'
+      - '.github/workflows/deploy-staging.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Esegui solo simulazione
+        required: true
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build, Deploy, Smoke
+    environment: staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    concurrency:
+      group: staging-deploy
+      cancel-in-progress: true
+    env:
+      PUBLIC_SITE_URL: https://staging.netmarket.it
+      PUBLIC_CMS_URL: https://cms.netmarket.it
+      PUBLIC_DEPLOY_ENV: staging
+      PUBLIC_BUILD_SHA: ${{ github.sha }}
+      CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      CMS_API_CACHE_DIR: apps/web/.cms-cache/netmarket/v1
+      CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
+      CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
+      TARGET_HOST: staging.netmarket.it
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard staging target
+        run: |
+          test "$TARGET_HOST" = "staging.netmarket.it"
+          test "$PUBLIC_SITE_URL" = "https://staging.netmarket.it"
+          test "$PUBLIC_DEPLOY_ENV" = "staging"
+
+      - name: Check SSH secrets
+        run: |
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required staging secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "SG_SSH_HOST" "${{ secrets.SG_SSH_HOST }}"
+          check_secret "SG_SSH_PORT" "${{ secrets.SG_SSH_PORT }}"
+          check_secret "SG_SSH_USER" "${{ secrets.SG_SSH_USER }}"
+          check_secret "SG_SSH_PRIVATE_KEY" "${{ secrets.SG_SSH_PRIVATE_KEY }}"
+          check_secret "SG_SSH_KNOWN_HOSTS" "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
+          check_secret "SG_STAGING_DEPLOY_PATH" "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+          check_secret "SG_CMS_WORDPRESS_PATH" "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
+
+          exit "$missing"
+
+      - name: Check CMS credentials
+        run: |
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required CMS secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "CMS_BASIC_AUTH_USER" "${{ secrets.CMS_BASIC_AUTH_USER }}"
+          check_secret "CMS_BASIC_AUTH_PASSWORD" "${{ secrets.CMS_BASIC_AUTH_PASSWORD }}"
+
+          exit "$missing"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+
+      - name: Pull CMS API cache
+        run: node infrastructure/scripts/pull-cms-cache.mjs
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+
+      - name: Stamp build time
+        run: echo "PUBLIC_BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fast frontend tests
+        run: pnpm --filter @netmarket/web test
+
+      - name: Build Astro frontend
+        run: pnpm --filter @netmarket/web build
+
+      - name: Dry-run deploy plan
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
+        run: infrastructure/scripts/deploy-staging.sh --dry-run --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+
+      - name: Deploy
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: infrastructure/scripts/deploy-staging.sh --execute --host staging.netmarket.it --path "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+
+      - name: Smoke staging
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: pnpm smoke:staging
+        env:
+          EXPECTED_BUILD_SHA: ${{ github.sha }}
+          EXPECTED_BUILD_ENV: staging

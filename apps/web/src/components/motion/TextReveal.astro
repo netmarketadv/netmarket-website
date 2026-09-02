@@ -1,0 +1,15 @@
+---
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  delay?: number;
+  class?: string;
+}
+
+const { as = 'span', delay = 0, class: className = '' } = Astro.props;
+const Tag = as;
+void ({} as Props);
+---
+
+<Tag data-reveal="line" data-reveal-delay={delay} class={className}>
+  <slot />
+</Tag>

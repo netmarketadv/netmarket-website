@@ -1,0 +1,51 @@
+---
+import type { Service } from '@netmarket/schemas';
+import { textItems } from '@/lib/services/content';
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const valueProps = textItems(service.valueProps).slice(0, 4);
+const problems = textItems(service.problems).slice(0, 4);
+const hasIntro = Boolean(
+  service.subtitle || service.excerpt || valueProps.length || problems.length
+);
+---
+
+{
+  hasIntro && (
+    <div class="service-intro">
+      <div class="service-intro__statement" data-reveal="line">
+        <h2 id="service-intro-title">{service.subtitle || service.title}</h2>
+        {service.excerpt && <p>{service.excerpt}</p>}
+      </div>
+
+      {valueProps.length > 0 && (
+        <div class="service-editorial-grid" data-reveal="up" data-reveal-stagger="1">
+          {valueProps.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              {item.description && <p>{item.description}</p>}
+            </article>
+          ))}
+        </div>
+      )}
+
+      {problems.length > 0 && (
+        <div class="service-needs" data-reveal="scale">
+          <h2>Dove interveniamo</h2>
+          <div>
+            {problems.map((item) => (
+              <article>
+                <h3>{item.title}</h3>
+                {item.description && <p>{item.description}</p>}
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

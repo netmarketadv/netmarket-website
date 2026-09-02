@@ -1,0 +1,34 @@
+---
+import GoogleTrustBadge from '@/components/blocks/GoogleTrustBadge.astro';
+import ReviewsCarousel from '@/components/blocks/ReviewsCarousel.astro';
+import { googleReviews } from '@/data/reviews';
+
+interface Props {
+  title: string;
+  titleId?: string;
+  text: string;
+  rating: string;
+  reviewCount: string;
+  googleHref: string;
+}
+
+const { title, titleId, text, rating, reviewCount, googleHref } = Astro.props;
+---
+
+<div class="reviews-section">
+  <div class="reviews-section__header" data-reveal="up">
+    <div>
+      <GoogleTrustBadge rating={rating} reviewCount={reviewCount} href={googleHref} />
+      <h2 id={titleId}>{title}</h2>
+      <p>{text}</p>
+    </div>
+  </div>
+
+  <ReviewsCarousel reviews={googleReviews} />
+</div>
+
+<script>
+  import { initReviewsCarousel } from '@/lib/google-business/reviews';
+
+  initReviewsCarousel();
+</script>

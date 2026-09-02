@@ -1,0 +1,9 @@
+parameters:
+  level: 5
+  paths:
+    - src
+    - netmarket-headless-core.php
+  scanFiles:
+    - src/Support/autoload.php
+  bootstrapFiles:
+    - tests/phpstan-wordpress-stubs.php

@@ -1,0 +1,42 @@
+---
+import { IconArrowUpRight, IconBrandLinkedin } from '@tabler/icons-astro';
+import type { TeamMember } from '@/data/team';
+
+interface Props {
+  person: TeamMember;
+  headingLevel?: 'h2' | 'h3' | 'h4';
+  priority?: boolean;
+}
+
+const { person, headingLevel = 'h3', priority = false } = Astro.props;
+const Heading = headingLevel;
+---
+
+<article class="person-card" data-person-id={person.id} data-reveal="up">
+  <figure class="person-card__figure">
+    <img
+      src={person.image}
+      alt={person.imageAlt}
+      width="900"
+      height="1200"
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+      fetchpriority={priority ? 'high' : undefined}
+      srcset={person.imageSrcSet}
+      sizes="(max-width: 640px) 84vw, (max-width: 1024px) 42vw, (max-width: 1440px) 19vw, 260px"
+      style={`object-position: ${person.imagePosition};`}
+    />
+  </figure>
+
+  <div class="person-card__content">
+    <div>
+      <Heading>{person.displayName}</Heading>
+      <p>{person.role}</p>
+    </div>
+    <a href={person.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`Profilo LinkedIn di ${person.fullName}`}>
+      <IconBrandLinkedin stroke={1.8} aria-hidden="true" />
+      <span>LinkedIn</span>
+      <IconArrowUpRight stroke={1.8} aria-hidden="true" />
+    </a>
+  </div>
+</article>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  left?: string;
+  right?: string;
+  align?: string;
+  class?: string;
+}
+
+const { left = '1fr', right = '1fr', align = 'center', class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['nm-split', className]}
+  style={`--split-left: ${left}; --split-right: ${right}; --split-align: ${align};`}
+>
+  <slot />
+</div>

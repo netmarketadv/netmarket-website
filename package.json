@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.13.0",
+  "packageManager": "pnpm@11.13.1",
   "engines": {
     "node": ">=22 <25",
     "pnpm": ">=10 <12"
@@ -15,6 +15,12 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @netmarket/web test:e2e",
+    "smoke:staging": "node infrastructure/scripts/smoke-staging.mjs",
+    "content:validate": "node infrastructure/scripts/content-validate.mjs",
+    "migration:validate:case-studies": "node infrastructure/migrations/case-studies/validate.mjs",
+    "migration:case-studies:write": "node infrastructure/migrations/case-studies/validate.mjs --write",
+    "migration:validate:insights": "node infrastructure/migrations/insights/validate.mjs",
+    "migration:insights:write": "node infrastructure/migrations/insights/validate.mjs --write",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "php:lint": "find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",

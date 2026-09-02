@@ -1,0 +1,24 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'inverse';
+  class?: string;
+  disabled?: boolean;
+  magnetic?: boolean;
+}
+
+const { href, variant = 'primary', class: className = '', disabled = false, magnetic = false } = Astro.props;
+const classes = ['nm-button', `nm-button--${variant}`, className];
+---
+
+{
+  href ? (
+    <a class:list={classes} href={href} aria-disabled={disabled ? 'true' : undefined} data-motion-magnetic={magnetic ? 'true' : undefined}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} disabled={disabled} data-motion-magnetic={magnetic ? 'true' : undefined}>
+      <slot />
+    </button>
+  )
+}

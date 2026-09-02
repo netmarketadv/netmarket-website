@@ -1,0 +1,66 @@
+[
+  {
+    "from": "/caso-studio/app-mobile-programma-fedelta-sirene-blu/",
+    "to": "/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/sviluppo-crm-custom-venitaly/",
+    "to": "/progetti/sviluppo-crm-custom-venitaly/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "to": "/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "to": "/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "to": "/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "to": "/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "to": "/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  },
+  {
+    "from": "/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+    "to": "/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "status": 301,
+    "source": "case-study-migration-v1",
+    "reason": "Legacy case study path to new projects architecture",
+    "verified": false
+  }
+]

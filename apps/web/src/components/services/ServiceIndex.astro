@@ -1,0 +1,53 @@
+---
+import type { Service } from '@netmarket/schemas';
+import Button from '@/components/ui/Button.astro';
+import { serviceLead, servicePath } from '@/lib/services/content';
+
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+<div class="service-index" id="indice-servizi" data-reveal="up" data-reveal-stagger="1">
+  {
+    services.map((service, index) => (
+      <article class="service-index__row">
+        <a class="service-index__link" href={servicePath(service.slug)}>
+          <span class="service-index__number">{String(index + 1).padStart(2, '0')}</span>
+          <span class="service-index__body">
+            <span class="service-index__title">{service.title}</span>
+            <span class="service-index__text">{serviceLead(service)}</span>
+            {(service.capabilities.length > 0 || service.technologies.length > 0) && (
+              <span class="service-index__chips">
+                {[...service.capabilities, ...service.technologies].slice(0, 4).map((item) => (
+                  <span>{item.name}</span>
+                ))}
+              </span>
+            )}
+          </span>
+          <span class="service-index__media" aria-hidden={service.image ? 'false' : 'true'}>
+            {service.image ? (
+              <img
+                src={service.image.url}
+                alt={service.image.alt}
+                loading={index < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            ) : (
+              <span>{service.title}</span>
+            )}
+          </span>
+          <span class="service-index__arrow" aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      </article>
+    ))
+  }
+  <div class="service-index__cta">
+    <p>Hai già chiaro il perimetro o vuoi costruirlo insieme?</p>
+    <Button href="#contatti">Parliamone</Button>
+  </div>
+</div>

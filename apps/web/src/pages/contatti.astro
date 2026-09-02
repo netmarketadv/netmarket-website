@@ -1,0 +1,87 @@
+---
+import { breadcrumbJsonLd, organizationJsonLd, webPageJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const title = 'Contatti';
+const description =
+  'Contatta Netmarket per siti web, ecommerce, marketing, comunicazione e progetti digitali.';
+const address = 'Viale della Navigazione Interna, 51/b, 35129 Padova PD';
+const email = 'info@netmarket.it';
+const mapsUrl = 'https://share.google/DPsZDzWohdLvBMwmZ';
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Contatti', url: `${canonicalSiteUrl}/contatti/` }
+]);
+const pageSchema = {
+  ...webPageJsonLd({
+    title,
+    description,
+    canonicalPath: '/contatti/',
+    siteUrl: canonicalSiteUrl,
+    robots: 'index, follow'
+  }),
+  '@type': 'ContactPage'
+};
+const organization = organizationJsonLd(canonicalSiteUrl, {
+  name: 'Netmarket',
+  legalName: 'Netmarket Srl',
+  vatId: '03618730281',
+  url: canonicalSiteUrl
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/contatti/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, pageSchema, organization]}
+>
+  <Section labelledby="contact-title" class="contact-hero">
+    <Container wide>
+      <div class="contact-hero__grid">
+        <div data-reveal="line">
+          <p class="nm-meta">Contatti Netmarket</p>
+          <h1 id="contact-title">Raccontaci cosa devi far funzionare.</h1>
+        </div>
+        <p data-reveal="up">
+          Una richiesta chiara ci permette di capire obiettivi, urgenze e priorità prima di proporti
+          il percorso più sensato.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section compact labelledby="contact-form-title">
+    <Container wide>
+      <div class="contact-layout">
+        <div class="contact-panel" data-reveal="up">
+          <h2 id="contact-form-title">Scrivici.</h2>
+          <ContactForm />
+        </div>
+        <aside class="contact-info" aria-label="Informazioni di contatto" data-reveal="scale">
+          <h2>Netmarket Srl</h2>
+          <dl>
+            <div>
+              <dt>Email</dt>
+              <dd><a href={`mailto:${email}`}>{email}</a></dd>
+            </div>
+            <div>
+              <dt>Indirizzo</dt>
+              <dd>{address}</dd>
+            </div>
+            <div>
+              <dt>P.IVA</dt>
+              <dd>03618730281</dd>
+            </div>
+          </dl>
+          <a class="button button--secondary" href={mapsUrl}>Apri su Google Maps</a>
+        </aside>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

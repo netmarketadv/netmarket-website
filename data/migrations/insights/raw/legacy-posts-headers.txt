@@ -1,0 +1,21 @@
+HTTP/2 200 
+server: nginx
+date: Wed, 02 Sep 2026 08:22:13 GMT
+content-type: application/json; charset=UTF-8
+vary: Accept-Encoding
+set-cookie: nm_core_utm=%7B%22landing_page%22%3A%22https%3A%5C%2F%5C%2Fnetmarket.it%5C%2Fwp-json%5C%2Fwp%5C%2Fv2%5C%2Fposts%3Fper_page%3D100%26_embed%3D1%22%7D; expires=Fri, 02 Oct 2026 08:22:11 GMT; Max-Age=2592000; path=/; secure
+vary: accept,content-type,Origin
+x-robots-tag: noindex
+link: <https://netmarket.it/wp-json/>; rel="https://api.w.org/"
+x-content-type-options: nosniff
+access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link
+access-control-allow-headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+x-wp-total: 26
+x-wp-totalpages: 1
+x-xss-protection: 1; mode=block
+allow: GET
+x-httpd-modphp: 1
+host-header: 6b7412fb82ca5edfd0917e3957f05d89
+x-proxy-cache: MISS
+x-proxy-cache-info: 0 NC:000000 UP:SKIP_CACHE_SET_COOKIE
+

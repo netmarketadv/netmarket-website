@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text?: string;
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow, title, text, id, class: className = '' } = Astro.props;
+---
+
+<header class:list={['nm-stack', className]} style="--stack-gap: var(--nm-heading-gap-md);">
+  {eyebrow && <p class="nm-eyebrow">{eyebrow}</p>}
+  <h2 id={id}>{title}</h2>
+  {text && <p class="nm-lead">{text}</p>}
+</header>

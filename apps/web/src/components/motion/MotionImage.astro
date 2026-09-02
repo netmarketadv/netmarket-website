@@ -1,0 +1,14 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { src, alt, class: className = '', loading = 'lazy' } = Astro.props;
+---
+
+<div class:list={['motion-image', className]} data-reveal="media">
+  <img src={src} alt={alt} loading={loading} decoding="async" />
+</div>

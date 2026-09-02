@@ -1,0 +1,346 @@
+{
+  "id": 6305,
+  "date": "2026-06-05T14:46:53",
+  "date_gmt": "2026-06-05T14:46:53",
+  "guid": {
+    "rendered": "https://netmarket.it/?post_type=caso-studio&#038;p=6305"
+  },
+  "modified": "2026-06-05T14:52:27",
+  "modified_gmt": "2026-06-05T14:52:27",
+  "slug": "sviluppo-crm-custom-venitaly",
+  "status": "publish",
+  "type": "caso-studio",
+  "link": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+  "title": {
+    "rendered": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo"
+  },
+  "content": {
+    "rendered": "\t\t<div data-elementor-type=\"wp-post\" data-elementor-id=\"6305\" class=\"elementor elementor-6305\" data-elementor-post-type=\"caso-studio\">\n\t\t\t\t<div class=\"elementor-element elementor-element-ad3e1e7 e-flex e-con-boxed e-con e-parent\" data-id=\"ad3e1e7\" data-element_type=\"container\" data-e-type=\"container\" data-settings=\"{&quot;background_background&quot;:&quot;classic&quot;}\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t\t\t<div class=\"elementor-element elementor-element-df0ae60 client-image-w  elementor-widget elementor-widget-image\" data-id=\"df0ae60\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"image.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<img decoding=\"async\" data-src=\"https://netmarket.it/wp-content/uploads/2026/06/venitaly-logo.svg\" width=\"412\" height=\"89\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" class=\"attachment-large size-large wp-image-6306 lazyload\" alt=\"\" /><noscript><img loading=\"lazy\" decoding=\"async\" width=\"412\" height=\"89\" src=\"https://netmarket.it/wp-content/uploads/2026/06/venitaly-logo.svg\" class=\"attachment-large size-large wp-image-6306\" alt=\"\"></noscript>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-8d4deac e-con-full e-flex e-con e-child\" data-id=\"8d4deac\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-7c848a5 elementor-widget elementor-widget-heading\" data-id=\"7c848a5\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h4 class=\"elementor-heading-title elementor-size-default\"><a href=\"https://netmarket.it/software-gestionali/\">Sviluppo software</a></h4>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-8160891 elementor-widget elementor-widget-heading\" data-id=\"8160891\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h4 class=\"elementor-heading-title elementor-size-default\">Manutenzione</h4>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-61ca434 elementor-widget elementor-widget-heading\" data-id=\"61ca434\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h4 class=\"elementor-heading-title elementor-size-default\">Supporto documentale</h4>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-e79ae2d e-flex e-con-boxed e-con e-parent\" data-id=\"e79ae2d\" data-element_type=\"container\" data-e-type=\"container\" data-settings=\"{&quot;background_background&quot;:&quot;classic&quot;}\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t<div class=\"elementor-element elementor-element-05d9816 e-con-full e-flex e-con e-child\" data-id=\"05d9816\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-094691d elementor-widget elementor-widget-heading\" data-id=\"094691d\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<span class=\"elementor-heading-title elementor-size-default\">Cliente</span>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-ebf019c elementor-widget elementor-widget-heading\" data-id=\"ebf019c\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<span class=\"elementor-heading-title elementor-size-default\">Venitaly</span>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-3355e11 e-con-full e-flex e-con e-child\" data-id=\"3355e11\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-dee3dfa elementor-widget__width-initial sc-reveal elementor-widget-mobile__width-initial elementor-widget elementor-widget-heading\" data-id=\"dee3dfa\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h1 class=\"elementor-heading-title elementor-size-default\">Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo</h1>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-1b495ae elementor-widget__width-initial elementor-widget elementor-widget-text-editor\" data-id=\"1b495ae\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t<p data-start=\"823\" data-end=\"925\">Un gestionale sviluppato da Netmarket per supportare le attività operative di VENITALY, con manutenzione continuativa, gestione degli account e interventi tecnici in contesti critici.</p>\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-a6b6e2d e-con-full e-flex e-con e-child\" data-id=\"a6b6e2d\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-01b4eb2 elementor-widget elementor-widget-heading\" data-id=\"01b4eb2\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<span class=\"elementor-heading-title elementor-size-default\">Anno</span>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-f2c2e9c nm-text-reveal e-flex e-con-boxed e-con e-parent\" data-id=\"f2c2e9c\" data-element_type=\"container\" data-e-type=\"container\" data-settings=\"{&quot;background_background&quot;:&quot;classic&quot;}\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t<div class=\"elementor-element elementor-element-ad061f6 e-con-full nm-reveal-wrap e-flex e-con e-child\" data-id=\"ad061f6\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-e61c1e5 nm-fade-text elementor-widget elementor-widget-text-editor\" data-id=\"e61c1e5\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t<p class=\"isSelectedEnd\">VENITALY utilizza un CRM custom sviluppato da Netmarket per gestire attività operative, dati e processi interni in modo più ordinato e strutturato.</p><p> </p><p class=\"isSelectedEnd\">Netmarket ha seguito lo sviluppo del gestionale e continua ad affiancare il cliente con manutenzione applicativa, supporto tecnico e interventi evolutivi. In un contesto operativo critico, l’attività ha incluso anche il censimento degli account, l’aggiornamento delle credenziali e il blocco degli accessi non autorizzati.</p><p> </p><p>Un progetto meno visibile dal punto di vista estetico, ma centrale per raccontare una competenza concreta: la capacità di sviluppare e mantenere software gestionali custom, garantendo supporto tecnico e continuità operativa nel tempo.</p>\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-6288082 e-flex e-con-boxed e-con e-parent\" data-id=\"6288082\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t<div class=\"elementor-element elementor-element-8043011 e-flex e-con-boxed e-con e-child\" data-id=\"8043011\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t\t\t<div class=\"elementor-element elementor-element-cf95692 elementor-widget elementor-widget-image\" data-id=\"cf95692\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"image.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<img loading=\"lazy\" decoding=\"async\" data-src=\"https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp\" data-srcset=\"https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp 1024w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-300x169.webp 300w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-768x432.webp 768w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1536x864.webp 1536w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp 1672w\" width=\"800\" height=\"450\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" class=\"attachment-large size-large wp-image-6307 lazyload\" alt=\"\"  sizes=\"(max-width: 800px) 100vw, 800px\" /><noscript><img loading=\"lazy\" decoding=\"async\" width=\"800\" height=\"450\" src=\"https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp\" class=\"attachment-large size-large wp-image-6307\" alt=\"\" srcset=\"https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp 1024w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-300x169.webp 300w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-768x432.webp 768w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1536x864.webp 1536w, https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp 1672w\" sizes=\"(max-width: 800px) 100vw, 800px\"></noscript>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-89cc352 e-flex e-con-boxed e-con e-child\" data-id=\"89cc352\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t\t<div class=\"e-con-inner\">\n\t\t\t\t<div class=\"elementor-element elementor-element-dba1ccd elementor-widget elementor-widget-heading\" data-id=\"dba1ccd\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h2 class=\"elementor-heading-title elementor-size-default\">Risultati</h2>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-6b11659 e-con-full e-flex e-con e-child\" data-id=\"6b11659\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-1141d62 elementor-widget elementor-widget-heading\" data-id=\"1141d62\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h3 class=\"elementor-heading-title elementor-size-default\">CRM custom</h3>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-4d7d613 elementor-widget elementor-widget-text-editor\" data-id=\"4d7d613\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t<p class=\"isSelectedEnd\">Sviluppo di una piattaforma gestionale progettata sulle esigenze operative del cliente.</p>\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-e9c42bf e-con-full e-flex e-con e-child\" data-id=\"e9c42bf\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-77ce78f elementor-widget elementor-widget-heading\" data-id=\"77ce78f\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h3 class=\"elementor-heading-title elementor-size-default\">Manutenzione costante</h3>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-bec77d7 elementor-widget elementor-widget-text-editor\" data-id=\"bec77d7\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t<p class=\"isSelectedEnd\">Supporto tecnico continuativo per aggiornamenti, verifiche e gestione applicativa del sistema.</p>\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t<div class=\"elementor-element elementor-element-586859f e-con-full e-flex e-con e-child\" data-id=\"586859f\" data-element_type=\"container\" data-e-type=\"container\">\n\t\t\t\t<div class=\"elementor-element elementor-element-13debfb elementor-widget elementor-widget-heading\" data-id=\"13debfb\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"heading.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t<h3 class=\"elementor-heading-title elementor-size-default\">Accessi controllati</h3>\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"elementor-element elementor-element-df98f04 elementor-widget elementor-widget-text-editor\" data-id=\"df98f04\" data-element_type=\"widget\" data-e-type=\"widget\" data-widget_type=\"text-editor.default\">\n\t\t\t\t<div class=\"elementor-widget-container\">\n\t\t\t\t\t\t\t\t\t<p>Censimento account, aggiornamento credenziali e blocco degli utenti non autorizzati.</p>\t\t\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t",
+    "protected": false
+  },
+  "featured_media": 6307,
+  "template": "",
+  "meta": {
+    "_acf_changed": false
+  },
+  "class_list": [
+    "post-6305",
+    "caso-studio",
+    "type-caso-studio",
+    "status-publish",
+    "has-post-thumbnail",
+    "hentry"
+  ],
+  "acf": [],
+  "yoast_head": "<!-- This site is optimized with the Yoast SEO Premium plugin v27.2 (Yoast SEO v28.3) - https://yoast.com/product/yoast-seo-premium-wordpress/ -->\n<title>Software gestionale custom VENITALY | Caso Studio Netmarket</title>\n<meta name=\"description\" content=\"Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.\" />\n<meta name=\"robots\" content=\"noindex, follow\" />\n<meta property=\"og:locale\" content=\"it_IT\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo\" />\n<meta property=\"og:description\" content=\"Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.\" />\n<meta property=\"og:url\" content=\"https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/\" />\n<meta property=\"og:site_name\" content=\"Netmarket\" />\n<meta property=\"article:publisher\" content=\"https://www.facebook.com/Netmarket.adv/\" />\n<meta property=\"article:modified_time\" content=\"2026-06-05T14:52:27+00:00\" />\n<meta property=\"og:image\" content=\"https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp\" />\n\t<meta property=\"og:image:width\" content=\"1672\" />\n\t<meta property=\"og:image:height\" content=\"941\" />\n\t<meta property=\"og:image:type\" content=\"image/webp\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:label1\" content=\"Tempo di lettura stimato\" />\n\t<meta name=\"twitter:data1\" content=\"2 minuti\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/\",\"url\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/\",\"name\":\"Software gestionale custom VENITALY | Caso Studio Netmarket\",\"isPartOf\":{\"@id\":\"https:\\/\\/netmarket.it\\/#website\"},\"primaryImageOfPage\":{\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/#primaryimage\"},\"image\":{\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/netmarket.it\\/wp-content\\/uploads\\/2026\\/06\\/sviluppo-software-gestionale-venitaly.webp\",\"datePublished\":\"2026-06-05T14:46:53+00:00\",\"dateModified\":\"2026-06-05T14:52:27+00:00\",\"description\":\"Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.\",\"breadcrumb\":{\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/#breadcrumb\"},\"inLanguage\":\"it-IT\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"it-IT\",\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/#primaryimage\",\"url\":\"https:\\/\\/netmarket.it\\/wp-content\\/uploads\\/2026\\/06\\/sviluppo-software-gestionale-venitaly.webp\",\"contentUrl\":\"https:\\/\\/netmarket.it\\/wp-content\\/uploads\\/2026\\/06\\/sviluppo-software-gestionale-venitaly.webp\",\"width\":1672,\"height\":941},{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/netmarket.it\\/caso-studio\\/sviluppo-crm-custom-venitaly\\/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/netmarket.it\\/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo\"}]},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/netmarket.it\\/#website\",\"url\":\"https:\\/\\/netmarket.it\\/\",\"name\":\"Netmarket\",\"description\":\"Web Agency Padova\",\"alternateName\":\"Net Market\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https:\\/\\/netmarket.it\\/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"it-IT\"}]}</script>\n<!-- / Yoast SEO Premium plugin. -->",
+  "yoast_head_json": {
+    "title": "Software gestionale custom VENITALY | Caso Studio Netmarket",
+    "description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+    "robots": {
+      "index": "noindex",
+      "follow": "follow"
+    },
+    "og_locale": "it_IT",
+    "og_type": "article",
+    "og_title": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+    "og_description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+    "og_url": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+    "og_site_name": "Netmarket",
+    "article_publisher": "https://www.facebook.com/Netmarket.adv/",
+    "article_modified_time": "2026-06-05T14:52:27+00:00",
+    "og_image": [
+      {
+        "width": 1672,
+        "height": 941,
+        "url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+        "type": "image/webp"
+      }
+    ],
+    "twitter_card": "summary_large_image",
+    "twitter_misc": {
+      "Tempo di lettura stimato": "2 minuti"
+    },
+    "schema": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+          "url": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+          "name": "Software gestionale custom VENITALY | Caso Studio Netmarket",
+          "isPartOf": {
+            "@id": "https://netmarket.it/#website"
+          },
+          "primaryImageOfPage": {
+            "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/#primaryimage"
+          },
+          "image": {
+            "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/#primaryimage"
+          },
+          "thumbnailUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+          "datePublished": "2026-06-05T14:46:53+00:00",
+          "dateModified": "2026-06-05T14:52:27+00:00",
+          "description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+          "breadcrumb": {
+            "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/#breadcrumb"
+          },
+          "inLanguage": "it-IT",
+          "potentialAction": [
+            {
+              "@type": "ReadAction",
+              "target": [
+                "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/"
+              ]
+            }
+          ]
+        },
+        {
+          "@type": "ImageObject",
+          "inLanguage": "it-IT",
+          "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/#primaryimage",
+          "url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+          "contentUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://netmarket.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo"
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://netmarket.it/#website",
+          "url": "https://netmarket.it/",
+          "name": "Netmarket",
+          "description": "Web Agency Padova",
+          "alternateName": "Net Market",
+          "potentialAction": [
+            {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://netmarket.it/?s={search_term_string}"
+              },
+              "query-input": {
+                "@type": "PropertyValueSpecification",
+                "valueRequired": true,
+                "valueName": "search_term_string"
+              }
+            }
+          ],
+          "inLanguage": "it-IT"
+        }
+      ]
+    }
+  },
+  "jetpack_sharing_enabled": true,
+  "_links": {
+    "self": [
+      {
+        "href": "https://netmarket.it/wp-json/wp/v2/caso-studio/6305",
+        "targetHints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://netmarket.it/wp-json/wp/v2/caso-studio"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://netmarket.it/wp-json/wp/v2/types/caso-studio"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 4,
+        "href": "https://netmarket.it/wp-json/wp/v2/caso-studio/6305/revisions"
+      }
+    ],
+    "predecessor-version": [
+      {
+        "id": 6311,
+        "href": "https://netmarket.it/wp-json/wp/v2/caso-studio/6305/revisions/6311"
+      }
+    ],
+    "wp:featuredmedia": [
+      {
+        "embeddable": true,
+        "href": "https://netmarket.it/wp-json/wp/v2/media/6307"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://netmarket.it/wp-json/wp/v2/media?parent=6305"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  },
+  "_embedded": {
+    "wp:featuredmedia": [
+      {
+        "id": 6307,
+        "date": "2026-06-05T14:43:16",
+        "slug": "sviluppo-software-gestionale-venitaly",
+        "type": "attachment",
+        "link": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/sviluppo-software-gestionale-venitaly/",
+        "title": {
+          "rendered": "sviluppo software gestionale venitaly"
+        },
+        "author": 1,
+        "featured_media": 0,
+        "jetpack_sharing_enabled": true,
+        "acf": [],
+        "caption": {
+          "rendered": ""
+        },
+        "alt_text": "",
+        "media_type": "image",
+        "mime_type": "image/webp",
+        "media_details": {
+          "width": 1672,
+          "height": 941,
+          "file": "2026/06/sviluppo-software-gestionale-venitaly.webp",
+          "filesize": 51436,
+          "sizes": {
+            "medium": {
+              "file": "sviluppo-software-gestionale-venitaly-300x169.webp",
+              "width": 300,
+              "height": 169,
+              "filesize": 5056,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-300x169.webp"
+            },
+            "large": {
+              "file": "sviluppo-software-gestionale-venitaly-1024x576.webp",
+              "width": 1024,
+              "height": 576,
+              "filesize": 26680,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp"
+            },
+            "thumbnail": {
+              "file": "sviluppo-software-gestionale-venitaly-150x150.webp",
+              "width": 150,
+              "height": 150,
+              "filesize": 3334,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-150x150.webp"
+            },
+            "medium_large": {
+              "file": "sviluppo-software-gestionale-venitaly-768x432.webp",
+              "width": 768,
+              "height": 432,
+              "filesize": 17972,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-768x432.webp"
+            },
+            "1536x1536": {
+              "file": "sviluppo-software-gestionale-venitaly-1536x864.webp",
+              "width": 1536,
+              "height": 864,
+              "filesize": 45358,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1536x864.webp"
+            },
+            "full": {
+              "file": "sviluppo-software-gestionale-venitaly.webp",
+              "width": 1672,
+              "height": 941,
+              "mime_type": "image/webp",
+              "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp"
+            }
+          },
+          "image_meta": {
+            "aperture": "0",
+            "credit": "",
+            "camera": "",
+            "caption": "",
+            "created_timestamp": "0",
+            "copyright": "",
+            "focal_length": "0",
+            "iso": "0",
+            "shutter_speed": "0",
+            "title": "",
+            "orientation": "0",
+            "keywords": [],
+            "alt": ""
+          }
+        },
+        "source_url": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+        "_links": {
+          "self": [
+            {
+              "href": "https://netmarket.it/wp-json/wp/v2/media/6307",
+              "targetHints": {
+                "allow": [
+                  "GET"
+                ]
+              }
+            }
+          ],
+          "collection": [
+            {
+              "href": "https://netmarket.it/wp-json/wp/v2/media"
+            }
+          ],
+          "about": [
+            {
+              "href": "https://netmarket.it/wp-json/wp/v2/types/attachment"
+            }
+          ],
+          "author": [
+            {
+              "embeddable": true,
+              "href": "https://netmarket.it/wp-json/wp/v2/users/1"
+            }
+          ],
+          "replies": [
+            {
+              "embeddable": true,
+              "href": "https://netmarket.it/wp-json/wp/v2/comments?post=6307"
+            }
+          ],
+          "wp:attached-to": [
+            {
+              "embeddable": true,
+              "post_type": "caso-studio",
+              "id": 6305,
+              "href": "https://netmarket.it/wp-json/wp/v2/caso-studio/6305"
+            }
+          ],
+          "curies": [
+            {
+              "name": "wp",
+              "href": "https://api.w.org/{rel}",
+              "templated": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

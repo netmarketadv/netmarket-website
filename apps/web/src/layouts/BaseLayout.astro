@@ -1,0 +1,65 @@
+---
+import Seo from '@/components/seo/Seo.astro';
+import SkipLink from '@/components/global/SkipLink.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import MotionController from '@/components/motion/MotionController.astro';
+import '@/styles/tokens.css';
+import '@/styles/reset.css';
+import '@/styles/global.css';
+import '@/styles/utilities.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  noindex?: boolean;
+  canonicalSiteUrl?: string | undefined;
+  structuredData?: Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  noindex = false,
+  canonicalSiteUrl,
+  structuredData = []
+} = Astro.props;
+const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
+const buildTime =
+  import.meta.env.PUBLIC_BUILD_TIME ?? process.env.PUBLIC_BUILD_TIME ?? new Date().toISOString();
+const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
+---
+
+<!doctype html>
+<html lang="it" data-netmarket-build={buildSha} data-netmarket-environment={buildEnvironment}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="netmarket-build" content={buildSha} />
+    <meta name="netmarket-build-time" content={buildTime} />
+    <meta name="netmarket-environment" content={buildEnvironment} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <Seo
+      title={title}
+      description={description}
+      path={path}
+      noindex={noindex}
+      canonicalSiteUrl={canonicalSiteUrl}
+      structuredData={structuredData}
+    />
+  </head>
+  <body>
+    <SkipLink />
+    <SiteHeader />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+    <MotionController />
+  </body>
+</html>

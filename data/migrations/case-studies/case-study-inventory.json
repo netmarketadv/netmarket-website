@@ -1,0 +1,270 @@
+[
+  {
+    "legacyId": 6312,
+    "legacyUrl": "https://netmarket.it/caso-studio/app-mobile-programma-fedelta-sirene-blu/",
+    "legacySlug": "app-mobile-programma-fedelta-sirene-blu",
+    "title": "App mobile e programma fedeltà Sirene Blu",
+    "status": "publish",
+    "publishDate": "2026-06-05T15:31:01",
+    "modifiedDate": "2026-06-05T15:39:20",
+    "client": "Sirene Blu",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket.webp",
+    "mediaCount": 5,
+    "contentLength": 18996,
+    "wordCount": 492,
+    "seoTitle": "App mobile e programma fedeltà | Caso Studio Sirene Blu",
+    "metaDescription": "Sviluppo app mobile, programma fidelity e integrazione custom con gestionale casse. Oltre 100.000 iscritti al programma fedeltà.",
+    "canonical": "",
+    "robots": {
+      "index": "noindex",
+      "follow": "follow"
+    },
+    "services": [
+      "software-e-integrazioni"
+    ],
+    "unmappedServices": [],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "legacy_noindex"
+    ]
+  },
+  {
+    "legacyId": 6305,
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+    "legacySlug": "sviluppo-crm-custom-venitaly",
+    "title": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+    "status": "publish",
+    "publishDate": "2026-06-05T14:46:53",
+    "modifiedDate": "2026-06-05T14:52:27",
+    "client": "VENITALY",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+    "mediaCount": 1,
+    "contentLength": 12871,
+    "wordCount": 179,
+    "seoTitle": "Software gestionale custom VENITALY | Caso Studio Netmarket",
+    "metaDescription": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+    "canonical": "",
+    "robots": {
+      "index": "noindex",
+      "follow": "follow"
+    },
+    "services": [
+      "software-e-integrazioni"
+    ],
+    "unmappedServices": [
+      "Supporto documentale"
+    ],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "legacy_noindex",
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "legacyId": 6284,
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "legacySlug": "sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda",
+    "title": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+    "status": "publish",
+    "publishDate": "2026-06-05T13:46:22",
+    "modifiedDate": "2026-06-05T14:33:13",
+    "client": "Rigomar",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/shooting-azienda-produzione-moda-rigomar-netmarket.webp",
+    "mediaCount": 1,
+    "contentLength": 10539,
+    "wordCount": 133,
+    "seoTitle": "Sviluppo sito web e shooting | Caso Studio Rigomar",
+    "metaDescription": "Sviluppo sito web, shooting fotografico e comunicazione visuale per valorizzare un’azienda specializzata nella produzione moda conto terzi.",
+    "canonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "siti-web",
+      "content-production"
+    ],
+    "unmappedServices": [],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "missing_alt"
+    ]
+  },
+  {
+    "legacyId": 6277,
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "legacySlug": "sviluppo-sito-web-allestimenti-fieristici-albertini",
+    "title": "Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura.",
+    "status": "publish",
+    "publishDate": "2026-06-05T13:22:50",
+    "modifiedDate": "2026-06-05T13:25:40",
+    "client": "Albertini Allestimenti",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-albertini-allestimenti.webp",
+    "mediaCount": 0,
+    "contentLength": 12357,
+    "wordCount": 197,
+    "seoTitle": "Sviluppo sito web per allestimenti fieristici | Caso Studio Netmarket",
+    "metaDescription": "Caso studio Albertini Allestimenti: analisi, posizionamento, SEO research, sviluppo del nuovo sito istituzionale con portfolio e catalogo.",
+    "canonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "seo",
+      "siti-web"
+    ],
+    "unmappedServices": [],
+    "migrationStatus": "ready",
+    "warnings": []
+  },
+  {
+    "legacyId": 6267,
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "legacySlug": "sviluppo-sito-web-fotovoltaico-progetto-e",
+    "title": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+    "status": "publish",
+    "publishDate": "2026-06-05T13:12:21",
+    "modifiedDate": "2026-06-05T13:12:23",
+    "client": "Progetto-e",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-progettoe.webp",
+    "mediaCount": 2,
+    "contentLength": 16056,
+    "wordCount": 173,
+    "seoTitle": "Sviluppo sito web fotovoltaico | Caso Studio Progetto-e Netmarket",
+    "metaDescription": "Caso studio Progetto-e: sviluppo sito WordPress, SEO, contenuti e landing page per un’azienda del settore fotovoltaico. Scopri il progetto.",
+    "canonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "siti-web"
+    ],
+    "unmappedServices": [
+      "Studio"
+    ],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "legacyId": 6171,
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "legacySlug": "sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa",
+    "title": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+    "status": "publish",
+    "publishDate": "2026-04-20T16:02:35",
+    "modifiedDate": "2026-04-20T16:15:38",
+    "client": "Pazzo Design",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2025/01/iPhone-Mockup-pazzodesign.jpg",
+    "mediaCount": 2,
+    "contentLength": 16700,
+    "wordCount": 227,
+    "seoTitle": "Sviluppo E-commerce Arredo Casa | Caso Studio Netmarket",
+    "metaDescription": "Caso studio e-commerce per tavoli e sedie: sviluppo, design e crescita fino a oltre 3M€ di fatturato. Scopri il progetto.",
+    "canonical": "https://netmarket.it/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "ecommerce"
+    ],
+    "unmappedServices": [
+      "Studio"
+    ],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "legacyId": 5928,
+    "legacyUrl": "https://netmarket.it/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "legacySlug": "concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa",
+    "title": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+    "status": "publish",
+    "publishDate": "2026-04-09T16:22:44",
+    "modifiedDate": "2026-04-09T16:49:26",
+    "client": "Sirene Blu",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-.jpg",
+    "mediaCount": 2,
+    "contentLength": 11675,
+    "wordCount": 174,
+    "seoTitle": "Sviluppo concorso a premi Sirene Blu 2024 - Netmarket",
+    "metaDescription": "",
+    "canonical": "https://netmarket.it/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "siti-web",
+      "concorsi-a-premi"
+    ],
+    "unmappedServices": [
+      "Strategia"
+    ],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "legacyId": 5210,
+    "legacyUrl": "https://netmarket.it/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+    "legacySlug": "casi-studio-strategia-digitale-ecommerce-brb",
+    "title": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+    "status": "publish",
+    "publishDate": "2025-01-23T11:15:57",
+    "modifiedDate": "2026-06-05T14:32:54",
+    "client": "BRB",
+    "featuredImage": "https://netmarket.it/wp-content/uploads/2026/01/gestione-social-media-creazione-contenuti-brand-alimentare.jpg",
+    "mediaCount": 2,
+    "contentLength": 26629,
+    "wordCount": 269,
+    "seoTitle": "Strategia digitale ed e-commerce BRB: caso studio completo",
+    "metaDescription": "Scopri il caso studio BRB: strategia multi-canale, nuovo e-commerce e crescita del +292% del fatturato. Un ecosistema digitale completo.",
+    "canonical": "https://netmarket.it/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "services": [
+      "siti-web",
+      "social-media"
+    ],
+    "unmappedServices": [
+      "Strategia"
+    ],
+    "migrationStatus": "ready_with_warnings",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  }
+]

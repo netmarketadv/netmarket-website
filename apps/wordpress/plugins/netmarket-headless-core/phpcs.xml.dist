@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="Netmarket Headless Core">
+  <file>netmarket-headless-core.php</file>
+  <file>src</file>
+  <exclude-pattern>vendor/*</exclude-pattern>
+  <rule ref="PSR12"/>
+  <rule ref="Generic.Files.LineLength">
+    <severity>0</severity>
+  </rule>
+</ruleset>

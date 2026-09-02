@@ -1,0 +1,51 @@
+---
+import IconBubble from '@/components/ui/IconBubble.astro';
+import { cmsMedia } from '@/data/home';
+
+interface Props {
+  title: string;
+  titleId?: string;
+  text: string;
+  image?: string;
+}
+
+const { title, titleId, text, image = cmsMedia.projects.sireneBlu } = Astro.props;
+---
+
+<div class="operations-bento">
+  <div class="operations-bento__heading" data-reveal="line">
+    <h2 id={titleId}>{title}</h2>
+    <p>{text}</p>
+  </div>
+  <article class="operations-bento__visual" data-reveal="media">
+    <img src={image} alt="Sistema visuale e contenuti Netmarket" loading="lazy" decoding="async" />
+    <div>
+      <h3>Libreria condivisa</h3>
+      <p>Una base comune per pagine, contenuti, landing e campagne.</p>
+    </div>
+  </article>
+  <article class="operations-bento__panel" data-reveal="scale">
+    <h3>Ruoli chiari</h3>
+    <p>Chi decide, chi produce, chi pubblica e chi misura resta definito.</p>
+    <div>
+      <span>Direzione</span>
+      <span>Contenuti</span>
+      <span>Sviluppo</span>
+    </div>
+  </article>
+  <article data-reveal="up">
+    <IconBubble name="users" />
+    <h3>Team allineati</h3>
+    <p>Marketing, vendite e direzione leggono gli stessi segnali.</p>
+  </article>
+  <article data-reveal="up">
+    <IconBubble name="shield" />
+    <h3>Controllo</h3>
+    <p>Il CMS resta riservato, il frontend guida SEO e pubblicazione.</p>
+  </article>
+  <article data-reveal="up">
+    <IconBubble name="chart" />
+    <h3>Misura</h3>
+    <p>Le decisioni successive partono da dati leggibili.</p>
+  </article>
+</div>

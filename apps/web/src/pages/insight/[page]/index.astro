@@ -1,0 +1,92 @@
+---
+import { breadcrumbJsonLd, webPageJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import {
+  formatDate,
+  getInsightArchiveData,
+  getInsightPage,
+  insightDescription,
+  insightPath
+} from '@/lib/insights/content';
+
+export async function getStaticPaths() {
+  const { totalPages } = await getInsightArchiveData();
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) }
+  }));
+}
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const page = Number(Astro.params.page || 1);
+const { insights, totalPages } = await getInsightPage(page);
+if (!Number.isInteger(page) || page < 2 || page > totalPages) return Astro.redirect('/404/');
+const title = `Insight - pagina ${page}`;
+const description = 'Archivio degli approfondimenti Netmarket.';
+const path = `/insight/${page}/`;
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Insight', url: `${canonicalSiteUrl}/insight/` },
+  { name: `Pagina ${page}`, url: `${canonicalSiteUrl}${path}` }
+]);
+const pageSchema = webPageJsonLd({
+  title,
+  description,
+  canonicalPath: path,
+  siteUrl: canonicalSiteUrl,
+  robots: 'index, follow'
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, pageSchema]}
+>
+  <Section labelledby="insight-page-title" class="insight-archive-hero">
+    <Container wide>
+      <div class="insight-archive-hero__grid">
+        <div data-reveal="line">
+          <p class="nm-meta">Insight Netmarket</p>
+          <h1 id="insight-page-title">Archivio Insight.</h1>
+        </div>
+        <p data-reveal="up">Pagina {page} di {totalPages}.</p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container wide>
+      <div class="insight-archive-grid" data-reveal="up" data-reveal-stagger="1">
+        {
+          insights.map((insight) => (
+            <a class="insight-archive-card" href={insightPath(insight.slug)}>
+              {insight.image && (
+                <img
+                  src={insight.image.url}
+                  alt={insight.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <span>
+                {insight.categories[0]?.name || 'Insight'} · {formatDate(insight.publishedAt)}
+              </span>
+              <h2>{insight.title}</h2>
+              <p>{insightDescription(insight)}</p>
+              <small>{insight.readingTime} min lettura</small>
+            </a>
+          ))
+        }
+      </div>
+      <nav class="pagination" aria-label="Paginazione Insight">
+        <a href={page === 2 ? '/insight/' : `/insight/${page - 1}/`}>Precedenti</a>
+        <span>Pagina {page} di {totalPages}</span>
+        {page < totalPages && <a href={`/insight/${page + 1}/`}>Successivi</a>}
+      </nav>
+    </Container>
+  </Section>
+</BaseLayout>

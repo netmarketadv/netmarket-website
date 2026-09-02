@@ -1,0 +1,165 @@
+---
+import { breadcrumbJsonLd } from '@netmarket/seo';
+import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
+import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Stack from '@/components/layout/Stack.astro';
+import ServiceArchiveHero from '@/components/services/ServiceArchiveHero.astro';
+import ServiceIndex from '@/components/services/ServiceIndex.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { clientLogos, cmsMedia, featureHighlights } from '@/data/home';
+import { getServiceArchiveData } from '@/lib/services/content';
+
+const canonicalSiteUrl = 'https://www.netmarket.it';
+const { services } = await getServiceArchiveData();
+const featuredServices = services.filter((service) => service.featured).slice(0, 3);
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Servizi', url: `${canonicalSiteUrl}/servizi/` }
+]);
+---
+
+<BaseLayout
+  title="Servizi"
+  description="Web, ecommerce, SEO, advertising, social, branding, contenuti e tecnologia in un sistema Netmarket coordinato."
+  path="/servizi/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb]}
+>
+  <Container wide>
+    <ServiceArchiveHero />
+  </Container>
+
+  <Section compact labelledby="services-intro-title">
+    <Container>
+      <div class="service-archive-intro" data-reveal="up">
+        <h2 id="services-intro-title">Un’offerta ampia, ma non dispersa.</h2>
+        <p>
+          Netmarket tiene insieme progettazione web, comunicazione, campagne, contenuti e strumenti
+          operativi. Ogni servizio può vivere da solo, ma dà il meglio quando lavora con gli altri.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section labelledby="service-index-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="service-index-title">Indice editoriale dei servizi.</h2>
+          <p>
+            Una lettura rapida per capire dove interveniamo e come le competenze si collegano tra
+            loro.
+          </p>
+        </div>
+        <ServiceIndex services={services} />
+      </Stack>
+    </Container>
+  </Section>
+
+  {
+    featuredServices.length > 0 && (
+      <Section compact labelledby="featured-services-title">
+        <Container>
+          <div class="service-featured" data-reveal="up" data-reveal-stagger="1">
+            <h2 id="featured-services-title">Da dove partono spesso i progetti.</h2>
+            {featuredServices.map((service) => (
+              <a href={`/servizi/${service.slug}/`}>
+                <span>{service.title}</span>
+                <p>{service.shortDescription || service.excerpt}</p>
+              </a>
+            ))}
+          </div>
+        </Container>
+      </Section>
+    )
+  }
+
+  <Section class="service-integration-band" labelledby="integration-title">
+    <Container wide>
+      <div class="service-integration" data-reveal="scale">
+        <div>
+          <h2 id="integration-title">Il valore non è nel singolo canale.</h2>
+          <p>
+            Un sito più chiaro aiuta le campagne. Una campagna migliore rivela quali contenuti
+            servono. Un contenuto ben progettato migliora SEO, vendita e fiducia.
+          </p>
+        </div>
+        <div class="service-integration__list" aria-label="Ambiti integrati">
+          {
+            featureHighlights.map(([title, text]) => (
+              <article>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section labelledby="selected-projects-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="selected-projects-title">Progetti come prova del sistema.</h2>
+          <p>
+            Alcuni lavori già presenti nel nuovo sito, in attesa del sistema completo Case Study.
+          </p>
+        </div>
+        <div class="project-rail" data-reveal="up" data-reveal-stagger="1">
+          <ProjectCard
+            title="Sirene Blu"
+            category="Brand e comunicazione"
+            description="Identità, contenuti e strumenti digitali dentro un progetto riconoscibile."
+            image={cmsMedia.projects.sireneBlu}
+            alt="Anteprima del progetto Sirene Blu"
+            href="/#progetti"
+            large
+          />
+          <ProjectCard
+            title="Albertini Allestimenti"
+            category="Sito web aziendale"
+            description="Presenza digitale istituzionale per raccontare competenze, servizi e solidità."
+            image={cmsMedia.projects.albertini}
+            alt="Anteprima del progetto Albertini Allestimenti"
+            href="/#progetti"
+          />
+          <ProjectCard
+            title="Progettoe"
+            category="Sito web e identità"
+            description="Un impianto visivo digitale coerente per presentare competenze e casi."
+            image={cmsMedia.projects.progettoe}
+            alt="Anteprima del progetto Progettoe"
+            href="/#progetti"
+          />
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section compact labelledby="clients-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-lg)">
+        <div class="center-heading" data-reveal="line">
+          <h2 id="clients-title">Clienti e progetti seguiti.</h2>
+          <p>Una selezione di marchi e realtà presenti nello storico lavori.</p>
+        </div>
+        <ClientMarquee clients={clientLogos} />
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section id="contatti" class="inline-cta-section" labelledby="service-archive-cta-title">
+    <Container wide>
+      <CTAInlineForm
+        titleId="service-archive-cta-title"
+        title="Hai un servizio da attivare,"
+        highlight="o un sistema da ordinare?"
+      />
+    </Container>
+  </Section>
+</BaseLayout>
