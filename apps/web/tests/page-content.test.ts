@@ -7,7 +7,8 @@ describe('homepage source', () => {
     const dataSource = readFileSync(new URL('../src/data/home.ts', import.meta.url), 'utf8');
     expect(source).toContain('Netmarket');
     expect(source).toContain('Comunichiamo valore.');
-    expect(source).toContain('Comunicazione e marketing digitale a Padova');
+    expect(source).toContain('Comunicazione e marketing digitale a');
+    expect(source).toContain('nm-heading-accent');
     expect(source).toContain('Trova il piano che tiene tutto collegato.');
     expect(dataSource).toContain('Siti web ed ecommerce');
     expect(dataSource).toContain('googleBusinessProfile');

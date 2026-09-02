@@ -19,6 +19,19 @@ type ScrollTrigger = {
 const revealSelector = '[data-reveal]';
 const lineRevealSelector = '[data-reveal="line"]';
 const mediaRevealSelector = '[data-reveal="media"]';
+const headingAccentClasses = [
+  'nm-heading-accent',
+  'nm-heading-muted',
+  'nm-heading-marker',
+  'nm-heading-marker--strong'
+] as const;
+
+type HeadingAccentClass = (typeof headingAccentClasses)[number];
+type TextRun = {
+  start: number;
+  end: number;
+  classes: HeadingAccentClass[];
+};
 
 function delayFor(target: HTMLElement): number {
   const parsed = Number.parseInt(target.dataset.revealDelay ?? '0', 10);
@@ -58,21 +71,71 @@ function headingTargets(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>('h1, h2, h3, h4, .nm-heading, .nm-display-heading'));
 }
 
+function inheritedAccentClasses(element: Element | null): HeadingAccentClass[] {
+  const classes = new Set<HeadingAccentClass>();
+  let current: Element | null = element;
+
+  while (current) {
+    headingAccentClasses.forEach((className) => {
+      if (current?.classList.contains(className)) classes.add(className);
+    });
+    current = current.parentElement;
+  }
+
+  return [...classes];
+}
+
+function collectTextRuns(root: HTMLElement): TextRun[] {
+  const runs: TextRun[] = [];
+  let cursor = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    const value = node.textContent ?? '';
+    const classes = inheritedAccentClasses(node.parentElement);
+    if (classes.length > 0 && value.length > 0) {
+      runs.push({ start: cursor, end: cursor + value.length, classes });
+    }
+    cursor += value.length;
+  }
+
+  return runs;
+}
+
+function classesForRange(runs: TextRun[], start: number, end: number): string {
+  const classes = new Set<HeadingAccentClass>();
+
+  runs.forEach((run) => {
+    if (start < run.end && end > run.start) {
+      run.classes.forEach((className) => classes.add(className));
+    }
+  });
+
+  return [...classes].join(' ');
+}
+
 function splitHeadingWords(heading: HTMLElement): HTMLElement[] {
   if (heading.dataset.motionLineSplit === 'ready') {
     return Array.from(heading.querySelectorAll<HTMLElement>('.nm-motion-word'));
   }
 
-  const text = heading.getAttribute('aria-label') ?? heading.textContent ?? '';
+  const text = heading.textContent ?? heading.getAttribute('aria-label') ?? '';
   if (!text.trim()) return [];
 
+  const runs = collectTextRuns(heading);
+  let cursor = 0;
   heading.dataset.motionLineSplit = 'ready';
   heading.innerHTML = text
     .split(/(\s+)/)
     .map((part) => {
+      const start = cursor;
+      const end = start + part.length;
+      cursor = end;
       if (!part) return '';
       if (/^\s+$/.test(part)) return part;
-      return `<span class="nm-motion-word"><span class="nm-motion-word__inner">${styleHeadingText(part)}</span></span>`;
+      const accentClasses = classesForRange(runs, start, end);
+      return `<span class="nm-motion-word"><span class="nm-motion-word__inner${accentClasses ? ` ${accentClasses}` : ''}">${styleHeadingText(part)}</span></span>`;
     })
     .join('');
 

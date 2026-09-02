@@ -155,6 +155,40 @@ h4 {
   white-space: nowrap;
 }
 
+.nm-heading-accent {
+  color: var(--nm-color-blue);
+}
+
+.nm-heading-muted {
+  color: var(--nm-color-subtle);
+}
+
+.nm-heading-marker {
+  border-radius: 0.18em;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 66%,
+      rgb(14 81 254 / 0.14) 66%,
+      rgb(14 81 254 / 0.14) 96%,
+      transparent 96%
+    );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding-inline: 0.04em;
+}
+
+.nm-heading-marker--strong {
+  background:
+    linear-gradient(
+      180deg,
+      transparent 64%,
+      rgb(14 81 254 / 0.2) 64%,
+      rgb(14 81 254 / 0.2) 96%,
+      transparent 96%
+    );
+}
+
 .nm-eyebrow {
   width: fit-content;
   display: inline-flex;

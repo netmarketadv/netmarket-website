@@ -91,7 +91,24 @@ Il rapporto heading verso body usa token semantici, non margini locali casuali.
 
 Usare `display: grid` e `gap` nelle primitive (`Stack`, `center-heading`, card body, bento, FAQ) quando il titolo e il testo appartengono allo stesso gruppo.
 
-### 6.2 Netmarket Italic O
+### 6.2 Heading Accent System
+
+I titoli possono usare parole evidenziate quando serve guidare la lettura, ma l'accento deve restare raro e intenzionale. Le primitive globali sono:
+
+- `.nm-heading-accent`: parola o breve frase in blu Netmarket `#0E51FE`, usata per evidenziare il concetto principale del titolo.
+- `.nm-heading-muted`: parola o breve frase in grigio soft, per il pattern gia usato scuro + grigio.
+- `.nm-heading-marker`: evidenziatore tipografico blu chiaro sotto la parola, utile quando il titolo deve mantenere colore ink ma dare enfasi.
+- `.nm-heading-marker--strong`: variante piu evidente, riservata a hero o sezioni prodotto.
+
+Regole:
+
+- Non usare piu di un accento forte nello stesso heading.
+- Evidenziare parole brevi o sintagmi chiari, non frasi intere.
+- Non combinare nello stesso titolo blu pieno, grigio e marker salvo casi editoriali approvati.
+- Gli accent devono funzionare dentro `h1`, `h2`, `h3`, `h4` e classi heading dedicate senza rompere la regola della "o" obliqua.
+- Il marker deve restare decorativo: non sostituisce link, badge o CTA.
+
+### 6.3 Netmarket Italic O
 
 In display and heading typography, occurrences of the letter "o" or "O" inside words are rendered with a subtle oblique treatment. The standalone Italian conjunction "o" remains roman. The rule does not apply to body copy or interface text unless explicitly classified as heading typography.
 
