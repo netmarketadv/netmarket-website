@@ -70,6 +70,9 @@ cat > .htaccess <<'EOF'
 
 <IfModule mod_setenvif.c>
   SetEnvIf Request_URI \"^/robots\\.txt$\" NMHC_NO_AUTH=1
+  SetEnvIf Request_URI \"^/wp-content/uploads/\" NMHC_NO_AUTH=1
+  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/health$\" NMHC_NO_AUTH=1
+  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/forms/contact$\" NMHC_NO_AUTH=1
 </IfModule>
 
 AuthType Basic
