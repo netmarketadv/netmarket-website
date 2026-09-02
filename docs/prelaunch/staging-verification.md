@@ -10,16 +10,16 @@ Data audit: 2026-09-02
 
 ## Stato
 
-Esito corrente: `DEPLOY IN PROGRESS`
+Esito corrente: `VERIFIED WITH WARNINGS`
 
-Il deploy del commit `53b5a99` non era arrivato allo smoke test remoto per fallimento nello step `Deploy`. Dopo hardening, il dry-run del branch `chore/prelaunch-hardening` e verde e il deploy reale e stato rilanciato con run `33615441326`.
+Il deploy del commit `53b5a99` non era arrivato allo smoke test remoto per fallimento nello step `Deploy`. Dopo hardening, il branch `chore/prelaunch-hardening` e stato deployato correttamente su staging.
 
 Health check remoto read-only eseguito su `https://staging.netmarket.it`:
 
 - Esito HTTP/strutturale: valido.
-- Build online rilevata: `6117c244cd3c1159f901c149c94e178f36bde8f0`.
+- Build online rilevata: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
 - Environment online rilevato: `staging`.
-- Stato: ambiente raggiungibile ma stale rispetto al commit atteso finche la run reale non completa lo smoke.
+- Stato: ambiente raggiungibile e aggiornato allo SHA atteso.
 
 ## Evidenze
 
@@ -40,8 +40,21 @@ Dry-run corretto:
 Deploy reale rilanciato:
 
 - Workflow: `Deploy Staging`
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
-- Stato durante audit: in progress.
+- Run annullata: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
+- Motivo: commit superato da patch cache fallback.
+
+Deploy reale verificato:
+
+- Workflow: `Deploy Staging`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`
+- Conclusione: `success`
+- Step `Deploy`: success
+- Step `Smoke staging`: success
+- SHA online: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`
+
+Warning:
+
+- Il CMS risponde `404` sugli endpoint contenuto headless, quindi le pagine editoriali deployate usano fallback/snapshot reali.
 
 ## Criteri Da Verificare Dopo Deploy
 
@@ -63,5 +76,5 @@ Deploy reale rilanciato:
 ## Comando Smoke
 
 ```bash
-EXPECTED_BUILD_SHA=2c8c73b474ced6f4049cabf66de338eae14f2278 EXPECTED_BUILD_ENV=staging pnpm smoke:staging
+EXPECTED_BUILD_SHA=4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1 EXPECTED_BUILD_ENV=staging pnpm smoke:staging
 ```

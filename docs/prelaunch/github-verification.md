@@ -43,11 +43,22 @@ Dry-run successivo dopo hardening:
 - `Dry-run deploy plan`: success.
 - Nota: durante la build il CMS ha risposto `404` sugli endpoint contenuto `services` e `insights`; il frontend ha usato i fallback/snapshot previsti.
 
-Deploy reale rilanciato:
+Deploy reale completato:
 
 - Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`
 - Branch/SHA iniziale: `chore/prelaunch-hardening`, `2c8c73b474ced6f4049cabf66de338eae14f2278`
-- Stato durante l'audit: in progress nello step `Build Astro frontend`.
+- Stato: annullato perche superato dal commit `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
+
+Deploy reale finale:
+
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`
+- Branch/SHA: `chore/prelaunch-hardening`, `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`
+- Esito: success.
+- `Build Astro frontend`: success, 53 pagine generate.
+- `Deploy`: success.
+- `Smoke staging`: success.
+- Smoke: `Smoke staging ok: build 4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1 su staging.`
+- Warning contenuto: endpoint CMS `/services`, `/insights` e `/case-studies` rispondono `404`, quindi il frontend usa fallback/snapshot.
 
 ## Secret GitHub Rilevati
 

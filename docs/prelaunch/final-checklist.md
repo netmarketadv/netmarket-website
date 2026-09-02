@@ -30,8 +30,8 @@ Esito: `STAGING READY WITH WARNINGS`
 - [x] Deploy Staging dry-run completato con successo: run `33615147619`.
 - [x] Cache fallback contenuti applicata per evitare chiamate dettaglio CMS ripetute.
 - [ ] `Verify SiteGround` registrato/rilanciato con controllo path.
-- [ ] `Deploy Staging` reale completato con successo.
-- [ ] Smoke staging completato con SHA atteso.
+- [x] `Deploy Staging` reale completato con successo: run `33615921590`.
+- [x] Smoke staging completato con SHA atteso: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
 - [ ] Content validation CMS reale completata con credenziali e route contenuto disponibili.
 - [ ] Visual QA staging completata.
 - [ ] Performance/Lighthouse staging completata.
@@ -39,7 +39,6 @@ Esito: `STAGING READY WITH WARNINGS`
 ## Bloccanti
 
 - Endpoint CMS contenuto `services` e `insights` non disponibili online (`404`), nonostante il plugin locale li registri.
-- Staging online ancora fermo alla build `6117c244cd3c1159f901c149c94e178f36bde8f0`.
 - Workflow `Deploy CMS Plugin` e `Verify SiteGround` presenti nel branch ma non ancora registrati su GitHub Actions.
 
 ## Comandi Per Secret CMS

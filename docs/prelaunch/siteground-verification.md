@@ -4,9 +4,9 @@ Data audit: 2026-09-02
 
 ## Stato
 
-Esito corrente: `DRY-RUN READY`
+Esito corrente: `READY FOR STAGING`
 
-L'accesso SSH risulta configurato nei secret dell'environment `staging`. Il deploy path remoto aveva fallito nel workflow precedente, ma il dry-run successivo del deploy staging e completato con successo dopo l'hardening dello script.
+L'accesso SSH risulta configurato nei secret dell'environment `staging`. Il deploy path remoto aveva fallito nel workflow precedente, ma dry-run, deploy reale e smoke staging sono completati con successo dopo l'hardening dello script.
 
 ## Evidenza
 
@@ -22,6 +22,13 @@ Workflow `Deploy Staging`, run `33615147619`:
 
 ```text
 Dry-run deploy plan: success
+```
+
+Workflow `Deploy Staging`, run `33615921590`:
+
+```text
+Deploy: success
+Smoke staging: success
 ```
 
 ## Hardening Applicato
@@ -47,7 +54,7 @@ In questo modo il processo remoto entra prima nel document root e poi riceve i f
 
 ## Azione Richiesta
 
-Portare `verify-siteground.yml` sul default branch o registrarlo in GitHub Actions, poi rilanciarlo per avere un controllo diretto e dedicato sul path.
+Portare `verify-siteground.yml` sul default branch o registrarlo in GitHub Actions, poi rilanciarlo per avere un controllo diretto e dedicato sul path. Il deploy staging principale e comunque gia verificato dalla run `33615921590`.
 
 Se il deploy reale fallisce ancora, correggere uno di questi elementi in GitHub Environment `staging`:
 

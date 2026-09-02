@@ -19,11 +19,11 @@ Stato corrente: `STAGING READY WITH WARNINGS`
 Motivi:
 
 - Il dry-run del deploy staging sul branch `chore/prelaunch-hardening` e verde e conferma che il problema `rsync change_dir` e stato risolto.
-- Il deploy reale staging e stato rilanciato dalla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615441326`; durante l'audit risultava ancora in build sul commit precedente alla cache fallback.
+- Il deploy reale staging e verde sulla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`.
 - `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` risultano configurati sia come repository secret sia nell'environment `staging`.
 - Il CMS risponde, ma gli endpoint contenuto `services` e `insights` documentati tornano `404`; il frontend continua quindi a usare fallback/snapshot reali finche il plugin/API CMS online non viene riallineato.
 - La Quality GitHub del commit `53b5a99` e completata con successo, E2E incluso.
-- `staging.netmarket.it` e raggiungibile ma serve ancora la build `6117c244cd3c1159f901c149c94e178f36bde8f0`, quindi e stale rispetto a `53b5a99`.
+- `staging.netmarket.it` serve la build `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1` e lo smoke remoto e passato.
 
 ## Findings
 
@@ -43,9 +43,9 @@ Motivi:
   Evidenza: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`.  
   Correzione verificata: dry-run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619` completato con successo nello step `Dry-run deploy plan`.
 
-- **Staging remoto stale**  
-  Evidenza: health check read-only su `https://staging.netmarket.it` valido, ma meta `netmarket-build` uguale a `6117c244cd3c1159f901c149c94e178f36bde8f0`.  
-  Impatto: fino al completamento del deploy reale, le ultime modifiche presenti su `chore/prelaunch-hardening` non sono verificabili online.
+- **CMS workflow non ancora registrati su GitHub Actions**  
+  Evidenza: `gh workflow list` mostra `Deploy Staging`, `Quality` e `Dependabot Updates`, ma non `Deploy CMS Plugin` e `Verify SiteGround`.  
+  Impatto: finche questi workflow non arrivano sul default branch, il deploy CMS del plugin headless non puo essere avviato da Actions standard.
 
 ### Medium
 
@@ -85,5 +85,5 @@ gh secret set CMS_BASIC_AUTH_PASSWORD --repo netmarketadv/netmarket-website --en
 ## Prossime Verifiche
 
 - Portare `deploy-cms.yml` e `verify-siteground.yml` sul default branch oppure registrarli in GitHub Actions, poi rilanciare il deploy CMS per riallineare le route `/netmarket/v1/services` e `/netmarket/v1/insights`.
-- Rilanciare `Deploy Staging` dopo la cache fallback per ridurre il tempo di build quando il CMS non e allineato.
-- Eseguire smoke remoto su `staging.netmarket.it` e verificare meta `netmarket-build` uguale allo SHA atteso.
+- Eseguire deploy CMS quando il workflow sara registrato o dopo merge del branch di hardening.
+- Completare content validation reale quando le route contenuto CMS saranno disponibili.
