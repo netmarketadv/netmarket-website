@@ -1,11 +1,13 @@
 ---
 import { breadcrumbJsonLd, webPageJsonLd } from '@netmarket/seo';
 import Container from '@/components/layout/Container.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
 import Section from '@/components/layout/Section.astro';
 import Stack from '@/components/layout/Stack.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import {
   getProjectArchiveData,
+  projectCategory,
   projectClient,
   projectDescription,
   projectPath
@@ -101,23 +103,19 @@ const pageSchema = webPageJsonLd({
         </div>
         <div class="project-index" data-reveal="up" data-reveal-stagger="1">
           {
-            remainingProjects.map((project) => (
-              <a class="project-index-row" href={projectPath(project.slug)} data-cursor-label="Apri">
-                <div class="project-index-row__media">
-                  {project.cover && <img src={project.cover.url} alt={project.cover.alt} loading="lazy" decoding="async" />}
-                </div>
-                <div class="project-index-row__content">
-                  <span>{projectClient(project)}</span>
-                  <h3>{project.title}</h3>
-                  <p>{projectDescription(project)}</p>
-                </div>
-                <div class="project-index-row__meta">
-                  {project.services.slice(0, 3).map((service) => (
-                    <span>{service.title}</span>
-                  ))}
-                </div>
-              </a>
-            ))
+            remainingProjects.map(
+              (project) =>
+                project.cover && (
+                  <ProjectCard
+                    title={projectClient(project)}
+                    category={projectCategory(project)}
+                    description={projectDescription(project)}
+                    image={project.cover.url}
+                    alt={project.cover.alt}
+                    href={projectPath(project.slug)}
+                  />
+                )
+            )
           }
         </div>
       </Stack>

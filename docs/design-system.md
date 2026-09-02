@@ -170,8 +170,24 @@ Icone minime, stroke 1.75-2px, 16-20px. Non introdurre librerie finche non serve
 - `team-section` / `person-card`: sistema persone per team, autori e contributor futuri.
 - `process-card`: metodo operativo.
 - `faq-list`: accordion.
+- `project-card`: card portfolio media-first per casi studio e progetti selezionati.
 
-### 13.3 Client Marquee
+### 13.3 Project Card
+
+`ProjectCard` e il componente ufficiale per mostrare un progetto in homepage, pagine servizio, archivio progetti e design system.
+
+Regole:
+
+- La parte alta e sempre media-first: l'immagine in evidenza occupa tutta l'area visiva con `object-fit: cover`.
+- La categoria del caso studio appare sovrapposta nella parte bassa dell'immagine, dentro una pill leggibile su sfondi chiari o scuri.
+- Sotto l'immagine appaiono solo nome cliente/progetto e descrizione breve.
+- Nessuna card esterna con bordo o box bianco vuoto: il bordo visuale e dato dal media arrotondato.
+- Hover desktop leggero: micro zoom dell'immagine e titolo blu Netmarket. Nessun effetto che sposti layout o renda il testo meno leggibile.
+- Il componente resta data-driven: `title`, `category`, `description`, `image`, `alt`, `href`.
+- Mobile: una colonna, immagine 16:10, categoria sempre dentro il media, testo sotto con line-height stabile.
+- Non creare varianti parallele per l'archivio progetti: usare `ProjectCard` salvo layout featured realmente editoriale.
+
+### 13.4 Client Marquee
 
 `ClientMarquee` e il componente ufficiale per mostrare clienti, partner e progetti seguiti. Sostituisce ogni griglia loghi con card.
 
@@ -188,7 +204,7 @@ Regole:
 - Il gruppo duplicato per il loop e puramente visivo: `aria-hidden="true"` e immagini con `alt=""`.
 - Reduced motion obbligatorio: niente autoplay, una sola lista semantica, scroll orizzontale manuale.
 
-### 13.4 People / Team
+### 13.5 People / Team
 
 `PersonCard` e `TeamSection` sono il sistema ufficiale per persone Netmarket, autori editoriali e contributor futuri dei case study.
 
