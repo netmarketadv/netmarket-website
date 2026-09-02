@@ -24,4 +24,22 @@ describe('agency and contact pages', () => {
     expect(form).toContain('contact_form_success');
     expect(form).toContain('privacyConsent');
   });
+
+  it('registers NOD as a product landing with beta form and schema', () => {
+    const page = readFileSync(new URL('../src/pages/nod.astro', import.meta.url), 'utf8');
+    const header = readFileSync(
+      new URL('../src/components/layout/SiteHeader.astro', import.meta.url),
+      'utf8'
+    );
+    const data = readFileSync(new URL('../src/data/nod.ts', import.meta.url), 'utf8');
+    const cta = readFileSync(new URL('../src/components/nod/NodCTA.astro', import.meta.url), 'utf8');
+
+    expect(page).toContain('SoftwareApplication');
+    expect(page).toContain('NodProductTour');
+    expect(cta).toContain('NodBetaForm');
+    expect(page).toContain('/nod/');
+    expect(header).toContain('NØD');
+    expect(data).toContain('regularMonthlyPrice: 299');
+    expect(data).toContain('/images/nod/dashboard.webp');
+  });
 });

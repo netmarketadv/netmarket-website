@@ -18,6 +18,7 @@ export async function GET() {
     '/',
     '/agenzia/',
     '/contatti/',
+    '/nod/',
     '/insight/',
     ...insightPages,
     ...insightArchive.insights

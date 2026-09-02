@@ -1,0 +1,22 @@
+---
+import { integrationSources } from '@/data/nod';
+---
+
+<section class="nod-section nod-section--soft" aria-labelledby="nod-integrations-title">
+  <div class="nod-container nod-integrations">
+    <div class="nod-section-heading" data-reveal="line">
+      <h2 id="nod-integrations-title">I lead arrivano da posti diversi. NØD li porta nello stesso processo.</h2>
+      <p>Le fonti operative e quelle previste sono distinte, così è sempre chiaro cosa è disponibile.</p>
+    </div>
+    <div class="nod-integrations__grid" data-reveal="up" data-reveal-stagger="1">
+      {
+        integrationSources.map(([name, status]) => (
+          <span class:list={['nod-integration-pill', status === 'in arrivo' && 'is-next']}>
+            <strong>{name}</strong>
+            <small>{status}</small>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
