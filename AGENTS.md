@@ -20,6 +20,10 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 - Prima di un deploy staging reale viene salvato uno snapshot rollback `before-<sha>.tgz` sullo stesso hosting.
 - La source of truth operativa è `Git -> GitHub -> GitHub Actions -> SiteGround`. Non usare normalmente FTP, SCP, rsync locale diretto, modifiche file server o upload manuali SiteGround se la pipeline ufficiale funziona.
 - Se una modifica deve essere pubblicata su staging, porta il codice corretto su `develop`, verifica push, `Deploy Staging`, smoke test, build SHA online e `https://staging.netmarket.it` prima di dichiararla pubblicata.
+- Il deploy staging deve sempre generare la cache CMS autenticata prima della build Astro. Il flusso corretto è `Pull CMS API cache -> pnpm install -> test veloci -> build -> deploy -> smoke`.
+- `cms.netmarket.it` può rispondere `401` sugli endpoint pubblici perché è protetto da Basic Auth. Nei workflow la lettura affidabile avviene via SSH/WP-CLI con `infrastructure/scripts/pull-cms-cache.mjs`, non con fetch pubblico non autenticato.
+- `CMS_API_CACHE_DIR` deve essere un path assoluto nei workflow, ad esempio `${{ github.workspace }}/apps/web/.cms-cache/netmarket/v1`; path relativi possono far usare fallback e generare staging non aggiornato.
+- Gli artifact `.cms-cache/` sono locali/CI e non vanno versionati.
 
 ## Comandi
 
@@ -31,6 +35,7 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 - `pnpm test`
 - `pnpm test:e2e`
 - `pnpm smoke:staging`
+- `pnpm migration:insights:cms`
 - `pnpm validate`
 
 ## Standard
@@ -53,9 +58,28 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 
 Usare branch dedicati, commit piccoli, niente force push, niente merge diretto su `main`. Controllare sempre lo stato prima di modificare.
 
+Eccezione pratica: `git push --force-with-lease` è consentito solo per correggere un commit appena creato dall'agente sullo stesso branch di lavoro e prima che altri collaboratori lo usino. Non usare force push su `main` o `develop`.
+
+## CMS E Migrazioni
+
+- Il CMS operativo è solo `cms.netmarket.it`. Non scrivere mai su `netmarket.it`.
+- Per import contenuti usare script idempotenti con dry-run quando disponibile, controllo duplicati per slug e riepilogo finale.
+- Gli insight legacy si importano con `pnpm migration:insights:cms`; supporta `--dry-run`, `--skip-media` e `--force`.
+- L'import insight legge `data/migrations/insights/insight-transform-dry-run.json`, crea/aggiorna post WordPress `post`, importa o riusa media WordPress, popola metadati `nmhc_*`, mette in relazione i servizi quando esistono e salva gli slug servizio differiti in `nmhc_migration_related_service_slugs`.
+- Dopo import CMS: mettere in bozza contenuti demo come `Hello world!`, rigenerare la cache CMS, buildare con `CMS_API_CACHE_DIR` e deployare staging.
+- Quando si genera PHP dentro template JavaScript, fare attenzione agli escape: regex PHP come `\s` devono essere scritte come `\\s` nel template JS. Un escape sbagliato può corrompere testi SEO o contenuti durante l'import.
+
 ## Qualità
 
 Ogni modifica deve aggiornare test e documentazione quando cambia comportamento. Per sviluppo quotidiano: test/typecheck/build rilevanti e smoke staging dopo deploy. La full QA completa vive in `.github/workflows/quality.yml` e include lint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E.
+
+Quando si verifica una build che deve usare dati CMS reali, lanciare la build con cache esplicita:
+
+```sh
+CMS_API_CACHE_DIR="$PWD/apps/web/.cms-cache/netmarket/v1" pnpm build
+```
+
+Se in output compaiono warning tipo `CMS unavailable, using migration snapshot fallback`, la build non sta usando la fonte reale prevista.
 
 ## Accessibilità, SEO, Performance
 
