@@ -43,6 +43,8 @@ fi
 
 PLUGIN_DIR="apps/wordpress/plugins/netmarket-headless-core"
 PLUGIN_SLUG="netmarket-headless-core"
+PLUGIN_PARENT="$WP_PATH/wp-content/plugins"
+PLUGIN_TARGET="$PLUGIN_PARENT/$PLUGIN_SLUG"
 if [[ ! -f "$PLUGIN_DIR/netmarket-headless-core.php" ]]; then
   echo "Plugin locale non trovato: $PLUGIN_DIR"
   exit 1
@@ -55,26 +57,58 @@ printf '%s\n' "$SG_SSH_PRIVATE_KEY" >"$KEY_FILE"
 printf '%s\n' "$SG_SSH_KNOWN_HOSTS" >"$KNOWN_HOSTS_FILE"
 chmod 600 "$KEY_FILE" "$KNOWN_HOSTS_FILE"
 
+ARCHIVE_FILE="$(mktemp -t "${PLUGIN_SLUG}.XXXXXX.tar.gz")"
+trap 'rm -f "$KEY_FILE" "$KNOWN_HOSTS_FILE" "$ARCHIVE_FILE"' EXIT
+COPYFILE_DISABLE=1 tar \
+  --exclude vendor \
+  --exclude .git \
+  --exclude tests \
+  --exclude composer.lock \
+  --exclude phpcs.xml.dist \
+  --exclude phpstan.neon \
+  -czf "$ARCHIVE_FILE" \
+  -C "$PLUGIN_DIR" \
+  .
+
 SSH_ARGS=(-p "$SG_SSH_PORT" -i "$KEY_FILE" -o "UserKnownHostsFile=$KNOWN_HOSTS_FILE" -o "StrictHostKeyChecking=yes")
-RSYNC_ARGS=(-az --delete --checksum --exclude vendor --exclude .git --exclude tests --exclude composer.lock --exclude phpcs.xml.dist --exclude phpstan.neon -e "ssh ${SSH_ARGS[*]}")
+SCP_ARGS=(-P "$SG_SSH_PORT" -i "$KEY_FILE" -o "UserKnownHostsFile=$KNOWN_HOSTS_FILE" -o "StrictHostKeyChecking=yes")
 
 if [[ "$DRY_RUN" == true ]]; then
-  RSYNC_ARGS+=(--dry-run)
   echo "Dry-run bootstrap WordPress su $DOMAIN:$WP_PATH"
 else
   echo "Bootstrap WordPress su $DOMAIN:$WP_PATH"
 fi
 
-ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "test -f '$WP_PATH/wp-config.php' && command -v wp >/dev/null"
-
-if [[ "$DRY_RUN" == false ]]; then
-  ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "mkdir -p '$WP_PATH/wp-content/plugins/$PLUGIN_SLUG'"
-fi
-
-rsync "${RSYNC_ARGS[@]}" "$PLUGIN_DIR/" "$SG_SSH_USER@$SG_SSH_HOST:$WP_PATH/wp-content/plugins/$PLUGIN_SLUG/"
+printf -v REMOTE_WP_PATH "%q" "$WP_PATH"
+printf -v REMOTE_PLUGIN_PARENT "%q" "$PLUGIN_PARENT"
+ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "test -f $REMOTE_WP_PATH/wp-config.php && test -d $REMOTE_PLUGIN_PARENT && test -w $REMOTE_PLUGIN_PARENT && command -v wp >/dev/null"
 
 if [[ "$DRY_RUN" == true ]]; then
   exit 0
 fi
 
-ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp core is-installed && wp option update blog_public 0 && wp rewrite structure '/%postname%/' --hard && wp plugin activate '$PLUGIN_SLUG' && wp rewrite flush --hard"
+REMOTE_ARCHIVE="/tmp/${PLUGIN_SLUG}-$(date +%Y%m%d%H%M%S).tar.gz"
+REMOTE_BACKUP_DIR="$WP_PATH/wp-content/netmarket-deploy-backups"
+printf -v REMOTE_ARCHIVE_Q "%q" "$REMOTE_ARCHIVE"
+printf -v REMOTE_PLUGIN_TARGET "%q" "$PLUGIN_TARGET"
+printf -v REMOTE_BACKUP_DIR_Q "%q" "$REMOTE_BACKUP_DIR"
+printf -v REMOTE_PLUGIN_SLUG "%q" "$PLUGIN_SLUG"
+
+scp "${SCP_ARGS[@]}" "$ARCHIVE_FILE" "$SG_SSH_USER@$SG_SSH_HOST:$REMOTE_ARCHIVE"
+ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "
+  set -Eeuo pipefail
+  cd $REMOTE_WP_PATH
+  wp --skip-plugins --skip-themes core is-installed
+  mkdir -p $REMOTE_BACKUP_DIR_Q
+  if [[ -d $REMOTE_PLUGIN_TARGET ]]; then
+    tar -czf $REMOTE_BACKUP_DIR_Q/${PLUGIN_SLUG}-before-\$(date +%Y%m%d%H%M%S).tar.gz -C $REMOTE_PLUGIN_PARENT $REMOTE_PLUGIN_SLUG
+  fi
+  rm -rf $REMOTE_PLUGIN_TARGET
+  mkdir -p $REMOTE_PLUGIN_TARGET
+  tar -xzf $REMOTE_ARCHIVE_Q -C $REMOTE_PLUGIN_TARGET
+  rm -f $REMOTE_ARCHIVE_Q
+  wp --skip-plugins --skip-themes option update blog_public 0
+  wp --skip-plugins --skip-themes rewrite structure '/%postname%/' --hard
+  wp --skip-plugins --skip-themes plugin activate $REMOTE_PLUGIN_SLUG
+  wp --skip-themes rewrite flush --hard
+"

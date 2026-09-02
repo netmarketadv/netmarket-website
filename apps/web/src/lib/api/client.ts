@@ -29,7 +29,7 @@ type CollectionParams = {
 };
 
 function withParams(path: string, params: CollectionParams = {}): string {
-  const search = new URLSearchParams();
+const search = new URLSearchParams();
   if (params.page) search.set('page', String(params.page));
   if (params.perPage) search.set('per_page', String(params.perPage));
   if (params.featured !== undefined) search.set('featured', String(params.featured));
@@ -43,6 +43,11 @@ function withParams(path: string, params: CollectionParams = {}): string {
   return query ? `${path}?${query}` : path;
 }
 
+const cmsHeaders = {
+  Accept: 'application/json',
+  'User-Agent': 'NetmarketBuildBot/1.0 (+https://staging.netmarket.it)'
+};
+
 export async function fetchCms<TSchema extends z.ZodTypeAny>(
   path: string,
   schema: TSchema
@@ -50,7 +55,7 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   const env = getServerEnv();
   const publicEnv = getPublicEnv();
   const endpoint = new URL(path.replace(/^\//, ''), env.CMS_API_BASE_URL).toString();
-  const headers: Record<string, string> = { Accept: 'application/json' };
+  const headers: Record<string, string> = { ...cmsHeaders };
   if (env.CMS_BUILD_TOKEN) {
     headers.Authorization = `Bearer ${env.CMS_BUILD_TOKEN}`;
   } else if (env.CMS_BASIC_AUTH_USER && env.CMS_BASIC_AUTH_PASSWORD) {
