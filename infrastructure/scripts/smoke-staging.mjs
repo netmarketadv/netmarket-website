@@ -50,6 +50,16 @@ async function fetchHtml(attempt) {
 }
 
 function validateHtml(response, html) {
+  const debugContext = () => {
+    const contentType = response.headers.get('content-type') || 'unknown';
+    const snippet = html
+      .slice(0, 180)
+      .replace(/\s+/g, ' ')
+      .replace(/[^\x20-\x7e]/g, '')
+      .trim();
+    return `status ${response.status}, content-type ${contentType}, length ${html.length}, snippet "${snippet}"`;
+  };
+
   if (!response.ok) {
     throw new Error(`HTTP ${response.status} ${response.statusText}`);
   }
@@ -58,11 +68,11 @@ function validateHtml(response, html) {
   const environment = readMeta(html, 'netmarket-environment');
 
   if (!/^<!doctype html>|<html[\s>]/i.test(html)) {
-    throw new Error('documento HTML non riconosciuto.');
+    throw new Error(`documento HTML non riconosciuto (${debugContext()}).`);
   }
 
   if (!/<head[\s>]/i.test(html) || !/<body[\s>]/i.test(html)) {
-    throw new Error('head/body mancanti.');
+    throw new Error(`head/body mancanti (${debugContext()}).`);
   }
 
   if (!/<header\b[^>]*class=["'][^"']*site-header/i.test(html)) {
