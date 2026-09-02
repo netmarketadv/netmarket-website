@@ -138,6 +138,7 @@ export const caseStudySchema = baseContentSchema.extend({
   objectives: z.array(z.unknown()).default([]),
   approach: z.string().optional(),
   solution: z.string().optional(),
+  additionalContent: z.string().optional(),
   numericResults: z.array(metricSchema).or(z.array(z.unknown())).default([]),
   gallery: z.array(z.unknown()).default([]),
   services: z.array(relationSummarySchema).default([]),

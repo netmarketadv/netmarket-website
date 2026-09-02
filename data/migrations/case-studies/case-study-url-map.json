@@ -1,0 +1,58 @@
+[
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/app-mobile-programma-fedelta-sirene-blu/",
+    "newPath": "/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "futureProductionUrl": "https://netmarket.it/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "status": "migrate_noindex",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+    "newPath": "/progetti/sviluppo-crm-custom-venitaly/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-crm-custom-venitaly/",
+    "status": "migrate_noindex",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "newPath": "/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "status": "migrate",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "newPath": "/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "status": "migrate",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "newPath": "/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "status": "migrate",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "newPath": "/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "status": "migrate",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "newPath": "/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "futureProductionUrl": "https://netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "status": "migrate",
+    "redirectRequired": true
+  },
+  {
+    "legacyUrl": "https://netmarket.it/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+    "newPath": "/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "futureProductionUrl": "https://netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "status": "migrate",
+    "redirectRequired": true
+  }
+]

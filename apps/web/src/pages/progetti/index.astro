@@ -1,0 +1,126 @@
+---
+import { breadcrumbJsonLd, webPageJsonLd } from '@netmarket/seo';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Stack from '@/components/layout/Stack.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+  getProjectArchiveData,
+  projectClient,
+  projectDescription,
+  projectPath
+} from '@/lib/projects/content';
+
+const canonicalSiteUrl = 'https://netmarket.it';
+const { projects, source } = await getProjectArchiveData();
+const visibleProjects = projects.filter((project) => project.projectStatus === 'published');
+const featuredProject = visibleProjects.find((project) => project.featured) ?? visibleProjects[0];
+const remainingProjects = featuredProject
+  ? visibleProjects.filter((project) => project.slug !== featuredProject.slug)
+  : visibleProjects;
+const title = 'Progetti';
+const description =
+  'Una selezione di casi studio Netmarket: siti web, ecommerce, software, campagne e comunicazione costruiti su progetti reali.';
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Progetti', url: `${canonicalSiteUrl}/progetti/` }
+]);
+const pageSchema = webPageJsonLd({
+  title,
+  description,
+  canonicalPath: '/progetti/',
+  siteUrl: canonicalSiteUrl,
+  robots: 'index, follow'
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/progetti/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, pageSchema]}
+>
+  <Section labelledby="projects-title" class="projects-archive-hero">
+    <Container wide>
+      <div class="projects-archive-hero__inner" data-reveal="up">
+        <p class="nm-meta">Progetti Netmarket</p>
+        <h1 id="projects-title">Il lavoro reale, prima delle promesse.</h1>
+        <p>
+          Casi studio migrati dal sito legacy e preparati per la nuova architettura editoriale.
+          Ogni progetto conserva cliente, contenuti, media e dati SEO disponibili.
+        </p>
+      </div>
+    </Container>
+  </Section>
+
+  {
+    featuredProject && (
+      <Section compact labelledby="featured-project-title">
+        <Container wide>
+          <a
+            class="project-featured"
+            href={projectPath(featuredProject.slug)}
+            data-reveal="scale"
+            data-cursor-label="Guarda"
+          >
+            <div class="project-featured__media">
+              {featuredProject.cover && (
+                <img
+                  src={featuredProject.cover.url}
+                  alt={featuredProject.cover.alt}
+                  loading="eager"
+                  decoding="async"
+                />
+              )}
+            </div>
+            <div class="project-featured__body">
+              <p class="nm-meta">{projectClient(featuredProject)}</p>
+              <h2 id="featured-project-title">{featuredProject.title}</h2>
+              <p>{projectDescription(featuredProject)}</p>
+              <div class="project-service-list" aria-label="Servizi applicati">
+                {featuredProject.services.map((service) => (
+                  <span>{service.title}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        </Container>
+      </Section>
+    )
+  }
+
+  <Section labelledby="projects-index-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="project-index-heading" data-reveal="line">
+          <h2 id="projects-index-title">Archivio progetti.</h2>
+          <p>
+            {visibleProjects.length} casi studio disponibili. Fonte build: {source === 'cms' ? 'CMS' : 'snapshot migrazione'}.
+          </p>
+        </div>
+        <div class="project-index" data-reveal="up" data-reveal-stagger="1">
+          {
+            remainingProjects.map((project) => (
+              <a class="project-index-row" href={projectPath(project.slug)} data-cursor-label="Apri">
+                <div class="project-index-row__media">
+                  {project.cover && <img src={project.cover.url} alt={project.cover.alt} loading="lazy" decoding="async" />}
+                </div>
+                <div class="project-index-row__content">
+                  <span>{projectClient(project)}</span>
+                  <h3>{project.title}</h3>
+                  <p>{projectDescription(project)}</p>
+                </div>
+                <div class="project-index-row__meta">
+                  {project.services.slice(0, 3).map((service) => (
+                    <span>{service.title}</span>
+                  ))}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+</BaseLayout>

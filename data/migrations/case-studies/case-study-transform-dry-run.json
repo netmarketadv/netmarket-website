@@ -1,0 +1,616 @@
+[
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6312,
+      "legacyUrl": "https://netmarket.it/caso-studio/app-mobile-programma-fedelta-sirene-blu/",
+      "sourceChecksum": "49b3707c7c79520c64119d9140876426f793d3a96efff97cc82a4f9ac6185352"
+    },
+    "postType": "nm_case_study",
+    "slug": "app-mobile-programma-fedelta-sirene-blu",
+    "title": "App mobile e programma fedeltà Sirene Blu",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Sviluppo app Software custom Programma fedeltà Cliente Sirene Blu App mobile e programma fedeltà Sirene Blu Un ecosistema digitale per portare la carta fedeltà sempre con il cliente, collegare app, punti vendita e gestionale casse, e trasformare il programma loyalty in uno strumento di relazione e analisi. Anno 2025 Sirene Blu è una catena con oltre 70 negozi in Italia dedicati alla cura e all’igiene della persona e alla pulizia della casa. Un’insegna costruita su risparmio, assortimento, qualità e servizio, con un rapporto quotidiano e diretto con migliaia di clienti nei punti vendita.Il progetto affidato a Netmarket nasceva da un’esigenza precisa: trasformare il programma fedeltà in uno strumento digitale più accessibile, integrato e utile sia per il cliente finale sia per l’azienda.Netmarket ha sviluppato l’app mobile Sirene Blu e l’infrastruttura del programma fidelity, progettando un sistema capace di collegare carta fedeltà, anagrafica clienti, logiche di accumulo punti, sconti attivi, volantino mensile, punti vendita e gestionale casse.L’app permette ai clienti di avere la propria carta fedeltà sempre a portata di mano, accumulare punti, accedere a sconti immediati, visualizzare le promozioni disponibili, trovare il negozio più vicino e consultare il volantino mensile. Una soluzione semplice nell’esperienza utente, ma costruita su un impianto tecnico articolato.Il lavoro non si è limitato allo sviluppo dell’app. Netmarket ha progettato anche il programma fedeltà alla base del sistema: gestione dell’anagrafica, logiche di funzionamento, collegamento con i dati cliente e integrazione custom con il gestionale casse. Questo consente al programma fidelity di dialogare con l’operatività reale dei punti vendita, rendendo l’esperienza coerente tra app, negozio fisico e sistema gestionale. Il risultato è un ecosistema loyalty che oggi ha superato i 100.000 iscritti. Un dato importante non solo dal punto di vista quantitativo, ma anche strategico: il programma consente a Sirene Blu di costruire una relazione più diretta con i clienti, valorizzare promozioni e offerte, migliorare la fidelizzazione e raccogliere informazioni utili sui comportamenti d’acquisto.Per un’insegna retail con una rete ampia di punti vendita, la fidelity non è solo una carta sconto. È uno strumento di conoscenza. Permette di analizzare frequenza d’acquisto, preferenze, categorie più rilevanti, risposta alle promozioni e abitudini dei clienti nel tempo.Questo apre la strada ad attività più evolute: campagne mirate, offerte più pertinenti, analisi di mercato, segmentazione della base utenti e decisioni commerciali basate su dati reali.L’app Sirene Blu e il programma fedeltà rappresentano quindi un progetto digitale ad alto impatto: uno strumento pensato per semplificare l’esperienza del cliente, supportare i negozi e dare all’azienda una base dati solida su cui costruire strategie di marketing, vendita e relazione.Un progetto che racconta bene il modo in cui Netmarket lavora sui software custom: partire da un’esigenza concreta, costruire un sistema stabile, integrarlo con i processi esistenti e trasformarlo in valore misurabile per l’azienda. Risultati 100mila Il programma fedeltà Sirene Blu ha superato quota 100.000 utenti registrati. App mobile Carta fedeltà, sconti, punti vendita e volantino sempre accessibili da smartphone. Integrazione Collegamento tra programma fidelity, anagrafica clienti e gestionale casse.",
+      "numericResults": [
+        {
+          "value": "100mila",
+          "label": "Risultato dichiarato"
+        }
+      ]
+    },
+    "client": "Sirene Blu",
+    "services": [
+      "software-e-integrazioni"
+    ],
+    "unmappedServices": [],
+    "seo": {
+      "title": "App mobile e programma fedeltà | Caso Studio Sirene Blu",
+      "description": "Sviluppo app mobile, programma fidelity e integrazione custom con gestionale casse. Oltre 100.000 iscritti al programma fedeltà.",
+      "noindex": true,
+      "legacyCanonical": "",
+      "socialTitle": "App mobile e programma fedeltà Sirene Blu",
+      "socialDescription": "Sviluppo app mobile, programma fidelity e integrazione custom con gestionale casse. Oltre 100.000 iscritti al programma fedeltà.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket.webp"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket.webp",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-1.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-1.webp",
+          "filename": "sviluppo-app-sirene-blu-netmarket-1.webp",
+          "alt": "sviluppo-app-sirene-blu-netmarket-1",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-1.webp"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-2.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-2.webp",
+          "filename": "sviluppo-app-sirene-blu-netmarket-2.webp",
+          "alt": "sviluppo-app-sirene-blu-netmarket-2",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-2.webp"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-3.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-3.webp",
+          "filename": "sviluppo-app-sirene-blu-netmarket-3.webp",
+          "alt": "sviluppo-app-sirene-blu-netmarket-3",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-3.webp"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-4.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-4.webp",
+          "filename": "sviluppo-app-sirene-blu-netmarket-4.webp",
+          "alt": "sviluppo-app-sirene-blu-netmarket-4",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-4.webp"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-5.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-5.webp",
+          "filename": "sviluppo-app-sirene-blu-netmarket-5.webp",
+          "alt": "sviluppo-app-sirene-blu-netmarket-5",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-app-sirene-blu-netmarket-5.webp"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg",
+        "filename": "sirene-blu-logo.svg",
+        "alt": "logo cliente sirene blu",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "futureProductionUrl": "https://netmarket.it/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "warnings": [
+      "legacy_noindex"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6305,
+      "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-crm-custom-venitaly/",
+      "sourceChecksum": "7842c0825e588d7f61caac1c7fc945728babcbb91be50925cdaf21a8cd266033"
+    },
+    "postType": "nm_case_study",
+    "slug": "sviluppo-crm-custom-venitaly",
+    "title": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Sviluppo software Manutenzione Supporto documentale Cliente Venitaly Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo Un gestionale sviluppato da Netmarket per supportare le attività operative di VENITALY, con manutenzione continuativa, gestione degli account e interventi tecnici in contesti critici. Anno VENITALY utilizza un CRM custom sviluppato da Netmarket per gestire attività operative, dati e processi interni in modo più ordinato e strutturato. Netmarket ha seguito lo sviluppo del gestionale e continua ad affiancare il cliente con manutenzione applicativa, supporto tecnico e interventi evolutivi. In un contesto operativo critico, l’attività ha incluso anche il censimento degli account, l’aggiornamento delle credenziali e il blocco degli accessi non autorizzati. Un progetto meno visibile dal punto di vista estetico, ma centrale per raccontare una competenza concreta: la capacità di sviluppare e mantenere software gestionali custom, garantendo supporto tecnico e continuità operativa nel tempo. Risultati CRM custom Sviluppo di una piattaforma gestionale progettata sulle esigenze operative del cliente. Manutenzione costante Supporto tecnico continuativo per aggiornamenti, verifiche e gestione applicativa del sistema. Accessi controllati Censimento account, aggiornamento credenziali e blocco degli utenti non autorizzati.",
+      "numericResults": []
+    },
+    "client": "VENITALY",
+    "services": [
+      "software-e-integrazioni"
+    ],
+    "unmappedServices": [
+      "Supporto documentale"
+    ],
+    "seo": {
+      "title": "Software gestionale custom VENITALY | Caso Studio Netmarket",
+      "description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+      "noindex": true,
+      "legacyCanonical": "",
+      "socialTitle": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+      "socialDescription": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly-1024x576.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp",
+          "filename": "sviluppo-software-gestionale-venitaly-1024x576.webp",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-software-gestionale-venitaly.webp"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/venitaly-logo.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/venitaly-logo.svg",
+        "filename": "venitaly-logo.svg",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/venitaly-logo.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/sviluppo-crm-custom-venitaly/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-crm-custom-venitaly/",
+    "warnings": [
+      "legacy_noindex",
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6284,
+      "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+      "sourceChecksum": "813e46aac5158767b2c54f88c6aa065b9644883a18a1371f2e6483eec5d14f6e"
+    },
+    "postType": "nm_case_study",
+    "slug": "sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda",
+    "title": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Sviluppo web Shooting Cliente Rigomar Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda. Un progetto costruito per raccontare Rigomar in modo più chiaro, contemporaneo e credibile, attraverso strategia, sviluppo web e contenuti visuali dedicati. Anno 2024 Rigomar aveva bisogno di una presenza digitale capace di raccontare meglio il proprio valore nel mondo della produzione moda conto terzi. Netmarket ha sviluppato un progetto completo che ha unito strategia, sviluppo del nuovo sito istituzionale e shooting fotografico dedicato. Il lavoro ha permesso di chiarire il posizionamento dell’azienda, valorizzare i servizi e costruire un’immagine più contemporanea, autorevole e coerente con il target B2B. Il risultato è un sito essenziale, premium e orientato al contatto, supportato da contenuti visuali pensati per rafforzare la percezione del brand.",
+      "numericResults": []
+    },
+    "client": "Rigomar",
+    "services": [
+      "siti-web",
+      "content-production"
+    ],
+    "unmappedServices": [],
+    "seo": {
+      "title": "Sviluppo sito web e shooting | Caso Studio Rigomar",
+      "description": "Sviluppo sito web, shooting fotografico e comunicazione visuale per valorizzare un’azienda specializzata nella produzione moda conto terzi.",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+      "socialTitle": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+      "socialDescription": "Sviluppo sito web, shooting fotografico e comunicazione visuale per valorizzare un’azienda specializzata nella produzione moda conto terzi.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/06/shooting-azienda-produzione-moda-rigomar-netmarket.webp"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/shooting-azienda-produzione-moda-rigomar-netmarket.webp",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-rigomar--1024x576.webp",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-rigomar-.webp",
+          "filename": "sviluppo-sito-web-rigomar--1024x576.webp",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-rigomar-.webp"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/rigomar-logo-small-h.png",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/rigomar-logo-small-h.png",
+        "filename": "rigomar-logo-small-h.png",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/rigomar-logo-small-h.png"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "warnings": [
+      "missing_alt"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6277,
+      "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+      "sourceChecksum": "92f1ed70b12992b52d2aaf1b162d278c890501ccda5239676590e3c14bfef7d6"
+    },
+    "postType": "nm_case_study",
+    "slug": "sviluppo-sito-web-allestimenti-fieristici-albertini",
+    "title": "Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura.",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Analisi strategica SEO Sviluppo sito web Cliente Albertini Allestimenti Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura. Un sito istituzionale progettato per rinnovare l’immagine dell’azienda, valorizzare i casi studio e trasformare la navigazione in nuove richieste commerciali. Anno 2024 Risultato Il progetto ha trasformato il sito Albertini in una piattaforma più chiara, strutturata e orientata alla generazione di contatti qualificati. Analisi strategica Studio del posizionamento, dei competitor e dell’offerta Portfolio progetti Sezione dedicata alla raccolta e valorizzazione dei casi studio Lead generation Modulo con invio automatico del catalogo aziendale Albertini Allestimenti aveva bisogno di rinnovare completamente la propria presenza digitale, con un sito capace di raccontare in modo più chiaro servizi, competenze e progetti realizzati. Netmarket ha seguito il progetto partendo da analisi, studio grafico, analisi dei competitor, posizionamento, SEO research e definizione dell’alberatura. Il lavoro ha portato allo sviluppo di un nuovo sito istituzionale, con sezioni dedicate ai servizi, area casi studio e modulo per la richiesta automatizzata del catalogo. Il risultato è una piattaforma più moderna, ordinata e orientata al contatto, pensata per valorizzare l’esperienza di Albertini nel mondo degli allestimenti fieristici, degli showroom e dell’arredo contract.",
+      "numericResults": []
+    },
+    "client": "Albertini Allestimenti",
+    "services": [
+      "seo",
+      "siti-web"
+    ],
+    "unmappedServices": [],
+    "seo": {
+      "title": "Sviluppo sito web per allestimenti fieristici | Caso Studio Netmarket",
+      "description": "Caso studio Albertini Allestimenti: analisi, posizionamento, SEO research, sviluppo del nuovo sito istituzionale con portfolio e catalogo.",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+      "socialTitle": "Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura.",
+      "socialDescription": "Caso studio Albertini Allestimenti: analisi, posizionamento, SEO research, sviluppo del nuovo sito istituzionale con portfolio e catalogo.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-albertini-allestimenti.webp"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-albertini-allestimenti.webp",
+      "gallery": [],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/Logotipo-albertini-new.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/Logotipo-albertini-new.svg",
+        "filename": "Logotipo-albertini-new.svg",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/Logotipo-albertini-new.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "warnings": []
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6267,
+      "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+      "sourceChecksum": "c2da1c70f71ebbabb4042de99d71b2576212f3169fa38e59a11458417324a1b3"
+    },
+    "postType": "nm_case_study",
+    "slug": "sviluppo-sito-web-fotovoltaico-progetto-e",
+    "title": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Studio Sviluppo sito web Cliente Progetto-e Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale. Un sito progettato per valorizzare competenza tecnica, contenuti SEO e generazione di contatti qualificati nel settore energia. Anno 2025 Risultati Il nuovo sito Progetto-E è stato costruito per trasformare la presenza online dell’azienda in uno strumento più chiaro, autorevole e orientato alla crescita organica. WordPress Sito flessibile e aggiornabile SEO Struttura pensata per crescere su Google Landing Page Landing page e contenuti orientati al contatto Progetto-e aveva bisogno di un sito capace di raccontare in modo più chiaro la propria competenza nel fotovoltaico industriale e di supportare attività SEO, contenuti e lead generation. Netmarket ha sviluppato il nuovo sito web, lavorando su struttura, navigazione, identità visiva, contenuti e ottimizzazione organica. Il progetto ha incluso anche landing page commerciali, materiali scaricabili, campagne email integrate con Brevo e interventi tecnici post-pubblicazione. Il risultato è una presenza digitale più solida, pensata per valorizzare l’azienda come partner tecnico per imprese e realtà produttive interessate a soluzioni energetiche concrete",
+      "numericResults": []
+    },
+    "client": "Progetto-e",
+    "services": [
+      "siti-web"
+    ],
+    "unmappedServices": [
+      "Studio"
+    ],
+    "seo": {
+      "title": "Sviluppo sito web fotovoltaico | Caso Studio Progetto-e Netmarket",
+      "description": "Caso studio Progetto-e: sviluppo sito WordPress, SEO, contenuti e landing page per un’azienda del settore fotovoltaico. Scopri il progetto.",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/sviluppo-sito-web-fotovoltaico-progetto-e/",
+      "socialTitle": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+      "socialDescription": "Caso studio Progetto-e: sviluppo sito WordPress, SEO, contenuti e landing page per un’azienda del settore fotovoltaico. Scopri il progetto.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-progettoe.webp"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/06/sviluppo-sito-web-aziendale-progettoe.webp",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg",
+          "filename": "installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg",
+          "filename": "impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/logo1-progettoe-white-2.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/06/logo1-progettoe-white-2.svg",
+        "filename": "logo1-progettoe-white-2.svg",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/06/logo1-progettoe-white-2.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 6171,
+      "legacyUrl": "https://netmarket.it/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+      "sourceChecksum": "803f71c6e26a7ff224e51623ee73f7913f0aef6c4413429e35479fc43ad0e5bf"
+    },
+    "postType": "nm_case_study",
+    "slug": "sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa",
+    "title": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Studio Sviluppo E-commerce Cliente Pazzo Design Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua. Lo sviluppo digitale di un'azienda artigiana italiano che ora vende per oltre €3M/anno online. Anno 2022 Risultati Nel 2025 l’e‑commerce ha riportato dati degni di nota, segnale che l'infrastruttura fa esattamente quello per cui è progettata. +3M fatturato e-commerce €360 Valore medio dell'ordine +1,2M Utenti attivi nel 2025 Pazzo Design è un brand italiano specializzato in tavoli e sedie per la casa, nato dall’evoluzione di un’attività familiare attiva nell’arredamento da circa sessant’anni.Nel 2022 il marchio decide di portare online questa esperienza, dando vita all’e‑commerce per vendere tavoli allungabili, consolle, sedie e poltrone a un pubblico nazionale. L’obiettivo del progetto affidato a Netmarket era trasformare un know‑how fisico consolidato in un e‑commerce verticale capace di scalare, mantenendo la percezione di qualità ed affidabilità della realtà tradizionale.Serviva una piattaforma solida, con una struttura catalogo chiara e una UX cucita su un target non necessariamente “nativo digitale”, ma disposto a investire in prodotti d’arredo di fascia medio‑alta. Netmarket ha curato progettazione, sviluppo e successivi miglioramenti dell’e‑commerce: architettura informativa, struttura del catalogo, UX delle schede prodotto, processo di checkout e integrazione dei contenuti istituzionali.Nel tempo il sito è stato ottimizzato iterativamente: razionalizzazione delle categorie, gestione delle varianti, miglioramento della leggibilità su mobile e affinamento di elementi di fiducia (policy chiare, contatti e servizio clienti ben visibili).",
+      "numericResults": []
+    },
+    "client": "Pazzo Design",
+    "services": [
+      "ecommerce"
+    ],
+    "unmappedServices": [
+      "Studio"
+    ],
+    "seo": {
+      "title": "Sviluppo E-commerce Arredo Casa | Caso Studio Netmarket",
+      "description": "Caso studio e-commerce per tavoli e sedie: sviluppo, design e crescita fino a oltre 3M€ di fatturato. Scopri il progetto.",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+      "socialTitle": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+      "socialDescription": "Caso studio e-commerce per tavoli e sedie: sviluppo, design e crescita fino a oltre 3M€ di fatturato. Scopri il progetto.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2025/01/iPhone-Mockup-pazzodesign.jpg"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2025/01/iPhone-Mockup-pazzodesign.jpg",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2024/08/ecommerce-negozio-arredamento-1024x683.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2024/08/ecommerce-negozio-arredamento.jpg",
+          "filename": "ecommerce-negozio-arredamento-1024x683.jpg",
+          "alt": "agenzia creazione ecommerce professionali",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2024/08/ecommerce-negozio-arredamento.jpg"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2025/01/Tablet-Mockup-pazzo-design.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2025/01/Tablet-Mockup-pazzo-design.jpg",
+          "filename": "Tablet-Mockup-pazzo-design.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2025/01/Tablet-Mockup-pazzo-design.jpg"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/pazzodesign-logo2026.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/pazzodesign-logo2026.svg",
+        "filename": "pazzodesign-logo2026.svg",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/04/pazzodesign-logo2026.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "futureProductionUrl": "https://netmarket.it/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 5928,
+      "legacyUrl": "https://netmarket.it/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+      "sourceChecksum": "4eab9e614210329b7df9458bcd558068c0f15f2957598a4c7a4dbe65e529486f"
+    },
+    "postType": "nm_case_study",
+    "slug": "concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa",
+    "title": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "",
+      "solution": "",
+      "additionalContent": "Strategia Sviluppo web Concorsi a premi Gestione operativa Cliente Sirene Blu Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2024 Il concorso a premi Sirene Blu 2024 nasce con l’obiettivo di aumentare il traffico nei punti vendita e incentivare la partecipazione attiva dei clienti attraverso una meccanica semplice ma efficace, garantendo al tempo stesso una gestione completamente conforme dal punto di vista normativo.Il progetto richiedeva un coordinamento completo tra strategia, creatività, tecnologia e burocrazia, con vincoli legati alla normativa sui concorsi a premi, alla gestione delle anagrafiche e al rispetto del GDPR.Per questo abbiamo sviluppato un intervento integrato che ha coperto tutte le fasi: ideazione della meccanica e del concept, definizione del naming e dell’identità visiva, realizzazione dei materiali di comunicazione per stampa e digitale, sviluppo di una piattaforma web dedicata per il caricamento degli scontrini e la verifica immediata delle vincite, gestione completa degli aspetti burocratici e normativi, e integrazione dei dati nel rispetto delle normative sulla privacy.",
+      "numericResults": []
+    },
+    "client": "Sirene Blu",
+    "services": [
+      "siti-web",
+      "concorsi-a-premi"
+    ],
+    "unmappedServices": [
+      "Strategia"
+    ],
+    "seo": {
+      "title": "Sviluppo concorso a premi Sirene Blu 2024 - Netmarket",
+      "description": "",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+      "socialTitle": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+      "socialDescription": "Strategia Sviluppo web Concorsi a premi Gestione operativa Cliente Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno Il concorso a premi Sirene Blu 2024 nasce con l’obiettivo di aumentare il traffico nei punti vendita e incentivare la partecipazione attiva dei clienti attraverso una meccanica semplice ma efficace, garantendo al tempo stesso [&hellip;]",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-.jpg"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-.jpg",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-sirene-blu-2-1024x576.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-sirene-blu-2.jpg",
+          "filename": "branding-aziendale-sirene-blu-2-1024x576.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-sirene-blu-2.jpg"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale--1024x576.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-.jpg",
+          "filename": "branding-aziendale--1024x576.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2024/10/branding-aziendale-.jpg"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg",
+        "filename": "sirene-blu-logo.svg",
+        "alt": "logo cliente sirene blu",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/04/sirene-blu-logo.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "futureProductionUrl": "https://netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  },
+  {
+    "migration": {
+      "version": "case-study-migration-v1",
+      "source": "https://netmarket.it/wp-json/wp/v2/caso-studio",
+      "legacyId": 5210,
+      "legacyUrl": "https://netmarket.it/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+      "sourceChecksum": "8b7678bb7e72205f05cdaccb308d10071d16a12d612dadcc45348103340d2b5e"
+    },
+    "postType": "nm_case_study",
+    "slug": "casi-studio-strategia-digitale-ecommerce-brb",
+    "title": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+    "content": {
+      "shortDescription": "",
+      "context": "",
+      "challenge": "",
+      "objectives": [],
+      "approach": "Strategia Sviluppo web Social Media Cliente BRB Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2025 A fine 2025 il progetto BRB è stato completamente ripensato con l’obiettivo di fare un salto di qualità, passando da una gestione operativa dei social a una strategia strutturata e orientata alla crescita. In parallelo al lancio del nuovo e-commerce sviluppato da Netmarket, abbiamo analizzato il mercato degli integratori, le dinamiche dei competitor e le best practice di settore, definendo un sistema coordinato tra contenuti, piattaforma e acquisizione traffico. Come lo abbiamo sviluppato Analisi del progetto e del settore Definizione strategia multi-canale Nuova identità visiva social Struttura visuale del feed (griglia coordinata) Piano editoriale e calendario contenuti Sviluppo e-commerce completo Ottimizzazione SEO e struttura contenuti Come lo abbiamo realizzato Strategia e posizionamento Abbiamo ridefinito il progetto partendo dai dati e dal mercato, costruendo una strategia che integrasse social, contenuti e piattaforma e-commerce, con l’obiettivo di generare traffico qualificato e aumentare la conversione. Sistema contenuti e identità visiva È stata sviluppata una nuova linea visiva coerente e riconoscibile, progettata nel dettaglio anche a livello di griglia di pubblicazione, per aumentare la percezione del brand e migliorare la leggibilità dei contenuti. E-commerce e struttura SEO In contemporanea, abbiamo progettato e sviluppato il nuovo e-commerce, strutturato per intercettare traffico organico e supportare la conversione attraverso categorie, schede prodotto e contenuti editoriali. Risultati Nei primi 3 mesi successivi al lancio, il progetto ha mostrato una crescita significativa rispetto allo storico: +292% fatturato e-commerce +206% Ordini +39% Valore medio ordine +364% prodotti venduti",
+      "solution": "",
+      "additionalContent": "Strategia Sviluppo web Social Media Cliente BRB Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2025 A fine 2025 il progetto BRB è stato completamente ripensato con l’obiettivo di fare un salto di qualità, passando da una gestione operativa dei social a una strategia strutturata e orientata alla crescita. In parallelo al lancio del nuovo e-commerce sviluppato da Netmarket, abbiamo analizzato il mercato degli integratori, le dinamiche dei competitor e le best practice di settore, definendo un sistema coordinato tra contenuti, piattaforma e acquisizione traffico. Come lo abbiamo sviluppato Analisi del progetto e del settore Definizione strategia multi-canale Nuova identità visiva social Struttura visuale del feed (griglia coordinata) Piano editoriale e calendario contenuti Sviluppo e-commerce completo Ottimizzazione SEO e struttura contenuti Come lo abbiamo realizzato Strategia e posizionamento Abbiamo ridefinito il progetto partendo dai dati e dal mercato, costruendo una strategia che integrasse social, contenuti e piattaforma e-commerce, con l’obiettivo di generare traffico qualificato e aumentare la conversione. Sistema contenuti e identità visiva È stata sviluppata una nuova linea visiva coerente e riconoscibile, progettata nel dettaglio anche a livello di griglia di pubblicazione, per aumentare la percezione del brand e migliorare la leggibilità dei contenuti. E-commerce e struttura SEO In contemporanea, abbiamo progettato e sviluppato il nuovo e-commerce, strutturato per intercettare traffico organico e supportare la conversione attraverso categorie, schede prodotto e contenuti editoriali. Risultati Nei primi 3 mesi successivi al lancio, il progetto ha mostrato una crescita significativa rispetto allo storico: +292% fatturato e-commerce +206% Ordini +39% Valore medio ordine +364% prodotti venduti",
+      "numericResults": [
+        {
+          "value": "+292%",
+          "label": "Risultato dichiarato"
+        },
+        {
+          "value": "+206%",
+          "label": "Risultato dichiarato"
+        },
+        {
+          "value": "+39%",
+          "label": "Risultato dichiarato"
+        },
+        {
+          "value": "+364%",
+          "label": "Risultato dichiarato"
+        }
+      ]
+    },
+    "client": "BRB",
+    "services": [
+      "siti-web",
+      "social-media"
+    ],
+    "unmappedServices": [
+      "Strategia"
+    ],
+    "seo": {
+      "title": "Strategia digitale ed e-commerce BRB: caso studio completo",
+      "description": "Scopri il caso studio BRB: strategia multi-canale, nuovo e-commerce e crescita del +292% del fatturato. Un ecosistema digitale completo.",
+      "noindex": false,
+      "legacyCanonical": "https://netmarket.it/caso-studio/casi-studio-strategia-digitale-ecommerce-brb/",
+      "socialTitle": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+      "socialDescription": "Scopri il caso studio BRB: strategia multi-canale, nuovo e-commerce e crescita del +292% del fatturato. Un ecosistema digitale completo.",
+      "socialImage": "https://netmarket.it/wp-content/uploads/2026/01/gestione-social-media-creazione-contenuti-brand-alimentare.jpg"
+    },
+    "media": {
+      "featuredImage": "https://netmarket.it/wp-content/uploads/2026/01/gestione-social-media-creazione-contenuti-brand-alimentare.jpg",
+      "gallery": [
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/01/sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/01/sviluppo-ecommerce-brand-alimentare-padova.jpg",
+          "filename": "sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2026/01/sviluppo-ecommerce-brand-alimentare-padova.jpg"
+        },
+        {
+          "sourceUrl": "https://netmarket.it/wp-content/uploads/2025/01/feed-instagram-social-brb.png",
+          "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2025/01/feed-instagram-social-brb.png",
+          "filename": "feed-instagram-social-brb.png",
+          "alt": "",
+          "caption": "",
+          "isLogo": false,
+          "checksumSource": "https://netmarket.it/wp-content/uploads/2025/01/feed-instagram-social-brb.png"
+        }
+      ],
+      "clientLogo": {
+        "sourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/baracco-logo2026.svg",
+        "normalizedSourceUrl": "https://netmarket.it/wp-content/uploads/2026/04/baracco-logo2026.svg",
+        "filename": "baracco-logo2026.svg",
+        "alt": "",
+        "caption": "",
+        "isLogo": true,
+        "checksumSource": "https://netmarket.it/wp-content/uploads/2026/04/baracco-logo2026.svg"
+      }
+    },
+    "newUrl": "https://staging.netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "futureProductionUrl": "https://netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "warnings": [
+      "unmapped_service",
+      "missing_alt"
+    ]
+  }
+]

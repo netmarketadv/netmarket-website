@@ -21,7 +21,9 @@ export const publicEnvSchema = z.object({
 export const serverEnvSchema = z.object({
   CMS_API_BASE_URL: z.string().url(),
   CMS_GRAPHQL_URL: z.string().url().optional().or(z.literal('')),
-  CMS_BUILD_TOKEN: z.string().optional().or(z.literal(''))
+  CMS_BUILD_TOKEN: z.string().optional().or(z.literal('')),
+  CMS_BASIC_AUTH_USER: z.string().optional().or(z.literal('')),
+  CMS_BASIC_AUTH_PASSWORD: z.string().optional().or(z.literal(''))
 });
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>;

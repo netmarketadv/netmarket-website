@@ -48,9 +48,17 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   schema: TSchema
 ): Promise<z.output<TSchema>> {
   const env = getServerEnv();
+  const publicEnv = getPublicEnv();
   const endpoint = new URL(path.replace(/^\//, ''), env.CMS_API_BASE_URL).toString();
   const headers: Record<string, string> = { Accept: 'application/json' };
-  if (env.CMS_BUILD_TOKEN) headers.Authorization = `Bearer ${env.CMS_BUILD_TOKEN}`;
+  if (env.CMS_BUILD_TOKEN) {
+    headers.Authorization = `Bearer ${env.CMS_BUILD_TOKEN}`;
+  } else if (env.CMS_BASIC_AUTH_USER && env.CMS_BASIC_AUTH_PASSWORD) {
+    headers.Authorization = `Basic ${btoa(`${env.CMS_BASIC_AUTH_USER}:${env.CMS_BASIC_AUTH_PASSWORD}`)}`;
+  }
+  if (!headers.Authorization && publicEnv.PUBLIC_DEPLOY_ENV === 'local') {
+    throw new Error(`CMS endpoint ${path} skipped locally because CMS credentials are not configured.`);
+  }
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
@@ -63,7 +71,7 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   try {
     return parseEndpoint(path, schema, await response.json()) as z.output<TSchema>;
   } catch (error) {
-    if (getPublicEnv().PUBLIC_DEPLOY_ENV === 'local') {
+    if (publicEnv.PUBLIC_DEPLOY_ENV === 'local') {
       console.error(error);
     }
     throw error;

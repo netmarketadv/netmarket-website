@@ -29,6 +29,12 @@ Il sistema frontend dei servizi è documentato in `docs/service-system.md`. Le p
 
 I termini non vengono popolati automaticamente.
 
+## Frontend Projects
+
+Il sistema frontend dei progetti è documentato in `docs/project-system.md`. Le pagine `/progetti/` e `/progetti/[slug]/` usano `nm_case_study` come fonte primaria. Finche il CMS non contiene tutti i case study migrati e leggibili dal build, il frontend puo usare il fallback reale generato dagli snapshot legacy in `data/migrations/case-studies/`.
+
+Il campo `additional_content` su `nm_case_study` conserva testo legacy non classificabile in modo affidabile dentro `context`, `challenge`, `approach` o `solution`.
+
 ## Relazioni
 
 Le relazioni multi-valore usano meta multiple WordPress, non array serializzati. La proprieta di ogni relazione e documentata in `docs/content-relationship-map.md`.

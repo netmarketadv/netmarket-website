@@ -134,6 +134,8 @@ Shadow leggere per overlay, pannelli hero e CTA primarie. Niente drop shadow dur
 
 I casi studio devono usare immagini reali appena disponibili dal CMS o asset esportati nel frontend statico. Vietati placeholder che sembrano casi cliente. Media principali: aspect ratio 16:10 o 4:3; portrait solo se il contenuto lo richiede. Il CMS non e host pubblico indicizzabile per media SEO: gli asset SEO devono essere serviti dal frontend pubblico con nomi, alt e contesto corretti.
 
+Il sistema `/progetti/` usa un archivio editoriale con featured project e righe media-driven, non una griglia portfolio generica. Le detail page supportano hero visuale, metadata progetto, contenuto preservato, risultati dichiarati, gallery e progetto successivo. Le sezioni vuote non vengono renderizzate.
+
 ## 12. Iconography
 
 Icone minime, stroke 1.75-2px, 16-20px. Non introdurre librerie finche non serve un set ampio. Evitare icone decorative ripetute.

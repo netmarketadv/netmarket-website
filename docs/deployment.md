@@ -37,6 +37,10 @@ Secret/variables richiesti per staging:
 - `SG_SSH_PRIVATE_KEY`
 - `SG_SSH_KNOWN_HOSTS`
 - `SG_STAGING_DEPLOY_PATH`
+- `CMS_BASIC_AUTH_USER`
+- `CMS_BASIC_AUTH_PASSWORD`
+
+Le credenziali Basic Auth del CMS sono usate solo durante il build Astro per leggere `cms.netmarket.it` quando il dominio e protetto a livello server. Non hanno prefisso `PUBLIC_` e non vengono esposte al browser.
 
 Secret richiesti per CMS:
 
@@ -56,6 +60,7 @@ Variables richieste:
 - `PUBLIC_DEPLOY_ENV=staging`
 - `PUBLIC_BUILD_SHA` generato automaticamente dalla GitHub Action
 - `PUBLIC_BUILD_TIME` generato automaticamente dalla GitHub Action
+- `CMS_API_BASE_URL=https://cms.netmarket.it/wp-json/`
 - `NODE_VERSION=22` o `24`
 
 Ordine operativo:

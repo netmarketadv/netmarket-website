@@ -25,6 +25,8 @@ Endpoint pubblici read-only:
 
 Gli endpoint pubblici sono read-only, non espongono utenti, email o metadata amministrativi. Pagination con `page` e `per_page` o `perPage`, massimo 50.
 
+In staging il dominio CMS puo essere protetto da HTTP Basic Auth. Il build Astro supporta `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` come credenziali server-only per leggere gli endpoint durante la generazione statica. Se e disponibile `CMS_BUILD_TOKEN`, il token applicativo ha priorita sull'header Basic.
+
 Archivi:
 
 ```json
@@ -60,6 +62,8 @@ Le relazioni nelle response sono summary:
 ```
 
 Le immagini includono `id`, `url`, `alt`, `width`, `height`, `mimeType`, `srcset`, `sizes` e `focalPoint` quando disponibili.
+
+Case Study detail include anche `additionalContent` quando una migrazione legacy deve preservare testo non classificabile con sicurezza nelle sezioni strutturate. I metadata tecnici `migration_*` restano admin-only e non vengono esposti nelle API pubbliche.
 
 Endpoint admin autenticato:
 

@@ -6,7 +6,9 @@ Netmarket è un'agenzia italiana attiva dal 1986. Questo repository prepara la n
 
 ## Regola Di Produzione
 
-Non modificare, testare deploy, connettersi o usare come target operativo `netmarket.it`. Target consentiti: `staging.netmarket.it` e `cms.netmarket.it`.
+Non modificare, testare deploy o usare come target operativo di scrittura `netmarket.it`. Target operativi consentiti per scritture, deploy, test di pubblicazione e integrazioni sono solo `staging.netmarket.it` e `cms.netmarket.it`.
+
+Eccezione autorizzata per migrazione e audit contenuti: sono consentite richieste HTTP `GET` e `HEAD` read-only verso `https://netmarket.it` esclusivamente per crawl responsabile, inventory, confronto SEO, raccolta URL, analisi HTML, sitemap, robots, media pubblici e WordPress REST pubblico. Questa eccezione non autorizza login, POST/PUT/PATCH/DELETE, modifiche a WordPress legacy, installazione plugin, redirect, DNS, Search Console, robots/sitemap di produzione, cancellazioni, upload o qualunque operazione che cambi stato sul sito legacy.
 
 ## Branch E Deploy
 

@@ -41,6 +41,8 @@ jobs:
       PUBLIC_DEPLOY_ENV: staging
       PUBLIC_BUILD_SHA: ${{ github.sha }}
       CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
+      CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
       TARGET_HOST: staging.netmarket.it
     steps:
       - uses: actions/checkout@v4

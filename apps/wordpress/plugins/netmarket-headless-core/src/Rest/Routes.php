@@ -257,6 +257,7 @@ final class Routes
             'objectives' => $this->metaArray($post->ID, 'objectives'),
             'approach' => $this->metaString($post->ID, 'approach'),
             'solution' => $this->metaString($post->ID, 'solution'),
+            'additionalContent' => $this->metaString($post->ID, 'additional_content'),
             'numericResults' => $this->metaArray($post->ID, 'numeric_results'),
             'gallery' => $this->metaArray($post->ID, 'gallery'),
             'services' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_services'), ['nm_service']),

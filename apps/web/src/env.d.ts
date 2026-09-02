@@ -13,6 +13,8 @@ interface ImportMetaEnv {
   readonly CMS_API_BASE_URL?: string;
   readonly CMS_GRAPHQL_URL?: string;
   readonly CMS_BUILD_TOKEN?: string;
+  readonly CMS_BASIC_AUTH_USER?: string;
+  readonly CMS_BASIC_AUTH_PASSWORD?: string;
 }
 
 interface ImportMeta {
