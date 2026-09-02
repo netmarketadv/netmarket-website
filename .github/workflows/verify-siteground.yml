@@ -3,10 +3,17 @@ name: Verify SiteGround
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   verify:
     environment: staging
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: verify-siteground-staging
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
       - name: Read-only SSH verification

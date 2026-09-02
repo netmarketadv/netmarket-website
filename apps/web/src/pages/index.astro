@@ -21,11 +21,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { approvalSteps, clientLogos, cmsMedia, featureHighlights, googleTrust, insights, painPoints, proof, questions, serviceCards, trustBadges, workSteps } from '@/data/home';
 import { teamMembers } from '@/data/team';
 import { personJsonLd } from '@netmarket/seo';
-import { getPublicEnv } from '@/lib/env';
 
-const env = getPublicEnv();
+const canonicalSiteUrl = 'https://www.netmarket.it';
 const teamJsonLd = teamMembers.map((person) =>
-  personJsonLd(env.PUBLIC_SITE_URL, {
+  personJsonLd(canonicalSiteUrl, {
     id: person.id,
     name: person.fullName,
     givenName: person.givenName,
@@ -41,6 +40,7 @@ const teamJsonLd = teamMembers.map((person) =>
   title="Agenzia web, marketing e comunicazione a Padova"
   description="Netmarket progetta siti web, ecommerce, SEO, advertising, branding e comunicazione coordinata per aziende e PMI."
   path="/"
+  canonicalSiteUrl={canonicalSiteUrl}
   structuredData={teamJsonLd}
 >
   <section class="home-hero" aria-labelledby="page-title">
