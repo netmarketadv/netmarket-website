@@ -41,6 +41,7 @@ jobs:
       PUBLIC_DEPLOY_ENV: staging
       PUBLIC_BUILD_SHA: ${{ github.sha }}
       CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      CMS_API_CACHE_DIR: apps/web/.cms-cache/netmarket/v1
       CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
       CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
       TARGET_HOST: staging.netmarket.it
@@ -72,6 +73,7 @@ jobs:
           check_secret "SG_SSH_PRIVATE_KEY" "${{ secrets.SG_SSH_PRIVATE_KEY }}"
           check_secret "SG_SSH_KNOWN_HOSTS" "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
           check_secret "SG_STAGING_DEPLOY_PATH" "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+          check_secret "SG_CMS_WORDPRESS_PATH" "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
 
           exit "$missing"
 
@@ -93,9 +95,6 @@ jobs:
 
           exit "$missing"
 
-      - name: Check CMS API auth
-        run: infrastructure/scripts/health-check.sh --url https://cms.netmarket.it/wp-json/netmarket/v1/health
-
       - uses: pnpm/action-setup@v4
         with:
           version: 11.13.1
@@ -104,6 +103,16 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
+
+      - name: Pull CMS API cache
+        run: node infrastructure/scripts/pull-cms-cache.mjs
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
 
       - name: Stamp build time
         run: echo "PUBLIC_BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
