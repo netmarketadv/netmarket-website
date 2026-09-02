@@ -4376,13 +4376,14 @@ main {
   margin: 0;
   font-size: clamp(3.6rem, 11vw, 8.8rem);
   font-weight: 500;
-  line-height: 0.92;
+  line-height: 0.96;
   letter-spacing: -0.055em;
 }
 
 .projects-archive-hero__inner p:last-child,
 .project-detail-hero__grid > div > p:last-child {
   max-width: 42rem;
+  margin-top: clamp(1.5rem, 3vw, 2.75rem);
   color: var(--nm-color-text-muted);
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   line-height: 1.45;
