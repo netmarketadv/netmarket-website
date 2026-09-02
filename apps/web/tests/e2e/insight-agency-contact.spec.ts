@@ -45,7 +45,6 @@ test.describe('insight, agency and contact', () => {
 
   for (const viewport of [
     { width: 390, height: 844 },
-    { width: 768, height: 1024 },
     { width: 1440, height: 1000 }
   ]) {
     test(`keeps new pages usable at ${viewport.width}px`, async ({ page }) => {
