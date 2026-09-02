@@ -6,7 +6,7 @@ Lo staging statico viene pubblicato con `infrastructure/scripts/deploy-staging.s
 
 Il deploy usa `rsync -az --delete` senza `--checksum`, perché Astro produce asset fingerprinted e il confronto checksum rallenterebbe inutilmente il normale ciclo di sviluppo. Prima del deploy reale viene salvato uno snapshot `before-<sha>.tgz` della build online, esclusa `.well-known`, nella directory `.netmarket-backups` accanto al document root.
 
-Il deploy staging è volutamente rapido: installa le dipendenze frontend, esegue i test unit essenziali di `@netmarket/web`, genera la build Astro, pubblica via rsync e poi lancia uno smoke test remoto. Non esegue Composer, PHPStan, PHPCS o Playwright E2E completo.
+Il deploy staging è volutamente rapido: installa le dipendenze, esegue `pnpm check:fast`, pubblica via rsync e poi lancia smoke test remoti. Non esegue Composer, PHPStan, PHPCS o Playwright E2E completo.
 
 Ogni build pubblicata espone metadata verificabili:
 
@@ -14,9 +14,11 @@ Ogni build pubblicata espone metadata verificabili:
 - `meta[name="netmarket-build-time"]`
 - `meta[name="netmarket-environment"]`
 
-Lo smoke test verifica che `https://staging.netmarket.it` serva lo stesso SHA della run GitHub appena pubblicata, evitando deploy stale o cache non aggiornate senza dipendere da testi editoriali fragili.
+Gli smoke test verificano che `https://staging.netmarket.it` serva lo stesso SHA della run GitHub appena pubblicata, evitando deploy stale o cache non aggiornate senza dipendere da testi editoriali fragili. Dopo lo smoke HTTP (`pnpm smoke:staging`) viene eseguito anche `pnpm test:e2e:smoke` contro lo staging reale.
 
-La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su Pull Request verso `develop`/`main`, push diretti a `develop`/`main`, e manualmente. Non parte automaticamente a ogni push su `feature/*` o `fix/*`.
+`Quality Fast` vive in `quality-fast.yml`: gira su PR verso `develop` e manualmente. Usa path filtering, cancella run obsolete sullo stesso ref e include controlli rapidi proporzionati. Su push `develop`, `deploy-staging.yml` esegue direttamente `pnpm check:fast` prima del deploy per evitare una doppia installazione/build in workflow separati.
+
+La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su Pull Request verso `main`, push diretti a `main`, e manualmente. Non parte automaticamente a ogni push su `develop`, `feature/*` o `fix/*`.
 
 Rollback staging:
 

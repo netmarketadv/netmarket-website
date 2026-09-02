@@ -9,7 +9,10 @@ on:
       - 'packages/**'
       - 'infrastructure/scripts/deploy-staging.sh'
       - 'infrastructure/scripts/health-check.sh'
+      - 'infrastructure/scripts/pull-cms-cache.mjs'
       - 'infrastructure/scripts/smoke-staging.mjs'
+      - 'apps/web/playwright.smoke.config.ts'
+      - 'apps/web/tests/e2e-smoke/**'
       - '.github/workflows/deploy-staging.yml'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -31,7 +34,7 @@ jobs:
     name: Build, Deploy, Smoke
     environment: staging
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     concurrency:
       group: staging-deploy
       cancel-in-progress: true
@@ -41,6 +44,7 @@ jobs:
       PUBLIC_DEPLOY_ENV: staging
       PUBLIC_BUILD_SHA: ${{ github.sha }}
       CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      CMS_API_CACHE_DIR: ${{ github.workspace }}/apps/web/.cms-cache/netmarket/v1
       CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
       CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
       TARGET_HOST: staging.netmarket.it
@@ -72,6 +76,25 @@ jobs:
           check_secret "SG_SSH_PRIVATE_KEY" "${{ secrets.SG_SSH_PRIVATE_KEY }}"
           check_secret "SG_SSH_KNOWN_HOSTS" "${{ secrets.SG_SSH_KNOWN_HOSTS }}"
           check_secret "SG_STAGING_DEPLOY_PATH" "${{ secrets.SG_STAGING_DEPLOY_PATH }}"
+          check_secret "SG_CMS_WORDPRESS_PATH" "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
+
+          exit "$missing"
+
+      - name: Check CMS credentials
+        run: |
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required CMS secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "CMS_BASIC_AUTH_USER" "${{ secrets.CMS_BASIC_AUTH_USER }}"
+          check_secret "CMS_BASIC_AUTH_PASSWORD" "${{ secrets.CMS_BASIC_AUTH_PASSWORD }}"
 
           exit "$missing"
 
@@ -84,16 +107,23 @@ jobs:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
 
+      - name: Pull CMS API cache
+        run: node infrastructure/scripts/pull-cms-cache.mjs
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+
       - name: Stamp build time
         run: echo "PUBLIC_BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Fast frontend tests
-        run: pnpm --filter @netmarket/web test
-
-      - name: Build Astro frontend
-        run: pnpm --filter @netmarket/web build
+      - name: Fast checks and Astro build
+        run: pnpm check:fast
 
       - name: Dry-run deploy plan
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
@@ -119,5 +149,24 @@ jobs:
         if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
         run: pnpm smoke:staging
         env:
+          EXPECTED_BUILD_SHA: ${{ github.sha }}
+          EXPECTED_BUILD_ENV: staging
+
+      - name: Cache Playwright browsers
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright smoke browser
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
+
+      - name: Playwright smoke on staging
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: pnpm test:e2e:smoke
+        env:
+          PLAYWRIGHT_BASE_URL: https://staging.netmarket.it
           EXPECTED_BUILD_SHA: ${{ github.sha }}
           EXPECTED_BUILD_ENV: staging
