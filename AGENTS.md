@@ -34,6 +34,7 @@ Eccezione autorizzata per migrazione e audit contenuti: sono consentite richiest
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm test:e2e`
+- `pnpm audit:final`
 - `pnpm smoke:staging`
 - `pnpm migration:insights:cms`
 - `pnpm validate`
@@ -68,6 +69,16 @@ Eccezione pratica: `git push --force-with-lease` è consentito solo per corregge
 - L'import insight legge `data/migrations/insights/insight-transform-dry-run.json`, crea/aggiorna post WordPress `post`, importa o riusa media WordPress, popola metadati `nmhc_*`, mette in relazione i servizi quando esistono e salva gli slug servizio differiti in `nmhc_migration_related_service_slugs`.
 - Dopo import CMS: mettere in bozza contenuti demo come `Hello world!`, rigenerare la cache CMS, buildare con `CMS_API_CACHE_DIR` e deployare staging.
 - Quando si genera PHP dentro template JavaScript, fare attenzione agli escape: regex PHP come `\s` devono essere scritte come `\\s` nel template JS. Un escape sbagliato può corrompere testi SEO o contenuti durante l'import.
+
+## Final Audit E Go-Live Readiness
+
+- Il consolidamento finale parte sempre da `pnpm audit:final`: crawl legacy read-only, crawl staging, URL decision matrix, redirect master e manual review.
+- Gli output canonici sono in `data/final-audit/`, `docs/final-audit/` e `data/migrations/redirects-master.json`.
+- Non applicare redirect, robots production, sitemap production, IndexNow, Search Console, DNS o deploy produzione senza autorizzazione esplicita al go-live.
+- Prima di dichiarare il sito pronto al go-live devono essere risolti o accettati formalmente i blocker in `docs/final-audit/discovery-summary.md`.
+- La pagina `/nod/` e qualunque voce di navigazione/footer devono essere 200 crawlable su staging oppure rimossi/nascosti prima del go-live.
+- Servizi, progetti, clienti, team, risorse e recensioni devono arrivare da CMS quando esiste ownership editoriale; i fallback locali sono accettabili solo come ponte di sviluppo e devono essere dichiarati.
+- Le ricerche su Google/Bing/AI crawler vanno documentate in `docs/final-audit/search-ai-research.md` usando fonti ufficiali o risultati SERP datati.
 
 ## Qualità
 

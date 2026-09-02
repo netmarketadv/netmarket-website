@@ -35,11 +35,25 @@ Esito: `STAGING READY WITH WARNINGS`
 - [ ] Content validation CMS reale completata con credenziali e route contenuto disponibili.
 - [ ] Visual QA staging completata.
 - [ ] Performance/Lighthouse staging completata.
+- [x] Final audit crawler legacy read-only completato: 101 URL inventariati.
+- [x] Final audit crawler staging completato: 53 URL inventariati.
+- [x] URL decision matrix generata: 103 righe.
+- [x] Redirect master preliminare generato: 54 candidate redirect.
+- [x] Search/GEO/AI crawler research documentata con fonti ufficiali.
+- [x] Topic map, navigation architecture, homepage strategy, editorial style guide e go-live runbook creati.
+- [x] `/nod/` implementato nel codice e generato dalla build locale.
+- [ ] `/nod/` pubblicato e verificato su staging.
+- [ ] Servizi, case study, clienti, team, risorse e testimonial popolati nel CMS o fallback formalmente accettati.
+- [ ] Image alt review completata distinguendo immagini decorative e immagini contenuto.
+- [ ] Export Search Console/GA4/Bing/backlink importato per priorizzare redirect e contenuti.
 
 ## Bloccanti
 
-- Endpoint CMS contenuto `services` e `insights` non disponibili online (`404`), nonostante il plugin locale li registri.
-- Workflow `Deploy CMS Plugin` e `Verify SiteGround` presenti nel branch ma non ancora registrati su GitHub Actions.
+- CMS non è ancora source of truth per servizi, case study, clienti, team, risorse e testimonial.
+- `/nod/` è linkato su staging ma restituisce `404`.
+- La redirect strategy è pronta come bozza, ma non è ancora validata con dati Search Console, Analytics o backlink.
+- La visual QA completa su staging e la review alt immagini non sono ancora concluse.
+- Staging deve restare noindex; nessuna azione di produzione è autorizzata.
 
 ## Comandi Per Secret CMS
 
