@@ -56,6 +56,26 @@ const fallbackCaseStudyPriority: Record<string, string[]> = {
     'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
     'casi-studio-strategia-digitale-ecommerce-brb',
     'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
+  ],
+  ecommerce: [
+    'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+    'casi-studio-strategia-digitale-ecommerce-brb'
+  ],
+  'software-e-integrazioni': [
+    'app-mobile-programma-fedelta-sirene-blu',
+    'sviluppo-crm-custom-venitaly'
+  ],
+  seo: [
+    'sviluppo-sito-web-allestimenti-fieristici-albertini',
+    'casi-studio-strategia-digitale-ecommerce-brb',
+    'sviluppo-sito-web-fotovoltaico-progetto-e'
+  ],
+  'social-media': ['casi-studio-strategia-digitale-ecommerce-brb'],
+  'content-production': [
+    'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda'
+  ],
+  'concorsi-a-premi': [
+    'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
   ]
 };
 
@@ -66,6 +86,46 @@ const fallbackInsightPriority: Record<string, string[]> = {
     'migliore-web-agency-padova',
     'sfide-opportunita-vantaggi-sito-web',
     'importanza-del-mobile-friendly-design'
+  ],
+  ecommerce: [
+    'intelligenza-artificiale-vendite-ecommerce',
+    'statistiche-dati-ecommerce-2024',
+    '10-motivi-avere-e-commerce',
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane'
+  ],
+  'software-e-integrazioni': [
+    'software-gestionale-descrizione-sviluppo-vantaggi',
+    'intelligenza-artificiale-vendite-ecommerce'
+  ],
+  seo: [
+    'scegliere-migliore-agenzia-seo-business-padova',
+    'accessibilita-siti-web-obbligatoria-dal-2025',
+    'wordpress-scelta-migliore-per-sito-web-aziendale',
+    'migliore-web-agency-padova'
+  ],
+  advertising: [
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane',
+    'funnel-marketing-conversioni-coinvolgere-clienti',
+    'ia-marketing-social-commerce-no-cookie'
+  ],
+  'social-media': [
+    'le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai',
+    '2023-12-14-instagram-le-6-novita-per-il-2023',
+    '2023-12-14-2023-06-30-linkedin-novita-2023',
+    'ia-marketing-social-commerce-no-cookie'
+  ],
+  'branding-e-comunicazione': [
+    'migliorare-la-brand-reputation',
+    '2023-12-14-registra-subito-il-tuo-marchio'
+  ],
+  'content-production': [
+    'le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai',
+    'funnel-marketing-conversioni-coinvolgere-clienti',
+    'migliorare-la-brand-reputation'
+  ],
+  'concorsi-a-premi': [
+    'organizzare-concorsi-a-premi',
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane'
   ]
 };
 

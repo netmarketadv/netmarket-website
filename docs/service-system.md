@@ -90,11 +90,23 @@ I link sono normali `<a>` e restano crawlable.
 
 Quando il CMS non espone ancora relazioni complete, il dettaglio servizio puo usare snapshot reali gia validati come fallback per case study e insight, ordinati per pertinenza editoriale del servizio. Questo fallback non deve introdurre contenuti inventati e va sostituito da relazioni CMS appena disponibili.
 
-## Service Pilot
+## Service Content Packs
 
-`/servizi/siti-web/` e il modello pilota per le future pagine servizio. Usa un content pack transitorio in `apps/web/src/data/service-pilots.ts` per arricchire il payload CMS con copy, proof, FAQ, capability, tecnologie e related prioritizzati. Il template resta generalizzabile: i componenti leggono solo dati strutturati e non contengono copy hardcoded del servizio.
+`/servizi/siti-web/` ha validato il modello pilota. Lo stesso approccio ora copre tutto il set iniziale dei servizi in `apps/web/src/data/service-pilots.ts`: ogni servizio ha copy, proof, FAQ, capability, tecnologie quando pertinenti, related service e priorità editoriali distinte. Il template resta generalizzabile: i componenti leggono solo dati strutturati e non contengono copy hardcoded del servizio.
 
-Il content pack deve essere migrato in `nm_service` quando il CMS dispone di una pipeline contenuti sicura o di editing manuale approvato.
+I content pack devono essere migrati in `nm_service` quando il CMS dispone di una pipeline contenuti sicura o di editing manuale approvato. Finché `GET /services` non espone servizi pubblicati, restano fallback controllati per build e staging.
+
+Schede strategiche:
+
+- `docs/services/siti-web-content-strategy.md`;
+- `docs/services/ecommerce-content-strategy.md`;
+- `docs/services/software-e-integrazioni-content-strategy.md`;
+- `docs/services/seo-content-strategy.md`;
+- `docs/services/advertising-content-strategy.md`;
+- `docs/services/social-media-content-strategy.md`;
+- `docs/services/branding-e-comunicazione-content-strategy.md`;
+- `docs/services/content-production-content-strategy.md`;
+- `docs/services/concorsi-a-premi-content-strategy.md`.
 
 ## SEO
 

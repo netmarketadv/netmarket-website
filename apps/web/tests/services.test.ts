@@ -78,6 +78,38 @@ describe('service system', () => {
     );
   });
 
+  it('enriches every non-pilot service with distinct page content', async () => {
+    const slugs = [
+      'ecommerce',
+      'software-e-integrazioni',
+      'seo',
+      'advertising',
+      'social-media',
+      'branding-e-comunicazione',
+      'content-production',
+      'concorsi-a-premi'
+    ];
+
+    const pages = await Promise.all(slugs.map((slug) => getServiceDetailData(slug)));
+
+    for (const data of pages) {
+      expect(data).toBeDefined();
+      expect(data!.service.shortDescription?.length ?? 0).toBeGreaterThan(90);
+      expect(data!.service.valueProps.length).toBeGreaterThanOrEqual(4);
+      expect(data!.service.problems.length).toBeGreaterThanOrEqual(4);
+      expect(data!.service.process.length).toBeGreaterThanOrEqual(4);
+      expect(data!.service.results.length).toBeGreaterThanOrEqual(3);
+      expect(data!.service.faq.length).toBeGreaterThanOrEqual(4);
+      expect(data!.service.relatedServices.length).toBeGreaterThanOrEqual(4);
+      expect(data!.service.seo.title).not.toBe(data!.service.title);
+      expect((data!.service.seo.description ?? '').length).toBeGreaterThan(90);
+      expect(data!.related.insights.length).toBeGreaterThan(0);
+    }
+
+    const propositions = pages.map((data) => data!.service.subtitle);
+    expect(new Set(propositions).size).toBe(slugs.length);
+  });
+
   it('uses dedicated CMS transparent service visuals in the build fallback', () => {
     const imageBySlug = Object.fromEntries(
       serviceFallbacks.map((service) => [service.slug, service.image])
