@@ -1,6 +1,6 @@
 # Final Audit Discovery Summary
 
-Generated: 2026-09-02T11:21:16.265Z
+Generated: 2026-09-02T12:22:07.791Z
 
 ## Scope Completed
 
@@ -13,7 +13,7 @@ Generated: 2026-09-02T11:21:16.265Z
 ## Key Findings
 
 - Legacy inventory found 90 OK URLs, 11 errors and 23 pages missing meta description.
-- Staging inventory found 52 OK URLs and 1 error. Current staging 404: `/nod/`.
+- Staging inventory found 53 OK URLs and 0 error. Current staging 404: `/nod/`.
 - CMS API cache currently exposes 26 insights, but 0 services, 0 case studies, 0 clients, 0 people, 0 resources and 0 testimonials.
 - Services and projects still rely on validated fallback data during build; insight content is now imported in CMS.
 - Staging pages emit no missing titles/descriptions/H1 in the crawl, but image alt usage needs manual review because decorative and content images are mixed.

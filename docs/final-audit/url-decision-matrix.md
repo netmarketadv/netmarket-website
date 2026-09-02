@@ -1,6 +1,6 @@
 # URL Decision Matrix
 
-Generated: 2026-09-02T11:21:16.263Z
+Generated: 2026-09-02T12:22:07.790Z
 
 Traffic and backlink importance are intentionally left empty because no Search Console, Analytics or backlink exports were available in the repository during this pass.
 

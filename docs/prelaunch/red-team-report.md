@@ -10,80 +10,80 @@ Verifica prelaunch del nuovo sito Netmarket su target consentiti:
 - `staging.netmarket.it`
 - `cms.netmarket.it`
 
-`netmarket.it` rimane escluso da deploy, login, test distruttivi e modifiche. Eventuali verifiche sul dominio production sono consentite solo come richieste `GET`/`HEAD` read-only per migrazione o confronto.
+`netmarket.it` rimane escluso da deploy, login, test distruttivi e modifiche. Le richieste al dominio production sono consentite solo come `GET`/`HEAD` read-only per migrazione o confronto.
 
 ## Stato Sintetico
 
 Stato corrente: `STAGING READY WITH WARNINGS`
 
-Motivi:
+Evidenze:
 
-- Il dry-run del deploy staging sul branch `chore/prelaunch-hardening` e verde e conferma che il problema `rsync change_dir` e stato risolto.
-- Il deploy reale staging e verde sulla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33616676522`.
-- `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` risultano configurati sia come repository secret sia nell'environment `staging`.
-- Il CMS risponde, ma gli endpoint contenuto `services` e `insights` documentati tornano `404`; il frontend continua quindi a usare fallback/snapshot reali finche il plugin/API CMS online non viene riallineato.
-- La Quality GitHub del commit `53b5a99` e completata con successo, E2E incluso.
-- `staging.netmarket.it` serve la build `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc` e lo smoke remoto e passato.
+- Ultimo commit verificato: `99d79ffcfb38449a864d1e1f1b59c437e382098a`.
+- Quality GitHub verde: `https://github.com/netmarketadv/netmarket-website/actions/runs/33627611115`.
+- Deploy CMS Plugin verde: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629190214`.
+- Verify SiteGround verde: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629193220`.
+- Deploy Staging reale verde: `https://github.com/netmarketadv/netmarket-website/actions/runs/33629259420`.
+- Smoke remoto verde: `Smoke staging ok: build 99d79ffcfb38449a864d1e1f1b59c437e382098a su staging.`
+- `/nod/` pubblicato su staging con HTTP 200 e `x-robots-tag: noindex, nofollow, noarchive`.
+- `CMS_BASIC_AUTH_USER`, `CMS_BASIC_AUTH_PASSWORD`, `SG_CMS_WORDPRESS_PATH`, SSH e deploy path staging risultano configurati nei secret GitHub.
 
 ## Findings
 
 ### Critical
 
-- **CMS headless online non allineato alle route contenuto**  
-  Run dry-run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619`  
-  Esito deploy dry-run: success.  
-  Evidenza build: `CMS endpoint /services?per_page=50&sort=priority ha risposto con status 404` e warning analoghi su `/insights`.  
-  Impatto: servizi, progetti e insight possono essere generati dagli snapshot/fallback invece che dalla fonte CMS primaria. Il sito resta deployabile, ma la content source non e ancora production-ready.
+- Nessun blocker tecnico critico aperto sul deploy staging corrente.
 
 ### High
 
-- **Deploy staging precedente non operativo, ora corretto in dry-run**  
-  Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33611336296`  
-  Esito: failure nello step `Deploy`.  
-  Evidenza: `rsync: [Receiver] change_dir#1 "***/" failed: Permission denied (13)`.  
-  Correzione verificata: dry-run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615147619` completato con successo nello step `Dry-run deploy plan`.
-
-- **CMS workflow non ancora registrati su GitHub Actions**  
-  Evidenza: `gh workflow list` mostra `Deploy Staging`, `Quality` e `Dependabot Updates`, ma non `Deploy CMS Plugin` e `Verify SiteGround`.  
-  Impatto: finche questi workflow non arrivano sul default branch, il deploy CMS del plugin headless non puo essere avviato da Actions standard.
+- **Content source CMS non ancora completa come source of truth editoriale**  
+  Il flusso tecnico CMS e deploy funziona, ma il sito usa ancora fallback/snapshot reali per alcune aree quando i contenuti headless non sono presenti o completi. Impatto: staging e deploy sono funzionanti, ma prima del go-live va deciso formalmente se accettare i fallback o completare il popolamento CMS.
 
 ### Medium
 
 - **Node locale fuori engine**  
-  Evidenza: comandi locali riportano `Unsupported engine`, richiesto `>=22 <25`, locale `v26.7.0`.  
-  Impatto: le verifiche locali restano utili, ma non sono perfettamente allineate al runtime CI.
+  Evidenza: comandi locali riportano `Unsupported engine`, richiesto `>=22 <25`, locale `v26.7.0`. CI usa Node configurato dal workflow e passa.
+
+- **Staging intentionally noindex**  
+  `robots.txt` risponde `Disallow: /` e le pagine hanno header `x-robots-tag: noindex`. Corretto per staging, da non modificare prima del go-live autorizzato.
+
+- **Review alt immagini ancora manuale**  
+  Il crawler segnala immagini con `alt=""`. Molte sono decorative, ma prima del go-live serve review manuale per distinguere decorative reali da immagini contenuto.
 
 ## Hardening Applicato
 
-- `deploy-staging.sh` ora verifica prima di `rsync` che il path remoto esista e sia leggibile, attraversabile e scrivibile dall'utente SSH.
+- `deploy-staging.sh` verifica prima di `rsync` che il path remoto esista e sia leggibile, attraversabile e scrivibile dall'utente SSH.
 - `deploy-staging.sh` usa quoting piu robusto per il path remoto.
-- `deploy-staging.sh` ora esegue un probe temporaneo `touch/rm` e usa `--rsync-path "cd <deploy-path> && rsync"` per evitare problemi di `chdir` su path assoluti SiteGround.
-- `deploy-staging.yml` ora fallisce esplicitamente se mancano `CMS_BASIC_AUTH_USER` o `CMS_BASIC_AUTH_PASSWORD`.
-- `verify-siteground.yml` passa `SG_STAGING_DEPLOY_PATH` allo script di verifica.
-- `verify-siteground-connection.sh` verifica anche accesso read/write al path staging quando il secret e presente.
-- Le canonical e gli URL JSON-LD hardcoded nelle pagine editoriali sono stati normalizzati su `https://www.netmarket.it`, coerenti con homepage, servizi e sitemap production.
-- `content-validate.mjs` e `health-check.sh` ora producono errori leggibili quando il CMS protetto richiede Basic Auth.
-- I loader di servizi, progetti e insight riutilizzano l'archivio gia caricato quando la source e fallback/snapshot, evitando chiamate CMS ripetute sui dettagli e riducendo tempi/rumore CI.
+- `deploy-staging.sh` esegue un probe temporaneo `touch/rm` e usa `--rsync-path "cd <deploy-path> && rsync"`.
+- `deploy-staging.yml` fallisce esplicitamente se mancano `CMS_BASIC_AUTH_USER` o `CMS_BASIC_AUTH_PASSWORD`.
+- `deploy-cms.yml` ha `permissions: contents: read`, timeout, concurrency e guard sul path CMS.
+- `verify-siteground.yml` ha `permissions: contents: read`, timeout e concurrency.
+- Le canonical della homepage sono state normalizzate su `https://www.netmarket.it`, coerenti con pagine interne e sitemap production simulation.
+- `/nod/` e stato aggiunto a header, sitemap, test e documentazione.
+- Il final audit produce inventari, URL decision matrix, redirect master e manual review in `data/final-audit/` e `docs/final-audit/`.
 
-## Secret CMS
+## Verifiche Locali
 
-I secret sono presenti su GitHub. Per rigenerarli usare valori reali, non placeholder:
+- `pnpm validate`: success.
+- `pnpm test:e2e`: success, 26 test passati.
+- Production metadata simulation: success con `PUBLIC_SITE_URL=https://www.netmarket.it`, 54 pagine generate.
+- Secret scan: success.
+- `pnpm content:validate`: non eseguito con credenziali locali; senza Basic Auth il CMS risponde correttamente `401`.
 
-```bash
-gh auth status
-gh secret set CMS_BASIC_AUTH_USER --repo netmarketadv/netmarket-website --body "USERNAME_BASIC_AUTH_CMS"
-gh secret set CMS_BASIC_AUTH_PASSWORD --repo netmarketadv/netmarket-website --body "PASSWORD_BASIC_AUTH_CMS"
-```
+## Verifiche Remote
 
-Opzionale ma consigliato se si vuole duplicare anche nello scope `staging`:
+- Quality: success, inclusi lint, typecheck, unit, Astro build, WordPress, secret scan, E2E.
+- CMS plugin deploy: success, inclusi activate, harden e health check.
+- Verify SiteGround: success.
+- Deploy staging: success, inclusi cache CMS, fast frontend tests, build, deploy e smoke.
+- Smoke locale read-only su staging: success con SHA atteso.
+- `curl -I https://staging.netmarket.it/nod/`: HTTP 200, `x-robots-tag: noindex, nofollow, noarchive`.
+- `curl https://staging.netmarket.it/robots.txt`: `Disallow: /`.
+- `curl https://cms.netmarket.it/wp-json/`: HTTP 401, coerente con CMS protetto da Basic Auth.
 
-```bash
-gh secret set CMS_BASIC_AUTH_USER --repo netmarketadv/netmarket-website --env staging --body "USERNAME_BASIC_AUTH_CMS"
-gh secret set CMS_BASIC_AUTH_PASSWORD --repo netmarketadv/netmarket-website --env staging --body "PASSWORD_BASIC_AUTH_CMS"
-```
+## Prossime Verifiche Prima Del Go-Live
 
-## Prossime Verifiche
-
-- Portare `deploy-cms.yml` e `verify-siteground.yml` sul default branch oppure registrarli in GitHub Actions, poi rilanciare il deploy CMS per riallineare le route `/netmarket/v1/services` e `/netmarket/v1/insights`.
-- Eseguire deploy CMS quando il workflow sara registrato o dopo merge del branch di hardening.
-- Completare content validation reale quando le route contenuto CMS saranno disponibili.
+- Completare o accettare formalmente la source dati CMS per servizi, progetti, clienti, team, risorse e testimonial.
+- Completare visual QA manuale su staging.
+- Eseguire Lighthouse/performance staging.
+- Validare redirect strategy con dati Search Console, Analytics e backlink.
+- Non attivare production robots, DNS, IndexNow o Search Console senza autorizzazione esplicita al go-live.

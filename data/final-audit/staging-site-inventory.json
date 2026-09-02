@@ -1,7 +1,7 @@
 {
   "site": "staging",
   "baseUrl": "https://staging.netmarket.it/",
-  "crawledAt": "2026-09-02T11:13:25.427Z",
+  "crawledAt": "2026-09-02T12:21:52.880Z",
   "maxPages": 180,
   "discovered": {
     "sitemaps": [],
@@ -28,10 +28,10 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 48,
+      "elapsedMs": 113,
       "title": "Agenzia web, marketing e comunicazione a Padova | Netmarket",
       "description": "Netmarket progetta siti web, ecommerce, SEO, advertising, branding e comunicazione coordinata per aziende e PMI.",
-      "canonical": "https://staging.netmarket.it/",
+      "canonical": "https://www.netmarket.it/",
       "robots": "noindex, nofollow, noarchive",
       "h1": [
         "C o municazi o ne e marketing digitale a Pad o va"
@@ -63,7 +63,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1627,
+      "wordCount": 1629,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -463,12 +463,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -496,7 +496,7 @@
         "title": "Agenzia web, marketing e comunicazione a Padova | Netmarket",
         "description": "Netmarket progetta siti web, ecommerce, SEO, advertising, branding e comunicazione coordinata per aziende e PMI.",
         "type": "website",
-        "url": "https://staging.netmarket.it/"
+        "url": "https://www.netmarket.it/"
       },
       "preliminaryAction": "KEEP"
     },
@@ -507,7 +507,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 40,
+      "elapsedMs": 65,
       "title": "Servizi | Netmarket",
       "description": "Web, ecommerce, SEO, advertising, social, branding, contenuti e tecnologia in un sistema Netmarket coordinato.",
       "canonical": "https://www.netmarket.it/servizi/",
@@ -531,7 +531,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 785,
+      "wordCount": 787,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -840,13 +840,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -875,7 +875,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 42,
+      "elapsedMs": 93,
       "title": "Siti web | Netmarket",
       "description": "Siti web aziendali progettati con strategia, contenuti, SEO tecnica e componenti aggiornabili.",
       "canonical": "https://www.netmarket.it/servizi/siti-web/",
@@ -897,7 +897,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 538,
+      "wordCount": 540,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -961,12 +961,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -995,7 +995,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 39,
+      "elapsedMs": 46,
       "title": "Ecommerce | Netmarket",
       "description": "Ecommerce e cataloghi digitali collegati a UX, SEO, marketing e gestione operativa.",
       "canonical": "https://www.netmarket.it/servizi/ecommerce/",
@@ -1016,7 +1016,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 471,
+      "wordCount": 473,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1080,12 +1080,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -1114,7 +1114,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 39,
+      "elapsedMs": 47,
       "title": "SEO | Netmarket",
       "description": "SEO tecnica, contenuti e architettura per migliorare visibilità organica e qualità del sito.",
       "canonical": "https://www.netmarket.it/servizi/seo/",
@@ -1135,7 +1135,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 459,
+      "wordCount": 461,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1199,13 +1199,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -1234,7 +1234,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 46,
       "title": "Branding e comunicazione | Netmarket",
       "description": "Branding, copy e comunicazione coordinata per identità, materiali, campagne e presenza digitale.",
       "canonical": "https://www.netmarket.it/servizi/branding-e-comunicazione/",
@@ -1255,7 +1255,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 443,
+      "wordCount": 445,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1319,13 +1319,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -1354,7 +1354,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 47,
       "title": "Agenzia | Netmarket",
       "description": "Netmarket è un’agenzia di comunicazione, web e marketing a Padova attiva dal 1986.",
       "canonical": "https://www.netmarket.it/agenzia/",
@@ -1373,7 +1373,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 439,
+      "wordCount": 441,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1633,12 +1633,12 @@
         "https://staging.netmarket.it/servizi/branding-e-comunicazione/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -1672,7 +1672,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 47,
       "title": "Progetti | Netmarket",
       "description": "Una selezione di casi studio Netmarket: siti web, ecommerce, software, campagne e comunicazione costruiti su progetti reali.",
       "canonical": "https://www.netmarket.it/progetti/",
@@ -1690,7 +1690,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 664,
+      "wordCount": 666,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1803,6 +1803,7 @@
         "https://staging.netmarket.it/servizi/branding-e-comunicazione/",
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
         "https://staging.netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
@@ -1816,7 +1817,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -1845,7 +1845,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 123,
       "title": "Insight | Netmarket",
       "description": "Approfondimenti Netmarket su comunicazione, siti web, ecommerce, marketing digitale e tecnologia.",
       "canonical": "https://www.netmarket.it/insight/",
@@ -1863,7 +1863,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 698,
+      "wordCount": 700,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -1983,6 +1983,7 @@
         "https://staging.netmarket.it/servizi/branding-e-comunicazione/",
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -1998,7 +1999,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2021,13 +2021,133 @@
       "preliminaryAction": "MIGRATE"
     },
     {
+      "url": "https://staging.netmarket.it/nod/",
+      "finalUrl": "https://staging.netmarket.it/nod/",
+      "status": 200,
+      "ok": true,
+      "redirected": false,
+      "contentType": "text/html",
+      "elapsedMs": 49,
+      "title": "NØD | Lead, pipeline e follow-up | Netmarket",
+      "description": "NØD collega lead, pipeline, follow-up, automazioni e dati in un unico sistema commerciale sviluppato da Netmarket per le PMI.",
+      "canonical": "https://www.netmarket.it/nod/",
+      "robots": "noindex, nofollow, noarchive",
+      "h1": [
+        "O gni lead. Un pr o cess o . Nessuna o pp o rtunità lasciata al cas o ."
+      ],
+      "h2": [
+        "Servizi integrati",
+        "Netmarket dal 1986",
+        "Generare un lead è s o l o l’inizi o .",
+        "Il c o llegament o che mancava tra marketing e c o mmerciale.",
+        "Un s o l o ambiente. Dal prim o c o ntatt o al cliente.",
+        "O gni lead racc o nta una st o ria c o mpleta.",
+        "Il pr o cess o c o ntinua anche quand o nessun o l o sta c o ntr o lland o .",
+        "L’AI interviene d o ve può essere utile.",
+        "I lead arrivan o da p o sti diversi. NØD li p o rta nell o stess o pr o cess o .",
+        "Il marketing diventa più vicin o ai numeri che c o ntan o .",
+        "Utile quand o un lead vale tr o pp o per essere dimenticat o .",
+        "Il tu o ambiente. I tu o i dati.",
+        "Stiam o aprend o NØD a un grupp o di clienti Netmarket.",
+        "D o mande frequenti su NØD.",
+        "I lead ci s o n o . C o struiam o il pr o cess o che viene d o p o .",
+        "Servizi",
+        "Netmarket",
+        "Ris o rse",
+        "Netmarket Srl"
+      ],
+      "wordCount": 1830,
+      "images": [
+        {
+          "src": "https://staging.netmarket.it/netmarket-logo.svg",
+          "alt": "",
+          "loading": "",
+          "width": "140",
+          "height": "40"
+        },
+        {
+          "src": "https://staging.netmarket.it/netmarket-logo.svg",
+          "alt": "",
+          "loading": "",
+          "width": "150",
+          "height": "43"
+        },
+        {
+          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/Gold.png",
+          "alt": "iubenda Gold Partner",
+          "loading": "lazy",
+          "width": "",
+          "height": ""
+        },
+        {
+          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/BrevoPartnerPioneer2025.png",
+          "alt": "Brevo Partner Pioneer 2025",
+          "loading": "lazy",
+          "width": "",
+          "height": ""
+        },
+        {
+          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/netmarket-woocommerce-ecommerce-partner.webp",
+          "alt": "WooCommerce ecommerce partner",
+          "loading": "lazy",
+          "width": "",
+          "height": ""
+        },
+        {
+          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/netmarket-logo_2026_secondary.svg",
+          "alt": "",
+          "loading": "",
+          "width": "150",
+          "height": "43"
+        }
+      ],
+      "imageCount": 6,
+      "imagesMissingAlt": 3,
+      "internalLinks": [
+        "https://staging.netmarket.it/nod/",
+        "https://staging.netmarket.it/",
+        "https://staging.netmarket.it/servizi/",
+        "https://staging.netmarket.it/servizi/siti-web/",
+        "https://staging.netmarket.it/servizi/ecommerce/",
+        "https://staging.netmarket.it/servizi/seo/",
+        "https://staging.netmarket.it/servizi/branding-e-comunicazione/",
+        "https://staging.netmarket.it/agenzia/",
+        "https://staging.netmarket.it/progetti/",
+        "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/contatti/",
+        "https://staging.netmarket.it/servizi/software-e-integrazioni/",
+        "https://staging.netmarket.it/servizi/advertising/",
+        "https://staging.netmarket.it/servizi/social-media/",
+        "https://staging.netmarket.it/servizi/concorsi-a-premi/",
+        "https://staging.netmarket.it/design-system/"
+      ],
+      "externalLinks": [
+        "https://www.iubenda.com/privacy-policy/69986431",
+        "http://www.instagram.com/netmarket.it/",
+        "https://www.linkedin.com/company/netmarket-s.r.l./",
+        "https://www.facebook.com/Netmarket.adv/",
+        "https://share.google/DPsZDzWohdLvBMwmZ",
+        "https://www.iubenda.com/privacy-policy/69986431/cookie-policy"
+      ],
+      "structuredData": [
+        "Organization,WebSite,WebPage,Organization,BreadcrumbList,SoftwareApplication,FAQPage"
+      ],
+      "openGraph": {
+        "title": "NØD | Lead, pipeline e follow-up | Netmarket",
+        "description": "NØD collega lead, pipeline, follow-up, automazioni e dati in un unico sistema commerciale sviluppato da Netmarket per le PMI.",
+        "type": "website",
+        "url": "https://www.netmarket.it/nod/"
+      },
+      "preliminaryAction": "KEEP"
+    },
+    {
       "url": "https://staging.netmarket.it/contatti/",
       "finalUrl": "https://staging.netmarket.it/contatti/",
       "status": 200,
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 49,
       "title": "Contatti | Netmarket",
       "description": "Contatta Netmarket per siti web, ecommerce, marketing, comunicazione e progetti digitali.",
       "canonical": "https://www.netmarket.it/contatti/",
@@ -2044,7 +2164,7 @@
         "Netmarket",
         "Ris o rse"
       ],
-      "wordCount": 363,
+      "wordCount": 365,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -2102,11 +2222,11 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2135,7 +2255,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 48,
       "title": "Software e integrazioni | Netmarket",
       "description": "Software, CRM, automazioni e integrazioni per collegare processi, dati e strumenti aziendali.",
       "canonical": "https://www.netmarket.it/servizi/software-e-integrazioni/",
@@ -2156,7 +2276,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 456,
+      "wordCount": 458,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -2221,11 +2341,11 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2254,7 +2374,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 46,
       "title": "Advertising | Netmarket",
       "description": "Advertising digitale e campagne coordinate con creatività, landing page, dati e obiettivi.",
       "canonical": "https://www.netmarket.it/servizi/advertising/",
@@ -2275,7 +2395,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 424,
+      "wordCount": 426,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -2340,12 +2460,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2374,7 +2494,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 46,
       "title": "Social media | Netmarket",
       "description": "Gestione social media e produzione contenuti con strategia, format e continuità editoriale.",
       "canonical": "https://www.netmarket.it/servizi/social-media/",
@@ -2395,7 +2515,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 435,
+      "wordCount": 437,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -2460,12 +2580,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2494,7 +2614,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 45,
       "title": "Concorsi a premi | Netmarket",
       "description": "Concorsi a premi e iniziative promozionali con ideazione, sviluppo, comunicazione e gestione.",
       "canonical": "https://www.netmarket.it/servizi/concorsi-a-premi/",
@@ -2515,7 +2635,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 440,
+      "wordCount": 442,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -2580,12 +2700,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/social-media/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -2608,120 +2728,13 @@
       "preliminaryAction": "MIGRATE"
     },
     {
-      "url": "https://staging.netmarket.it/nod/",
-      "finalUrl": "https://staging.netmarket.it/nod/",
-      "status": 404,
-      "ok": false,
-      "redirected": false,
-      "contentType": "text/html",
-      "elapsedMs": 36,
-      "title": "Pagina non trovata | Netmarket",
-      "description": "La pagina richiesta non è disponibile.",
-      "canonical": "https://staging.netmarket.it/404/",
-      "robots": "noindex, nofollow, noarchive",
-      "h1": [
-        "Pagina n o n tr o vata"
-      ],
-      "h2": [
-        "Servizi integrati",
-        "Netmarket dal 1986",
-        "Servizi",
-        "Netmarket",
-        "Ris o rse",
-        "Netmarket Srl"
-      ],
-      "wordCount": 278,
-      "images": [
-        {
-          "src": "https://staging.netmarket.it/netmarket-logo.svg",
-          "alt": "",
-          "loading": "",
-          "width": "140",
-          "height": "40"
-        },
-        {
-          "src": "https://staging.netmarket.it/netmarket-logo.svg",
-          "alt": "",
-          "loading": "",
-          "width": "150",
-          "height": "43"
-        },
-        {
-          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/Gold.png",
-          "alt": "iubenda Gold Partner",
-          "loading": "lazy",
-          "width": "",
-          "height": ""
-        },
-        {
-          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/BrevoPartnerPioneer2025.png",
-          "alt": "Brevo Partner Pioneer 2025",
-          "loading": "lazy",
-          "width": "",
-          "height": ""
-        },
-        {
-          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/netmarket-woocommerce-ecommerce-partner.webp",
-          "alt": "WooCommerce ecommerce partner",
-          "loading": "lazy",
-          "width": "",
-          "height": ""
-        },
-        {
-          "src": "https://cms.netmarket.it/wp-content/uploads/2026/09/netmarket-logo_2026_secondary.svg",
-          "alt": "",
-          "loading": "",
-          "width": "150",
-          "height": "43"
-        }
-      ],
-      "imageCount": 6,
-      "imagesMissingAlt": 3,
-      "internalLinks": [
-        "https://staging.netmarket.it/nod/",
-        "https://staging.netmarket.it/",
-        "https://staging.netmarket.it/servizi/",
-        "https://staging.netmarket.it/servizi/siti-web/",
-        "https://staging.netmarket.it/servizi/ecommerce/",
-        "https://staging.netmarket.it/servizi/seo/",
-        "https://staging.netmarket.it/servizi/branding-e-comunicazione/",
-        "https://staging.netmarket.it/agenzia/",
-        "https://staging.netmarket.it/progetti/",
-        "https://staging.netmarket.it/insight/",
-        "https://staging.netmarket.it/contatti/",
-        "https://staging.netmarket.it/servizi/software-e-integrazioni/",
-        "https://staging.netmarket.it/servizi/advertising/",
-        "https://staging.netmarket.it/servizi/social-media/",
-        "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/design-system/"
-      ],
-      "externalLinks": [
-        "http://www.instagram.com/netmarket.it/",
-        "https://www.linkedin.com/company/netmarket-s.r.l./",
-        "https://www.facebook.com/Netmarket.adv/",
-        "https://share.google/DPsZDzWohdLvBMwmZ",
-        "https://www.iubenda.com/privacy-policy/69986431",
-        "https://www.iubenda.com/privacy-policy/69986431/cookie-policy"
-      ],
-      "structuredData": [
-        "Organization,WebSite,WebPage"
-      ],
-      "openGraph": {
-        "title": "Pagina non trovata | Netmarket",
-        "description": "La pagina richiesta non è disponibile.",
-        "type": "website",
-        "url": "https://staging.netmarket.it/404/"
-      },
-      "preliminaryAction": "REMOVE_410"
-    },
-    {
       "url": "https://staging.netmarket.it/design-system/",
       "finalUrl": "https://staging.netmarket.it/design-system/",
       "status": 200,
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 42,
+      "elapsedMs": 49,
       "title": "Design System | Netmarket",
       "description": "Pagina interna di sviluppo per il design system Netmarket.",
       "canonical": "https://staging.netmarket.it/design-system/",
@@ -2759,7 +2772,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1638,
+      "wordCount": 1640,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3111,12 +3124,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
-        "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/"
+        "https://staging.netmarket.it/servizi/concorsi-a-premi/"
       ],
       "externalLinks": [
         "https://share.google/DPsZDzWohdLvBMwmZ",
@@ -3154,7 +3167,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 47,
       "title": "Content production | Netmarket",
       "description": "Produzione contenuti per siti, campagne, social e materiali commerciali.",
       "canonical": "https://www.netmarket.it/servizi/content-production/",
@@ -3175,7 +3188,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 446,
+      "wordCount": 448,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3240,12 +3253,12 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3274,7 +3287,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 46,
       "title": "Strategia digitale ed e-commerce BRB: caso studio completo | Netmarket",
       "description": "Scopri il caso studio BRB: strategia multi-canale, nuovo e-commerce e crescita del +292% del fatturato. Un ecosistema digitale completo.",
       "canonical": "https://www.netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
@@ -3293,7 +3306,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 632,
+      "wordCount": 634,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3372,13 +3385,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3407,7 +3420,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 136,
       "title": "Sviluppo concorso a premi Sirene Blu 2024 - Netmarket | Netmarket",
       "description": "Caso studio Netmarket.",
       "canonical": "https://www.netmarket.it/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
@@ -3425,7 +3438,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 512,
+      "wordCount": 514,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3504,13 +3517,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
         "https://staging.netmarket.it/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3539,7 +3552,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 50,
       "title": "Sviluppo E-commerce Arredo Casa | Caso Studio Netmarket | Netmarket",
       "description": "Caso studio e-commerce per tavoli e sedie: sviluppo, design e crescita fino a oltre 3M€ di fatturato. Scopri il progetto.",
       "canonical": "https://www.netmarket.it/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
@@ -3557,7 +3570,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 574,
+      "wordCount": 576,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3636,13 +3649,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3671,7 +3684,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 47,
       "title": "Sviluppo sito web fotovoltaico | Caso Studio Progetto-e Netmarket | Netmarket",
       "description": "Caso studio Progetto-e: sviluppo sito WordPress, SEO, contenuti e landing page per un’azienda del settore fotovoltaico. Scopri il progetto.",
       "canonical": "https://www.netmarket.it/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
@@ -3689,7 +3702,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 531,
+      "wordCount": 533,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3768,13 +3781,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3803,7 +3816,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 47,
       "title": "Sviluppo sito web per allestimenti fieristici | Caso Studio Netmarket | Netmarket",
       "description": "Caso studio Albertini Allestimenti: analisi, posizionamento, SEO research, sviluppo del nuovo sito istituzionale con portfolio e catalogo.",
       "canonical": "https://www.netmarket.it/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
@@ -3820,7 +3833,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 550,
+      "wordCount": 552,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -3885,13 +3898,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -3920,7 +3933,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 39,
+      "elapsedMs": 49,
       "title": "Sviluppo sito web e shooting | Caso Studio Rigomar | Netmarket",
       "description": "Sviluppo sito web, shooting fotografico e comunicazione visuale per valorizzare un’azienda specializzata nella produzione moda conto terzi.",
       "canonical": "https://www.netmarket.it/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
@@ -3938,7 +3951,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 500,
+      "wordCount": 502,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4010,6 +4023,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/content-production/",
         "https://staging.netmarket.it/progetti/sviluppo-crm-custom-venitaly/",
@@ -4017,7 +4031,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4046,7 +4059,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 48,
       "title": "Software gestionale custom VENITALY | Caso Studio Netmarket | Netmarket",
       "description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
       "canonical": "https://www.netmarket.it/progetti/sviluppo-crm-custom-venitaly/",
@@ -4064,7 +4077,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 519,
+      "wordCount": 521,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4136,13 +4149,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/progetti/app-mobile-programma-fedelta-sirene-blu/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4171,7 +4184,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 46,
       "title": "App mobile e programma fedeltà | Caso Studio Sirene Blu | Netmarket",
       "description": "Sviluppo app mobile, programma fidelity e integrazione custom con gestionale casse. Oltre 100.000 iscritti al programma fedeltà.",
       "canonical": "https://www.netmarket.it/progetti/app-mobile-programma-fedelta-sirene-blu/",
@@ -4190,7 +4203,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 836,
+      "wordCount": 838,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4290,13 +4303,13 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/servizi/software-e-integrazioni/",
         "https://staging.netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4325,7 +4338,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 47,
       "title": "Black Friday 2025: tendenze e strategie vincenti per le PMI italiane | Netmarket",
       "description": "Prepara in anticipo il Black Friday e il Cyber Monday per testare nuove strategie di vendita e generare fino al 30% del fatturato in più.",
       "canonical": "https://www.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
@@ -4343,7 +4356,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 880,
+      "wordCount": 882,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4408,6 +4421,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
         "https://staging.netmarket.it/insight/le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai/",
@@ -4416,7 +4430,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4446,7 +4459,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 46,
       "title": "Accessibilità siti web obbligatoria dal 2025: come adeguarsi | Netmarket",
       "description": "Dal 28 giugno 2025 il tuo sito web dovrà essere accessibile per legge. Tutte le aziende che offrono servizi digitali dovranno adeguarsi",
       "canonical": "https://www.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -4464,7 +4477,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1174,
+      "wordCount": 1176,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4529,6 +4542,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai/",
@@ -4537,7 +4551,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4567,7 +4580,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 102,
       "title": "Le 8 Novità di Instagram per il 2025: Reel, Caroselli e Meta AI | Netmarket",
       "description": "Novità di Instagram 2025: dai Reel privati e caroselli fino a 20 slide, intelligenza artificiale Meta AI. Scopri cosa cambierà e preparati!",
       "canonical": "https://www.netmarket.it/insight/le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai/",
@@ -4594,7 +4607,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1423,
+      "wordCount": 1425,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4659,6 +4672,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -4667,7 +4681,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4698,7 +4711,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 47,
       "title": "L'Intelligenza Artificiale Incrementa le Vendite del Tuo E-commerce - Netmarket | Netmarket",
       "description": "Scopri il nuovo algoritmo di Instagram nel 2024: rivoluzione dell",
       "canonical": "https://www.netmarket.it/insight/intelligenza-artificiale-vendite-ecommerce/",
@@ -4723,7 +4736,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1011,
+      "wordCount": 1013,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4788,6 +4801,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -4796,7 +4810,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4826,7 +4839,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 40,
+      "elapsedMs": 47,
       "title": "Statistiche eCommerce 2024: dati, nuove tendenze e strategie - Netmarket | Netmarket",
       "description": "Il settore dell",
       "canonical": "https://www.netmarket.it/insight/statistiche-dati-ecommerce-2024/",
@@ -4849,7 +4862,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1279,
+      "wordCount": 1281,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -4914,6 +4927,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -4922,7 +4936,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -4952,7 +4965,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 48,
       "title": "Funnel Marketing: Ottimizza Conversioni e Coinvolgi Clienti - Netmarket | Netmarket",
       "description": "copri come ottimizzare il tuo funnel di marketing digitale per massimizzare le conversioni e coinvolgere i clienti nel tuo business online",
       "canonical": "https://www.netmarket.it/insight/funnel-marketing-conversioni-coinvolgere-clienti/",
@@ -4976,7 +4989,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1155,
+      "wordCount": 1157,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5041,6 +5054,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5049,7 +5063,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5085,7 +5098,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 48,
       "title": "Software gestionale: cos’è, a cosa serve e come semplifica il lavoro - Netmarket | Netmarket",
       "description": "Scopri come un software gestionale personalizzato e ben progettato può ottimizzare la tua azienda e migliorare l",
       "canonical": "https://www.netmarket.it/insight/software-gestionale-descrizione-sviluppo-vantaggi/",
@@ -5103,7 +5116,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1334,
+      "wordCount": 1336,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5168,6 +5181,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5176,7 +5190,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5206,7 +5219,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 54,
       "title": "10 Motivi per cui dovresti avere un E-commerce nel 2026 - Netmarket | Netmarket",
       "description": "Scopri 10 motivi per cui dovresti avere un",
       "canonical": "https://www.netmarket.it/insight/10-motivi-avere-e-commerce/",
@@ -5235,7 +5248,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1567,
+      "wordCount": 1569,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5300,6 +5313,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5308,7 +5322,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5340,7 +5353,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 37,
+      "elapsedMs": 48,
       "title": "Scegliere la migliore agenzia SEO per il tuo business - Netmarket | Netmarket",
       "description": "Ecco come scegliere la migliore agenzia SEO per migliorare il posizionamento sui motori di ricerca. Leggi l",
       "canonical": "https://www.netmarket.it/insight/scegliere-migliore-agenzia-seo-business-padova/",
@@ -5367,7 +5380,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1450,
+      "wordCount": 1452,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5432,6 +5445,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5440,7 +5454,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5471,7 +5484,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 35,
+      "elapsedMs": 50,
       "title": "Insight - pagina 2 | Netmarket",
       "description": "Archivio degli approfondimenti Netmarket.",
       "canonical": "https://www.netmarket.it/insight/2/",
@@ -5496,7 +5509,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 667,
+      "wordCount": 669,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5603,6 +5616,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/organizzare-concorsi-a-premi/",
         "https://staging.netmarket.it/insight/wordpress-scelta-migliore-per-sito-web-aziendale/",
@@ -5618,7 +5632,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5647,7 +5660,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 34,
+      "elapsedMs": 48,
       "title": "Organizzare Concorsi a Premi: Quanto è Importante? - Netmarket | Netmarket",
       "description": "Scopri come organizzare concorsi a premi di successo affidandoti a Netmarket. Esperienza e professionalità per il tuo brand.",
       "canonical": "https://www.netmarket.it/insight/organizzare-concorsi-a-premi/",
@@ -5665,7 +5678,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1106,
+      "wordCount": 1108,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5730,6 +5743,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5738,7 +5752,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5770,7 +5783,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 35,
+      "elapsedMs": 131,
       "title": "Perchè scegliere Wordpress per il tuo Sito Web - Netmarket | Netmarket",
       "description": "Scopri perché WordPress è la scelta migliore per il tuo sito web aziendale. Facile, sicuro e personalizzabile.",
       "canonical": "https://www.netmarket.it/insight/wordpress-scelta-migliore-per-sito-web-aziendale/",
@@ -5797,7 +5810,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1375,
+      "wordCount": 1377,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5862,6 +5875,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5870,7 +5884,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -5902,7 +5915,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 40,
+      "elapsedMs": 45,
       "title": "Come Migliorare la Tua Brand Reputation con il Digital Marketing - Netmarket | Netmarket",
       "description": "Scopri come il digital marketing può migliorare la tua brand reputation. Affidati a una web agency esperta.",
       "canonical": "https://www.netmarket.it/insight/migliorare-la-brand-reputation/",
@@ -5923,7 +5936,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1038,
+      "wordCount": 1040,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -5988,6 +6001,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -5996,7 +6010,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6031,7 +6044,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 34,
+      "elapsedMs": 46,
       "title": "Cosa fa una Web Agency? - Netmarket | Netmarket",
       "description": "Scopri come scegliere migliore web agency e trasformare la tua presenza online. Approfondimenti su servizi digitali e agenzia web a Padova.",
       "canonical": "https://www.netmarket.it/insight/migliore-web-agency-padova/",
@@ -6049,7 +6062,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 862,
+      "wordCount": 864,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6107,6 +6120,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6115,7 +6129,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6146,7 +6159,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 34,
+      "elapsedMs": 45,
       "title": "L’IA non sarà l’unico trending topic del 2024: Social Commerce, S.. | Netmarket",
       "description": "Dall",
       "canonical": "https://www.netmarket.it/insight/ia-marketing-social-commerce-no-cookie/",
@@ -6164,7 +6177,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 816,
+      "wordCount": 818,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6229,6 +6242,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6237,7 +6251,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6266,7 +6279,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 42,
+      "elapsedMs": 47,
       "title": "E-mail Marketing: 7 Consigli Utili | Netmarket",
       "description": "Leggi l",
       "canonical": "https://www.netmarket.it/insight/2023-12-14-limportanza-del-mobile-friendly-design-per-il-tuo-sito-web/",
@@ -6284,7 +6297,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 888,
+      "wordCount": 890,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6349,6 +6362,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6357,7 +6371,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6387,7 +6400,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 46,
       "title": "Convenzione delle Nazioni Unite: Privacy | Netmarket",
       "description": "Leggi l",
       "canonical": "https://www.netmarket.it/insight/https-netmarket-it-2023-06-20-convezione-delle-nazioni-unite-come-la-situazione-dei-diritti-della-privacy/",
@@ -6405,7 +6418,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 859,
+      "wordCount": 861,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6470,6 +6483,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6478,7 +6492,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6507,7 +6520,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 40,
+      "elapsedMs": 47,
       "title": "REGISTRA SUBITO IL TUO MARCHIO - Netmarket | Netmarket",
       "description": "Leggi il seguente articolo per scoprire perchè è di fondamentale importanza registrare il marchio della tua azienda.",
       "canonical": "https://www.netmarket.it/insight/2023-12-14-registra-subito-il-tuo-marchio/",
@@ -6525,7 +6538,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 563,
+      "wordCount": 565,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6590,6 +6603,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6598,7 +6612,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6629,7 +6642,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 39,
+      "elapsedMs": 49,
       "title": "Maximulta a Meta dal garante privacy irlandese: 1,2 miliardi di euro - Netmarket | Netmarket",
       "description": "Meta, la società proprietaria di Facebook, Instagram e Whatsapp, ha ricevuto una massiccia multa di 1,2 miliardi di euro dal Garante privacy irlandese (DPC) il 22 maggio 2023.",
       "canonical": "https://www.netmarket.it/insight/maxi-multa-a-meta/",
@@ -6647,7 +6660,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 723,
+      "wordCount": 725,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6705,6 +6718,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6713,7 +6727,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6742,7 +6755,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 48,
       "title": "Insight - pagina 3 | Netmarket",
       "description": "Archivio degli approfondimenti Netmarket.",
       "canonical": "https://www.netmarket.it/insight/3/",
@@ -6766,7 +6779,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 607,
+      "wordCount": 609,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6852,6 +6865,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/2023-12-14-instagram-le-6-novita-per-il-2023/",
         "https://staging.netmarket.it/insight/2023-12-14-2023-06-30-linkedin-novita-2023/",
@@ -6866,7 +6880,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -6895,7 +6908,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 45,
       "title": "INSTAGRAM: LE 6 NOVITÀ PER IL 2023 - Netmarket | Netmarket",
       "description": "Leggi l",
       "canonical": "https://www.netmarket.it/insight/2023-12-14-instagram-le-6-novita-per-il-2023/",
@@ -6913,7 +6926,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 679,
+      "wordCount": 681,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -6978,6 +6991,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -6986,7 +7000,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7016,7 +7029,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 106,
       "title": "LINKEDIN: NOVITÀ 2023 - Netmarket | Netmarket",
       "description": "Scopri tutte le novità per il social di Linkedin per il 2023",
       "canonical": "https://www.netmarket.it/insight/2023-12-14-2023-06-30-linkedin-novita-2023/",
@@ -7034,7 +7047,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 810,
+      "wordCount": 812,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7099,6 +7112,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7107,7 +7121,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7136,7 +7149,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 38,
+      "elapsedMs": 47,
       "title": "L'Importanza del Sito Web: Sfide, Opportunità e Vantaggi - Netmarket | Netmarket",
       "description": "Leggi l",
       "canonical": "https://www.netmarket.it/insight/sfide-opportunita-vantaggi-sito-web/",
@@ -7154,7 +7167,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 886,
+      "wordCount": 888,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7219,6 +7232,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7227,7 +7241,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7256,7 +7269,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 39,
+      "elapsedMs": 46,
       "title": "L'Importanza del Mobile-Friendly Design per il Tuo Sito Web - Netmarket | Netmarket",
       "description": "L",
       "canonical": "https://www.netmarket.it/insight/importanza-del-mobile-friendly-design/",
@@ -7275,7 +7288,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 861,
+      "wordCount": 863,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7340,6 +7353,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7348,7 +7362,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7377,7 +7390,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 711,
+      "elapsedMs": 48,
       "title": "THREADS: NUOVO SOCIAL DI META? - Netmarket | Netmarket",
       "description": "Nell’ultimo periodo, Twitter sta avendo un calo drastico di iscritti, dovuta da una forte delusione delle nuove novità introdotte da Elon Mask.",
       "canonical": "https://www.netmarket.it/insight/threads-nuovo-social-di-meta/",
@@ -7395,7 +7408,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 630,
+      "wordCount": 632,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7453,6 +7466,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7461,7 +7475,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7490,7 +7503,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 60,
+      "elapsedMs": 46,
       "title": "RECENSIONI ONLINE: CREATE DALL’UOMO O DAL “AI”? - Netmarket | Netmarket",
       "description": "Le intelligenze artificiali come l’apprezzatissimo ChatGPT stanno diventando sempre più presenti nella nostra vita quotidiana e non si limitano ad elaborare i dati forniti e processarli…",
       "canonical": "https://www.netmarket.it/insight/recensioni-online-create-dalluomo-o-dal-ai/",
@@ -7508,7 +7521,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 864,
+      "wordCount": 866,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7566,6 +7579,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7574,7 +7588,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7603,7 +7616,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 49,
       "title": "Il passaggio da Google Analytics a GA4 - Netmarket | Netmarket",
       "description": "Dal primo luglio 2023 Google Analytics, la piattaforma di analisi web utilizzata da milioni di aziende in tutto il mondo per monitorare il traffico del sito web e analizzare il…",
       "canonical": "https://www.netmarket.it/insight/il-passaggio-da-google-analytics-a-ga4-tutto-quello-che-devi-sapere/",
@@ -7625,7 +7638,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 985,
+      "wordCount": 987,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7683,6 +7696,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7691,7 +7705,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7720,7 +7733,7 @@
       "ok": true,
       "redirected": false,
       "contentType": "text/html",
-      "elapsedMs": 36,
+      "elapsedMs": 49,
       "title": "5 APP PER LA PRODUTTIVITA’: ecco come diventare efficienti - Netmarket | Netmarket",
       "description": "Aumentare la produttività personale e aziendale è un obiettivo di fondamentale importanza per qualsiasi imprenditore, ma può risultare estremamente impegnativo.",
       "canonical": "https://www.netmarket.it/insight/5-app-per-la-produttivita-ecco-come-diventare-efficienti/",
@@ -7738,7 +7751,7 @@
         "Ris o rse",
         "Netmarket Srl"
       ],
-      "wordCount": 1248,
+      "wordCount": 1250,
       "images": [
         {
           "src": "https://staging.netmarket.it/netmarket-logo.svg",
@@ -7796,6 +7809,7 @@
         "https://staging.netmarket.it/agenzia/",
         "https://staging.netmarket.it/progetti/",
         "https://staging.netmarket.it/insight/",
+        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/contatti/",
         "https://staging.netmarket.it/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/",
         "https://staging.netmarket.it/insight/accessibilita-siti-web-obbligatoria-dal-2025/",
@@ -7804,7 +7818,6 @@
         "https://staging.netmarket.it/servizi/advertising/",
         "https://staging.netmarket.it/servizi/social-media/",
         "https://staging.netmarket.it/servizi/concorsi-a-premi/",
-        "https://staging.netmarket.it/nod/",
         "https://staging.netmarket.it/design-system/"
       ],
       "externalLinks": [
@@ -7836,18 +7849,17 @@
     "site": "staging",
     "baseUrl": "https://staging.netmarket.it/",
     "pages": 53,
-    "ok": 52,
+    "ok": 53,
     "redirects": 0,
-    "errors": 1,
+    "errors": 0,
     "missingTitle": 0,
     "missingDescription": 0,
     "missingH1": 0,
     "duplicateH1Urls": 1,
     "imagesMissingAlt": 228,
     "actions": {
-      "KEEP": 2,
+      "KEEP": 3,
       "MIGRATE": 46,
-      "REMOVE_410": 1,
       "NOINDEX": 4
     }
   }

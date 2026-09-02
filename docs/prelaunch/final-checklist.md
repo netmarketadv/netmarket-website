@@ -22,16 +22,17 @@ Esito: `STAGING READY WITH WARNINGS`
 - [x] GitHub secrets audit eseguito per nomi, senza leggere valori.
 - [x] `CMS_BASIC_AUTH_USER` configurato su GitHub.
 - [x] `CMS_BASIC_AUTH_PASSWORD` configurato su GitHub.
-- [x] Quality GitHub completata con E2E verde per `53b5a99`.
+- [x] Quality GitHub completata con E2E verde per `99d79ff`.
 - [x] Hardening deploy path applicato.
 - [x] Hardening verifica SiteGround applicato.
 - [x] Hardening CMS credentials applicato nel deploy workflow.
 - [x] Content validation CMS reale tentata: fallisce con `401` per Basic Auth mancante.
 - [x] Deploy Staging dry-run completato con successo: run `33615147619`.
 - [x] Cache fallback contenuti applicata per evitare chiamate dettaglio CMS ripetute.
-- [ ] `Verify SiteGround` registrato/rilanciato con controllo path.
-- [x] `Deploy Staging` reale completato con successo: run `33616676522`.
-- [x] Smoke staging completato con SHA atteso: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`.
+- [x] `Verify SiteGround` registrato/rilanciato con controllo path: run `33629193220`.
+- [x] `Deploy CMS Plugin` reale completato con successo: run `33629190214`.
+- [x] `Deploy Staging` reale completato con successo: run `33629259420`.
+- [x] Smoke staging completato con SHA atteso: `99d79ffcfb38449a864d1e1f1b59c437e382098a`.
 - [ ] Content validation CMS reale completata con credenziali e route contenuto disponibili.
 - [ ] Visual QA staging completata.
 - [ ] Performance/Lighthouse staging completata.
@@ -42,15 +43,14 @@ Esito: `STAGING READY WITH WARNINGS`
 - [x] Search/GEO/AI crawler research documentata con fonti ufficiali.
 - [x] Topic map, navigation architecture, homepage strategy, editorial style guide e go-live runbook creati.
 - [x] `/nod/` implementato nel codice e generato dalla build locale.
-- [ ] `/nod/` pubblicato e verificato su staging.
+- [x] `/nod/` pubblicato e verificato su staging: HTTP 200 e `x-robots-tag: noindex, nofollow, noarchive`.
 - [ ] Servizi, case study, clienti, team, risorse e testimonial popolati nel CMS o fallback formalmente accettati.
 - [ ] Image alt review completata distinguendo immagini decorative e immagini contenuto.
 - [ ] Export Search Console/GA4/Bing/backlink importato per priorizzare redirect e contenuti.
 
 ## Bloccanti
 
-- CMS non è ancora source of truth per servizi, case study, clienti, team, risorse e testimonial.
-- `/nod/` è linkato su staging ma restituisce `404`.
+- CMS non è ancora source of truth completa per servizi, case study, clienti, team, risorse e testimonial.
 - La redirect strategy è pronta come bozza, ma non è ancora validata con dati Search Console, Analytics o backlink.
 - La visual QA completa su staging e la review alt immagini non sono ancora concluse.
 - Staging deve restare noindex; nessuna azione di produzione è autorizzata.

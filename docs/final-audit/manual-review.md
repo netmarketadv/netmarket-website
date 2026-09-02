@@ -1,6 +1,6 @@
 # Manual Review
 
-Generated: 2026-09-02T11:21:16.264Z
+Generated: 2026-09-02T12:22:07.791Z
 
 | Category | Severity | URL | Issue | Suggested action |
 | --- | --- | --- | --- | --- |
@@ -61,12 +61,12 @@ Generated: 2026-09-02T11:21:16.264Z
 | CONTENT | MEDIUM | https://staging.netmarket.it/agenzia/ | 15 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/progetti/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/insight/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
+| CONTENT | MEDIUM | https://staging.netmarket.it/nod/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/contatti/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/servizi/software-e-integrazioni/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/servizi/advertising/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/servizi/social-media/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/servizi/concorsi-a-premi/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
-| TECHNICAL | HIGH | https://staging.netmarket.it/nod/ | Staging URL returns 404. | Fix link or create target page |
 | CONTENT | MEDIUM | https://staging.netmarket.it/design-system/ | 22 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/servizi/content-production/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |
 | CONTENT | MEDIUM | https://staging.netmarket.it/progetti/casi-studio-strategia-digitale-ecommerce-brb/ | 3 images missing alt or intentionally decorative alt need review. | Verify decorative images vs content images |

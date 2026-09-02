@@ -400,6 +400,13 @@
   },
   {
     "category": "CONTENT",
+    "url": "https://staging.netmarket.it/nod/",
+    "issue": "3 images missing alt or intentionally decorative alt need review.",
+    "severity": "MEDIUM",
+    "suggestedAction": "Verify decorative images vs content images"
+  },
+  {
+    "category": "CONTENT",
     "url": "https://staging.netmarket.it/contatti/",
     "issue": "3 images missing alt or intentionally decorative alt need review.",
     "severity": "MEDIUM",
@@ -432,13 +439,6 @@
     "issue": "3 images missing alt or intentionally decorative alt need review.",
     "severity": "MEDIUM",
     "suggestedAction": "Verify decorative images vs content images"
-  },
-  {
-    "category": "TECHNICAL",
-    "url": "https://staging.netmarket.it/nod/",
-    "issue": "Staging URL returns 404.",
-    "severity": "HIGH",
-    "suggestedAction": "Fix link or create target page"
   },
   {
     "category": "CONTENT",
