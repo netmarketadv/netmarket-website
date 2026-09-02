@@ -20,6 +20,8 @@ Gli smoke test verificano che `https://staging.netmarket.it` serva lo stesso SHA
 
 Misura del 2026-09-02: il deploy staging del commit `eece167d74da38772218ce02fea53c9e6e30ea7e` ha completato in 2m56s, includendo pull cache CMS, install, `pnpm check:fast`, deploy, smoke HTTP e Playwright smoke post deploy.
 
+Misura successiva con cache browser Playwright già disponibile: il deploy staging del commit `b9d14e0e2a375d7d2e703178ef740e7ea044b89b` ha completato in 2m19s.
+
 La QA completa vive in `quality.yml`: ESLint, TypeScript, Vitest, build Astro, PHP lint, PHPCS, PHPStan, secret scan e Playwright E2E completo sono separati in job paralleli. Può richiedere più tempo e viene eseguita su Pull Request verso `main`, push diretti a `main`, e manualmente. Non parte automaticamente a ogni push su `develop`, `feature/*` o `fix/*`.
 
 Rollback staging:

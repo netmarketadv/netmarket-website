@@ -29,6 +29,7 @@ Rilevazioni locali del 2026-09-02, con Node locale `v26.7.0` fuori range progett
 - After: `pnpm test:e2e` passa in circa 1.3 minuti localmente usando build statica e `astro preview`.
 - After GitHub PR `Quality Fast`: job principale `fast-checks` 1m32s, `wordpress-fast` 12s, `secrets-fast` 19s.
 - After GitHub `Deploy Staging`: 2m56s end-to-end con cache CMS, `pnpm check:fast`, deploy, smoke HTTP e Playwright smoke. Prima esecuzione con download/cache browser Playwright inclusi.
+- After GitHub `Deploy Staging` con cache Playwright già disponibile: 2m19s end-to-end.
 - After GitHub staging smoke: Playwright smoke remoto 4.7s; smoke locale contro `https://staging.netmarket.it` 1.8s.
 
 Gli E2E usano build statica + `astro preview`, non `astro dev`, per evitare flakiness da Vite dependency optimization e per avvicinare i test a staging/produzione.
