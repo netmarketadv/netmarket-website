@@ -193,10 +193,11 @@ Regole:
 
 Regole:
 
-- Full viewport width tramite viewport interno; il contenuto puo stare dentro una sezione contenuta, ma il rail visivo deve attraversare tutto lo schermo.
+- Full viewport width sul componente; il contenuto testuale resta allineato alla griglia, ma il rail visivo deve attraversare tutto lo schermo.
 - Una sola riga orizzontale, senza wrapping, box, card, bordi o ombre.
 - Movimento automatico continuo, lineare, lento, da destra verso sinistra.
-- Gap ampio e respirato: circa 60-110px desktop, 36-64px mobile.
+- Gap compatto e respirato: circa 22-62px desktop, 20-38px mobile. Evitare slot larghi che fanno sembrare i loghi piccoli o dispersi.
+- Loghi visibili e generosi: altezza ottica circa 48-84px desktop e 38-58px mobile, normalizzata con `visualScale`.
 - Fade laterale con CSS mask per evitare tagli duri ai bordi viewport.
 - Loghi data-driven con `name`, `logo`, `href?`, `visualScale?`.
 - `visualScale` serve per normalizzare otticamente loghi con formati diversi, senza alterare i file sorgenti.

@@ -91,18 +91,18 @@ export type ClientLogo = {
 };
 
 export const clientLogos = [
-  { name: 'Despar', logo: `${cmsUploadsBase}/despar-logo.png`, visualScale: 1.08 },
-  { name: 'Morato', logo: `${cmsUploadsBase}/morato-logo.png`, visualScale: 1.08 },
-  { name: 'Tigotà', logo: `${cmsUploadsBase}/tigota-logo.png`, visualScale: 1.02 },
-  { name: 'Unieuro', logo: `${cmsUploadsBase}/unieuro-logo.png`, visualScale: 1.12 },
-  { name: 'Porsche', logo: `${cmsUploadsBase}/porsche-logo.png`, visualScale: 1.18 },
-  { name: 'Mercedes-Benz', logo: `${cmsUploadsBase}/mercedes-logo.png`, visualScale: 1.08 },
-  { name: 'Kartell', logo: `${cmsUploadsBase}/kartell-logo.png`, visualScale: 1.04 },
-  { name: 'Baracco', logo: `${cmsUploadsBase}/baracco-logo2026.png`, visualScale: 1.16 },
-  { name: 'Sirene Blu', logo: `${cmsUploadsBase}/sirene-blu-logo.png`, visualScale: 1.1 },
-  { name: 'Albertini Allestimenti', logo: `${cmsUploadsBase}/Logotipo-albertini-new.png`, visualScale: 1.2 },
-  { name: 'Pazzo Design', logo: `${cmsUploadsBase}/pazzodesign-logo2026.png`, visualScale: 1.12 },
-  { name: 'Orofino', logo: `${cmsUploadsBase}/orofino-logo.png`, visualScale: 1.04 }
+  { name: 'Despar', logo: `${cmsUploadsBase}/despar-logo.png`, visualScale: 1.18 },
+  { name: 'Morato', logo: `${cmsUploadsBase}/morato-logo.png`, visualScale: 1.16 },
+  { name: 'Tigotà', logo: `${cmsUploadsBase}/tigota-logo.png`, visualScale: 1.1 },
+  { name: 'Unieuro', logo: `${cmsUploadsBase}/unieuro-logo.png`, visualScale: 1.2 },
+  { name: 'Porsche', logo: `${cmsUploadsBase}/porsche-logo.png`, visualScale: 1.24 },
+  { name: 'Mercedes-Benz', logo: `${cmsUploadsBase}/mercedes-logo.png`, visualScale: 1.16 },
+  { name: 'Kartell', logo: `${cmsUploadsBase}/kartell-logo.png`, visualScale: 1.12 },
+  { name: 'Baracco', logo: `${cmsUploadsBase}/baracco-logo2026.png`, visualScale: 0.9 },
+  { name: 'Sirene Blu', logo: `${cmsUploadsBase}/sirene-blu-logo.png`, visualScale: 1.18 },
+  { name: 'Albertini Allestimenti', logo: `${cmsUploadsBase}/Logotipo-albertini-new.png`, visualScale: 1.28 },
+  { name: 'Pazzo Design', logo: `${cmsUploadsBase}/pazzodesign-logo2026.png`, visualScale: 1.2 },
+  { name: 'Orofino', logo: `${cmsUploadsBase}/orofino-logo.png`, visualScale: 1.12 }
 ] satisfies ClientLogo[];
 
 export const approvalSteps = [
