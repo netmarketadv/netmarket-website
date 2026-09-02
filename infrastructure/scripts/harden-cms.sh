@@ -71,8 +71,10 @@ cat > .htaccess <<'EOF'
 <IfModule mod_setenvif.c>
   SetEnvIf Request_URI \"^/robots\\.txt$\" NMHC_NO_AUTH=1
   SetEnvIf Request_URI \"^/wp-content/uploads/\" NMHC_NO_AUTH=1
-  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/health$\" NMHC_NO_AUTH=1
-  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/forms/contact$\" NMHC_NO_AUTH=1
+  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/health/?$\" NMHC_NO_AUTH=1
+  SetEnvIf Request_URI \"^/wp-json/netmarket/v1/forms/contact/?$\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase THE_REQUEST \"^[A-Z]+[[:space:]]+/wp-json/netmarket/v1/health/?([[:space:]?]|$)\" NMHC_NO_AUTH=1
+  SetEnvIfNoCase THE_REQUEST \"^[A-Z]+[[:space:]]+/wp-json/netmarket/v1/forms/contact/?([[:space:]?]|$)\" NMHC_NO_AUTH=1
 </IfModule>
 
 AuthType Basic
@@ -82,15 +84,18 @@ AuthUserFile $HTPASSWD_PATH
 <IfModule mod_authz_core.c>
   <RequireAny>
     Require env NMHC_NO_AUTH
-    Require expr "%{REQUEST_URI} =~ m#^/robots\\.txt$#"
-    Require expr "%{REQUEST_URI} =~ m#^/wp-content/uploads/#"
-    Require expr "%{REQUEST_URI} =~ m#^/wp-json/netmarket/v1/health/?$#"
-    Require expr "%{REQUEST_URI} =~ m#^/wp-json/netmarket/v1/forms/contact/?$#"
     Require valid-user
   </RequireAny>
 </IfModule>
 <IfModule !mod_authz_core.c>
   Require valid-user
+</IfModule>
+
+<IfModule mod_access_compat.c>
+  Order deny,allow
+  Deny from all
+  Allow from env=NMHC_NO_AUTH
+  Satisfy Any
 </IfModule>
 
 # SGS XMLRPC Disable Service
