@@ -59,6 +59,8 @@ Secret richiesti per CMS:
 - `CMS_BASIC_AUTH_USER`
 - `CMS_BASIC_AUTH_PASSWORD`
 
+I secret `SG_CMS_SSH_*` sono opzionali se il CMS usa lo stesso account SSH dello staging: in quel caso `deploy-cms.yml` usa automaticamente i fallback `SG_SSH_HOST`, `SG_SSH_PORT`, `SG_SSH_USER`, `SG_SSH_PRIVATE_KEY` e `SG_SSH_KNOWN_HOSTS`. `SG_CMS_WORDPRESS_PATH` resta obbligatorio per evitare deploy su path ambigui.
+
 Variables richieste:
 
 - `PUBLIC_SITE_URL=https://staging.netmarket.it`

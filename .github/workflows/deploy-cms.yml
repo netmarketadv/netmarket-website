@@ -16,17 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_HOST: cms.netmarket.it
+      CMS_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST || secrets.SG_SSH_HOST }}
+      CMS_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT || secrets.SG_SSH_PORT }}
+      CMS_SSH_USER: ${{ secrets.SG_CMS_SSH_USER || secrets.SG_SSH_USER }}
+      CMS_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY || secrets.SG_SSH_PRIVATE_KEY }}
+      CMS_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS || secrets.SG_SSH_KNOWN_HOSTS }}
     steps:
       - uses: actions/checkout@v4
       - name: Guard CMS target
         run: test "$TARGET_HOST" = "cms.netmarket.it"
       - name: Check SSH secrets
         run: |
-          test -n "${{ secrets.SG_CMS_SSH_HOST }}"
-          test -n "${{ secrets.SG_CMS_SSH_PORT }}"
-          test -n "${{ secrets.SG_CMS_SSH_USER }}"
-          test -n "${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}"
-          test -n "${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}"
+          test -n "$CMS_SSH_HOST"
+          test -n "$CMS_SSH_PORT"
+          test -n "$CMS_SSH_USER"
+          test -n "$CMS_SSH_PRIVATE_KEY"
+          test -n "$CMS_SSH_KNOWN_HOSTS"
           test -n "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
           test -n "${{ secrets.CMS_BASIC_AUTH_USER }}"
           test -n "${{ secrets.CMS_BASIC_AUTH_PASSWORD }}"
@@ -34,29 +39,29 @@ jobs:
         if: ${{ inputs.dry_run == 'true' }}
         run: infrastructure/scripts/bootstrap-wordpress.sh --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
+          SG_SSH_HOST: ${{ env.CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.CMS_SSH_KNOWN_HOSTS }}
       - name: Deploy and activate CMS plugin
         if: ${{ inputs.dry_run == 'false' }}
         run: infrastructure/scripts/bootstrap-wordpress.sh --execute --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
+          SG_SSH_HOST: ${{ env.CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.CMS_SSH_KNOWN_HOSTS }}
       - name: Harden CMS access and indexing
         if: ${{ inputs.dry_run == 'false' }}
         run: infrastructure/scripts/harden-cms.sh --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
         env:
-          SG_SSH_HOST: ${{ secrets.SG_CMS_SSH_HOST }}
-          SG_SSH_PORT: ${{ secrets.SG_CMS_SSH_PORT }}
-          SG_SSH_USER: ${{ secrets.SG_CMS_SSH_USER }}
-          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_CMS_SSH_PRIVATE_KEY }}
-          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_CMS_SSH_KNOWN_HOSTS }}
+          SG_SSH_HOST: ${{ env.CMS_SSH_HOST }}
+          SG_SSH_PORT: ${{ env.CMS_SSH_PORT }}
+          SG_SSH_USER: ${{ env.CMS_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ env.CMS_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ env.CMS_SSH_KNOWN_HOSTS }}
           CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
           CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
       - name: Health check
