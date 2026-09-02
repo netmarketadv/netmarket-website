@@ -10,7 +10,7 @@ import {
   insightPath
 } from '@/lib/insights/content';
 
-const canonicalSiteUrl = 'https://netmarket.it';
+const canonicalSiteUrl = 'https://www.netmarket.it';
 const { insights, totalPages } = await getInsightPage(1);
 const featured = insights.find((item) => item.featured) ?? insights[0];
 const rest = featured ? insights.filter((item) => item.slug !== featured.slug) : insights;

@@ -11,7 +11,7 @@ import {
   projectPath
 } from '@/lib/projects/content';
 
-const canonicalSiteUrl = 'https://netmarket.it';
+const canonicalSiteUrl = 'https://www.netmarket.it';
 const { projects, source } = await getProjectArchiveData();
 const visibleProjects = projects.filter((project) => project.projectStatus === 'published');
 const featuredProject = visibleProjects.find((project) => project.featured) ?? visibleProjects[0];

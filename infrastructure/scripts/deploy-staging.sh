@@ -33,7 +33,7 @@ if [[ "$SG_SSH_HOST" == *"netmarket.it"* && "$SG_SSH_HOST" != "$HOST" ]]; then
   exit 1
 fi
 
-if [[ -z "$PATH_TARGET" || "$PATH_TARGET" != /* || "$PATH_TARGET" == "/" || "$PATH_TARGET" == *"/../"* ]]; then
+if [[ -z "$PATH_TARGET" || "$PATH_TARGET" != /* || "$PATH_TARGET" == "/" || "$PATH_TARGET" == *"/../"* || "$PATH_TARGET" == *".."* ]]; then
   echo "Percorso deploy mancante o ambiguo."
   exit 1
 fi
@@ -63,7 +63,15 @@ printf '%s\n' "$SG_SSH_KNOWN_HOSTS" >"$KNOWN_HOSTS_FILE"
 chmod 600 "$KEY_FILE" "$KNOWN_HOSTS_FILE"
 
 SSH_ARGS=(-p "$SG_SSH_PORT" -i "$KEY_FILE" -o "UserKnownHostsFile=$KNOWN_HOSTS_FILE" -o "StrictHostKeyChecking=yes")
-RSYNC_ARGS=(-az --delete --itemize-changes --exclude .well-known -e "ssh ${SSH_ARGS[*]}")
+printf -v REMOTE_PATH_TARGET "%q" "$PATH_TARGET"
+RSYNC_ARGS=(
+  -az
+  --delete
+  --itemize-changes
+  --exclude .well-known
+  --rsync-path "cd $REMOTE_PATH_TARGET && rsync"
+  -e "ssh ${SSH_ARGS[*]}"
+)
 
 if [[ "$DRY_RUN" == true ]]; then
   RSYNC_ARGS+=(--dry-run)
@@ -72,8 +80,29 @@ else
   echo "Deploy staging verso $HOST:$PATH_TARGET"
 fi
 
-ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "test -d '$PATH_TARGET'"
-if [[ "$DRY_RUN" == false ]]; then
-  ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "target='$PATH_TARGET'; backup_dir=\"\$(dirname -- \"\$target\")/.netmarket-backups\"; mkdir -p \"\$backup_dir\"; if [ -f \"\$target/index.html\" ]; then tar -C \"\$target\" --exclude='.well-known' -czf \"\$backup_dir/before-$SAFE_RELEASE_ID.tgz\" .; find \"\$backup_dir\" -maxdepth 1 -name 'before-*.tgz' -type f -printf '%T@ %p\n' | sort -nr | tail -n +6 | cut -d ' ' -f 2- | xargs -r rm -f; fi"
+REMOTE_PREFLIGHT='
+set -eu
+target="$1"
+if [ ! -d "$target" ]; then
+  echo "Deploy path non esiste o non e una directory: $target" >&2
+  exit 21
 fi
-rsync "${RSYNC_ARGS[@]}" "$BUILD_DIR/" "$SG_SSH_USER@$SG_SSH_HOST:$PATH_TARGET/"
+if [ ! -r "$target" ] || [ ! -x "$target" ]; then
+  echo "Deploy path non leggibile/attraversabile dall utente SSH: $target" >&2
+  exit 22
+fi
+if [ ! -w "$target" ]; then
+  echo "Deploy path non scrivibile dall utente SSH: $target" >&2
+  exit 23
+fi
+cd "$target"
+probe=".netmarket-write-test-$$"
+touch "$probe"
+rm -f "$probe"
+'
+
+ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "sh -s -- $REMOTE_PATH_TARGET" <<<"$REMOTE_PREFLIGHT"
+if [[ "$DRY_RUN" == false ]]; then
+  ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "target=$REMOTE_PATH_TARGET; backup_dir=\"\$(dirname -- \"\$target\")/.netmarket-backups\"; mkdir -p \"\$backup_dir\"; if [ -f \"\$target/index.html\" ]; then tar -C \"\$target\" --exclude='.well-known' -czf \"\$backup_dir/before-$SAFE_RELEASE_ID.tgz\" .; find \"\$backup_dir\" -maxdepth 1 -name 'before-*.tgz' -type f -printf '%T@ %p\n' | sort -nr | tail -n +6 | cut -d ' ' -f 2- | xargs -r rm -f; fi"
+fi
+rsync "${RSYNC_ARGS[@]}" "$BUILD_DIR/" "$SG_SSH_USER@$SG_SSH_HOST:."

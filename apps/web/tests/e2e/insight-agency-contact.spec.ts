@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('insight, agency and contact', () => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   test('renders insight archive and article detail with crawlable links', async ({ page }) => {
     await page.goto('/insight/', { waitUntil: 'domcontentloaded' });

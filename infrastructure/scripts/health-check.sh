@@ -29,6 +29,9 @@ if [[ -n "$BASIC_AUTH" ]]; then
   CURL_ARGS+=(-u "$BASIC_AUTH")
 elif [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" && -n "${CMS_BASIC_AUTH_USER:-}" && -n "${CMS_BASIC_AUTH_PASSWORD:-}" ]]; then
   CURL_ARGS+=(-u "$CMS_BASIC_AUTH_USER:$CMS_BASIC_AUTH_PASSWORD")
+elif [[ "$URL" == "https://cms.netmarket.it/wp-json/netmarket/v1/health" ]]; then
+  echo "CMS health check richiede Basic Auth: impostare --basic-auth oppure CMS_BASIC_AUTH_USER/CMS_BASIC_AUTH_PASSWORD."
+  exit 1
 fi
 
 BODY="$(curl "${CURL_ARGS[@]}" "$CHECK_URL")"

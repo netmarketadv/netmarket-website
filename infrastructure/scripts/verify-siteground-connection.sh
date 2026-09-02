@@ -27,3 +27,19 @@ ssh -p "$SG_SSH_PORT" \
   -o "StrictHostKeyChecking=yes" \
   "$SG_SSH_USER@$SG_SSH_HOST" \
   'whoami && pwd && php -v | head -n 1 && git --version && (wp --version || true)'
+
+if [[ -n "${SG_STAGING_DEPLOY_PATH:-}" ]]; then
+  if [[ "$SG_STAGING_DEPLOY_PATH" != /* || "$SG_STAGING_DEPLOY_PATH" == "/" || "$SG_STAGING_DEPLOY_PATH" == *".."* ]]; then
+    echo "Percorso staging rifiutato: SG_STAGING_DEPLOY_PATH deve essere assoluto e non ambiguo."
+    exit 1
+  fi
+
+  printf -v REMOTE_STAGING_PATH "%q" "$SG_STAGING_DEPLOY_PATH"
+  ssh -p "$SG_SSH_PORT" \
+    -i "$KEY_FILE" \
+    -o "UserKnownHostsFile=$KNOWN_HOSTS_FILE" \
+    -o "StrictHostKeyChecking=yes" \
+    "$SG_SSH_USER@$SG_SSH_HOST" \
+    "target=$REMOTE_STAGING_PATH; test -d \"\$target\" && test -r \"\$target\" && test -x \"\$target\" && test -w \"\$target\""
+  echo "Deploy path staging accessibile in lettura e scrittura."
+fi

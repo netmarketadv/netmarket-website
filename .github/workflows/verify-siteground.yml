@@ -17,3 +17,4 @@ jobs:
           SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
           SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
           SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_STAGING_DEPLOY_PATH: ${{ secrets.SG_STAGING_DEPLOY_PATH }}

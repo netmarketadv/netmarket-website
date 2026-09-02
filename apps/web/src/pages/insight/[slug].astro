@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const canonicalSiteUrl = 'https://netmarket.it';
+const canonicalSiteUrl = 'https://www.netmarket.it';
 const { slug } = Astro.params;
 const data = slug ? await getInsightDetailData(slug) : undefined;
 if (!data) return Astro.redirect('/404/');

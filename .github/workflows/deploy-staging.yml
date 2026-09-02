@@ -75,6 +75,24 @@ jobs:
 
           exit "$missing"
 
+      - name: Check CMS credentials
+        run: |
+          missing=0
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::Missing required CMS secret: $name"
+              missing=1
+            fi
+          }
+
+          check_secret "CMS_BASIC_AUTH_USER" "${{ secrets.CMS_BASIC_AUTH_USER }}"
+          check_secret "CMS_BASIC_AUTH_PASSWORD" "${{ secrets.CMS_BASIC_AUTH_PASSWORD }}"
+
+          exit "$missing"
+
       - uses: pnpm/action-setup@v4
         with:
           version: 11.13.1

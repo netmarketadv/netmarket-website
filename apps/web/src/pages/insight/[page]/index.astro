@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const canonicalSiteUrl = 'https://netmarket.it';
+const canonicalSiteUrl = 'https://www.netmarket.it';
 const page = Number(Astro.params.page || 1);
 const { insights, totalPages } = await getInsightPage(page);
 if (!Number.isInteger(page) || page < 2 || page > totalPages) return Astro.redirect('/404/');

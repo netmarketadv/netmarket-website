@@ -17,6 +17,10 @@ const allowedRelationTypes = new Set([
 ]);
 
 const issues = [];
+const hasCmsAuth = Boolean(
+  process.env.CMS_BUILD_TOKEN ||
+    (process.env.CMS_BASIC_AUTH_USER && process.env.CMS_BASIC_AUTH_PASSWORD)
+);
 
 async function fetchJson(path) {
   const url = new URL(path, baseUrl);
@@ -31,6 +35,11 @@ async function fetchJson(path) {
   }
   const response = await fetch(url, { headers });
   if (!response.ok) {
+    if (response.status === 401 && !hasCmsAuth) {
+      throw new Error(
+        `${url.toString()} returned 401. Configure CMS_BUILD_TOKEN or CMS_BASIC_AUTH_USER/CMS_BASIC_AUTH_PASSWORD before validating protected CMS content.`
+      );
+    }
     throw new Error(`${url.toString()} returned ${response.status}`);
   }
   return response.json();
@@ -59,26 +68,33 @@ function validateRelations(entity, relations, field) {
   }
 }
 
-for (const endpoint of endpoints) {
-  const payload = await fetchJson(endpoint);
-  if (!Array.isArray(payload.data)) {
-    issues.push(`${endpoint}: response senza data[]`);
-    continue;
+try {
+  for (const endpoint of endpoints) {
+    const payload = await fetchJson(endpoint);
+    if (!Array.isArray(payload.data)) {
+      issues.push(`${endpoint}: response senza data[]`);
+      continue;
+    }
+    const slugs = new Set();
+    for (const item of payload.data) {
+      const entity = `${endpoint}/${item.slug || item.id}`;
+      if (!item.slug) issues.push(`${entity}: slug mancante`);
+      if (slugs.has(item.slug)) issues.push(`${endpoint}: slug duplicato ${item.slug}`);
+      slugs.add(item.slug);
+      validateMedia(entity, item.image, 'image');
+      if (endpoint === 'clients' && !item.brandName)
+        issues.push(`${entity}: client senza brandName`);
+      if (endpoint === 'people' && !item.role) issues.push(`${entity}: person senza ruolo`);
+      validateRelations(entity, item.relatedServices, 'relatedServices');
+      validateRelations(entity, item.relatedCaseStudies, 'relatedCaseStudies');
+      validateRelations(entity, item.services, 'services');
+      validateRelations(entity, item.contributors, 'contributors');
+    }
   }
-  const slugs = new Set();
-  for (const item of payload.data) {
-    const entity = `${endpoint}/${item.slug || item.id}`;
-    if (!item.slug) issues.push(`${entity}: slug mancante`);
-    if (slugs.has(item.slug)) issues.push(`${endpoint}: slug duplicato ${item.slug}`);
-    slugs.add(item.slug);
-    validateMedia(entity, item.image, 'image');
-    if (endpoint === 'clients' && !item.brandName) issues.push(`${entity}: client senza brandName`);
-    if (endpoint === 'people' && !item.role) issues.push(`${entity}: person senza ruolo`);
-    validateRelations(entity, item.relatedServices, 'relatedServices');
-    validateRelations(entity, item.relatedCaseStudies, 'relatedCaseStudies');
-    validateRelations(entity, item.services, 'services');
-    validateRelations(entity, item.contributors, 'contributors');
-  }
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`Content validation failed: ${message}`);
+  process.exit(1);
 }
 
 if (issues.length > 0) {
