@@ -1,6 +1,7 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import IconBubble from '@/components/ui/IconBubble.astro';
+import { IconMail } from '@tabler/icons-astro';
 
 type IconName = 'bolt' | 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'shield' | 'sparkles' | 'users';
 
@@ -171,17 +172,32 @@ const navItems: NavItem[] = [
         <span></span>
       </summary>
       <nav class="site-header__mobile-panel" aria-label="Navigazione mobile">
+        <a class="site-header__mobile-brand" href="/" aria-label="Netmarket home">
+          <img src="/netmarket-logo.svg" alt="" width="140" height="40" />
+        </a>
         <div class="site-header__mobile-links">
           {
             navItems.map((item) =>
               item.children ? (
-                <details class="mobile-submenu">
+                <details
+                  class:list={[
+                    'mobile-submenu',
+                    item.menuVariant === 'compact' && 'mobile-submenu--compact',
+                    item.menuVariant === 'wide' && 'mobile-submenu--wide'
+                  ]}
+                >
                   <summary>{item.label}</summary>
                   <div class="mobile-submenu__panel">
+                    {item.menuVariant === 'wide' && (
+                      <p class="mobile-submenu__eyebrow">{item.label}:</p>
+                    )}
                     {item.children.map((child) => (
                       <a href={child.href}>
-                        <span>{child.label}</span>
-                        <small>{child.description}</small>
+                        <IconBubble name={child.icon} size="sm" />
+                        <span>
+                          <strong>{child.label}</strong>
+                          <small>{child.description}</small>
+                        </span>
                       </a>
                     ))}
                   </div>
@@ -193,7 +209,10 @@ const navItems: NavItem[] = [
           }
         </div>
         <div class="site-header__mobile-actions">
-          <Button href="/contatti/" variant="primary" magnetic>Parliamone</Button>
+          <a class="site-header__mobile-cta" href="/contatti/">
+            <IconMail stroke={1.8} aria-hidden="true" />
+            <span>Contattaci</span>
+          </a>
         </div>
       </nav>
     </details>

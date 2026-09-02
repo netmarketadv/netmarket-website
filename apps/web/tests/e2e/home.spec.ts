@@ -130,7 +130,7 @@ test('interactive motion controls remain accessible', async ({ page }) => {
 
   await page.setViewportSize({ width: 390, height: 900 });
   await page.getByLabel('Apri menu').click();
-  await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByLabel('Chiudi menu')).toHaveAttribute('aria-expanded', 'true');
   await page.keyboard.press('Escape');
   await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false');
 });
@@ -156,9 +156,15 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(panel).toBeVisible();
   await expect(panel).toHaveCSS('position', 'fixed');
   await expect(panel).toHaveCSS('height', '900px');
+  await expect(page.getByLabel('Chiudi menu')).toHaveCSS('position', 'fixed');
+  await expect(panel.getByRole('link', { name: /Contattaci/ })).toHaveCSS(
+    'background-color',
+    'rgb(14, 81, 254)'
+  );
 
   await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
   await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
+  await expect(panel.locator('.mobile-submenu--wide .icon-bubble')).toHaveCount(9);
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {

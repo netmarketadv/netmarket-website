@@ -109,6 +109,7 @@ function initMobileMenu(): void {
   menu.dataset.motionMobileMenu = 'ready';
 
   summary.setAttribute('aria-expanded', String(menu.open));
+  summary.setAttribute('aria-label', menu.open ? 'Chiudi menu' : 'Apri menu');
 
   submenus.forEach((submenu) => {
     const trigger = submenu.querySelector('summary');
@@ -116,11 +117,16 @@ function initMobileMenu(): void {
     trigger.setAttribute('aria-expanded', String(submenu.open));
     submenu.addEventListener('toggle', () => {
       trigger.setAttribute('aria-expanded', String(submenu.open));
+      if (!submenu.open) return;
+      submenus.forEach((other) => {
+        if (other !== submenu) other.open = false;
+      });
     });
   });
 
   menu.addEventListener('toggle', () => {
     summary.setAttribute('aria-expanded', String(menu.open));
+    summary.setAttribute('aria-label', menu.open ? 'Chiudi menu' : 'Apri menu');
     document.documentElement.classList.toggle('has-mobile-menu', menu.open);
     if (menu.open) window.setTimeout(() => focusables[0]?.focus(), 80);
     if (!menu.open) submenus.forEach((submenu) => (submenu.open = false));
