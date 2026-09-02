@@ -23,6 +23,7 @@ final class Routes
         register_rest_route(self::NAMESPACE, '/health', ['methods' => 'GET', 'callback' => [$this, 'health'], 'permission_callback' => '__return_true']);
         register_rest_route(self::NAMESPACE, '/settings', ['methods' => 'GET', 'callback' => [$this, 'settings'], 'permission_callback' => '__return_true']);
         register_rest_route(self::NAMESPACE, '/taxonomies', ['methods' => 'GET', 'callback' => [$this, 'taxonomies'], 'permission_callback' => '__return_true']);
+        register_rest_route(self::NAMESPACE, '/forms/contact', ['methods' => 'POST', 'callback' => [$this, 'contactForm'], 'permission_callback' => '__return_true']);
         register_rest_route(self::NAMESPACE, '/admin/relation-search', ['methods' => 'GET', 'callback' => [$this, 'relationSearch'], 'permission_callback' => fn (): bool => current_user_can('edit_posts'), 'args' => ['search' => ['type' => 'string', 'required' => true], 'types' => ['type' => 'string', 'required' => true]]]);
 
         foreach ($this->routes() as $route => $postType) {
@@ -73,6 +74,77 @@ final class Routes
             }
         }
         return $this->json($items);
+    }
+
+    public function contactForm(WP_REST_Request $request): WP_REST_Response
+    {
+        $payload = $request->get_json_params();
+        if (! is_array($payload)) {
+            return new WP_REST_Response(['code' => 'invalid_payload', 'message' => 'Richiesta non valida.'], 400);
+        }
+
+        $name = sanitize_text_field((string) ($payload['name'] ?? ''));
+        $company = sanitize_text_field((string) ($payload['company'] ?? ''));
+        $email = sanitize_email((string) ($payload['email'] ?? ''));
+        $phone = sanitize_text_field((string) ($payload['phone'] ?? ''));
+        $service = sanitize_text_field((string) ($payload['service'] ?? ''));
+        $message = sanitize_textarea_field((string) ($payload['message'] ?? ''));
+        $website = sanitize_text_field((string) ($payload['website'] ?? ''));
+        $privacy = (bool) ($payload['privacyConsent'] ?? false);
+        $marketing = (bool) ($payload['marketingConsent'] ?? false);
+        $sourceUrl = esc_url_raw((string) ($payload['sourceUrl'] ?? ''));
+        $referrer = esc_url_raw((string) ($payload['referrer'] ?? ''));
+        $utm = is_array($payload['utm'] ?? null) ? $payload['utm'] : [];
+
+        $errors = [];
+        if ($website !== '') {
+            $errors['website'] = 'bot_detected';
+        }
+        if (mb_strlen($name) < 2 || mb_strlen($name) > 120) {
+            $errors['name'] = 'invalid_name';
+        }
+        if ($email === '' || ! is_email($email)) {
+            $errors['email'] = 'invalid_email';
+        }
+        if (mb_strlen($message) < 10 || mb_strlen($message) > 3000) {
+            $errors['message'] = 'invalid_message';
+        }
+        if (! $privacy) {
+            $errors['privacyConsent'] = 'privacy_required';
+        }
+        if ($this->looksLikeSpam($message . ' ' . $name . ' ' . $company)) {
+            $errors['message'] = 'spam_pattern';
+        }
+        if ($errors !== []) {
+            return new WP_REST_Response(['code' => 'validation_failed', 'message' => 'Controlla i campi evidenziati.', 'fields' => $errors], 422);
+        }
+
+        $ip = $this->requestIp();
+        $rateKey = 'nmhc_contact_' . md5($ip . '|' . strtolower($email));
+        $attempts = (int) get_transient($rateKey);
+        if ($attempts >= 3) {
+            return new WP_REST_Response(['code' => 'rate_limited', 'message' => 'Troppe richieste ravvicinate.'], 429);
+        }
+        set_transient($rateKey, $attempts + 1, 10 * MINUTE_IN_SECONDS);
+
+        $recipient = get_option('admin_email');
+        $subject = sprintf('Nuova richiesta dal sito Netmarket - %s', $name);
+        $lines = [
+            'Nome: ' . $name,
+            'Email: ' . $email,
+            'Azienda: ' . $company,
+            'Telefono: ' . $phone,
+            'Interesse: ' . $service,
+            'Marketing: ' . ($marketing ? 'si' : 'no'),
+            'Source URL: ' . $sourceUrl,
+            'Referrer: ' . $referrer,
+            'UTM: ' . wp_json_encode($this->sanitizeStringMap($utm)),
+            '',
+            $message,
+        ];
+        wp_mail($recipient, $subject, implode("\n", $lines), ['Reply-To: ' . $name . ' <' . $email . '>']);
+
+        return $this->json(['ok' => true]);
     }
 
     public function collection(WP_REST_Request $request, string $postType): WP_REST_Response
@@ -365,8 +437,12 @@ final class Routes
     private function insightPayload(\WP_Post $post): array
     {
         return [
+            'content' => apply_filters('the_content', $post->post_content),
             'subtitle' => $this->metaString($post->ID, 'subtitle'),
             'authorPerson' => Relations::summaries([$this->metaInt($post->ID, 'author_person')], ['nm_person'])[0] ?? null,
+            'publishedAt' => get_post_time(DATE_ATOM, true, $post),
+            'modifiedAt' => get_post_modified_time(DATE_ATOM, true, $post),
+            'categories' => array_map(static fn (\WP_Term $term): array => ['id' => $term->term_id, 'slug' => $term->slug, 'name' => $term->name], get_the_category($post->ID)),
             'readingTime' => $this->readingTime($post),
             'featured' => $this->metaBool($post->ID, 'featured'),
             'priority' => $this->metaInt($post->ID, 'priority'),
@@ -447,6 +523,36 @@ final class Routes
     {
         $words = str_word_count(wp_strip_all_tags((string) $post->post_content));
         return max(1, (int) ceil($words / 220));
+    }
+
+    private function requestIp(): string
+    {
+        $forwarded = sanitize_text_field((string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''));
+        $remote = sanitize_text_field((string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'));
+        $candidate = trim(explode(',', $forwarded)[0] ?: $remote);
+        return filter_var($candidate, FILTER_VALIDATE_IP) ? $candidate : '0.0.0.0';
+    }
+
+    private function looksLikeSpam(string $value): bool
+    {
+        if (preg_match_all('~https?://~i', $value) > 2) {
+            return true;
+        }
+        return (bool) preg_match('~\[(url|link)=|<a\s|viagra|casino|crypto\s+investment~i', $value);
+    }
+
+    /** @param array<mixed> $values @return array<string, string> */
+    private function sanitizeStringMap(array $values): array
+    {
+        $sanitized = [];
+        foreach ($values as $key => $value) {
+            $safeKey = sanitize_key((string) $key);
+            if ($safeKey === '') {
+                continue;
+            }
+            $sanitized[$safeKey] = sanitize_text_field((string) $value);
+        }
+        return $sanitized;
     }
 
     private function json(array $data): WP_REST_Response

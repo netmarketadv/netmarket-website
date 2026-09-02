@@ -20,12 +20,12 @@ const footerColumns = [
     links: [
       ['Home', '/'],
       ['Servizi', '/servizi/'],
-      ['Agenzia', '/#agenzia'],
-      ['Team', '/#team'],
+      ['Agenzia', '/agenzia/'],
+      ['Team', '/agenzia/#team'],
       ['Progetti', '/progetti/'],
-      ['Insight', '/#insight'],
+      ['Insight', '/insight/'],
       ['NOD', '/nod/', 'new'],
-      ['Contatti', '/#contatti']
+      ['Contatti', '/contatti/']
     ]
   },
   {
@@ -58,31 +58,54 @@ const socialLinks = [
         </a>
         <p>Comunichiamo valore dal 1986, con progetti web, marketing e comunicazione coordinata.</p>
         <div class="site-footer__social" aria-label="Social Netmarket">
-          {socialLinks.map(([label, href, Icon]) => (
-            <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
-              <Icon stroke={1.8} />
-            </a>
-          ))}
+          {
+            socialLinks.map(([label, href, Icon]) => (
+              <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+                <Icon stroke={1.8} />
+              </a>
+            ))
+          }
         </div>
       </div>
 
-      {footerColumns.map((column) => (
-        <nav aria-label={column.title}>
-          <h2>{column.title}</h2>
-          {column.links.map(([label, href, badge]) => (
-            <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}>
-              <span>{label}</span>
-              {badge && <small>{badge}</small>}
-            </a>
-          ))}
-        </nav>
-      ))}
+      {
+        footerColumns.map((column) => (
+          <nav aria-label={column.title}>
+            <h2>{column.title}</h2>
+            {column.links.map(([label, href, badge]) => (
+              <a
+                href={href}
+                target={href.startsWith('http') ? '_blank' : undefined}
+                rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <span>{label}</span>
+                {badge && <small>{badge}</small>}
+              </a>
+            ))}
+          </nav>
+        ))
+      }
     </section>
 
     <section class="site-footer__trust" aria-label="Certificazioni e privacy">
-      <img src={cmsMedia.badges.iubendaGold} alt="iubenda Gold Partner" loading="lazy" decoding="async" />
-      <img src={cmsMedia.badges.brevo} alt="Brevo Partner Pioneer 2025" loading="lazy" decoding="async" />
-      <img src={cmsMedia.badges.woocommerce} alt="WooCommerce ecommerce partner" loading="lazy" decoding="async" />
+      <img
+        src={cmsMedia.badges.iubendaGold}
+        alt="iubenda Gold Partner"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        src={cmsMedia.badges.brevo}
+        alt="Brevo Partner Pioneer 2025"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        src={cmsMedia.badges.woocommerce}
+        alt="WooCommerce ecommerce partner"
+        loading="lazy"
+        decoding="async"
+      />
     </section>
 
     <section class="site-footer__details" aria-label="Dati societari">

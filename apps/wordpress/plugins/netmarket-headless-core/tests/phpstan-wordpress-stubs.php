@@ -1,6 +1,7 @@
 <?php
 
 const ABSPATH = '/tmp';
+const MINUTE_IN_SECONDS = 60;
 
 class WP_Post
 {
@@ -27,6 +28,11 @@ class WP_REST_Request implements ArrayAccess
     public function get_param(string $key): mixed
     {
         return null;
+    }
+
+    public function get_json_params(): mixed
+    {
+        return [];
     }
 
     public function offsetExists(mixed $offset): bool
@@ -91,6 +97,7 @@ function wp_create_nonce(string $action = ''): string { return 'nonce'; }
 function deactivate_plugins(string $plugin): void {}
 function wp_die(string $message): never { exit($message); }
 function flush_rewrite_rules(): void {}
+function apply_filters(string $hookName, mixed $value, mixed ...$args): mixed { return $value; }
 function esc_html__(string $text, string $domain = ''): string { return $text; }
 function __(string $text, string $domain = ''): string { return $text; }
 function esc_html(string $text): string { return $text; }
@@ -105,14 +112,19 @@ function sanitize_key(string $text): string { return $text; }
 function sanitize_title(string $text): string { return $text; }
 function wp_kses_post(string $text): string { return $text; }
 function wp_unslash(mixed $value): mixed { return $value; }
+function is_email(string $email): string|false { return $email; }
 function wp_nonce_field(string $action, string $name): void {}
 function wp_verify_nonce(string $nonce, string $action): bool { return true; }
 function current_user_can(string $capability, mixed ...$args): bool { return true; }
 function get_post_meta(int $postId, string $key, bool $single = false): mixed { return ''; }
+function get_option(string $option, mixed $defaultValue = false): mixed { return $defaultValue; }
+function get_transient(string $transient): mixed { return false; }
+function set_transient(string $transient, mixed $value, int $expiration = 0): bool { return true; }
 function update_post_meta(int $postId, string $key, mixed $value): int|bool { return true; }
 function delete_post_meta(int $postId, string $metaKey): bool { return true; }
 function add_post_meta(int $postId, string $metaKey, mixed $metaValue, bool $unique = false): int|false { return 1; }
 function wp_json_encode(mixed $value, int $flags = 0, int $depth = 512): string|false { return json_encode($value, $flags, $depth); }
+function wp_mail(string|array $to, string $subject, string $message, string|array $headers = '', string|array $attachments = []): bool { return true; }
 function checked(mixed $checked, mixed $current = true, bool $display = true): string { return ''; }
 function selected(mixed $selected, mixed $current = true, bool $display = true): string { return ''; }
 function absint(mixed $value): int { return abs((int) $value); }
@@ -123,6 +135,8 @@ function is_wp_error(mixed $thing): bool { return false; }
 function get_posts(array $args = []): array { return []; }
 function get_the_title(WP_Post $post): string { return ''; }
 function get_the_excerpt(WP_Post $post): string { return ''; }
+function get_post_time(string $format = 'U', bool $gmt = false, WP_Post|int|null $post = null, bool $translate = false): string|int|false { return ''; }
+function get_post_modified_time(string $format = 'U', bool $gmt = false, WP_Post|int|null $post = null, bool $translate = false): string|int|false { return ''; }
 function get_post_type(int $postId): string|false { return 'post'; }
 function get_post_status(int $postId): string|false { return 'publish'; }
 function get_post_thumbnail_id(int $postId): int { return 0; }
@@ -133,6 +147,7 @@ function wp_get_attachment_image_srcset(int $attachmentId): string|false { retur
 function wp_get_attachment_image_sizes(int $attachmentId): string|false { return false; }
 function wp_get_attachment_image(int $attachmentId, string|array $size = 'thumbnail'): string { return ''; }
 function get_the_terms(int $postId, string $taxonomy): array|false { return []; }
+function get_the_category(int $postId = 0): array { return []; }
 function wp_strip_all_tags(string $text, bool $removeBreaks = false): string { return $text; }
 function get_current_screen(): WP_Screen|null { return null; }
 function post_type_supports(string $postType, string $feature): bool { return true; }

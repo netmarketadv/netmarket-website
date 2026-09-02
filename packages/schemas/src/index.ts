@@ -180,8 +180,14 @@ export const resourceSchema = baseContentSchema.extend({
 });
 
 export const insightSchema = baseContentSchema.extend({
+  content: z.string().optional(),
   subtitle: z.string().optional(),
   authorPerson: relationSummarySchema.nullable().optional(),
+  publishedAt: z.string().optional(),
+  modifiedAt: z.string().optional(),
+  categories: z
+    .array(z.object({ id: z.number().int(), slug: z.string(), name: z.string() }))
+    .default([]),
   readingTime: z.number().int().positive(),
   featured: z.boolean().default(false),
   priority: z.number().int().default(0),

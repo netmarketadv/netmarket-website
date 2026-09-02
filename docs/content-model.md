@@ -35,6 +35,16 @@ Il sistema frontend dei progetti è documentato in `docs/project-system.md`. Le 
 
 Il campo `additional_content` su `nm_case_study` conserva testo legacy non classificabile in modo affidabile dentro `context`, `challenge`, `approach` o `solution`.
 
+## Frontend Insights
+
+Il sistema Insight e documentato in `docs/insight-system.md`. Le pagine `/insight/`, `/insight/[page]/` e `/insight/[slug]/` usano i post WordPress come fonte primaria. Finche il CMS non espone contenuti importati e credenziali build, il frontend usa lo snapshot reale legacy in `data/migrations/insights/`.
+
+Gli articoli supportano relazione opzionale con `nm_person` come autore editoriale e link reali verso servizi, progetti e risorse.
+
+## Pagine Istituzionali
+
+La pagina `/agenzia/` e documentata in `docs/agency-page.md`. La pagina `/contatti/` e documentata in `docs/contact-system.md`.
+
 ## Relazioni
 
 Le relazioni multi-valore usano meta multiple WordPress, non array serializzati. La proprieta di ogni relazione e documentata in `docs/content-relationship-map.md`.

@@ -21,7 +21,15 @@ const issues = [];
 async function fetchJson(path) {
   const url = new URL(path, baseUrl);
   url.searchParams.set('per_page', '50');
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  const headers = { Accept: 'application/json' };
+  if (process.env.CMS_BUILD_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.CMS_BUILD_TOKEN}`;
+  } else if (process.env.CMS_BASIC_AUTH_USER && process.env.CMS_BASIC_AUTH_PASSWORD) {
+    headers.Authorization = `Basic ${Buffer.from(
+      `${process.env.CMS_BASIC_AUTH_USER}:${process.env.CMS_BASIC_AUTH_PASSWORD}`
+    ).toString('base64')}`;
+  }
+  const response = await fetch(url, { headers });
   if (!response.ok) {
     throw new Error(`${url.toString()} returned ${response.status}`);
   }

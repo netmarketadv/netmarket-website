@@ -1,0 +1,131 @@
+---
+import { breadcrumbJsonLd, organizationJsonLd, personJsonLd, webPageJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import TeamSection from '@/components/blocks/TeamSection.astro';
+import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import { clientLogos } from '@/data/home';
+import { teamMembers } from '@/data/team';
+
+const canonicalSiteUrl = 'https://netmarket.it';
+const title = 'Agenzia';
+const description =
+  'Netmarket è un’agenzia di comunicazione, web e marketing a Padova attiva dal 1986.';
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Agenzia', url: `${canonicalSiteUrl}/agenzia/` }
+]);
+const pageSchema = webPageJsonLd({
+  title,
+  description,
+  canonicalPath: '/agenzia/',
+  siteUrl: canonicalSiteUrl,
+  robots: 'index, follow'
+});
+const organization = organizationJsonLd(canonicalSiteUrl, {
+  name: 'Netmarket',
+  legalName: 'Netmarket Srl',
+  vatId: '03618730281',
+  url: canonicalSiteUrl
+});
+const people = teamMembers.map((person) =>
+  personJsonLd(canonicalSiteUrl, {
+    id: person.id,
+    name: person.fullName,
+    givenName: person.givenName,
+    familyName: person.familyName,
+    jobTitle: person.role,
+    sameAs: person.linkedin ? [person.linkedin] : [],
+    image: person.image
+  })
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/agenzia/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, pageSchema, organization, ...people]}
+>
+  <Section labelledby="agency-title" class="agency-hero">
+    <Container wide>
+      <div class="agency-hero__grid">
+        <div data-reveal="line">
+          <p class="nm-meta">Agenzia Netmarket</p>
+          <h1 id="agency-title">Esperienza che continua a evolvere.</h1>
+        </div>
+        <div class="agency-hero__statement" data-reveal="up">
+          <strong>Dal 1986</strong>
+          <p>
+            Progettiamo comunicazione, siti, contenuti e marketing digitale con una regia unica.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section labelledby="agency-method-title">
+    <Container>
+      <div class="agency-statement" data-reveal="line">
+        <h2 id="agency-method-title">
+          Non una funzione separata. Una squadra intorno al progetto.
+        </h2>
+        <p>
+          Strategia, creatività, tecnologia e marketing lavorano insieme per rendere più chiaro ciò
+          che un’azienda offre, come viene scelta e come cresce nel tempo.
+        </p>
+      </div>
+      <div class="agency-pillars" data-reveal="up" data-reveal-stagger="1">
+        <article>
+          <span>01</span><h3>Analisi</h3><p>
+            Obiettivi, pubblico, canali e vincoli vengono messi in ordine prima di produrre.
+          </p>
+        </article>
+        <article>
+          <span>02</span><h3>Sistema</h3><p>
+            Brand, sito, contenuti e campagne vengono progettati come parti della stessa
+            architettura.
+          </p>
+        </article>
+        <article>
+          <span>03</span><h3>Continuità</h3><p>
+            Il progetto resta aggiornabile: dati, CMS, SEO e materiali restano governabili nel
+            tempo.
+          </p>
+        </article>
+      </div>
+    </Container>
+  </Section>
+
+  <Section id="team" labelledby="agency-team-title">
+    <Container wide>
+      <TeamSection
+        title="Le persone dietro il lavoro."
+        titleId="agency-team-title"
+        text="Un team compatto con competenze operative integrate."
+        people={teamMembers}
+      />
+    </Container>
+  </Section>
+
+  <Section labelledby="agency-clients-title" compact>
+    <Container wide>
+      <ClientMarquee
+        title="Clienti e progetti seguiti da Netmarket."
+        text="Una selezione di marchi e realtà presenti nello storico lavori."
+        clients={clientLogos}
+      />
+    </Container>
+  </Section>
+
+  <Section compact>
+    <Container>
+      <a class="agency-cta" href="/contatti/" data-reveal="scale">
+        <span>Hai un progetto da mettere in ordine?</span>
+        <strong>Parliamone.</strong>
+      </a>
+    </Container>
+  </Section>
+</BaseLayout>
