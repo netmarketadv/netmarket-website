@@ -19,11 +19,11 @@ Stato corrente: `STAGING READY WITH WARNINGS`
 Motivi:
 
 - Il dry-run del deploy staging sul branch `chore/prelaunch-hardening` e verde e conferma che il problema `rsync change_dir` e stato risolto.
-- Il deploy reale staging e verde sulla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`.
+- Il deploy reale staging e verde sulla run `https://github.com/netmarketadv/netmarket-website/actions/runs/33616676522`.
 - `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` risultano configurati sia come repository secret sia nell'environment `staging`.
 - Il CMS risponde, ma gli endpoint contenuto `services` e `insights` documentati tornano `404`; il frontend continua quindi a usare fallback/snapshot reali finche il plugin/API CMS online non viene riallineato.
 - La Quality GitHub del commit `53b5a99` e completata con successo, E2E incluso.
-- `staging.netmarket.it` serve la build `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1` e lo smoke remoto e passato.
+- `staging.netmarket.it` serve la build `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc` e lo smoke remoto e passato.
 
 ## Findings
 

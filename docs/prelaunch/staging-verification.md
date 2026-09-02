@@ -17,7 +17,7 @@ Il deploy del commit `53b5a99` non era arrivato allo smoke test remoto per falli
 Health check remoto read-only eseguito su `https://staging.netmarket.it`:
 
 - Esito HTTP/strutturale: valido.
-- Build online rilevata: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
+- Build online rilevata: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`.
 - Environment online rilevato: `staging`.
 - Stato: ambiente raggiungibile e aggiornato allo SHA atteso.
 
@@ -46,11 +46,11 @@ Deploy reale rilanciato:
 Deploy reale verificato:
 
 - Workflow: `Deploy Staging`
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33616676522`
 - Conclusione: `success`
 - Step `Deploy`: success
 - Step `Smoke staging`: success
-- SHA online: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`
+- SHA online: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`
 
 Warning:
 
@@ -76,5 +76,5 @@ Warning:
 ## Comando Smoke
 
 ```bash
-EXPECTED_BUILD_SHA=4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1 EXPECTED_BUILD_ENV=staging pnpm smoke:staging
+EXPECTED_BUILD_SHA=a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc EXPECTED_BUILD_ENV=staging pnpm smoke:staging
 ```

@@ -24,7 +24,7 @@ Workflow `Deploy Staging`, run `33615147619`:
 Dry-run deploy plan: success
 ```
 
-Workflow `Deploy Staging`, run `33615921590`:
+Workflow `Deploy Staging`, run `33616676522`:
 
 ```text
 Deploy: success
@@ -54,7 +54,7 @@ In questo modo il processo remoto entra prima nel document root e poi riceve i f
 
 ## Azione Richiesta
 
-Portare `verify-siteground.yml` sul default branch o registrarlo in GitHub Actions, poi rilanciarlo per avere un controllo diretto e dedicato sul path. Il deploy staging principale e comunque gia verificato dalla run `33615921590`.
+Portare `verify-siteground.yml` sul default branch o registrarlo in GitHub Actions, poi rilanciarlo per avere un controllo diretto e dedicato sul path. Il deploy staging principale e comunque gia verificato dalla run `33616676522`.
 
 Se il deploy reale fallisce ancora, correggere uno di questi elementi in GitHub Environment `staging`:
 

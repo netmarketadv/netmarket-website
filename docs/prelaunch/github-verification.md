@@ -49,15 +49,15 @@ Deploy reale completato:
 - Branch/SHA iniziale: `chore/prelaunch-hardening`, `2c8c73b474ced6f4049cabf66de338eae14f2278`
 - Stato: annullato perche superato dal commit `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
 
-Deploy reale finale:
+Deploy reale finale verificato:
 
-- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33615921590`
-- Branch/SHA: `chore/prelaunch-hardening`, `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`
+- Run: `https://github.com/netmarketadv/netmarket-website/actions/runs/33616676522`
+- Branch/SHA: `chore/prelaunch-hardening`, `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`
 - Esito: success.
 - `Build Astro frontend`: success, 53 pagine generate.
 - `Deploy`: success.
 - `Smoke staging`: success.
-- Smoke: `Smoke staging ok: build 4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1 su staging.`
+- Smoke: `Smoke staging ok: build a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc su staging.`
 - Warning contenuto: endpoint CMS `/services`, `/insights` e `/case-studies` rispondono `404`, quindi il frontend usa fallback/snapshot.
 
 ## Secret GitHub Rilevati

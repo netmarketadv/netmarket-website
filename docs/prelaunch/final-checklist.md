@@ -30,8 +30,8 @@ Esito: `STAGING READY WITH WARNINGS`
 - [x] Deploy Staging dry-run completato con successo: run `33615147619`.
 - [x] Cache fallback contenuti applicata per evitare chiamate dettaglio CMS ripetute.
 - [ ] `Verify SiteGround` registrato/rilanciato con controllo path.
-- [x] `Deploy Staging` reale completato con successo: run `33615921590`.
-- [x] Smoke staging completato con SHA atteso: `4b3d77f8a7a45cbbd7ae1763a2c57776e79bf2c1`.
+- [x] `Deploy Staging` reale completato con successo: run `33616676522`.
+- [x] Smoke staging completato con SHA atteso: `a1753b3e77f6e9c0de4cecc3f4b4616b2e0929bc`.
 - [ ] Content validation CMS reale completata con credenziali e route contenuto disponibili.
 - [ ] Visual QA staging completata.
 - [ ] Performance/Lighthouse staging completata.
