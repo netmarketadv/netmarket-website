@@ -21,6 +21,7 @@
     "migration:case-studies:write": "node infrastructure/migrations/case-studies/validate.mjs --write",
     "migration:validate:insights": "node infrastructure/migrations/insights/validate.mjs",
     "migration:insights:write": "node infrastructure/migrations/insights/validate.mjs --write",
+    "migration:insights:cms": "node infrastructure/migrations/insights/import-to-cms.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "php:lint": "find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",
