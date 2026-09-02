@@ -265,3 +265,7 @@ export function projectDescription(project: CaseStudy): string {
     'Caso studio Netmarket.'
   );
 }
+
+export function projectCategory(project: CaseStudy): string {
+  return project.services[0]?.title || 'Caso studio';
+}

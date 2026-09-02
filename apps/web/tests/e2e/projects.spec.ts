@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('projects', () => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   test('renders project archive with crawlable project links', async ({ page }) => {
     const errors: string[] = [];

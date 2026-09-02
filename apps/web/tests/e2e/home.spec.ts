@@ -162,10 +162,15 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
   await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
-  await expect(page.getByRole('img', { name: 'iubenda Gold Partner' })).toBeVisible();
-  await page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' })).toBeVisible();
-  await expect(page.getByRole('img', { name: 'WooCommerce ecommerce partner' })).toBeVisible();
+  const iubenda = page.getByRole('img', { name: 'iubenda Gold Partner' });
+  const brevo = page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' });
+  const woocommerce = page.getByRole('img', { name: 'WooCommerce ecommerce partner' });
+  await iubenda.scrollIntoViewIfNeeded();
+  await expect(iubenda).toBeVisible();
+  await brevo.scrollIntoViewIfNeeded();
+  await expect(brevo).toBeVisible();
+  await woocommerce.scrollIntoViewIfNeeded();
+  await expect(woocommerce).toBeVisible();
 });
 
 test('reviews layout stays compact and clean', async ({ page }) => {
@@ -522,6 +527,6 @@ test('motion reveal is robust on mobile and reduced motion', async ({ browser })
 });
 
 test('404 page works', async ({ page }) => {
-  await page.goto('/missing-page');
+  await page.goto('/missing-page', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: 'Pagina non trovata' })).toBeVisible();
 });
