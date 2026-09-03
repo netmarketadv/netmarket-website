@@ -3708,35 +3708,35 @@ main {
 
 .home-hero__orbit {
   position: absolute;
-  inset: auto 15% -34% 15%;
-  height: 58%;
+  inset: auto 7% -43% 7%;
+  height: 76%;
   border: 0;
   border-radius: 50% 50% 0 0 / 100% 100% 0 0;
   background:
-    radial-gradient(ellipse at 50% 96%, rgb(14 81 254 / 0.24), rgb(14 81 254 / 0.11) 36%, transparent 70%),
-    linear-gradient(180deg, transparent, rgb(14 81 254 / 0.06));
-  filter: blur(0.3px);
+    radial-gradient(ellipse at 50% 98%, rgb(14 81 254 / 0.4), rgb(14 81 254 / 0.18) 40%, transparent 74%),
+    linear-gradient(180deg, transparent, rgb(14 81 254 / 0.1));
+  filter: blur(0.2px);
 }
 
 .home-hero__device {
   position: absolute;
-  inset: 3% 34% -24% 34%;
+  inset: 1% 38.4% -24% 38.4%;
   z-index: 2;
   display: grid;
   place-items: end center;
   margin: 0;
-  overflow: visible;
-  border-radius: 0;
+  overflow: hidden;
+  border-radius: 2.4rem 2.4rem 0 0;
   background: transparent;
   box-shadow: none;
 }
 
 .home-hero__device img {
-  width: min(142%, 29rem);
+  width: min(170%, 29rem);
   height: 100%;
   object-fit: contain;
   object-position: bottom center;
-  filter: drop-shadow(0 2rem 3rem rgb(9 10 15 / 0.22));
+  filter: drop-shadow(0 2rem 3rem rgb(9 10 15 / 0.2));
 }
 
 .home-hero__tile,
@@ -3748,9 +3748,14 @@ main {
 }
 
 .home-hero__tile {
+  isolation: isolate;
   overflow: hidden;
   border-radius: 1.35rem;
+  background: transparent;
+  background-clip: padding-box;
   box-shadow: 0 1.2rem 3.2rem rgb(9 10 15 / 0.11);
+  clip-path: inset(0 round 1.35rem);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .home-hero__tile img {
@@ -3808,9 +3813,17 @@ main {
   right: 1%;
   bottom: 16%;
   width: clamp(11rem, 16vw, 15rem);
-  aspect-ratio: 1.34;
-  box-shadow: 0 1.1rem 3rem rgb(9 10 15 / 0.1);
+  aspect-ratio: 1.36;
+  box-shadow: none;
+  clip-path: inset(0 0 22% 0 round 1.08rem);
   transform: rotate(1deg);
+}
+
+.home-hero__tile--social img {
+  width: 204%;
+  height: 204%;
+  object-position: 50% 50%;
+  transform: translate(-25.5%, -20%);
 }
 
 .home-hero__rating {
@@ -6206,7 +6219,7 @@ main {
   }
 
   .home-hero__grid {
-    gap: clamp(1.6rem, 7vw, 2.4rem);
+    gap: clamp(0.75rem, 3.8vw, 1.25rem);
   }
 
   .home-hero__copy h1 {
@@ -6233,15 +6246,21 @@ main {
 
   .home-hero__visual {
     width: min(100vw - 1.5rem, 44rem);
-    height: clamp(26rem, 104vw, 34rem);
+    height: clamp(25rem, 98vw, 32rem);
+    margin-top: -0.4rem;
+  }
+
+  .home-hero__orbit {
+    inset: auto -5% -33% -5%;
+    height: 70%;
   }
 
   .home-hero__device {
-    inset: 13% 23% -20% 23%;
+    inset: 13% 24% -22% 24%;
   }
 
   .home-hero__device img {
-    width: min(152%, 20rem);
+    width: min(178%, 21rem);
   }
 
   .home-hero__tile {
@@ -6249,13 +6268,13 @@ main {
   }
 
   .home-hero__tile--marketing {
-    top: 6%;
-    left: 1%;
+    top: 3%;
+    left: 7%;
   }
 
   .home-hero__tile--ecommerce {
-    top: 7%;
-    right: 1%;
+    top: 3%;
+    right: 7%;
     bottom: auto;
     width: clamp(7.8rem, 31vw, 10rem);
     padding: 0.65rem;
@@ -6264,18 +6283,18 @@ main {
   .home-hero__tile--social {
     right: 1%;
     bottom: 15%;
-    width: clamp(8.2rem, 35vw, 10.6rem);
+    width: clamp(8rem, 34vw, 10.4rem);
   }
 
   .home-hero__rating {
     left: 4%;
-    bottom: 23%;
+    bottom: 23.5%;
   }
 
   .home-hero__mini-card {
     top: auto;
     right: auto;
-    bottom: 34%;
+    bottom: 35%;
     left: 4%;
     min-width: 7.8rem;
   }
@@ -6359,11 +6378,17 @@ main {
   }
 
   .home-hero__visual {
-    height: clamp(24rem, 116vw, 30rem);
+    height: clamp(23rem, 110vw, 28rem);
+    margin-top: -0.75rem;
   }
 
   .home-hero__device {
-    inset: 16% 21% -22% 21%;
+    inset: 12% 23% -21% 23%;
+  }
+
+  .home-hero__orbit {
+    inset: auto -12% -31% -12%;
+    height: 72%;
   }
 
   .home-hero__rating {
