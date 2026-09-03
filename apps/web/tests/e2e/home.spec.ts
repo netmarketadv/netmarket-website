@@ -212,6 +212,7 @@ test('reviews layout stays compact and clean', async ({ page }) => {
 
     const cardStyle = window.getComputedStyle(card);
     const quoteStyle = window.getComputedStyle(quote);
+    const quoteFade = window.getComputedStyle(quote, '::after');
     const starStyle = window.getComputedStyle(star);
     return {
       cardHeight: card.getBoundingClientRect().height,
@@ -219,6 +220,7 @@ test('reviews layout stays compact and clean', async ({ page }) => {
       transition: cardStyle.transitionDuration,
       transform: cardStyle.transform,
       quoteMaxHeight: Number.parseFloat(quoteStyle.maxHeight),
+      quoteFadeBackground: quoteFade.backgroundImage,
       starColor: starStyle.color,
       hasEyeButton: Boolean(open),
       openText: open?.textContent?.trim() ?? ''
@@ -231,6 +233,7 @@ test('reviews layout stays compact and clean', async ({ page }) => {
   expect(reviewState?.transition).toBe('0s');
   expect(reviewState?.transform).toBe('none');
   expect(reviewState?.quoteMaxHeight).toBeLessThanOrEqual(140);
+  expect(reviewState?.quoteFadeBackground).toContain('linear-gradient');
   expect(reviewState?.starColor).toBe('rgb(251, 188, 4)');
   expect(reviewState?.hasEyeButton).toBe(true);
   expect(reviewState?.openText).toBe('');
@@ -428,6 +431,52 @@ test('client marquee is full width, continuous, and accessible', async ({ page }
   expect(marqueeState.animationName).toBe('nm-client-marquee');
   expect(marqueeState.animationTiming).toBe('linear');
   expect(marqueeState.mask).not.toBe('none');
+});
+
+test('homepage polish keeps key sections aligned and manually scrollable', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-work-section').scrollIntoViewIfNeeded();
+
+  const polishState = await page.evaluate(() => {
+    const caseSlider = document.querySelector<HTMLElement>('.home-case-slider');
+    const caseTrack = document.querySelector<HTMLElement>('.home-case-slider__track');
+    const caseBody = document.querySelector<HTMLElement>('.home-case-card__body');
+    const methodSection = document.querySelector<HTMLElement>('.home-method-section');
+    const ctaSection = document.querySelector<HTMLElement>('.home-final-cta');
+    const ctaCard = document.querySelector<HTMLElement>('.home-final-cta__inner');
+    const linkedinIcon = document.querySelector<SVGElement>('.person-card__content a svg');
+
+    if (caseSlider) caseSlider.scrollLeft = 260;
+
+    const iconRect = linkedinIcon?.getBoundingClientRect();
+    const linkRect = linkedinIcon?.closest('a')?.getBoundingClientRect();
+
+    return {
+      caseSliderOverflow: caseSlider ? window.getComputedStyle(caseSlider).overflowX : '',
+      caseSliderScrollLeft: caseSlider?.scrollLeft ?? 0,
+      caseTrackAnimation: caseTrack ? window.getComputedStyle(caseTrack).animationName : '',
+      caseTextAlign: caseBody ? window.getComputedStyle(caseBody).textAlign : '',
+      methodBackground: methodSection ? window.getComputedStyle(methodSection).backgroundColor : '',
+      ctaSectionBackground: ctaSection ? window.getComputedStyle(ctaSection).backgroundColor : '',
+      ctaCardBackground: ctaCard ? window.getComputedStyle(ctaCard).backgroundImage : '',
+      ctaCardRadius: ctaCard ? Number.parseFloat(window.getComputedStyle(ctaCard).borderTopLeftRadius) : 0,
+      linkedinCentered:
+        iconRect && linkRect
+          ? Math.abs(iconRect.left + iconRect.width / 2 - (linkRect.left + linkRect.width / 2)) < 1 &&
+            Math.abs(iconRect.top + iconRect.height / 2 - (linkRect.top + linkRect.height / 2)) < 1
+          : false
+    };
+  });
+
+  expect(polishState.caseSliderOverflow).toBe('auto');
+  expect(polishState.caseSliderScrollLeft).toBeGreaterThan(0);
+  expect(polishState.caseTrackAnimation).toBe('nm-case-slider');
+  expect(polishState.caseTextAlign).toBe('center');
+  expect(polishState.methodBackground).toBe('rgb(255, 255, 255)');
+  expect(polishState.ctaSectionBackground).toBe('rgb(255, 255, 255)');
+  expect(polishState.ctaCardBackground).toContain('linear-gradient');
+  expect(polishState.ctaCardRadius).toBeGreaterThan(20);
+  expect(polishState.linkedinCentered).toBe(true);
 });
 
 test('client marquee respects reduced motion', async ({ browser }) => {

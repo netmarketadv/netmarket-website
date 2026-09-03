@@ -184,7 +184,7 @@ Icone minime, stroke 1.75-2px, 16-20px. Non introdurre librerie finche non serve
 - `plan-card`: spiegazione del percorso con step interni.
 - `dark-checklist`: pain point o vincoli, solo quando serve contrasto.
 - `service-bento`: competenze con immagine e testo.
-- `landscape-cta`: pausa visiva e conversione.
+- `landscape-cta` / `home-final-cta`: pausa visiva e conversione. In homepage la CTA finale e una card scenica scura dentro sezione bianca, non una fascia full-width.
 - `trust-grid`: metriche reali.
 - `reviews-carousel`: slider orizzontale full-width con contenuti Google reali statici.
 - `client-marquee`: riga loghi clienti full-width, continua e riutilizzabile.
@@ -217,14 +217,18 @@ Regole:
 - Full viewport width sul componente; il contenuto testuale resta allineato alla griglia, ma il rail visivo deve attraversare tutto lo schermo.
 - Una sola riga orizzontale, senza wrapping, box, card, bordi o ombre.
 - Movimento automatico continuo, lineare, lento, da destra verso sinistra.
-- Gap compatto e respirato: circa 22-62px desktop, 20-38px mobile. Evitare slot larghi che fanno sembrare i loghi piccoli o dispersi.
-- Loghi visibili e generosi: altezza ottica circa 48-84px desktop e 38-58px mobile, normalizzata con `visualScale`.
+- Gap compatto e respirato: circa 15-44px desktop, 13-24px mobile. Evitare slot larghi che fanno sembrare i loghi piccoli o dispersi.
+- Loghi visibili e generosi: altezza ottica circa 71-133px desktop e 80-112px mobile, normalizzata con `visualScale`.
 - Fade laterale con CSS mask per evitare tagli duri ai bordi viewport.
 - Loghi data-driven con `name`, `logo`, `href?`, `visualScale?`.
 - `visualScale` serve per normalizzare otticamente loghi con formati diversi, senza alterare i file sorgenti.
 - Link solo quando esiste una destinazione reale e coerente, come un caso studio pubblicato. In assenza di URL reale, il logo resta non cliccabile.
 - Il gruppo duplicato per il loop e puramente visivo: `aria-hidden="true"` e immagini con `alt=""`.
 - Reduced motion obbligatorio: niente autoplay, una sola lista semantica, scroll orizzontale manuale.
+
+### 13.4.1 Homepage Case Slider
+
+Lo slider case study in homepage e un rail full-width con autoplay leggero e scroll manuale nativo. I testi della sezione e delle card restano centrati; le card mantengono altezza uniforme pur alternando larghezze diverse. In hover, focus o interazione manuale l'autoplay si ferma, e in reduced motion viene disattivato.
 
 ### 13.5 People / Team
 
@@ -242,10 +246,15 @@ Regole:
 - LinkedIn discreto, esterno, con label accessibile "Profilo LinkedIn di Nome Cognome".
 - Desktop: 5 colonne solo quando le foto restano grandi. Tablet largo: 3+2 centrato intenzionale. Tablet: 2 colonne. Mobile: rail swipe nativo con prossima card parzialmente visibile.
 - Hover desktop: micro scale immagine massimo circa `1.025`, link LinkedIn piu evidente; niente overlay pesanti, rotazioni o testo sopra il volto.
+- Il link LinkedIn compatto e un bottone circolare: l'icona resta centrata anche quando label e freccia sono nascoste. Su hover/focus puo espandersi a pill con testo.
 - Motion: sezione con `line` reveal, persone con stagger leggero. Il contenuto resta server-rendered e visibile senza JS.
 - Structured data: usare utility centrale `personJsonLd`; emettere `Person` solo nelle pagine dove la persona e visibile o semanticamente rilevante.
 - Futura integrazione CMS: valutare CPT `nm_person` o relazione con utenti WordPress per authoring. `Person` resta entita principale; team member, author e contributor sono ruoli/relazioni, non copie della stessa persona.
 - Future pagine persona solo con contenuto reale sufficiente: nome, ruolo, ritratto, bio professionale verificata, competenze, progetti, articoli, LinkedIn.
+
+### 13.6 Reviews
+
+Le sezioni recensioni devono centrare badge Google, titolo e testo introduttivo. Le card recensione usano clamp sul testo e mostrano un fade inferiore solo quando il testo e realmente troncato; il pulsante di lettura completa resta sopra il fade e apre la modale accessibile.
 
 ## 14. Cards
 
