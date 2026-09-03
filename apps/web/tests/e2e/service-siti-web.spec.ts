@@ -10,6 +10,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await expect(
     page.getByRole('heading', { level: 1, name: 'Siti web che lavorano per la tua azienda.' })
   ).toBeVisible();
+  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorano');
   await expect(page).toHaveTitle(/Realizzazione siti web a Padova/);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
@@ -19,14 +20,18 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await expect(page.getByRole('link', { name: 'Guarda i progetti' }).first()).toBeVisible();
 
   await expect(page.getByRole('heading', { level: 2, name: 'Che tipo di sito possiamo realizzare.' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Alcuni siti che abbiamo progettato.' })).toBeVisible();
+  await expect(page.locator('[data-portfolio-card]')).toHaveCount(6);
+  await expect(page.locator('.websites-portfolio-card[aria-hidden="true"]')).toHaveCount(6);
+  await expect(page.locator('[data-portfolio-card]').first()).toHaveAttribute('href', /rigomar/);
   await expect(page.getByRole('heading', { level: 2, name: /modo in cui cerchiamo oggi/ })).toBeVisible();
   await expect(page.locator('body')).toContainText(/nuovi sistemi di ricerca basati sull’AI/);
   await expect(page.locator('body')).toContainText(/senza promettere risultati non controllabili/);
 
   const projectCards = page.locator('.websites-project-card');
   await expect(projectCards).toHaveCount(4);
-  await expect(page.getByRole('link', { name: /Albertini/i })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Rigomar/i })).toBeVisible();
+  await expect(page.locator('.websites-project-showcase').getByRole('link', { name: /Albertini/i })).toBeVisible();
+  await expect(page.locator('.websites-project-showcase').getByRole('link', { name: /Rigomar/i })).toBeVisible();
   await expect(page.getByRole('link', { name: /Guarda tutti i progetti/i })).toBeVisible();
 
   const connectedLinks = page.locator('.websites-connected__links');
@@ -46,13 +51,17 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await page.locator('.websites-type-rail').scrollIntoViewIfNeeded();
   const mobileState = await page.evaluate(() => {
     const rail = document.querySelector<HTMLElement>('.websites-type-rail');
+    const portfolioRail = document.querySelector<HTMLElement>('.websites-portfolio__viewport');
     const projectRail = document.querySelector<HTMLElement>('.websites-project-showcase');
     if (rail) rail.scrollLeft = 180;
+    if (portfolioRail) portfolioRail.scrollLeft = 180;
     if (projectRail) projectRail.scrollLeft = 180;
     return {
       bodyOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       typeRailOverflow: rail ? window.getComputedStyle(rail).overflowX : '',
       typeRailScrollLeft: rail?.scrollLeft ?? 0,
+      portfolioRailOverflow: portfolioRail ? window.getComputedStyle(portfolioRail).overflowX : '',
+      portfolioRailScrollLeft: portfolioRail?.scrollLeft ?? 0,
       projectRailOverflow: projectRail ? window.getComputedStyle(projectRail).overflowX : '',
       projectRailScrollLeft: projectRail?.scrollLeft ?? 0
     };
@@ -61,6 +70,8 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   expect(mobileState.bodyOverflow).toBeLessThanOrEqual(2);
   expect(mobileState.typeRailOverflow).toBe('auto');
   expect(mobileState.typeRailScrollLeft).toBeGreaterThan(0);
+  expect(mobileState.portfolioRailOverflow).toBe('auto');
+  expect(mobileState.portfolioRailScrollLeft).toBeGreaterThan(0);
   expect(mobileState.projectRailOverflow).toBe('auto');
   expect(mobileState.projectRailScrollLeft).toBeGreaterThan(0);
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);

@@ -51,6 +51,64 @@ const projectCopy: Record<string, { headline: string; outcome: string; kind: str
   }
 };
 
+type PortfolioSlide = {
+  client: string;
+  type: string;
+  image: string;
+  alt: string;
+  href?: string;
+  position: string;
+};
+
+const portfolioSlides: PortfolioSlide[] = [
+  {
+    client: 'Rigomar',
+    type: 'Sito web aziendale',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp',
+    alt: 'Pagina del sito web aziendale Rigomar progettato da Netmarket',
+    href: projectPath(
+      'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda'
+    ),
+    position: '50% 50%'
+  },
+  {
+    client: 'Non Solo Tende',
+    type: 'Ecommerce',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp',
+    alt: 'Ecommerce Non Solo Tende realizzato da Netmarket',
+    position: '50% 50%'
+  },
+  {
+    client: 'Sirene Blu',
+    type: 'Sito corporate',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp',
+    alt: 'Sito corporate Sirene Blu progettato da Netmarket',
+    position: '50% 48%'
+  },
+  {
+    client: 'Progetto-e',
+    type: 'Sito web e SEO',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp',
+    alt: 'Sito web Progetto-e fotovoltaico sviluppato da Netmarket',
+    href: projectPath('sviluppo-sito-web-fotovoltaico-progetto-e'),
+    position: '50% 50%'
+  },
+  {
+    client: 'Ecommerce moda',
+    type: 'Ecommerce',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp',
+    alt: 'Ecommerce di abbigliamento sviluppato da Netmarket',
+    position: '50% 50%'
+  },
+  {
+    client: 'Sito corporate',
+    type: 'Web design',
+    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp',
+    alt: 'Web design per sito corporate realizzato da Netmarket',
+    position: '50% 50%'
+  }
+];
+
 const serviceLinks = [
   ['Ecommerce', '/servizi/ecommerce/', 'Per vendere online con cataloghi, checkout e gestione operativa.'],
   ['SEO', '/servizi/seo/', 'Per costruire struttura, contenuti e segnali utili alla visibilità.'],
@@ -170,7 +228,7 @@ const displayedFaq = fallbackFaq;
 
     <div class="websites-hero__copy" data-reveal="line">
       <p class="websites-kicker">Netmarket · Padova · dal 1986</p>
-      <h1 id="page-title">Siti web che lavorano per la tua azienda.</h1>
+      <h1 id="page-title">Siti web che <span class="nm-heading-marker nm-heading-marker--strong">lavorano</span> per la tua azienda.</h1>
       <p>
         Progettiamo siti corporate, ecommerce e piattaforme digitali che uniscono comunicazione,
         contenuti, marketing e tecnologia.
@@ -207,6 +265,67 @@ const displayedFaq = fallbackFaq;
         <span>CMS</span>
         <span>SEO</span>
         <span>Analytics</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="websites-portfolio" aria-labelledby="websites-portfolio-title">
+    <div class="websites-portfolio__heading" data-reveal="line">
+      <h2 id="websites-portfolio-title">Alcuni siti che abbiamo progettato.</h2>
+      <p>Interfacce diverse, identità diverse, stesso standard di cura.</p>
+    </div>
+    <div class="websites-portfolio__viewport" data-reveal="up">
+      <div class="websites-portfolio__track" aria-label="Portfolio siti web Netmarket">
+        {portfolioSlides.map((slide, index) => {
+          const Tag = slide.href ? 'a' : 'article';
+          return (
+            <Tag
+              class="websites-portfolio-card"
+              {...(slide.href ? { href: slide.href } : {})}
+              style={`--portfolio-position: ${slide.position}`}
+              data-portfolio-card
+            >
+              <img
+                src={slide.image}
+                alt={slide.alt}
+                width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
+                height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
+                loading={index < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+                sizes="(max-width: 767px) 82vw, (max-width: 1023px) 55vw, 38vw"
+              />
+              <span>
+                <strong>{slide.client}</strong>
+                <small>{slide.type}</small>
+              </span>
+            </Tag>
+          );
+        })}
+        {portfolioSlides.map((slide, index) => {
+          const Tag = slide.href ? 'a' : 'article';
+          return (
+            <Tag
+              class="websites-portfolio-card"
+              {...(slide.href ? { href: slide.href, tabindex: -1 } : {})}
+              style={`--portfolio-position: ${slide.position}`}
+              aria-hidden="true"
+            >
+              <img
+                src={slide.image}
+                alt=""
+                width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
+                height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 767px) 82vw, (max-width: 1023px) 55vw, 38vw"
+              />
+              <span>
+                <strong>{slide.client}</strong>
+                <small>{slide.type}</small>
+              </span>
+            </Tag>
+          );
+        })}
       </div>
     </div>
   </section>

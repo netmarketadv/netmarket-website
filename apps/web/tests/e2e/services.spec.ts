@@ -24,7 +24,8 @@ test('services archive renders the editorial index', async ({ page }) => {
 
 test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
   await page.goto('/servizi/siti-web/', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { level: 1, name: 'Siti web' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Siti web che lavorano per la tua azienda.' })).toBeVisible();
+  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorano');
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Servizi');
   const jsonLd = await page
     .locator('script[type="application/ld+json"]')
@@ -37,7 +38,7 @@ test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
   );
   await expect(page.locator('#service-faq-title')).toBeVisible();
   await expect(page.locator('.faq-list__trigger').first()).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Parliamone' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Parliamone' }).first()).toBeVisible();
 });
 
 test('services remain visible without javascript', async ({ browser }) => {
