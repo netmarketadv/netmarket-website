@@ -72,6 +72,7 @@ const hasProof = service.results.length > 0;
   noindex={service.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, serviceSchema]}
+  motionMode={isWebsitesService ? 'light' : 'full'}
 >
   {
     isWebsitesService ? (

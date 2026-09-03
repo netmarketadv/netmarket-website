@@ -1,5 +1,12 @@
 ---
 import type { CaseStudy, RelationSummary, Service } from '@netmarket/schemas';
+import {
+  IconBuildingStore,
+  IconLayoutDashboard,
+  IconPalette,
+  IconRocket,
+  IconShoppingCart
+} from '@tabler/icons-astro';
 import Button from '@/components/ui/Button.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
 import { getProjectArchiveData, projectClient, projectDescription, projectPath } from '@/lib/projects/content';
@@ -55,6 +62,7 @@ type PortfolioSlide = {
   client: string;
   type: string;
   image: string;
+  srcset: string;
   alt: string;
   href?: string;
   position: string;
@@ -65,6 +73,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Rigomar',
     type: 'Sito web aziendale',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp 1448w',
     alt: 'Pagina del sito web aziendale Rigomar progettato da Netmarket',
     href: projectPath(
       'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda'
@@ -75,6 +85,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Non Solo Tende',
     type: 'Ecommerce',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp 1448w',
     alt: 'Ecommerce Non Solo Tende realizzato da Netmarket',
     position: '50% 50%'
   },
@@ -82,6 +94,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Sirene Blu',
     type: 'Sito corporate',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket-768x432.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket-1024x577.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp 1671w',
     alt: 'Sito corporate Sirene Blu progettato da Netmarket',
     position: '50% 48%'
   },
@@ -89,6 +103,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Progetto-e',
     type: 'Sito web e SEO',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp 1448w',
     alt: 'Sito web Progetto-e fotovoltaico sviluppato da Netmarket',
     href: projectPath('sviluppo-sito-web-fotovoltaico-progetto-e'),
     position: '50% 50%'
@@ -97,6 +113,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Ecommerce moda',
     type: 'Ecommerce',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket-768x512.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket-1024x683.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp 1536w',
     alt: 'Ecommerce di abbigliamento sviluppato da Netmarket',
     position: '50% 50%'
   },
@@ -104,6 +122,8 @@ const portfolioSlides: PortfolioSlide[] = [
     client: 'Sito corporate',
     type: 'Web design',
     image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp',
+    srcset:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp 1448w',
     alt: 'Web design per sito corporate realizzato da Netmarket',
     position: '50% 50%'
   }
@@ -131,11 +151,31 @@ const serviceLinks = [
 ] as const;
 
 const projectTypes = [
-  ['Siti corporate', 'Per raccontare azienda, servizi, prodotti e posizionamento con una struttura chiara.'],
-  ['Ecommerce', 'Per vendere online con un percorso costruito attorno a catalogo, cliente e gestione.'],
-  ['Landing page', 'Per campagne, lanci, eventi e acquisizione contatti senza disperdere attenzione.'],
-  ['Piattaforme digitali', 'Per aree riservate, contenuti dinamici, dati, funzioni custom e integrazioni.'],
-  ['Restyling', 'Per ripensare siti diventati lenti, confusi, difficili da aggiornare o poco efficaci.']
+  {
+    title: 'Siti corporate',
+    text: 'Per raccontare azienda, servizi, prodotti e posizionamento con una struttura chiara.',
+    icon: IconBuildingStore
+  },
+  {
+    title: 'Ecommerce',
+    text: 'Per vendere online con un percorso costruito attorno a catalogo, cliente e gestione.',
+    icon: IconShoppingCart
+  },
+  {
+    title: 'Landing page',
+    text: 'Per campagne, lanci, eventi e acquisizione contatti senza disperdere attenzione.',
+    icon: IconRocket
+  },
+  {
+    title: 'Piattaforme digitali',
+    text: 'Per aree riservate, contenuti dinamici, dati, funzioni custom e integrazioni.',
+    icon: IconLayoutDashboard
+  },
+  {
+    title: 'Restyling',
+    text: 'Per ripensare siti diventati lenti, confusi, difficili da aggiornare o poco efficaci.',
+    icon: IconPalette
+  }
 ] as const;
 
 const assetChecks = [
@@ -171,6 +211,17 @@ const seoAiItems = [
     'Chiaro per i sistemi AI',
     'Organizziamo informazioni, contesto e relazioni perché anche i nuovi strumenti possano interpretare meglio l’azienda.'
   ]
+] as const;
+
+const aiLogos = [
+  {
+    name: 'ChatGPT',
+    src: 'https://cms.netmarket.it/wp-content/uploads/2026/09/ChatGPT-Logo.svg.webp'
+  },
+  {
+    name: 'Google Gemini',
+    src: 'https://cms.netmarket.it/wp-content/uploads/2026/09/Google_Gemini_logo_2025.svg.webp'
+  }
 ] as const;
 
 const technologyItems = [
@@ -239,41 +290,9 @@ const displayedFaq = fallbackFaq;
       </div>
     </div>
 
-    <div class="websites-hero__visual" aria-label="Composizione dimostrativa di sito web responsive" data-reveal="media">
-      <div class="websites-browser-demo" aria-hidden="true">
-        <div class="websites-browser-demo__bar">
-          <span></span><span></span><span></span>
-          <strong>azienda.it</strong>
-        </div>
-        <div class="websites-browser-demo__screen">
-          <div>
-            <span>Servizi</span>
-            <strong>Progettare, produrre, misurare.</strong>
-            <p>Una pagina chiara porta l’utente dal bisogno al contatto.</p>
-          </div>
-          <div class="websites-browser-demo__grid">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
-      <div class="websites-phone-demo" aria-hidden="true">
-        <div></div>
-        <strong>Mobile first</strong>
-        <span>Contatto visibile</span>
-      </div>
-      <div class="websites-hero__note" aria-hidden="true">
-        <span>CMS</span>
-        <span>SEO</span>
-        <span>Analytics</span>
-      </div>
-    </div>
   </section>
 
-  <section class="websites-portfolio" aria-labelledby="websites-portfolio-title">
-    <div class="websites-portfolio__heading" data-reveal="line">
-      <h2 id="websites-portfolio-title">Alcuni siti che abbiamo progettato.</h2>
-      <p>Interfacce diverse, identità diverse, stesso standard di cura.</p>
-    </div>
+  <section class="websites-portfolio" aria-label="Portfolio siti web Netmarket">
     <div class="websites-portfolio__viewport" data-reveal="up">
       <div class="websites-portfolio__track" aria-label="Portfolio siti web Netmarket">
         {portfolioSlides.map((slide, index) => {
@@ -287,12 +306,13 @@ const displayedFaq = fallbackFaq;
             >
               <img
                 src={slide.image}
+                srcset={slide.srcset}
                 alt={slide.alt}
                 width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
                 height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
-                loading={index < 3 ? 'eager' : 'lazy'}
+                loading="lazy"
                 decoding="async"
-                sizes="(max-width: 767px) 82vw, (max-width: 1023px) 55vw, 38vw"
+                sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
               />
               <span>
                 <strong>{slide.client}</strong>
@@ -312,12 +332,13 @@ const displayedFaq = fallbackFaq;
             >
               <img
                 src={slide.image}
+                srcset={slide.srcset}
                 alt=""
                 width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
                 height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
                 loading="lazy"
                 decoding="async"
-                sizes="(max-width: 767px) 82vw, (max-width: 1023px) 55vw, 38vw"
+                sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
               />
               <span>
                 <strong>{slide.client}</strong>
@@ -338,8 +359,11 @@ const displayedFaq = fallbackFaq;
       </p>
     </div>
     <div class="websites-type-rail" data-reveal="up" data-reveal-stagger="1">
-      {projectTypes.map(([title, text]) => (
+      {projectTypes.map(({ title, text, icon: Icon }) => (
         <article>
+          <span class="websites-type-rail__icon" aria-hidden="true">
+            <Icon stroke={1.8} />
+          </span>
           <h3 class="nm-heading-o-none">{title}</h3>
           <p>{text}</p>
         </article>
@@ -388,6 +412,13 @@ const displayedFaq = fallbackFaq;
         Google non è più l’unico punto di accesso alle informazioni. Per questo organizziamo
         pagine, contenuti e dati perché siano comprensibili anche dai nuovi sistemi di ricerca basati sull’AI.
       </p>
+      <div class="websites-ai__logos" aria-label="Sistemi AI considerati nella progettazione dei contenuti">
+        {aiLogos.map((logo) => (
+          <span>
+            <img src={logo.src} alt={logo.name} width="140" height="44" loading="lazy" decoding="async" />
+          </span>
+        ))}
+      </div>
     </div>
     <div class="websites-ai__cards" data-reveal="up" data-reveal-stagger="1">
       {seoAiItems.map(([title, text]) => (

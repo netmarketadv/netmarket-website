@@ -20,7 +20,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await expect(page.getByRole('link', { name: 'Guarda i progetti' }).first()).toBeVisible();
 
   await expect(page.getByRole('heading', { level: 2, name: 'Che tipo di sito possiamo realizzare.' })).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Alcuni siti che abbiamo progettato.' })).toBeVisible();
+  await expect(page.getByText('Alcuni siti che abbiamo progettato.')).toHaveCount(0);
   await expect(page.locator('[data-portfolio-card]')).toHaveCount(6);
   await expect(page.locator('.websites-portfolio-card[aria-hidden="true"]')).toHaveCount(6);
   await expect(page.locator('[data-portfolio-card]').first()).toHaveAttribute('href', /rigomar/);
@@ -53,13 +53,11 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
     const rail = document.querySelector<HTMLElement>('.websites-type-rail');
     const portfolioRail = document.querySelector<HTMLElement>('.websites-portfolio__viewport');
     const projectRail = document.querySelector<HTMLElement>('.websites-project-showcase');
-    if (rail) rail.scrollLeft = 180;
     if (portfolioRail) portfolioRail.scrollLeft = 180;
     if (projectRail) projectRail.scrollLeft = 180;
     return {
       bodyOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      typeRailOverflow: rail ? window.getComputedStyle(rail).overflowX : '',
-      typeRailScrollLeft: rail?.scrollLeft ?? 0,
+      typeRailColumns: rail ? window.getComputedStyle(rail).gridTemplateColumns : '',
       portfolioRailOverflow: portfolioRail ? window.getComputedStyle(portfolioRail).overflowX : '',
       portfolioRailScrollLeft: portfolioRail?.scrollLeft ?? 0,
       projectRailOverflow: projectRail ? window.getComputedStyle(projectRail).overflowX : '',
@@ -68,8 +66,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   });
 
   expect(mobileState.bodyOverflow).toBeLessThanOrEqual(2);
-  expect(mobileState.typeRailOverflow).toBe('auto');
-  expect(mobileState.typeRailScrollLeft).toBeGreaterThan(0);
+  expect(mobileState.typeRailColumns.split(' ').length).toBe(1);
   expect(mobileState.portfolioRailOverflow).toBe('auto');
   expect(mobileState.portfolioRailScrollLeft).toBeGreaterThan(0);
   expect(mobileState.projectRailOverflow).toBe('auto');

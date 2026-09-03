@@ -1,5 +1,4 @@
 import { motionConfig } from './config';
-import { initGsapMotion } from './gsap-motion';
 import { isFinePointer, prefersReducedMotion } from './reduced-motion';
 import { initReveal } from './reveal';
 
@@ -312,11 +311,24 @@ function initMagnetic(): void {
   });
 }
 
-export function initMotion(): void {
+interface MotionInitOptions {
+  useGsap?: boolean;
+}
+
+export function initMotion(options: MotionInitOptions = {}): void {
+  const { useGsap = true } = options;
+
   initHeader();
-  void initGsapMotion().then((handled) => {
-    if (!handled) initReveal();
-  });
+  if (useGsap) {
+    void import('./gsap-motion')
+      .then(({ initGsapMotion }) => initGsapMotion())
+      .then((handled) => {
+        if (!handled) initReveal();
+      })
+      .catch(() => initReveal());
+  } else {
+    initReveal();
+  }
   initMegaMenus();
   initMobileMenu();
   initAccordions();

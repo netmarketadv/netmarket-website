@@ -18,6 +18,7 @@ interface Props {
   noindexFollow?: boolean;
   canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
+  motionMode?: 'full' | 'light';
 }
 
 const {
@@ -27,7 +28,8 @@ const {
   noindex = false,
   noindexFollow = false,
   canonicalSiteUrl,
-  structuredData = []
+  structuredData = [],
+  motionMode = 'full'
 } = Astro.props;
 const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
 const buildTime =
@@ -36,7 +38,12 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
 ---
 
 <!doctype html>
-<html lang="it" data-netmarket-build={buildSha} data-netmarket-environment={buildEnvironment}>
+<html
+  lang="it"
+  data-motion-mode={motionMode}
+  data-netmarket-build={buildSha}
+  data-netmarket-environment={buildEnvironment}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -1,5 +1,7 @@
 <script>
   import { initMotion } from '@/lib/motion/lifecycle';
 
-  initMotion();
+  initMotion({
+    useGsap: document.documentElement.dataset.motionMode !== 'light'
+  });
 </script>
