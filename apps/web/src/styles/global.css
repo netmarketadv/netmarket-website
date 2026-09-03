@@ -166,24 +166,30 @@ h4 {
 }
 
 .nm-heading-marker {
+  --nm-marker-bg: rgb(14 81 254 / 0.17);
+  --nm-marker-line: rgb(14 81 254 / 0.94);
+  --nm-marker-line-width: max(2px, 0.025em);
+  --nm-marker-handle-size: max(0.44rem, 0.12em);
   position: relative;
   display: inline;
-  border-radius: 0.03em;
-  background: rgb(14 81 254 / 0.16);
-  box-shadow:
-    -0.035em 0 0 rgb(14 81 254 / 0.92),
-    0.035em 0 0 rgb(14 81 254 / 0.92);
+  border-radius: 0;
+  background:
+    linear-gradient(var(--nm-marker-line), var(--nm-marker-line)) left center /
+      var(--nm-marker-line-width) calc(100% + 0.08em) no-repeat,
+    linear-gradient(var(--nm-marker-line), var(--nm-marker-line)) right center /
+      var(--nm-marker-line-width) calc(100% + 0.08em) no-repeat,
+    linear-gradient(var(--nm-marker-bg), var(--nm-marker-bg));
+  box-shadow: none;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  padding-inline: 0.055em;
   color: var(--nm-color-ink);
+  padding-inline: 0.075em;
+  padding-block: 0.015em;
 }
 
 .nm-heading-marker--strong {
-  background: rgb(14 81 254 / 0.2);
-  box-shadow:
-    -0.04em 0 0 rgb(14 81 254 / 0.96),
-    0.04em 0 0 rgb(14 81 254 / 0.96);
+  --nm-marker-bg: rgb(14 81 254 / 0.22);
+  --nm-marker-line: var(--nm-color-blue);
 }
 
 .nm-heading-marker::before,
@@ -191,22 +197,22 @@ h4 {
   content: '';
   position: absolute;
   z-index: 2;
-  width: clamp(0.35rem, 0.14em, 0.58rem);
+  width: var(--nm-marker-handle-size);
   aspect-ratio: 1;
   border-radius: 999px;
-  background: var(--nm-color-blue);
+  background: var(--nm-marker-line);
   box-shadow: 0 0 0 1px rgb(255 255 255 / 0.72);
   pointer-events: none;
 }
 
 .nm-heading-marker::before {
-  bottom: -0.11em;
-  left: -0.12em;
+  top: -0.08em;
+  left: calc((var(--nm-marker-handle-size) / -2) + (var(--nm-marker-line-width) / 2));
 }
 
 .nm-heading-marker::after {
-  top: -0.11em;
-  right: -0.12em;
+  right: calc((var(--nm-marker-handle-size) / -2) + (var(--nm-marker-line-width) / 2));
+  bottom: -0.08em;
 }
 
 .nm-motion-word__inner.nm-heading-marker {
@@ -4651,8 +4657,8 @@ main {
 .nm-motion-word {
   display: inline-block;
   overflow: clip;
-  margin: -0.14em -0.18em -0.26em;
-  padding: 0.14em 0.18em 0.26em;
+  margin: -0.2em -0.22em -0.3em;
+  padding: 0.2em 0.22em 0.3em;
   vertical-align: baseline;
 }
 
