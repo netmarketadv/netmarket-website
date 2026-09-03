@@ -7035,19 +7035,22 @@ main {
     mask-image: none;
   }
 
-  .home-case-slider {
+  .home-case-slider,
+  .websites-portfolio__viewport {
     overflow-x: auto;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
   .client-marquee__track,
-  .home-case-slider__track {
+  .home-case-slider__track,
+  .websites-portfolio__track {
     animation: none;
     will-change: auto;
   }
 
-  .client-marquee__group[aria-hidden='true'] {
+  .client-marquee__group[aria-hidden='true'],
+  .websites-portfolio-card[aria-hidden='true'] {
     display: none;
   }
 }
