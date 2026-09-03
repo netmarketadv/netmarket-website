@@ -2398,7 +2398,7 @@ main {
 
 .reviews-section {
   --review-card-width: clamp(18rem, 28vw, 27rem);
-  --review-card-height: clamp(18.75rem, 27vw, 24rem);
+  --review-card-height: clamp(17rem, 23vw, 20rem);
   display: grid;
   gap: clamp(1.6rem, 3vw, 3rem);
 }
@@ -2425,7 +2425,7 @@ main {
 }
 
 .reviews-section__header h2 {
-  max-width: 10ch;
+  max-width: 13ch;
   margin-inline: auto;
   font-size: var(--nm-text-h2);
   line-height: 0.98;
@@ -2606,7 +2606,7 @@ main {
 }
 
 .js .review-card blockquote {
-  max-height: 8.7rem;
+  max-height: 6.9rem;
   overflow: hidden;
 }
 
@@ -4223,7 +4223,7 @@ main {
 
   .reviews-section {
     --review-card-width: clamp(18rem, 62vw, 26rem);
-    --review-card-height: 23rem;
+    --review-card-height: 20rem;
   }
 
   .reviews-section__header {
@@ -4239,11 +4239,11 @@ main {
 @media (width <= 640px) {
   .reviews-section {
     --review-card-width: clamp(17rem, 82vw, 22rem);
-    --review-card-height: 22rem;
+    --review-card-height: 19.5rem;
   }
 
   .reviews-section__header h2 {
-    max-width: 11ch;
+    max-width: 13ch;
   }
 
   .reviews-carousel__track {
@@ -4266,7 +4266,7 @@ main {
   }
 
   .js .review-card blockquote {
-    max-height: 8.1rem;
+    max-height: 6.5rem;
   }
 
   .review-modal {
@@ -4611,10 +4611,10 @@ main {
 .home-hero__device {
   position: absolute;
   right: auto;
-  bottom: clamp(-15rem, -13vw, -9rem);
+  bottom: clamp(-12rem, -10.5vw, -7.5rem);
   left: 50%;
   z-index: 2;
-  width: clamp(24rem, 29vw, 36rem);
+  width: clamp(20rem, 23vw, 28rem);
   height: auto;
   margin: 0;
   overflow: visible;
@@ -4758,10 +4758,9 @@ main {
 }
 
 .home-hero__rating {
-  left: 20%;
-  bottom: 19%;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  left: 21%;
+  bottom: 18%;
+  display: flex;
   gap: 0.1rem 0.65rem;
   align-items: center;
   border: 1px solid rgb(14 81 254 / 0.12);
@@ -4784,9 +4783,7 @@ main {
 }
 
 .home-hero__rating small {
-  grid-column: 1 / -1;
-  color: #102a62;
-  font-size: 0.74rem;
+  display: none;
 }
 
 .home-hero__mini-card {
@@ -5084,6 +5081,7 @@ main {
   scrollbar-width: none;
   touch-action: pan-x;
   cursor: grab;
+  -webkit-overflow-scrolling: touch;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 5rem, #000 calc(100% - 5rem), transparent);
   mask-image: linear-gradient(90deg, transparent, #000 5rem, #000 calc(100% - 5rem), transparent);
 }
@@ -5111,6 +5109,22 @@ main {
 .home-case-slider:focus-within .home-case-slider__track,
 .home-case-slider:active .home-case-slider__track {
   animation-play-state: paused;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .home-case-slider {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .home-case-slider__track {
+    animation: none;
+    will-change: auto;
+  }
+
+  .home-case-card {
+    scroll-snap-align: start;
+  }
 }
 
 .home-case-card {
@@ -5146,6 +5160,7 @@ main {
 }
 
 .home-case-card__media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -5186,14 +5201,15 @@ main {
 .home-case-card__body {
   display: grid;
   align-content: start;
-  justify-items: center;
+  justify-items: start;
   gap: 0.38rem;
   min-height: 0;
   padding-inline: 0.15rem;
-  text-align: center;
+  text-align: left;
 }
 
 .home-case-card__body h3 {
+  text-align: left;
   margin: 0;
   color: var(--nm-color-ink);
   font-size: clamp(1.2rem, 1.55vw, 1.75rem);
@@ -5207,6 +5223,7 @@ main {
   display: -webkit-box;
   overflow: hidden;
   margin: 0;
+  text-align: left;
   color: var(--nm-color-muted);
   font-size: 0.94rem;
   line-height: 1.42;
@@ -7389,8 +7406,8 @@ main {
   }
 
   .home-hero__device {
-    bottom: clamp(-11rem, -30vw, -7rem);
-    width: min(76vw, 24rem);
+    bottom: clamp(-8rem, -22vw, -5.6rem);
+    width: min(58vw, 17.4rem);
   }
 
   .home-hero__device img {
@@ -7416,19 +7433,19 @@ main {
 
   .home-hero__social-preview {
     right: 0;
-    bottom: 13%;
-    width: clamp(9rem, 42vw, 12.2rem);
+    bottom: 15%;
+    width: clamp(8.6rem, 37vw, 11.4rem);
   }
 
   .home-hero__rating {
     left: 4%;
-    bottom: 23.5%;
+    bottom: 22%;
   }
 
   .home-hero__mini-card {
     top: auto;
     right: auto;
-    bottom: 35%;
+    bottom: 34%;
     left: 4%;
     min-width: 7.8rem;
   }
@@ -7460,8 +7477,8 @@ main {
   }
 
   .home-case-slider {
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .home-case-card,
@@ -7517,8 +7534,8 @@ main {
   }
 
   .home-hero__device {
-    bottom: clamp(-9.5rem, -30vw, -6rem);
-    width: min(78vw, 20rem);
+    bottom: clamp(-6.6rem, -19vw, -4.4rem);
+    width: min(58vw, 15.4rem);
   }
 
   .home-hero__orbit {
@@ -7527,7 +7544,7 @@ main {
   }
 
   .home-hero__rating {
-    bottom: 18%;
+    bottom: 18.5%;
   }
 
   .home-hero__tile figcaption,

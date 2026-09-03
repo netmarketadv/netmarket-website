@@ -7,9 +7,10 @@ interface Props {
   href: string;
   compact?: boolean;
   live?: boolean;
+  showReviewCount?: boolean;
 }
 
-const { rating, reviewCount, href, compact = false, live = false } = Astro.props;
+const { rating, reviewCount, href, compact = false, live = false, showReviewCount = true } = Astro.props;
 ---
 
 <a
@@ -30,6 +31,6 @@ const { rating, reviewCount, href, compact = false, live = false } = Astro.props
       <IconBubble name="star" size="sm" />
       <IconBubble name="star" size="sm" />
     </span>
-    <span><span data-google-review-count>{reviewCount}</span> {live ? 'recensioni live' : 'recensioni Google'}</span>
+    {showReviewCount && <span><span data-google-review-count>{reviewCount}</span> {live ? 'recensioni live' : 'recensioni Google'}</span>}
   </span>
 </a>

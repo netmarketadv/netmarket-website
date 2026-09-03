@@ -146,7 +146,6 @@ const teamJsonLd = teamMembers.map((person) =>
           <div class="home-hero__rating" data-reveal="up" data-reveal-delay="3" aria-label={`${googleTrust.rating} stelle su Google`}>
             <span aria-hidden="true">★★★★★</span>
             <strong>{googleTrust.rating}</strong>
-            <small>{googleTrust.reviewCount} recensioni Google</small>
           </div>
           <div class="home-hero__mini-card" data-reveal="up" data-reveal-delay="4">
             <span>Vendite</span>
@@ -234,7 +233,7 @@ const teamJsonLd = teamMembers.map((person) =>
                       <img
                         src={project.cover!.url}
                         alt={project.cover!.alt || project.title}
-                        loading={index < 3 ? 'eager' : 'lazy'}
+                        loading={index < visibleProjects.length ? 'eager' : 'lazy'}
                         decoding="async"
                       />
                       <span>{projectCategory(project)}</span>

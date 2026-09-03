@@ -208,6 +208,7 @@ test('reviews layout stays compact and clean', async ({ page }) => {
     const quote = document.querySelector<HTMLElement>('.review-card blockquote');
     const star = document.querySelector<HTMLElement>('.review-card__stars svg');
     const open = document.querySelector<HTMLElement>('[data-review-open]:not([hidden])');
+    const badge = document.querySelector<HTMLElement>('.reviews-section .google-trust');
     if (!card || !quote || !star) return null;
 
     const cardStyle = window.getComputedStyle(card);
@@ -223,20 +224,22 @@ test('reviews layout stays compact and clean', async ({ page }) => {
       quoteFadeBackground: quoteFade.backgroundImage,
       starColor: starStyle.color,
       hasEyeButton: Boolean(open),
-      openText: open?.textContent?.trim() ?? ''
+      openText: open?.textContent?.trim() ?? '',
+      badgeText: badge?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
     };
   });
 
   expect(reviewState).not.toBeNull();
-  expect(reviewState?.cardHeight).toBeLessThanOrEqual(390);
+  expect(reviewState?.cardHeight).toBeLessThanOrEqual(330);
   expect(reviewState?.backgroundImage).toBe('none');
   expect(reviewState?.transition).toBe('0s');
   expect(reviewState?.transform).toBe('none');
-  expect(reviewState?.quoteMaxHeight).toBeLessThanOrEqual(140);
+  expect(reviewState?.quoteMaxHeight).toBeLessThanOrEqual(116);
   expect(reviewState?.quoteFadeBackground).toContain('linear-gradient');
   expect(reviewState?.starColor).toBe('rgb(251, 188, 4)');
   expect(reviewState?.hasEyeButton).toBe(true);
   expect(reviewState?.openText).toBe('');
+  expect(reviewState?.badgeText).not.toContain('50 recensioni Google');
 
   await page.locator('[data-review-open]:not([hidden])').first().click();
   await expect(page.locator('[data-review-modal]')).toBeVisible();
@@ -471,12 +474,47 @@ test('homepage polish keeps key sections aligned and manually scrollable', async
   expect(polishState.caseSliderOverflow).toBe('auto');
   expect(polishState.caseSliderScrollLeft).toBeGreaterThan(0);
   expect(polishState.caseTrackAnimation).toBe('nm-case-slider');
-  expect(polishState.caseTextAlign).toBe('center');
+  expect(polishState.caseTextAlign).toBe('left');
   expect(polishState.methodBackground).toBe('rgb(255, 255, 255)');
   expect(polishState.ctaSectionBackground).toBe('rgb(255, 255, 255)');
   expect(polishState.ctaCardBackground).toContain('linear-gradient');
   expect(polishState.ctaCardRadius).toBeGreaterThan(20);
   expect(polishState.linkedinCentered).toBe(true);
+});
+
+test('case study slider remains stable on mobile touch viewports', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 900 },
+    hasTouch: true,
+    isMobile: true,
+    baseURL: testBaseUrl()
+  });
+  const page = await context.newPage();
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-case-slider').scrollIntoViewIfNeeded();
+
+  const state = await page.evaluate(async () => {
+    const slider = document.querySelector<HTMLElement>('.home-case-slider');
+    const track = document.querySelector<HTMLElement>('.home-case-slider__track');
+    const image = document.querySelector<HTMLImageElement>('.home-case-card__media img');
+    if (!slider || !track || !image) return null;
+
+    slider.scrollLeft = 220;
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
+    return {
+      sliderScrollLeft: slider.scrollLeft,
+      animationName: window.getComputedStyle(track).animationName,
+      sliderMask: window.getComputedStyle(slider).maskImage,
+      imageVisible: image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0
+    };
+  });
+
+  expect(state).not.toBeNull();
+  expect(state?.sliderScrollLeft).toBeGreaterThan(0);
+  expect(state?.animationName).toBe('none');
+  expect(state?.sliderMask).toBe('none');
+  expect(state?.imageVisible).toBe(true);
+  await context.close();
 });
 
 test('client marquee respects reduced motion', async ({ browser }) => {
