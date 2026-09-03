@@ -1,8 +1,5 @@
 export type Robots =
-  | 'index, follow'
-  | 'noindex, follow'
-  | 'noindex, nofollow'
-  | 'noindex, nofollow, noarchive';
+  'index, follow' | 'noindex, follow' | 'noindex, nofollow' | 'noindex, nofollow, noarchive';
 
 export interface PageMeta {
   title: string;
@@ -28,6 +25,7 @@ export interface OrganizationMeta {
   legalName?: string;
   url?: string;
   vatId?: string;
+  logo?: string;
 }
 
 export interface ArticleMeta {
@@ -58,6 +56,7 @@ export function organizationJsonLd(
     name: organization.name ?? 'Netmarket',
     ...(organization.legalName ? { legalName: organization.legalName } : {}),
     ...(organization.vatId ? { vatID: organization.vatId } : {}),
+    logo: organization.logo ?? absoluteCanonical(siteUrl, '/netmarket-favicon.png'),
     url: organization.url ?? siteUrl
   };
 }
