@@ -3764,6 +3764,10 @@ main {
   object-fit: contain;
 }
 
+.websites-ai__logo--gemini {
+  transform: scale(1.22);
+}
+
 .websites-ai__cards {
   display: grid;
   gap: 1px;
@@ -3773,8 +3777,30 @@ main {
 }
 
 .websites-ai__cards article {
+  display: grid;
+  gap: 0.72rem;
   background: rgb(255 255 255 / 0.06);
   padding: clamp(1.1rem, 2.2vw, 1.7rem);
+}
+
+.websites-ai__card-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(2.35rem, 3vw, 2.8rem);
+  height: clamp(2.35rem, 3vw, 2.8rem);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: var(--nm-radius-pill);
+  background: rgb(255 255 255 / 0.1);
+  color: #ffffff;
+}
+
+.websites-ai__card-icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+.websites-ai__cards h3 {
+  color: #ffffff;
 }
 
 .websites-ai__cards p {
@@ -6191,8 +6217,24 @@ main {
     border-radius: var(--nm-radius-lg);
   }
 
+  .websites-connected__links a {
+    align-content: start;
+    gap: 1.05rem;
+    min-height: 8rem;
+    padding: 1.05rem;
+  }
+
+  .websites-connected__links span {
+    margin-top: 0;
+  }
+
   .websites-type-rail {
     grid-template-columns: 1fr;
+  }
+
+  .websites-technology,
+  .websites-why {
+    display: none;
   }
 
   .websites-orbit article {

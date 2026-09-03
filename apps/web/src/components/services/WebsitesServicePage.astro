@@ -5,7 +5,10 @@ import {
   IconLayoutDashboard,
   IconPalette,
   IconRocket,
-  IconShoppingCart
+  IconSearch,
+  IconShoppingCart,
+  IconSparkles,
+  IconUsers
 } from '@tabler/icons-astro';
 import Button from '@/components/ui/Button.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
@@ -205,12 +208,21 @@ const methodSteps = [
 ] as const;
 
 const seoAiItems = [
-  ['Chiaro per le persone', 'Testi, navigazione e pagine servizio aiutano a capire subito cosa fate e perché scegliere voi.'],
-  ['Chiaro per Google', 'Struttura, contenuti e collegamenti aiutano il motore di ricerca a leggere correttamente il sito.'],
-  [
-    'Chiaro per i sistemi AI',
-    'Organizziamo informazioni, contesto e relazioni perché anche i nuovi strumenti possano interpretare meglio l’azienda.'
-  ]
+  {
+    title: 'Chiaro per le persone',
+    text: 'Testi, navigazione e pagine servizio aiutano a capire subito cosa fate e perché scegliere voi.',
+    icon: IconUsers
+  },
+  {
+    title: 'Chiaro per Google',
+    text: 'Struttura, contenuti e collegamenti aiutano il motore di ricerca a leggere correttamente il sito.',
+    icon: IconSearch
+  },
+  {
+    title: 'Chiaro per i sistemi AI',
+    text: 'Organizziamo informazioni, contesto e relazioni perché anche i nuovi strumenti possano interpretare meglio l’azienda.',
+    icon: IconSparkles
+  }
 ] as const;
 
 const aiLogos = [
@@ -310,7 +322,8 @@ const displayedFaq = fallbackFaq;
                 alt={slide.alt}
                 width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
                 height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
-                loading="lazy"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchpriority={index === 0 ? 'high' : undefined}
                 decoding="async"
                 sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
               />
@@ -415,14 +428,25 @@ const displayedFaq = fallbackFaq;
       <div class="websites-ai__logos" aria-label="Sistemi AI considerati nella progettazione dei contenuti">
         {aiLogos.map((logo) => (
           <span>
-            <img src={logo.src} alt={logo.name} width="140" height="44" loading="lazy" decoding="async" />
+            <img
+              class:list={[logo.name === 'Google Gemini' && 'websites-ai__logo--gemini']}
+              src={logo.src}
+              alt={logo.name}
+              width="140"
+              height="44"
+              loading="lazy"
+              decoding="async"
+            />
           </span>
         ))}
       </div>
     </div>
     <div class="websites-ai__cards" data-reveal="up" data-reveal-stagger="1">
-      {seoAiItems.map(([title, text]) => (
+      {seoAiItems.map(({ title, text, icon: Icon }) => (
         <article>
+          <span class="websites-ai__card-icon" aria-hidden="true">
+            <Icon stroke={1.8} />
+          </span>
           <h3 class="nm-heading-o-none">{title}</h3>
           <p>{text}</p>
         </article>

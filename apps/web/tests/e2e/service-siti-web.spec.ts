@@ -24,6 +24,8 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await expect(page.locator('[data-portfolio-card]')).toHaveCount(6);
   await expect(page.locator('.websites-portfolio-card[aria-hidden="true"]')).toHaveCount(6);
   await expect(page.locator('[data-portfolio-card]').first()).toHaveAttribute('href', /rigomar/);
+  await expect(page.locator('[data-portfolio-card] img').first()).toHaveAttribute('loading', 'eager');
+  await expect(page.locator('[data-portfolio-card] img').first()).toHaveAttribute('fetchpriority', 'high');
   await expect(page.getByRole('heading', { level: 2, name: /modo in cui cerchiamo oggi/ })).toBeVisible();
   await expect(page.locator('body')).toContainText(/nuovi sistemi di ricerca basati sull’AI/);
   await expect(page.locator('body')).toContainText(/senza promettere risultati non controllabili/);
@@ -53,6 +55,8 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
     const rail = document.querySelector<HTMLElement>('.websites-type-rail');
     const portfolioRail = document.querySelector<HTMLElement>('.websites-portfolio__viewport');
     const projectRail = document.querySelector<HTMLElement>('.websites-project-showcase');
+    const technology = document.querySelector<HTMLElement>('.websites-technology');
+    const why = document.querySelector<HTMLElement>('.websites-why');
     if (portfolioRail) portfolioRail.scrollLeft = 180;
     if (projectRail) projectRail.scrollLeft = 180;
     return {
@@ -61,7 +65,9 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
       portfolioRailOverflow: portfolioRail ? window.getComputedStyle(portfolioRail).overflowX : '',
       portfolioRailScrollLeft: portfolioRail?.scrollLeft ?? 0,
       projectRailOverflow: projectRail ? window.getComputedStyle(projectRail).overflowX : '',
-      projectRailScrollLeft: projectRail?.scrollLeft ?? 0
+      projectRailScrollLeft: projectRail?.scrollLeft ?? 0,
+      technologyDisplay: technology ? window.getComputedStyle(technology).display : '',
+      whyDisplay: why ? window.getComputedStyle(why).display : ''
     };
   });
 
@@ -71,5 +77,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   expect(mobileState.portfolioRailScrollLeft).toBeGreaterThan(0);
   expect(mobileState.projectRailOverflow).toBe('auto');
   expect(mobileState.projectRailScrollLeft).toBeGreaterThan(0);
+  expect(mobileState.technologyDisplay).toBe('none');
+  expect(mobileState.whyDisplay).toBe('none');
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
 });
