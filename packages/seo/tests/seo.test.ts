@@ -23,7 +23,7 @@ describe('seo utilities', () => {
   it('creates stable person structured data linked to the organization', () => {
     expect(organizationJsonLd('https://staging.netmarket.it')).toMatchObject({
       '@id': 'https://staging.netmarket.it/#organization',
-      logo: 'https://staging.netmarket.it/netmarket-favicon.png'
+      logo: 'https://staging.netmarket.it/icon-512.png'
     });
     expect(
       personJsonLd('https://staging.netmarket.it', {

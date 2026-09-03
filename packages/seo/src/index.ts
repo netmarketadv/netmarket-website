@@ -56,7 +56,7 @@ export function organizationJsonLd(
     name: organization.name ?? 'Netmarket',
     ...(organization.legalName ? { legalName: organization.legalName } : {}),
     ...(organization.vatId ? { vatID: organization.vatId } : {}),
-    logo: organization.logo ?? absoluteCanonical(siteUrl, '/netmarket-favicon.png'),
+    logo: organization.logo ?? absoluteCanonical(siteUrl, '/icon-512.png'),
     url: organization.url ?? siteUrl
   };
 }

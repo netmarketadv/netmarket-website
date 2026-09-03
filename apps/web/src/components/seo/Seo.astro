@@ -32,7 +32,8 @@ const env = getPublicEnv();
 const pageTitle = buildTitle(title);
 const seoSiteUrl = canonicalSiteUrl ?? env.PUBLIC_SITE_URL;
 const canonical = absoluteCanonical(seoSiteUrl, path);
-const faviconUrl = absoluteCanonical(seoSiteUrl, '/netmarket-favicon.png');
+const faviconUrl = absoluteCanonical(seoSiteUrl, '/icon-192.png');
+const faviconLargeUrl = absoluteCanonical(seoSiteUrl, '/icon-512.png');
 const appleTouchIconUrl = absoluteCanonical(seoSiteUrl, '/apple-touch-icon.png');
 const manifestUrl = absoluteCanonical(seoSiteUrl, '/site.webmanifest');
 const robots = currentRobots(noindex, noindexFollow);
@@ -58,7 +59,8 @@ const jsonLd = [
 <meta name="msapplication-TileColor" content="#155BFF" />
 <meta name="msapplication-TileImage" content={faviconUrl} />
 <link rel="canonical" href={canonical} />
-<link rel="icon" type="image/png" sizes="520x520" href={faviconUrl} />
+<link rel="icon" type="image/png" sizes="192x192" href={faviconUrl} />
+<link rel="icon" type="image/png" sizes="512x512" href={faviconLargeUrl} />
 <link rel="shortcut icon" type="image/png" href={faviconUrl} />
 <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
 <link rel="manifest" href={manifestUrl} />
