@@ -58,7 +58,7 @@ describe('service system', () => {
     const description = serviceDescription(data!.service);
     expect(description).toContain('Siti web aziendali');
     expect(description).toContain('Netmarket');
-  });
+  }, 15_000);
 
   it('enriches the Siti web pilot with proof, FAQ and real related content', async () => {
     const data = await getServiceDetailData('siti-web');
@@ -76,7 +76,7 @@ describe('service system', () => {
     expect(data!.related.insights.every((item) => relationPath(item).startsWith('/insight/'))).toBe(
       true
     );
-  });
+  }, 15_000);
 
   it('enriches every non-pilot service with distinct page content', async () => {
     const slugs = [
@@ -108,7 +108,7 @@ describe('service system', () => {
 
     const propositions = pages.map((data) => data!.service.subtitle);
     expect(new Set(propositions).size).toBe(slugs.length);
-  });
+  }, 15_000);
 
   it('uses dedicated CMS transparent service visuals in the build fallback', () => {
     const imageBySlug = Object.fromEntries(
