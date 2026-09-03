@@ -3698,10 +3698,12 @@ main {
 
 .home-hero__visual {
   position: relative;
-  width: min(100%, 64rem);
-  height: clamp(21rem, 34vw, 30rem);
+  left: 50%;
+  width: min(100vw - 2rem, 82rem);
+  height: clamp(24rem, 36vw, 34rem);
   margin-inline: auto;
   overflow: hidden;
+  transform: translateX(-50%);
 }
 
 .home-hero__orbit {
@@ -3718,11 +3720,10 @@ main {
 
 .home-hero__device {
   position: absolute;
-  inset: auto 31% -13% 31%;
+  inset: 3% 34% -24% 34%;
   z-index: 2;
   display: grid;
   place-items: end center;
-  min-height: 96%;
   margin: 0;
   overflow: visible;
   border-radius: 0;
@@ -3731,7 +3732,7 @@ main {
 }
 
 .home-hero__device img {
-  width: min(132%, 24rem);
+  width: min(142%, 29rem);
   height: 100%;
   object-fit: contain;
   object-position: bottom center;
@@ -3744,48 +3745,59 @@ main {
   position: absolute;
   z-index: 3;
   margin: 0;
-  border: 1px solid rgb(9 10 15 / 0.08);
-  box-shadow: 0 1.2rem 3.2rem rgb(9 10 15 / 0.11);
 }
 
 .home-hero__tile {
-  display: grid;
-  gap: 0.65rem;
-  width: clamp(9.2rem, 13vw, 12.4rem);
-  border-radius: 1.2rem;
-  background: #f4f5f7;
-  padding: 0.72rem;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  box-shadow: 0 1.2rem 3.2rem rgb(9 10 15 / 0.11);
 }
 
 .home-hero__tile img {
+  display: block;
   width: 100%;
-  aspect-ratio: 1.2;
-  border-radius: 0.72rem;
+  height: 100%;
   object-fit: cover;
 }
 
 .home-hero__tile figcaption {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.9);
   color: var(--nm-color-ink);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
+  line-height: 1;
+  padding: 0.42rem 0.62rem;
 }
 
 .home-hero__tile--marketing {
-  top: 5%;
-  left: 11%;
+  top: 4%;
+  left: 4%;
+  width: clamp(10rem, 16vw, 14rem);
+  aspect-ratio: 1;
   transform: rotate(-2deg);
 }
 
 .home-hero__tile--ecommerce {
-  top: 8%;
-  right: 9%;
+  top: 5%;
+  right: 7%;
+  display: grid;
+  place-items: center;
+  width: clamp(11rem, 17vw, 15.5rem);
+  aspect-ratio: 1.24;
+  border: 1px solid rgb(9 10 15 / 0.06);
+  border-radius: 1.35rem;
   background: #f0f1f4;
+  padding: clamp(0.75rem, 1.2vw, 1.1rem);
   transform: rotate(2deg);
 }
 
 .home-hero__tile--ecommerce img {
+  height: auto;
   object-fit: contain;
-  background: #e9edf2;
 }
 
 .home-hero__tile--ecommerce figcaption {
@@ -3793,29 +3805,30 @@ main {
 }
 
 .home-hero__tile--social {
-  right: 4%;
-  bottom: 15%;
-  width: clamp(10rem, 15vw, 14rem);
-  background: #ffffff;
+  right: 1%;
+  bottom: 16%;
+  width: clamp(11rem, 16vw, 15rem);
+  aspect-ratio: 1.34;
+  box-shadow: 0 1.1rem 3rem rgb(9 10 15 / 0.1);
   transform: rotate(1deg);
 }
 
 .home-hero__rating {
   left: 20%;
-  bottom: 20%;
+  bottom: 19%;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.1rem 0.65rem;
   align-items: center;
-  border-color: rgb(14 81 254 / 0.12);
+  border: 1px solid rgb(14 81 254 / 0.12);
   border-radius: 999px;
-  background: rgb(14 81 254 / 0.13);
+  background: var(--nm-color-blue);
   padding: 0.62rem 0.8rem;
-  box-shadow: 0 1rem 2.5rem rgb(14 81 254 / 0.12);
+  box-shadow: 0 1rem 2.5rem rgb(14 81 254 / 0.22);
 }
 
 .home-hero__rating span {
-  color: #0a2b7a;
+  color: #061942;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
 }
@@ -6177,7 +6190,8 @@ main {
   }
 
   .home-hero__visual {
-    height: clamp(27rem, 57vw, 35rem);
+    width: min(100vw - 2rem, 68rem);
+    height: clamp(29rem, 58vw, 36rem);
   }
 
   .home-method__heading {
@@ -6218,50 +6232,51 @@ main {
   }
 
   .home-hero__visual {
-    height: clamp(25rem, 98vw, 33rem);
+    width: min(100vw - 1.5rem, 44rem);
+    height: clamp(26rem, 104vw, 34rem);
   }
 
   .home-hero__device {
-    inset: auto 24% -10% 24%;
-    min-height: 82%;
+    inset: 13% 23% -20% 23%;
   }
 
   .home-hero__device img {
-    width: min(148%, 19rem);
+    width: min(152%, 20rem);
   }
 
   .home-hero__tile {
-    width: clamp(7rem, 30vw, 9rem);
-    padding: 0.55rem;
+    width: clamp(7.4rem, 31vw, 9.6rem);
   }
 
   .home-hero__tile--marketing {
     top: 6%;
-    left: 0;
+    left: 1%;
   }
 
   .home-hero__tile--ecommerce {
     top: 7%;
-    right: 0;
+    right: 1%;
     bottom: auto;
+    width: clamp(7.8rem, 31vw, 10rem);
+    padding: 0.65rem;
   }
 
   .home-hero__tile--social {
-    right: 0;
-    bottom: 16%;
-    width: clamp(8rem, 34vw, 10rem);
+    right: 1%;
+    bottom: 15%;
+    width: clamp(8.2rem, 35vw, 10.6rem);
   }
 
   .home-hero__rating {
-    left: 3%;
-    bottom: 18%;
+    left: 4%;
+    bottom: 23%;
   }
 
   .home-hero__mini-card {
     top: auto;
     right: auto;
-    bottom: 35%;
-    left: 2%;
+    bottom: 34%;
+    left: 4%;
     min-width: 7.8rem;
   }
 
@@ -6344,7 +6359,15 @@ main {
   }
 
   .home-hero__visual {
-    min-height: clamp(21rem, 108vw, 27rem);
+    height: clamp(24rem, 116vw, 30rem);
+  }
+
+  .home-hero__device {
+    inset: 16% 21% -22% 21%;
+  }
+
+  .home-hero__rating {
+    bottom: 18%;
   }
 
   .home-hero__tile figcaption,
