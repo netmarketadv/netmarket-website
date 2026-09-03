@@ -25,7 +25,7 @@ export const cmsMedia = {
     contests: `${cmsUploadsBase}/concorsi-a-premi_netmarket.png`
   },
   hero: {
-    phone: `${cmsUploadsBase}/social-media-marketing-netmarket.webp`,
+    phone: '/media/generated/home-hero-social-phone.png',
     productPhotography: `${cmsUploadsBase}/product-photography-netmarket.webp`,
     socialPost: `${cmsUploadsBase}/gestione-social-profilo-instagram-netmarket.webp`,
     ecommerce: `${cmsUploadsBase}/sviluppo-ecommerce_netmarket-1.png`

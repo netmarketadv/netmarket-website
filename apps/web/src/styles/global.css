@@ -3720,23 +3720,39 @@ main {
 
 .home-hero__device {
   position: absolute;
-  inset: 1% 38.4% -24% 38.4%;
+  right: auto;
+  bottom: clamp(-15rem, -13vw, -9rem);
+  left: 50%;
   z-index: 2;
-  display: grid;
-  place-items: end center;
+  width: clamp(24rem, 29vw, 36rem);
+  height: auto;
   margin: 0;
-  overflow: hidden;
-  border-radius: 2.4rem 2.4rem 0 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
   background: transparent;
   box-shadow: none;
+  transform: translateX(-50%);
 }
 
 .home-hero__device img {
-  width: min(170%, 29rem);
-  height: 100%;
+  display: block;
+  width: 100%;
+  height: auto;
   object-fit: contain;
-  object-position: bottom center;
+  object-position: center;
   filter: drop-shadow(0 2rem 3rem rgb(9 10 15 / 0.2));
+}
+
+.home-hero__device[data-reveal][data-motion-state='ready'] {
+  clip-path: none;
+  transform: translateX(-50%) scale(1.015);
+}
+
+.home-hero__device[data-reveal].is-visible,
+.home-hero__device[data-reveal][data-motion-state='revealed'] {
+  clip-path: none;
+  transform: translateX(-50%);
 }
 
 .home-hero__tile,
@@ -3783,7 +3799,7 @@ main {
   left: 4%;
   width: clamp(10rem, 16vw, 14rem);
   aspect-ratio: 1;
-  transform: rotate(-2deg);
+  rotate: -2deg;
 }
 
 .home-hero__tile--ecommerce {
@@ -3797,7 +3813,7 @@ main {
   border-radius: 1.35rem;
   background: #f0f1f4;
   padding: clamp(0.75rem, 1.2vw, 1.1rem);
-  transform: rotate(2deg);
+  rotate: 2deg;
 }
 
 .home-hero__tile--ecommerce img {
@@ -3809,21 +3825,47 @@ main {
   display: none;
 }
 
-.home-hero__tile--social {
-  right: 1%;
-  bottom: 16%;
-  width: clamp(11rem, 16vw, 15rem);
-  aspect-ratio: 1.36;
-  box-shadow: none;
-  clip-path: inset(0 0 22% 0 round 1.08rem);
-  transform: rotate(1deg);
+.home-hero__tile[data-reveal].is-visible {
+  clip-path: inset(0 round 1.35rem);
 }
 
-.home-hero__tile--social img {
-  width: 204%;
-  height: 204%;
-  object-position: 50% 50%;
-  transform: translate(-25.5%, -20%);
+.home-hero__social-preview {
+  position: absolute;
+  right: 1%;
+  bottom: 13%;
+  z-index: 3;
+  width: clamp(12rem, 18vw, 19rem);
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  rotate: 1deg;
+}
+
+.home-hero__social-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-hero__tile--marketing[data-reveal].is-visible,
+.home-hero__tile--marketing[data-reveal][data-motion-state='revealed'] {
+  transform: rotate(-2deg);
+}
+
+.home-hero__tile--ecommerce[data-reveal].is-visible,
+.home-hero__tile--ecommerce[data-reveal][data-motion-state='revealed'] {
+  transform: rotate(2deg);
+}
+
+.home-hero__social-preview[data-reveal].is-visible,
+.home-hero__social-preview[data-reveal][data-motion-state='revealed'] {
+  clip-path: none;
+  transform: rotate(1deg);
 }
 
 .home-hero__rating {
@@ -6256,11 +6298,12 @@ main {
   }
 
   .home-hero__device {
-    inset: 13% 24% -22% 24%;
+    bottom: clamp(-11rem, -30vw, -7rem);
+    width: min(76vw, 24rem);
   }
 
   .home-hero__device img {
-    width: min(178%, 21rem);
+    width: 100%;
   }
 
   .home-hero__tile {
@@ -6280,10 +6323,10 @@ main {
     padding: 0.65rem;
   }
 
-  .home-hero__tile--social {
-    right: 1%;
-    bottom: 15%;
-    width: clamp(8rem, 34vw, 10.4rem);
+  .home-hero__social-preview {
+    right: 0;
+    bottom: 13%;
+    width: clamp(9rem, 42vw, 12.2rem);
   }
 
   .home-hero__rating {
@@ -6383,7 +6426,8 @@ main {
   }
 
   .home-hero__device {
-    inset: 12% 23% -21% 23%;
+    bottom: clamp(-9.5rem, -30vw, -6rem);
+    width: min(78vw, 20rem);
   }
 
   .home-hero__orbit {
