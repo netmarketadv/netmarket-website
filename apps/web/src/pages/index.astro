@@ -68,16 +68,20 @@ const serviceGroups = [
 }));
 
 const heroPrimaryImage = {
-  url: cmsMedia.services.websites,
-  alt: 'Visual sviluppo siti web Netmarket'
+  url: cmsMedia.hero.phone,
+  alt: 'iPhone con contenuto social media realizzato da Netmarket'
 };
 const heroSecondaryImage = {
-  url: cmsMedia.services.marketing,
-  alt: 'Visual marketing digitale Netmarket'
+  url: cmsMedia.hero.productPhotography,
+  alt: 'Scatto di product photography realizzato da Netmarket'
 };
 const heroTertiaryImage = {
-  url: cmsMedia.services.ecommerce,
+  url: cmsMedia.hero.ecommerce,
   alt: 'Visual sviluppo ecommerce Netmarket'
+};
+const heroSocialPostImage = {
+  url: cmsMedia.hero.socialPost,
+  alt: 'Anteprima profilo Instagram gestito da Netmarket'
 };
 
 const teamJsonLd = teamMembers.map((person) =>
@@ -130,11 +134,15 @@ const teamJsonLd = teamMembers.map((person) =>
           </figure>
           <figure class="home-hero__tile home-hero__tile--marketing" data-reveal="scale" data-reveal-delay="1">
             <img src={heroSecondaryImage.url} alt={heroSecondaryImage.alt || 'Visual marketing Netmarket'} loading="eager" decoding="async" />
-            <figcaption>Strategia digitale</figcaption>
+            <figcaption>Product photography</figcaption>
           </figure>
           <figure class="home-hero__tile home-hero__tile--ecommerce" data-reveal="scale" data-reveal-delay="2">
             <img src={heroTertiaryImage.url} alt={heroTertiaryImage.alt || 'Visual ecommerce Netmarket'} loading="eager" decoding="async" />
             <figcaption>Ecommerce</figcaption>
+          </figure>
+          <figure class="home-hero__tile home-hero__tile--social" data-reveal="scale" data-reveal-delay="3">
+            <img src={heroSocialPostImage.url} alt={heroSocialPostImage.alt} loading="eager" decoding="async" />
+            <figcaption>Social media</figcaption>
           </figure>
           <div class="home-hero__rating" data-reveal="up" data-reveal-delay="3" aria-label={`${googleTrust.rating} stelle su Google`}>
             <span aria-hidden="true">★★★★★</span>
@@ -142,18 +150,12 @@ const teamJsonLd = teamMembers.map((person) =>
             <small>{googleTrust.reviewCount} recensioni Google</small>
           </div>
           <div class="home-hero__mini-card" data-reveal="up" data-reveal-delay="4">
-            <strong>1986</strong>
-            <span>comunicazione, web e marketing per aziende</span>
+            <span>Vendite</span>
+            <strong>+292%</strong>
           </div>
         </div>
       </div>
 
-      <div class="home-hero__proof" aria-label="Informazioni principali Netmarket" data-reveal="up" data-reveal-stagger="1">
-        <p><strong>1986</strong><span>anno di nascita dell’agenzia</span></p>
-        <p><strong>Padova</strong><span>sede e relazione diretta con le aziende</span></p>
-        <p><strong>{googleTrust.rating}/5</strong><span>su {googleTrust.reviewCount} recensioni Google</span></p>
-        <p><strong>Una regia</strong><span>web, contenuti, campagne e tecnologia</span></p>
-      </div>
     </Container>
   </section>
 

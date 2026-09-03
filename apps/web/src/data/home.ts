@@ -24,6 +24,12 @@ export const cmsMedia = {
     social: `${cmsUploadsBase}/social-media-management_netmarket.png`,
     contests: `${cmsUploadsBase}/concorsi-a-premi_netmarket.png`
   },
+  hero: {
+    phone: `${cmsUploadsBase}/social-media-marketing-netmarket.webp`,
+    productPhotography: `${cmsUploadsBase}/product-photography-netmarket.webp`,
+    socialPost: `${cmsUploadsBase}/gestione-social-profilo-instagram-netmarket.webp`,
+    ecommerce: `${cmsUploadsBase}/sviluppo-ecommerce_netmarket-1.png`
+  },
   badges: {
     brevo: `${cmsUploadsBase}/BrevoPartnerPioneer2025.png`,
     iubendaGold: `${cmsUploadsBase}/Gold.png`,
