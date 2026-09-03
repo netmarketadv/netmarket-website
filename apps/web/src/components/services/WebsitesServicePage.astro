@@ -1,0 +1,414 @@
+---
+import type { CaseStudy, RelationSummary, Service } from '@netmarket/schemas';
+import Button from '@/components/ui/Button.astro';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import { getProjectArchiveData, projectClient, projectDescription, projectPath } from '@/lib/projects/content';
+
+interface Props {
+  service: Service;
+  related: {
+    caseStudies: RelationSummary[];
+    insights: RelationSummary[];
+    resources: RelationSummary[];
+    services: RelationSummary[];
+  };
+  faqItems: [string, string][];
+}
+
+const { service } = Astro.props;
+const { projects } = await getProjectArchiveData();
+const preferredProjectSlugs = [
+  'sviluppo-sito-web-allestimenti-fieristici-albertini',
+  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
+  'sviluppo-sito-web-fotovoltaico-progetto-e',
+  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa'
+];
+const projectMap = new Map(projects.map((project) => [project.slug, project]));
+const featuredProjects = preferredProjectSlugs
+  .map((slug) => projectMap.get(slug))
+  .filter((project): project is CaseStudy => Boolean(project))
+  .slice(0, 4);
+const projectCopy: Record<string, { headline: string; outcome: string; kind: string }> = {
+  'sviluppo-sito-web-allestimenti-fieristici-albertini': {
+    headline: 'Un sito istituzionale per raccontare allestimenti su misura.',
+    outcome: 'Architettura, contenuti e SEO per rendere leggibili servizi, settori e portfolio.',
+    kind: 'Sito corporate'
+  },
+  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda': {
+    headline: 'Presenza digitale e immagini per un’azienda moda B2B.',
+    outcome: 'Sito web e shooting fotografico lavorano insieme per valorizzare produzione e competenze.',
+    kind: 'Sito + contenuti'
+  },
+  'sviluppo-sito-web-fotovoltaico-progetto-e': {
+    headline: 'Un sito per aziende che vogliono investire nel fotovoltaico.',
+    outcome: 'Contenuti, struttura e pagine servizio aiutano a spiegare un’offerta tecnica in modo chiaro.',
+    kind: 'Sito aziendale'
+  },
+  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa': {
+    headline: 'Ecommerce per un catalogo arredamento ampio e navigabile.',
+    outcome: 'Schede, categorie e percorsi di acquisto organizzati attorno a prodotto e cliente.',
+    kind: 'Ecommerce'
+  }
+};
+
+const serviceLinks = [
+  ['Ecommerce', '/servizi/ecommerce/', 'Per vendere online con cataloghi, checkout e gestione operativa.'],
+  ['SEO', '/servizi/seo/', 'Per costruire struttura, contenuti e segnali utili alla visibilità.'],
+  [
+    'Branding e comunicazione',
+    '/servizi/branding-e-comunicazione/',
+    'Per rendere coerenti messaggio, identità e materiali aziendali.'
+  ],
+  [
+    'Content production',
+    '/servizi/content-production/',
+    'Per produrre testi, immagini, foto e video che rendono il sito più chiaro.'
+  ],
+  [
+    'Software e integrazioni',
+    '/servizi/software-e-integrazioni/',
+    'Per collegare sito, CRM, gestionali e processi aziendali.'
+  ],
+  ['Advertising', '/servizi/advertising/', 'Per trasformare campagne e landing in percorsi misurabili.']
+] as const;
+
+const projectTypes = [
+  ['Siti corporate', 'Per raccontare azienda, servizi, prodotti e posizionamento con una struttura chiara.'],
+  ['Ecommerce', 'Per vendere online con un percorso costruito attorno a catalogo, cliente e gestione.'],
+  ['Landing page', 'Per campagne, lanci, eventi e acquisizione contatti senza disperdere attenzione.'],
+  ['Piattaforme digitali', 'Per aree riservate, contenuti dinamici, dati, funzioni custom e integrazioni.'],
+  ['Restyling', 'Per ripensare siti diventati lenti, confusi, difficili da aggiornare o poco efficaci.']
+] as const;
+
+const assetChecks = [
+  'Il messaggio è comprensibile anche a chi non conosce l’azienda.',
+  'Il percorso mobile non sacrifica contenuti e contatto.',
+  'Le pagine importanti sono organizzate per essere trovate.',
+  'Il sito può crescere con nuovi contenuti, campagne e servizi.',
+  'I dati aiutano a capire cosa migliorare dopo la pubblicazione.'
+] as const;
+
+const approachItems = [
+  ['Contenuti', 'Cosa deve capire il cliente prima di contattarvi.'],
+  ['Esperienza', 'Come trova velocemente servizi, prove e prossimi passi.'],
+  ['Visibilità', 'Come Google e nuovi sistemi di ricerca interpretano pagine e relazioni.'],
+  ['Marketing', 'Come il sito sostiene campagne, landing e acquisizione.'],
+  ['Dati', 'Come misuriamo cosa succede e dove intervenire.'],
+  ['Integrazioni', 'Come il sito dialoga con CRM, gestionali e strumenti aziendali.']
+] as const;
+
+const methodSteps = [
+  ['01', 'Capire', 'Partiamo da obiettivi, pubblici, contenuti esistenti, vincoli e priorità commerciali.'],
+  ['02', 'Organizzare', 'Mettiamo ordine in pagine, gerarchie, percorsi, messaggi e collegamenti interni.'],
+  ['03', 'Progettare', 'Costruiamo identità, interfaccia e componenti attorno ai contenuti reali.'],
+  ['04', 'Sviluppare', 'Realizziamo un sito veloce, stabile, gestibile e pronto per evolvere.'],
+  ['05', 'Verificare', 'Controlliamo mobile, accessibilità, performance, SEO, form, redirect e tracciamenti.'],
+  ['06', 'Migliorare', 'Dopo il lancio leggiamo dati e comportamento per continuare a ottimizzare.']
+] as const;
+
+const seoAiItems = [
+  ['Chiaro per le persone', 'Testi, navigazione e pagine servizio aiutano a capire subito cosa fate e perché scegliere voi.'],
+  ['Chiaro per Google', 'Struttura, contenuti e collegamenti aiutano il motore di ricerca a leggere correttamente il sito.'],
+  [
+    'Chiaro per i sistemi AI',
+    'Organizziamo informazioni, contesto e relazioni perché anche i nuovi strumenti possano interpretare meglio l’azienda.'
+  ]
+] as const;
+
+const technologyItems = [
+  ['Velocità', 'Pagine leggere e reattive, soprattutto da smartphone.'],
+  ['Gestione', 'Contenuti aggiornabili senza dipendere da interventi tecnici per ogni modifica.'],
+  ['Stabilità', 'Architettura pensata per durare, non per inseguire mode.'],
+  ['Integrazioni', 'Quando serve, collegamento a CRM, gestionali, ecommerce e servizi esterni.']
+] as const;
+
+const whyItems = [
+  ['Dal 1986', 'Netmarket costruisce comunicazione per aziende da prima che il web esistesse. Gli strumenti cambiano, il principio resta.'],
+  ['Competenze insieme', 'Sito, contenuti, SEO, advertising, foto, video e sviluppo non vivono in reparti separati.'],
+  ['Contesto Padova', 'Lavoriamo con imprese del territorio e aziende strutturate che hanno bisogno di chiarezza, continuità e metodo.']
+] as const;
+
+const fallbackFaq: [string, string][] = [
+  [
+    'Quanto costa un sito web professionale?',
+    'Dipende da obiettivi, contenuti, numero di pagine, design, CMS, integrazioni e migrazione. Per questo partiamo sempre da un confronto sul progetto.'
+  ],
+  [
+    'Quanto tempo serve per realizzarlo?',
+    'Un sito aziendale richiede analisi, architettura, design, sviluppo, test e pubblicazione. I tempi cambiano in base alla complessità e alla disponibilità dei contenuti.'
+  ],
+  [
+    'Posso aggiornare autonomamente il sito?',
+    'Sì, quando il progetto lo prevede. Organizziamo CMS, template e contenuti per rendere gestibili le modifiche ricorrenti.'
+  ],
+  [
+    'Il sito sarà ottimizzato per Google?',
+    'Sì. Struttura, contenuti, performance, metadata, collegamenti interni e migrazione vengono considerati già in fase di progetto.'
+  ],
+  [
+    'Pensate anche alla ricerca tramite AI?',
+    'Progettiamo contenuti e struttura perché il sito sia comprensibile anche dai nuovi sistemi di ricerca basati sull’intelligenza artificiale, senza promettere risultati non controllabili.'
+  ],
+  [
+    'Vi occupate anche di testi, foto, video e campagne?',
+    'Sì. Quando serve, il progetto coinvolge copywriting, fotografia, video, SEO, advertising, social e analytics.'
+  ]
+];
+
+const displayedFaq = fallbackFaq;
+---
+
+<div class="websites-service-page">
+  <section class="websites-hero" aria-labelledby="page-title">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/servizi/">Servizi</a>
+      <span aria-hidden="true">/</span>
+      <span>{service.title}</span>
+    </nav>
+
+    <div class="websites-hero__copy" data-reveal="line">
+      <p class="websites-kicker">Netmarket · Padova · dal 1986</p>
+      <h1 id="page-title">Siti web che lavorano per la tua azienda.</h1>
+      <p>
+        Progettiamo siti corporate, ecommerce e piattaforme digitali che uniscono comunicazione,
+        contenuti, marketing e tecnologia.
+      </p>
+      <div class="websites-hero__actions">
+        <Button href="#contatti" magnetic>Parliamone</Button>
+        <Button href="#progetti-web" variant="secondary">Guarda i progetti</Button>
+      </div>
+    </div>
+
+    <div class="websites-hero__visual" aria-label="Composizione dimostrativa di sito web responsive" data-reveal="media">
+      <div class="websites-browser-demo" aria-hidden="true">
+        <div class="websites-browser-demo__bar">
+          <span></span><span></span><span></span>
+          <strong>azienda.it</strong>
+        </div>
+        <div class="websites-browser-demo__screen">
+          <div>
+            <span>Servizi</span>
+            <strong>Progettare, produrre, misurare.</strong>
+            <p>Una pagina chiara porta l’utente dal bisogno al contatto.</p>
+          </div>
+          <div class="websites-browser-demo__grid">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <div class="websites-phone-demo" aria-hidden="true">
+        <div></div>
+        <strong>Mobile first</strong>
+        <span>Contatto visibile</span>
+      </div>
+      <div class="websites-hero__note" aria-hidden="true">
+        <span>CMS</span>
+        <span>SEO</span>
+        <span>Analytics</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="websites-realization" aria-labelledby="websites-realization-title">
+    <div class="websites-section-heading" data-reveal="line">
+      <h2 id="websites-realization-title">Che tipo di sito possiamo realizzare.</h2>
+      <p>
+        Non partiamo dal formato. Partiamo da ciò che il sito deve ottenere per l’azienda.
+      </p>
+    </div>
+    <div class="websites-type-rail" data-reveal="up" data-reveal-stagger="1">
+      {projectTypes.map(([title, text]) => (
+        <article>
+          <h3 class="nm-heading-o-none">{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="websites-asset" aria-labelledby="websites-asset-title">
+    <div class="websites-asset__copy" data-reveal="line">
+      <h2 id="websites-asset-title">Un sito può essere online e non funzionare davvero.</h2>
+      <p>
+        Succede quando non spiega bene l’azienda, non sostiene le campagne, non è pensato per
+        mobile o non permette di capire cosa fanno gli utenti.
+      </p>
+    </div>
+    <div class="websites-asset__panel" data-reveal="up">
+      <p>Un buon sito mette insieme comunicazione, contenuti, esperienza, visibilità e dati.</p>
+      <ul>
+        {assetChecks.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="websites-approach" aria-labelledby="websites-approach-title">
+    <div class="websites-section-heading" data-reveal="line">
+      <h2 id="websites-approach-title">Mettiamo ordine tra contenuti, tecnologia e marketing.</h2>
+      <p>
+        Un sito Netmarket non viene progettato come un elemento isolato. Deve parlare con il resto
+        della comunicazione aziendale.
+      </p>
+    </div>
+    <div class="websites-orbit" data-reveal="up" data-reveal-stagger="1">
+      {approachItems.map(([title, text]) => (
+        <article>
+          <span>{title}</span>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="websites-ai" aria-labelledby="websites-ai-title">
+    <div class="websites-ai__copy" data-reveal="line">
+      <h2 id="websites-ai-title">Pensato anche per il modo in cui cerchiamo oggi.</h2>
+      <p>
+        Google non è più l’unico punto di accesso alle informazioni. Per questo organizziamo
+        pagine, contenuti e dati perché siano comprensibili anche dai nuovi sistemi di ricerca basati sull’AI.
+      </p>
+    </div>
+    <div class="websites-ai__cards" data-reveal="up" data-reveal-stagger="1">
+      {seoAiItems.map(([title, text]) => (
+        <article>
+          <h3 class="nm-heading-o-none">{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {
+    featuredProjects.length > 0 && (
+      <section id="progetti-web" class="websites-projects" aria-labelledby="websites-projects-title">
+        <div class="websites-section-heading" data-reveal="line">
+          <h2 id="websites-projects-title">Progetti web reali.</h2>
+          <p>
+            Il modo migliore per capire il servizio è guardare come sito, contenuti e obiettivi
+            diventano un progetto concreto.
+          </p>
+        </div>
+        <div class="websites-project-showcase" data-reveal="up" data-reveal-stagger="1">
+          {featuredProjects.map((project, index) => (
+            <a
+              class:list={['websites-project-card', index === 0 && 'websites-project-card--large']}
+              href={projectPath(project.slug)}
+            >
+              {project.cover && <img src={project.cover.url} alt={project.cover.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />}
+              <div>
+                <span>{projectClient(project)} · {projectCopy[project.slug]?.kind ?? 'Progetto web'}</span>
+                <h3 class="nm-heading-o-none">{projectCopy[project.slug]?.headline ?? project.title}</h3>
+                <p>{projectCopy[project.slug]?.outcome ?? projectDescription(project)}</p>
+                <strong>Guarda il progetto completo</strong>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="websites-projects__cta">
+          <Button href="/progetti/" variant="secondary">Guarda tutti i progetti</Button>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="websites-method" aria-labelledby="websites-method-title">
+    <div class="websites-method__heading" data-reveal="line">
+      <h2 id="websites-method-title">Un metodo per gestire progetti complessi.</h2>
+      <p>
+        Il lavoro resta comprensibile anche quando dentro al sito entrano contenuti, sviluppo,
+        SEO, integrazioni e stakeholder diversi.
+      </p>
+    </div>
+    <ol class="websites-method__list" data-reveal="up" data-reveal-stagger="1">
+      {methodSteps.map(([number, title, text]) => (
+        <li>
+          <span>{number}</span>
+          <div>
+            <h3 class="nm-heading-o-none">{title}</h3>
+            <p>{text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="websites-technology" aria-labelledby="websites-technology-title">
+    <div class="websites-technology__visual" aria-hidden="true" data-reveal="media">
+      <div class="websites-stack-demo">
+        <span>Contenuti</span>
+        <span>CMS</span>
+        <span>Frontend</span>
+        <span>SEO</span>
+        <span>Dati</span>
+      </div>
+    </div>
+    <div class="websites-technology__copy" data-reveal="line">
+      <h2 id="websites-technology-title">La tecnologia conta quando rende il sito più utile.</h2>
+      <p>
+        Non scegliamo strumenti perché sono di moda. Scegliamo ciò che permette al sito di essere
+        veloce, gestibile, stabile e collegato a quello che serve.
+      </p>
+      <div class="websites-technology__items">
+        {technologyItems.map(([title, text]) => (
+          <article>
+            <h3 class="nm-heading-o-none">{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="websites-connected" aria-labelledby="websites-connected-title">
+    <div class="websites-section-heading" data-reveal="line">
+      <h2 id="websites-connected-title">Competenze che lavorano insieme.</h2>
+      <p>
+        Quando il progetto lo richiede, il sito diventa il punto in cui convergono strategia,
+        contenuti, campagne, immagini, software e misurazione.
+      </p>
+    </div>
+    <div class="websites-connected__links" data-reveal="up" data-reveal-stagger="1">
+      {serviceLinks.map(([title, href, text]) => (
+        <a href={href}>
+          <strong>{title}</strong>
+          <span>{text}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="websites-why" aria-labelledby="websites-why-title">
+    <h2 id="websites-why-title" data-reveal="line">Le tecnologie cambiano. Il principio no.</h2>
+    <div data-reveal="up" data-reveal-stagger="1">
+      {whyItems.map(([title, text]) => (
+        <article>
+          <h3 class="nm-heading-o-none">{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="websites-faq faq-section" aria-labelledby="service-faq-title">
+    <FAQBlock
+      titleId="service-faq-title"
+      title="FAQ sui siti web"
+      text="Le prime risposte per capire come impostiamo un progetto web aziendale."
+      items={displayedFaq}
+    />
+  </section>
+
+  <section id="contatti" class="websites-final-cta" aria-labelledby="websites-cta-title">
+    <div data-reveal="scale">
+      <p class="websites-kicker">Prossimo passo</p>
+      <h2 id="websites-cta-title">Partiamo da quello che deve fare il tuo sito.</h2>
+      <p>
+        Raccontaci obiettivi, problemi e contesto. Capiremo insieme da dove partire e quali
+        competenze mettere al lavoro.
+      </p>
+      <Button href="/contatti/" variant="inverse" magnetic>Parliamone</Button>
+    </div>
+  </section>
+</div>

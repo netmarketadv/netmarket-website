@@ -3,6 +3,7 @@ import type { DefaultTreeAdapterMap } from 'parse5';
 
 export const headingItalicOClass = 'nm-heading-o';
 export const headingItalicOWordClass = 'nm-heading-o-word';
+export const headingItalicOOptOutClass = 'nm-heading-o-none';
 
 type Node = DefaultTreeAdapterMap['node'];
 type ChildNode = DefaultTreeAdapterMap['childNode'];
@@ -35,11 +36,15 @@ function classList(element: Element) {
 }
 
 function isHeadingElement(element: Element) {
+  const classes = classList(element);
+  if (classes.has(headingItalicOOptOutClass)) {
+    return false;
+  }
+
   if (headingTags.has(element.tagName)) {
     return true;
   }
 
-  const classes = classList(element);
   return [...headingClassNames].some((className) => classes.has(className));
 }
 

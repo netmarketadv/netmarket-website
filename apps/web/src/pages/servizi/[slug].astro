@@ -12,6 +12,7 @@ import ServiceProof from '@/components/services/ServiceProof.astro';
 import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
 import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
 import ServiceTechnicalFocus from '@/components/services/ServiceTechnicalFocus.astro';
+import WebsitesServicePage from '@/components/services/WebsitesServicePage.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getServiceArchiveData, resolveRelated, serviceDescription } from '@/lib/services/content';
 
@@ -32,8 +33,13 @@ const canonicalSiteUrl = 'https://www.netmarket.it';
 const { service } = Astro.props;
 const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;
-const description = serviceDescription(service);
-const title = service.seo.title || service.title;
+const isWebsitesService = service.slug === 'siti-web';
+const description = isWebsitesService
+  ? 'Realizzazione siti web a Padova: Netmarket progetta siti corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia.'
+  : serviceDescription(service);
+const title = isWebsitesService
+  ? 'Realizzazione siti web a Padova'
+  : service.seo.title || service.title;
 const faqItems = service.faq
   .map((item) => {
     if (!item || typeof item !== 'object') return null;
@@ -51,9 +57,10 @@ const breadcrumb = breadcrumbJsonLd([
 ]);
 const serviceSchema = serviceJsonLd(
   canonicalSiteUrl,
-  service.title,
+  isWebsitesService ? 'Realizzazione siti web a Padova' : service.title,
   description,
-  absoluteCanonical(canonicalSiteUrl, path)
+  absoluteCanonical(canonicalSiteUrl, path),
+  isWebsitesService ? 'Realizzazione siti web' : service.title
 );
 const hasProof = service.results.length > 0;
 ---
@@ -66,68 +73,74 @@ const hasProof = service.results.length > 0;
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, serviceSchema]}
 >
-  <Container wide>
-    <ServiceDetailHero service={service} />
-  </Container>
-
-  <Section compact labelledby="service-intro-title">
-    <Container>
-      <ServiceIntro service={service} />
-    </Container>
-  </Section>
-
   {
-    hasProof && (
-      <Section labelledby="service-proof-title">
-        <Container>
-          <ServiceProof items={service.results} />
+    isWebsitesService ? (
+      <Container wide>
+        <WebsitesServicePage service={service} related={related} faqItems={faqItems} />
+      </Container>
+    ) : (
+      <>
+        <Container wide>
+          <ServiceDetailHero service={service} />
         </Container>
-      </Section>
+
+        <Section compact labelledby="service-intro-title">
+          <Container>
+            <ServiceIntro service={service} />
+          </Container>
+        </Section>
+
+        {hasProof && (
+          <Section labelledby="service-proof-title">
+            <Container>
+              <ServiceProof items={service.results} />
+            </Container>
+          </Section>
+        )}
+
+        <Section labelledby="service-process-title">
+          <Container>
+            <ServiceProcess service={service} />
+          </Container>
+        </Section>
+
+        <Section compact>
+          <Container>
+            <ServiceTechnicalFocus service={service} />
+            <ServiceTaxonomyList service={service} />
+          </Container>
+        </Section>
+
+        <Section>
+          <Container wide>
+            <ServiceRelatedContent
+              caseStudies={related.caseStudies}
+              insights={related.insights}
+              resources={related.resources}
+              services={related.services}
+            />
+          </Container>
+        </Section>
+
+        {faqItems.length > 0 && (
+          <Section class="faq-section" labelledby="service-faq-title">
+            <Container>
+              <FAQBlock
+                titleId="service-faq-title"
+                title="FAQ"
+                text={`Risposte essenziali sul servizio ${service.title}.`}
+                items={faqItems}
+              />
+            </Container>
+          </Section>
+        )}
+
+        <Section class="inline-cta-section" labelledby="service-cta-title">
+          <Container wide>
+            <ServiceCTA />
+          </Container>
+        </Section>
+      </>
     )
   }
-
-  <Section labelledby="service-process-title">
-    <Container>
-      <ServiceProcess service={service} />
-    </Container>
-  </Section>
-
-  <Section compact>
-    <Container>
-      <ServiceTechnicalFocus service={service} />
-      <ServiceTaxonomyList service={service} />
-    </Container>
-  </Section>
-
-  <Section>
-    <Container wide>
-      <ServiceRelatedContent
-        caseStudies={related.caseStudies}
-        insights={related.insights}
-        resources={related.resources}
-        services={related.services}
-      />
-    </Container>
-  </Section>
-
-  {
-    faqItems.length > 0 && (
-      <Section class="faq-section" labelledby="service-faq-title">
-        <Container>
-          <FAQBlock
-            titleId="service-faq-title"
-            title="FAQ"
-            text={`Risposte essenziali sul servizio ${service.title}.`}
-            items={faqItems}
-          />
-        </Container>
-      </Section>
-    )
-  }
-
-  <Section class="inline-cta-section" labelledby="service-cta-title">
-    <Container wide>
-      <ServiceCTA />
-    </Container>
-  </Section>
 </BaseLayout>

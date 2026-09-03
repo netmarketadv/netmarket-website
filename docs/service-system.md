@@ -71,6 +71,18 @@ La pagina dettaglio è statica tramite `getStaticPaths`. Ogni sezione è opziona
 
 Regola: se un gruppo dati è vuoto, la sezione non viene renderizzata.
 
+### Variante editoriale Siti web
+
+`/servizi/siti-web/` usa una pagina editoriale dedicata, non il template generico. La pagina e progettata per imprenditori, responsabili marketing e decisori aziendali: parte dal valore del sito come asset aziendale, mostra progetti reali e traduce tecnologia, SEO e AI-readiness in benefici comprensibili.
+
+Regole della variante:
+
+- non duplicarla automaticamente sulle altre pagine servizio;
+- usare sezioni e visual specifici solo quando il servizio ha contenuto reale sufficiente;
+- mantenere contenuti essenziali nel DOM iniziale, senza dipendere da JavaScript;
+- preferire prove reali e internal link contestuali a liste generiche;
+- non promettere risultati non controllabili su AI Overview, ChatGPT o altri sistemi di risposta.
+
 ## Related Content
 
 Priorità:
