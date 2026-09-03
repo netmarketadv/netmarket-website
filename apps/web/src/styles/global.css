@@ -3841,7 +3841,6 @@ main {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  rotate: 1deg;
 }
 
 .home-hero__social-preview img {
@@ -3865,7 +3864,7 @@ main {
 .home-hero__social-preview[data-reveal].is-visible,
 .home-hero__social-preview[data-reveal][data-motion-state='revealed'] {
   clip-path: none;
-  transform: rotate(1deg);
+  transform: none;
 }
 
 .home-hero__rating {
