@@ -5,10 +5,12 @@ describe('agency and contact pages', () => {
   it('registers agency with team, clients and schema', () => {
     const agency = readFileSync(new URL('../src/pages/agenzia.astro', import.meta.url), 'utf8');
 
-    expect(agency).toContain('TeamSection');
+    expect(agency).toContain('AboutPage');
     expect(agency).toContain('ClientMarquee');
     expect(agency).toContain('personJsonLd');
     expect(agency).toContain('id="team"');
+    expect(agency).toContain('agency-team__grid');
+    expect(agency).toContain('/servizi/siti-web/');
   });
 
   it('registers contact with a real form endpoint and tracking fields', () => {

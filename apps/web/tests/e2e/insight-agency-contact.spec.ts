@@ -24,9 +24,14 @@ test.describe('insight, agency and contact', () => {
   test('renders agency page with team and client systems', async ({ page }) => {
     await page.goto('/agenzia/', { waitUntil: 'domcontentloaded' });
 
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Esperienza');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Padova');
     await expect(page.locator('#team')).toBeVisible();
     await expect(page.locator('.client-marquee')).toBeVisible();
+    await expect(page.locator('.agency-project-card').first()).toBeVisible();
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
+      .toBeLessThanOrEqual(1);
   });
 
   test('renders contact form without console errors', async ({ page }) => {
@@ -41,7 +46,9 @@ test.describe('insight, agency and contact', () => {
     expect(errors).toEqual([]);
   });
 
-  test('submits contact form, records success and redirects to thank-you page', async ({ page }) => {
+  test('submits contact form, records success and redirects to thank-you page', async ({
+    page
+  }) => {
     const errors = collectCriticalConsoleErrors(page);
     let requestCount = 0;
 
@@ -77,7 +84,9 @@ test.describe('insight, agency and contact', () => {
     await page.getByLabel('Azienda').fill('Netmarket Test');
     await page.getByLabel('Telefono').fill('+39 049 000000');
     await page.getByLabel('Interesse').selectOption('altro');
-    await page.getByLabel('Messaggio').fill('Vorrei parlare di un progetto digitale per la mia azienda.');
+    await page
+      .getByLabel('Messaggio')
+      .fill('Vorrei parlare di un progetto digitale per la mia azienda.');
     await page.getByRole('checkbox', { name: /informativa/i }).check();
     await page.getByRole('button', { name: 'Invia richiesta' }).click();
 
@@ -121,7 +130,9 @@ test.describe('insight, agency and contact', () => {
     );
   });
 
-  test('prevents duplicate contact submits while the first request is pending', async ({ page }) => {
+  test('prevents duplicate contact submits while the first request is pending', async ({
+    page
+  }) => {
     let requestCount = 0;
 
     await page.route('**/wp-json/netmarket/v1/forms/contact', async (route) => {
