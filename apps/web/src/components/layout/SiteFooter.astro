@@ -57,7 +57,7 @@ const socialLinks = [
           <img src="/netmarket-logo.svg" alt="" width="150" height="43" />
         </a>
         <p>Comunichiamo valore dal 1986, con progetti web, marketing e comunicazione coordinata.</p>
-        <div class="site-footer__social" aria-label="Social Netmarket">
+        <nav class="site-footer__social" aria-label="Social Netmarket">
           {
             socialLinks.map(([label, href, Icon]) => (
               <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
@@ -65,7 +65,7 @@ const socialLinks = [
               </a>
             ))
           }
-        </div>
+        </nav>
       </div>
 
       {

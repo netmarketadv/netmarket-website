@@ -113,15 +113,22 @@ const teamJsonLd = teamMembers.map((person) =>
             Agenzia marketing e siti web a <span class="nm-heading-marker">Padova.</span>
           </h1>
           <p class="home-hero__lead" data-reveal="up">
-            Dal 1986 aiutiamo aziende e PMI a chiarire il messaggio, costruire presenza digitale e far lavorare insieme brand, contenuti, campagne e tecnologia.
+            Dal 1986 aiutiamo aziende e PMI a chiarire il messaggio, costruire presenza digitale e
+            far lavorare insieme brand, contenuti, campagne e tecnologia.
           </p>
-          <div class="home-hero__actions" aria-label="Azioni principali" data-reveal="up" data-reveal-delay="1">
+          <div
+            class="home-hero__actions"
+            role="group"
+            aria-label="Azioni principali"
+            data-reveal="up"
+            data-reveal-delay="1"
+          >
             <Button href="/contatti/" magnetic>Raccontaci il progetto</Button>
             <Button href="/progetti/" variant="secondary">Guarda i progetti</Button>
           </div>
         </div>
 
-        <div class="home-hero__visual" aria-label="Sistema Netmarket">
+        <div class="home-hero__visual">
           <div class="home-hero__orbit" aria-hidden="true"></div>
           <figure class="home-hero__device" data-reveal="media">
             <img
@@ -132,18 +139,47 @@ const teamJsonLd = teamMembers.map((person) =>
               fetchpriority="high"
             />
           </figure>
-          <figure class="home-hero__tile home-hero__tile--marketing" data-reveal="scale" data-reveal-delay="1">
-            <img src={heroSecondaryImage.url} alt={heroSecondaryImage.alt || 'Visual marketing Netmarket'} loading="eager" decoding="async" />
+          <figure
+            class="home-hero__tile home-hero__tile--marketing"
+            data-reveal="scale"
+            data-reveal-delay="1"
+          >
+            <img
+              src={heroSecondaryImage.url}
+              alt={heroSecondaryImage.alt || 'Visual marketing Netmarket'}
+              loading="eager"
+              decoding="async"
+            />
             <figcaption>Product</figcaption>
           </figure>
-          <figure class="home-hero__tile home-hero__tile--ecommerce" data-reveal="scale" data-reveal-delay="2">
-            <img src={heroTertiaryImage.url} alt={heroTertiaryImage.alt || 'Visual ecommerce Netmarket'} loading="eager" decoding="async" />
+          <figure
+            class="home-hero__tile home-hero__tile--ecommerce"
+            data-reveal="scale"
+            data-reveal-delay="2"
+          >
+            <img
+              src={heroTertiaryImage.url}
+              alt={heroTertiaryImage.alt || 'Visual ecommerce Netmarket'}
+              loading="eager"
+              decoding="async"
+            />
             <figcaption>Ecommerce</figcaption>
           </figure>
           <figure class="home-hero__social-preview" data-reveal="scale" data-reveal-delay="3">
-            <img src={heroSocialPostImage.url} alt={heroSocialPostImage.alt} loading="eager" decoding="async" />
+            <img
+              src={heroSocialPostImage.url}
+              alt={heroSocialPostImage.alt}
+              loading="eager"
+              decoding="async"
+            />
           </figure>
-          <div class="home-hero__rating" data-reveal="up" data-reveal-delay="3" aria-label={`${googleTrust.rating} stelle su Google`}>
+          <div
+            class="home-hero__rating"
+            data-reveal="up"
+            data-reveal-delay="3"
+            role="img"
+            aria-label={`${googleTrust.rating} stelle su Google`}
+          >
             <span aria-hidden="true">★★★★★</span>
             <strong>{googleTrust.rating}</strong>
           </div>
@@ -153,7 +189,6 @@ const teamJsonLd = teamMembers.map((person) =>
           </div>
         </div>
       </div>
-
     </Container>
   </section>
 
@@ -174,8 +209,8 @@ const teamJsonLd = teamMembers.map((person) =>
           <p class="nm-meta">Cosa facciamo</p>
           <h2 id="system-title">Servizi integrati, non attività scollegate.</h2>
           <p>
-            Un sito più chiaro aiuta le campagne. Le campagne indicano quali contenuti servono.
-            I dati guidano le scelte successive.
+            Un sito più chiaro aiuta le campagne. Le campagne indicano quali contenuti servono. I
+            dati guidano le scelte successive.
           </p>
           <a href="/servizi/">Vedi tutti i servizi</a>
         </div>
@@ -213,10 +248,16 @@ const teamJsonLd = teamMembers.map((person) =>
               <p class="nm-meta">Progetti</p>
               <h2 id="work-title">Case study e progetti reali.</h2>
               <p>
-                Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne e comunicazione.
+                Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne
+                e comunicazione.
               </p>
             </div>
-            <div class="home-case-slider" aria-label="Slider case study Netmarket" data-reveal="up">
+            <div
+              class="home-case-slider"
+              role="region"
+              aria-label="Slider case study Netmarket"
+              data-reveal="up"
+            >
               <div class="home-case-slider__track">
                 {[...visibleProjects, ...visibleProjects].map((project, index) => (
                   <a
@@ -247,7 +288,9 @@ const teamJsonLd = teamMembers.map((person) =>
               </div>
             </div>
             <div class="home-work-section__actions">
-              <Button href="/progetti/" variant="secondary">Tutti i casi studio</Button>
+              <Button href="/progetti/" variant="secondary">
+                Tutti i casi studio
+              </Button>
             </div>
           </Stack>
         </Container>
@@ -262,7 +305,8 @@ const teamJsonLd = teamMembers.map((person) =>
           <p class="nm-meta">Metodo</p>
           <h2 id="method-title">Metodo chiaro. Lavoro coordinato.</h2>
           <p>
-            Il metodo Netmarket nasce per trasformare richieste sparse in priorità chiare, responsabilità definite e attività coordinate.
+            Il metodo Netmarket nasce per trasformare richieste sparse in priorità chiare,
+            responsabilità definite e attività coordinate.
           </p>
         </div>
         <div class="home-method__steps" data-reveal="up" data-reveal-stagger="1">

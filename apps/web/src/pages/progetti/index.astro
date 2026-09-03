@@ -47,10 +47,12 @@ const pageSchema = webPageJsonLd({
     <Container wide>
       <div class="projects-archive-hero__inner" data-reveal="up">
         <p class="nm-meta">Progetti Netmarket</p>
-        <h1 id="projects-title">Il <span class="nm-heading-accent">lavoro reale</span>, prima delle promesse.</h1>
+        <h1 id="projects-title">
+          Il <span class="nm-heading-accent">lavoro reale</span>, prima delle promesse.
+        </h1>
         <p>
-          Casi studio migrati dal sito legacy e preparati per la nuova architettura editoriale.
-          Ogni progetto conserva cliente, contenuti, media e dati SEO disponibili.
+          Casi studio migrati dal sito legacy e preparati per la nuova architettura editoriale. Ogni
+          progetto conserva cliente, contenuti, media e dati SEO disponibili.
         </p>
       </div>
     </Container>
@@ -80,9 +82,9 @@ const pageSchema = webPageJsonLd({
               <p class="nm-meta">{projectClient(featuredProject)}</p>
               <h2 id="featured-project-title">{featuredProject.title}</h2>
               <p>{projectDescription(featuredProject)}</p>
-              <div class="project-service-list" aria-label="Servizi applicati">
+              <div class="project-service-list" role="list" aria-label="Servizi applicati">
                 {featuredProject.services.map((service) => (
-                  <span>{service.title}</span>
+                  <span role="listitem">{service.title}</span>
                 ))}
               </div>
             </div>
@@ -96,9 +98,13 @@ const pageSchema = webPageJsonLd({
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
         <div class="project-index-heading" data-reveal="line">
-          <h2 id="projects-index-title">Archivio <span class="nm-heading-marker">progetti.</span></h2>
+          <h2 id="projects-index-title">
+            Archivio <span class="nm-heading-marker">progetti.</span>
+          </h2>
           <p>
-            {visibleProjects.length} casi studio disponibili. Fonte build: {source === 'cms' ? 'CMS' : 'snapshot migrazione'}.
+            {visibleProjects.length} casi studio disponibili. Fonte build: {
+              source === 'cms' ? 'CMS' : 'snapshot migrazione'
+            }.
           </p>
         </div>
         <div class="project-index" data-reveal="up" data-reveal-stagger="1">

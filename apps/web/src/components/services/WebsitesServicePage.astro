@@ -12,7 +12,12 @@ import {
 } from '@tabler/icons-astro';
 import Button from '@/components/ui/Button.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
-import { getProjectArchiveData, projectClient, projectDescription, projectPath } from '@/lib/projects/content';
+import {
+  getProjectArchiveData,
+  projectClient,
+  projectDescription,
+  projectPath
+} from '@/lib/projects/content';
 
 interface Props {
   service: Service;
@@ -44,14 +49,17 @@ const projectCopy: Record<string, { headline: string; outcome: string; kind: str
     outcome: 'Architettura, contenuti e SEO per rendere leggibili servizi, settori e portfolio.',
     kind: 'Sito corporate'
   },
-  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda': {
-    headline: 'Presenza digitale e immagini per un’azienda moda B2B.',
-    outcome: 'Sito web e shooting fotografico lavorano insieme per valorizzare produzione e competenze.',
-    kind: 'Sito + contenuti'
-  },
+  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda':
+    {
+      headline: 'Presenza digitale e immagini per un’azienda moda B2B.',
+      outcome:
+        'Sito web e shooting fotografico lavorano insieme per valorizzare produzione e competenze.',
+      kind: 'Sito + contenuti'
+    },
   'sviluppo-sito-web-fotovoltaico-progetto-e': {
     headline: 'Un sito per aziende che vogliono investire nel fotovoltaico.',
-    outcome: 'Contenuti, struttura e pagine servizio aiutano a spiegare un’offerta tecnica in modo chiaro.',
+    outcome:
+      'Contenuti, struttura e pagine servizio aiutano a spiegare un’offerta tecnica in modo chiaro.',
     kind: 'Sito aziendale'
   },
   'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa': {
@@ -75,7 +83,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Rigomar',
     type: 'Sito web aziendale',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-aziendale-rigomar-netmarket.webp 1448w',
     alt: 'Pagina del sito web aziendale Rigomar progettato da Netmarket',
@@ -87,7 +96,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Non Solo Tende',
     type: 'Ecommerce',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/ecommerce-nonsolotende-netmarket.webp 1448w',
     alt: 'Ecommerce Non Solo Tende realizzato da Netmarket',
@@ -96,7 +106,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Sirene Blu',
     type: 'Sito corporate',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket-768x432.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket-1024x577.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sito-web-corporate-sireneblu-netmarket.webp 1671w',
     alt: 'Sito corporate Sirene Blu progettato da Netmarket',
@@ -105,7 +116,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Progetto-e',
     type: 'Sito web e SEO',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-sito-web-progettoe-fotovolatico-netmarket.webp 1448w',
     alt: 'Sito web Progetto-e fotovoltaico sviluppato da Netmarket',
@@ -115,7 +127,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Ecommerce moda',
     type: 'Ecommerce',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket-768x512.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket-1024x683.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-web-ecommerce-abbigliamento-netmarket.webp 1536w',
     alt: 'Ecommerce di abbigliamento sviluppato da Netmarket',
@@ -124,7 +137,8 @@ const portfolioSlides: PortfolioSlide[] = [
   {
     client: 'Sito corporate',
     type: 'Web design',
-    image: 'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp',
+    image:
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp',
     srcset:
       'https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket-768x576.webp 768w, https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket-1024x768.webp 1024w, https://cms.netmarket.it/wp-content/uploads/2026/09/web-design-sito-corporate-netmarket.webp 1448w',
     alt: 'Web design per sito corporate realizzato da Netmarket',
@@ -133,7 +147,11 @@ const portfolioSlides: PortfolioSlide[] = [
 ];
 
 const serviceLinks = [
-  ['Ecommerce', '/servizi/ecommerce/', 'Per vendere online con cataloghi, checkout e gestione operativa.'],
+  [
+    'Ecommerce',
+    '/servizi/ecommerce/',
+    'Per vendere online con cataloghi, checkout e gestione operativa.'
+  ],
   ['SEO', '/servizi/seo/', 'Per costruire struttura, contenuti e segnali utili alla visibilità.'],
   [
     'Branding e comunicazione',
@@ -150,7 +168,11 @@ const serviceLinks = [
     '/servizi/software-e-integrazioni/',
     'Per collegare sito, CRM, gestionali e processi aziendali.'
   ],
-  ['Advertising', '/servizi/advertising/', 'Per trasformare campagne e landing in percorsi misurabili.']
+  [
+    'Advertising',
+    '/servizi/advertising/',
+    'Per trasformare campagne e landing in percorsi misurabili.'
+  ]
 ] as const;
 
 const projectTypes = [
@@ -199,11 +221,23 @@ const approachItems = [
 ] as const;
 
 const methodSteps = [
-  ['01', 'Capire', 'Partiamo da obiettivi, pubblici, contenuti esistenti, vincoli e priorità commerciali.'],
-  ['02', 'Organizzare', 'Mettiamo ordine in pagine, gerarchie, percorsi, messaggi e collegamenti interni.'],
+  [
+    '01',
+    'Capire',
+    'Partiamo da obiettivi, pubblici, contenuti esistenti, vincoli e priorità commerciali.'
+  ],
+  [
+    '02',
+    'Organizzare',
+    'Mettiamo ordine in pagine, gerarchie, percorsi, messaggi e collegamenti interni.'
+  ],
   ['03', 'Progettare', 'Costruiamo identità, interfaccia e componenti attorno ai contenuti reali.'],
   ['04', 'Sviluppare', 'Realizziamo un sito veloce, stabile, gestibile e pronto per evolvere.'],
-  ['05', 'Verificare', 'Controlliamo mobile, accessibilità, performance, SEO, form, redirect e tracciamenti.'],
+  [
+    '05',
+    'Verificare',
+    'Controlliamo mobile, accessibilità, performance, SEO, form, redirect e tracciamenti.'
+  ],
   ['06', 'Migliorare', 'Dopo il lancio leggiamo dati e comportamento per continuare a ottimizzare.']
 ] as const;
 
@@ -244,9 +278,18 @@ const technologyItems = [
 ] as const;
 
 const whyItems = [
-  ['Dal 1986', 'Netmarket costruisce comunicazione per aziende da prima che il web esistesse. Gli strumenti cambiano, il principio resta.'],
-  ['Competenze insieme', 'Sito, contenuti, SEO, advertising, foto, video e sviluppo non vivono in reparti separati.'],
-  ['Contesto Padova', 'Lavoriamo con imprese del territorio e aziende strutturate che hanno bisogno di chiarezza, continuità e metodo.']
+  [
+    'Dal 1986',
+    'Netmarket costruisce comunicazione per aziende da prima che il web esistesse. Gli strumenti cambiano, il principio resta.'
+  ],
+  [
+    'Competenze insieme',
+    'Sito, contenuti, SEO, advertising, foto, video e sviluppo non vivono in reparti separati.'
+  ],
+  [
+    'Contesto Padova',
+    'Lavoriamo con imprese del territorio e aziende strutturate che hanno bisogno di chiarezza, continuità e metodo.'
+  ]
 ] as const;
 
 const fallbackFaq: [string, string][] = [
@@ -291,7 +334,10 @@ const displayedFaq = fallbackFaq;
 
     <div class="websites-hero__copy" data-reveal="line">
       <p class="websites-kicker">Netmarket · Padova · dal 1986</p>
-      <h1 id="page-title">Siti web che <span class="nm-heading-marker nm-heading-marker--strong">lavorano</span> per la tua azienda.</h1>
+      <h1 id="page-title">
+        Siti web che <span class="nm-heading-marker nm-heading-marker--strong">lavorano</span> per la
+        tua azienda.
+      </h1>
       <p>
         Progettiamo siti corporate, ecommerce e piattaforme digitali che uniscono comunicazione,
         contenuti, marketing e tecnologia.
@@ -301,65 +347,69 @@ const displayedFaq = fallbackFaq;
         <Button href="#progetti-web" variant="secondary">Guarda i progetti</Button>
       </div>
     </div>
-
   </section>
 
   <section class="websites-portfolio" aria-label="Portfolio siti web Netmarket">
     <div class="websites-portfolio__viewport" data-reveal="up">
-      <div class="websites-portfolio__track" aria-label="Portfolio siti web Netmarket">
-        {portfolioSlides.map((slide, index) => {
-          const Tag = slide.href ? 'a' : 'article';
-          return (
-            <Tag
-              class="websites-portfolio-card"
-              {...(slide.href ? { href: slide.href } : {})}
-              style={`--portfolio-position: ${slide.position}`}
-              data-portfolio-card
-            >
-              <img
-                src={slide.image}
-                srcset={slide.srcset}
-                alt={slide.alt}
-                width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
-                height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchpriority={index === 0 ? 'high' : undefined}
-                decoding="async"
-                sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
-              />
-              <span>
-                <strong>{slide.client}</strong>
-                <small>{slide.type}</small>
-              </span>
-            </Tag>
-          );
-        })}
-        {portfolioSlides.map((slide, index) => {
-          const Tag = slide.href ? 'a' : 'article';
-          return (
-            <Tag
-              class="websites-portfolio-card"
-              {...(slide.href ? { href: slide.href, tabindex: -1 } : {})}
-              style={`--portfolio-position: ${slide.position}`}
-              aria-hidden="true"
-            >
-              <img
-                src={slide.image}
-                srcset={slide.srcset}
-                alt=""
-                width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
-                height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
-              />
-              <span>
-                <strong>{slide.client}</strong>
-                <small>{slide.type}</small>
-              </span>
-            </Tag>
-          );
-        })}
+      <div class="websites-portfolio__track" role="list" aria-label="Portfolio siti web Netmarket">
+        {
+          portfolioSlides.map((slide, index) => {
+            const Tag = slide.href ? 'a' : 'article';
+            return (
+              <Tag
+                class="websites-portfolio-card"
+                {...(slide.href ? { href: slide.href } : {})}
+                style={`--portfolio-position: ${slide.position}`}
+                data-portfolio-card
+                role="listitem"
+              >
+                <img
+                  src={slide.image}
+                  srcset={slide.srcset}
+                  alt={slide.alt}
+                  width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
+                  height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
+                  decoding="async"
+                  sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
+                />
+                <span>
+                  <strong>{slide.client}</strong>
+                  <small>{slide.type}</small>
+                </span>
+              </Tag>
+            );
+          })
+        }
+        {
+          portfolioSlides.map((slide, index) => {
+            const Tag = slide.href ? 'a' : 'article';
+            return (
+              <Tag
+                class="websites-portfolio-card"
+                {...(slide.href ? { href: slide.href, tabindex: -1 } : {})}
+                style={`--portfolio-position: ${slide.position}`}
+                aria-hidden="true"
+              >
+                <img
+                  src={slide.image}
+                  srcset={slide.srcset}
+                  alt=""
+                  width={index === 2 ? 1671 : index === 4 ? 1536 : 1448}
+                  height={index === 2 ? 941 : index === 4 ? 1024 : 1086}
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 767px) 78vw, (max-width: 1023px) 48vw, 34vw"
+                />
+                <span>
+                  <strong>{slide.client}</strong>
+                  <small>{slide.type}</small>
+                </span>
+              </Tag>
+            );
+          })
+        }
       </div>
     </div>
   </section>
@@ -367,20 +417,20 @@ const displayedFaq = fallbackFaq;
   <section class="websites-realization" aria-labelledby="websites-realization-title">
     <div class="websites-section-heading" data-reveal="line">
       <h2 id="websites-realization-title">Che tipo di sito possiamo realizzare.</h2>
-      <p>
-        Non partiamo dal formato. Partiamo da ciò che il sito deve ottenere per l’azienda.
-      </p>
+      <p>Non partiamo dal formato. Partiamo da ciò che il sito deve ottenere per l’azienda.</p>
     </div>
     <div class="websites-type-rail" data-reveal="up" data-reveal-stagger="1">
-      {projectTypes.map(({ title, text, icon: Icon }) => (
-        <article>
-          <span class="websites-type-rail__icon" aria-hidden="true">
-            <Icon stroke={1.8} />
-          </span>
-          <h3 class="nm-heading-o-none">{title}</h3>
-          <p>{text}</p>
-        </article>
-      ))}
+      {
+        projectTypes.map(({ title, text, icon: Icon }) => (
+          <article>
+            <span class="websites-type-rail__icon" aria-hidden="true">
+              <Icon stroke={1.8} />
+            </span>
+            <h3 class="nm-heading-o-none">{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
@@ -388,8 +438,8 @@ const displayedFaq = fallbackFaq;
     <div class="websites-asset__copy" data-reveal="line">
       <h2 id="websites-asset-title">Un sito può essere online e non funzionare davvero.</h2>
       <p>
-        Succede quando non spiega bene l’azienda, non sostiene le campagne, non è pensato per
-        mobile o non permette di capire cosa fanno gli utenti.
+        Succede quando non spiega bene l’azienda, non sostiene le campagne, non è pensato per mobile
+        o non permette di capire cosa fanno gli utenti.
       </p>
     </div>
     <div class="websites-asset__panel" data-reveal="up">
@@ -409,12 +459,14 @@ const displayedFaq = fallbackFaq;
       </p>
     </div>
     <div class="websites-orbit" data-reveal="up" data-reveal-stagger="1">
-      {approachItems.map(([title, text]) => (
-        <article>
-          <span>{title}</span>
-          <p>{text}</p>
-        </article>
-      ))}
+      {
+        approachItems.map(([title, text]) => (
+          <article>
+            <span>{title}</span>
+            <p>{text}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
@@ -422,41 +474,54 @@ const displayedFaq = fallbackFaq;
     <div class="websites-ai__copy" data-reveal="line">
       <h2 id="websites-ai-title">Pensato anche per il modo in cui cerchiamo oggi.</h2>
       <p>
-        Google non è più l’unico punto di accesso alle informazioni. Per questo organizziamo
-        pagine, contenuti e dati perché siano comprensibili anche dai nuovi sistemi di ricerca basati sull’AI.
+        Google non è più l’unico punto di accesso alle informazioni. Per questo organizziamo pagine,
+        contenuti e dati perché siano comprensibili anche dai nuovi sistemi di ricerca basati
+        sull’AI.
       </p>
-      <div class="websites-ai__logos" aria-label="Sistemi AI considerati nella progettazione dei contenuti">
-        {aiLogos.map((logo) => (
-          <span>
-            <img
-              class:list={[logo.name === 'Google Gemini' && 'websites-ai__logo--gemini']}
-              src={logo.src}
-              alt={logo.name}
-              width="140"
-              height="44"
-              loading="lazy"
-              decoding="async"
-            />
-          </span>
-        ))}
+      <div
+        class="websites-ai__logos"
+        role="list"
+        aria-label="Sistemi AI considerati nella progettazione dei contenuti"
+      >
+        {
+          aiLogos.map((logo) => (
+            <span role="listitem">
+              <img
+                class:list={[logo.name === 'Google Gemini' && 'websites-ai__logo--gemini']}
+                src={logo.src}
+                alt={logo.name}
+                width="140"
+                height="44"
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+          ))
+        }
       </div>
     </div>
     <div class="websites-ai__cards" data-reveal="up" data-reveal-stagger="1">
-      {seoAiItems.map(({ title, text, icon: Icon }) => (
-        <article>
-          <span class="websites-ai__card-icon" aria-hidden="true">
-            <Icon stroke={1.8} />
-          </span>
-          <h3 class="nm-heading-o-none">{title}</h3>
-          <p>{text}</p>
-        </article>
-      ))}
+      {
+        seoAiItems.map(({ title, text, icon: Icon }) => (
+          <article>
+            <span class="websites-ai__card-icon" aria-hidden="true">
+              <Icon stroke={1.8} />
+            </span>
+            <h3 class="nm-heading-o-none">{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
   {
     featuredProjects.length > 0 && (
-      <section id="progetti-web" class="websites-projects" aria-labelledby="websites-projects-title">
+      <section
+        id="progetti-web"
+        class="websites-projects"
+        aria-labelledby="websites-projects-title"
+      >
         <div class="websites-section-heading" data-reveal="line">
           <h2 id="websites-projects-title">Progetti web reali.</h2>
           <p>
@@ -470,10 +535,21 @@ const displayedFaq = fallbackFaq;
               class:list={['websites-project-card', index === 0 && 'websites-project-card--large']}
               href={projectPath(project.slug)}
             >
-              {project.cover && <img src={project.cover.url} alt={project.cover.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />}
+              {project.cover && (
+                <img
+                  src={project.cover.url}
+                  alt={project.cover.alt}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              )}
               <div>
-                <span>{projectClient(project)} · {projectCopy[project.slug]?.kind ?? 'Progetto web'}</span>
-                <h3 class="nm-heading-o-none">{projectCopy[project.slug]?.headline ?? project.title}</h3>
+                <span>
+                  {projectClient(project)} · {projectCopy[project.slug]?.kind ?? 'Progetto web'}
+                </span>
+                <h3 class="nm-heading-o-none">
+                  {projectCopy[project.slug]?.headline ?? project.title}
+                </h3>
                 <p>{projectCopy[project.slug]?.outcome ?? projectDescription(project)}</p>
                 <strong>Guarda il progetto completo</strong>
               </div>
@@ -481,7 +557,9 @@ const displayedFaq = fallbackFaq;
           ))}
         </div>
         <div class="websites-projects__cta">
-          <Button href="/progetti/" variant="secondary">Guarda tutti i progetti</Button>
+          <Button href="/progetti/" variant="secondary">
+            Guarda tutti i progetti
+          </Button>
         </div>
       </section>
     )
@@ -491,20 +569,22 @@ const displayedFaq = fallbackFaq;
     <div class="websites-method__heading" data-reveal="line">
       <h2 id="websites-method-title">Un metodo per gestire progetti complessi.</h2>
       <p>
-        Il lavoro resta comprensibile anche quando dentro al sito entrano contenuti, sviluppo,
-        SEO, integrazioni e stakeholder diversi.
+        Il lavoro resta comprensibile anche quando dentro al sito entrano contenuti, sviluppo, SEO,
+        integrazioni e stakeholder diversi.
       </p>
     </div>
     <ol class="websites-method__list" data-reveal="up" data-reveal-stagger="1">
-      {methodSteps.map(([number, title, text]) => (
-        <li>
-          <span>{number}</span>
-          <div>
-            <h3 class="nm-heading-o-none">{title}</h3>
-            <p>{text}</p>
-          </div>
-        </li>
-      ))}
+      {
+        methodSteps.map(([number, title, text]) => (
+          <li>
+            <span>{number}</span>
+            <div>
+              <h3 class="nm-heading-o-none">{title}</h3>
+              <p>{text}</p>
+            </div>
+          </li>
+        ))
+      }
     </ol>
   </section>
 
@@ -525,12 +605,14 @@ const displayedFaq = fallbackFaq;
         veloce, gestibile, stabile e collegato a quello che serve.
       </p>
       <div class="websites-technology__items">
-        {technologyItems.map(([title, text]) => (
-          <article>
-            <h3 class="nm-heading-o-none">{title}</h3>
-            <p>{text}</p>
-          </article>
-        ))}
+        {
+          technologyItems.map(([title, text]) => (
+            <article>
+              <h3 class="nm-heading-o-none">{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -544,24 +626,28 @@ const displayedFaq = fallbackFaq;
       </p>
     </div>
     <div class="websites-connected__links" data-reveal="up" data-reveal-stagger="1">
-      {serviceLinks.map(([title, href, text]) => (
-        <a href={href}>
-          <strong>{title}</strong>
-          <span>{text}</span>
-        </a>
-      ))}
+      {
+        serviceLinks.map(([title, href, text]) => (
+          <a href={href}>
+            <strong>{title}</strong>
+            <span>{text}</span>
+          </a>
+        ))
+      }
     </div>
   </section>
 
   <section class="websites-why" aria-labelledby="websites-why-title">
     <h2 id="websites-why-title" data-reveal="line">Le tecnologie cambiano. Il principio no.</h2>
     <div data-reveal="up" data-reveal-stagger="1">
-      {whyItems.map(([title, text]) => (
-        <article>
-          <h3 class="nm-heading-o-none">{title}</h3>
-          <p>{text}</p>
-        </article>
-      ))}
+      {
+        whyItems.map(([title, text]) => (
+          <article>
+            <h3 class="nm-heading-o-none">{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 

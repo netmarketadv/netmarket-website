@@ -95,8 +95,18 @@ const operatingItems = [
       <Container wide>
         <div class="nod-hero__grid">
           <div class="nod-hero__copy" data-reveal="up">
-            <img class="nod-wordmark" src={nodLogo} alt="NØD by Netmarket" width="220" height="64" decoding="async" />
-            <h1 id="nod-title">Il CRM operativo per seguire lead, task e <span class="nm-heading-marker nm-heading-marker--strong">pipeline.</span></h1>
+            <img
+              class="nod-wordmark"
+              src={nodLogo}
+              alt="NØD by Netmarket"
+              width="220"
+              height="64"
+              decoding="async"
+            />
+            <h1 id="nod-title">
+              Il CRM operativo per seguire lead, task e <span
+                class="nm-heading-marker nm-heading-marker--strong">pipeline.</span>
+            </h1>
             <p>
               NØD aiuta le aziende a trasformare contatti, attività commerciali e dati in un flusso
               di lavoro più chiaro.
@@ -127,10 +137,12 @@ const operatingItems = [
     <Section compact labelledby="nod-system-title">
       <Container>
         <div class="nod-system" data-reveal="up">
-          <h2 id="nod-system-title">Un ambiente unico per lavorare sui <span class="nm-heading-accent">contatti.</span></h2>
+          <h2 id="nod-system-title">
+            Un ambiente unico per lavorare sui <span class="nm-heading-accent">contatti.</span>
+          </h2>
           <p>
-            La piattaforma tiene insieme marketing, vendita e follow-up. Il team vede cosa è successo,
-            cosa va fatto e dove intervenire.
+            La piattaforma tiene insieme marketing, vendita e follow-up. Il team vede cosa è
+            successo, cosa va fatto e dove intervenire.
           </p>
         </div>
       </Container>
@@ -142,8 +154,8 @@ const operatingItems = [
           <div class="nod-platform__intro" data-reveal="line">
             <h2 id="nod-platform-title">La UI resta semplice anche quando il processo cresce.</h2>
             <p>
-              Lead, pipeline, calendario e report mantengono la stessa grammatica visiva: pochi livelli,
-              informazioni leggibili e azioni vicine al contesto.
+              Lead, pipeline, calendario e report mantengono la stessa grammatica visiva: pochi
+              livelli, informazioni leggibili e azioni vicine al contesto.
             </p>
           </div>
 
@@ -161,7 +173,14 @@ const operatingItems = [
                       <p>{item.text}</p>
                     </div>
                     <div class="nod-feature-card__media">
-                      <img src={item.image} alt={item.alt} width="1600" height="1000" loading="lazy" decoding="async" />
+                      <img
+                        src={item.image}
+                        alt={item.alt}
+                        width="1600"
+                        height="1000"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   </article>
                 );
@@ -181,10 +200,10 @@ const operatingItems = [
               NØD non sostituisce il metodo commerciale. Lo rende più visibile, così ogni persona sa
               cosa seguire e quando farlo.
             </p>
-            <div class="nod-flow__steps" aria-label="Flusso operativo NOD">
+            <div class="nod-flow__steps" role="list" aria-label="Flusso operativo NOD">
               {
                 operatingItems.map(([title, text]) => (
-                  <article>
+                  <article role="listitem">
                     <h3>{title}</h3>
                     <p>{text}</p>
                   </article>
@@ -219,16 +238,33 @@ const operatingItems = [
                 aiutano il team a mantenere il ritmo.
               </p>
             </div>
-            <img src={nodImages.aiAssistant} alt="AI Assistant dentro NOD" width="1600" height="1000" loading="lazy" decoding="async" />
+            <img
+              src={nodImages.aiAssistant}
+              alt="AI Assistant dentro NOD"
+              width="1600"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
           </article>
 
           <article class="nod-deep-card" data-reveal="scale" data-reveal-delay="1">
             <div>
               <IconSparkles stroke={1.8} aria-hidden="true" />
               <h3>Automazioni operative</h3>
-              <p>Trigger e azioni collegano fonti, task e follow-up senza appesantire il lavoro quotidiano.</p>
+              <p>
+                Trigger e azioni collegano fonti, task e follow-up senza appesantire il lavoro
+                quotidiano.
+              </p>
             </div>
-            <img src={nodImages.automations} alt="Automazioni operative nella piattaforma NOD" width="1600" height="1000" loading="lazy" decoding="async" />
+            <img
+              src={nodImages.automations}
+              alt="Automazioni operative nella piattaforma NOD"
+              width="1600"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
           </article>
         </div>
       </Container>
@@ -239,7 +275,9 @@ const operatingItems = [
         <div class="nod-reports" data-reveal="media">
           <div class="nod-reports__copy">
             <IconChartLine stroke={1.8} aria-hidden="true" />
-            <h2 id="nod-reports-title">Report leggibili, <span class="nm-heading-marker">decisioni più rapide.</span></h2>
+            <h2 id="nod-reports-title">
+              Report leggibili, <span class="nm-heading-marker">decisioni più rapide.</span>
+            </h2>
             <p>
               Le viste di report collegano andamento dei lead, attività e risultati. Non servono
               dati decorativi: servono segnali chiari.
@@ -260,10 +298,20 @@ const operatingItems = [
     <Section class="nod-final-section" labelledby="nod-cta-title">
       <Container>
         <div class="nod-final" data-reveal="scale">
-          <img src={nodLogoWhite} alt="NØD" width="160" height="48" loading="lazy" decoding="async" />
+          <img
+            src={nodLogoWhite}
+            alt="NØD"
+            width="160"
+            height="48"
+            loading="lazy"
+            decoding="async"
+          />
           <div>
             <h2 id="nod-cta-title">Vuoi capire se NØD è adatto al tuo processo?</h2>
-            <p>Partiamo da lead, canali e metodo commerciale già attivi. Poi costruiamo il flusso utile.</p>
+            <p>
+              Partiamo da lead, canali e metodo commerciale già attivi. Poi costruiamo il flusso
+              utile.
+            </p>
           </div>
           <Button href="/contatti/" variant="inverse" magnetic>
             <span>Contattaci</span>
@@ -283,8 +331,12 @@ const operatingItems = [
     --nod-line: rgb(9 10 15 / 0.1);
     --nod-blue: var(--nm-color-blue);
     --nod-muted: #68707c;
-    background:
-      linear-gradient(180deg, #ffffff 0%, var(--nod-surface) 22%, var(--nod-surface) 100%);
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      var(--nod-surface) 22%,
+      var(--nod-surface) 100%
+    );
   }
 
   .nod-hero {
@@ -579,8 +631,7 @@ const operatingItems = [
     align-items: center;
     border-radius: 1.75rem;
     background:
-      radial-gradient(circle at 92% 14%, rgb(255 255 255 / 0.18), transparent 34%),
-      #081229;
+      radial-gradient(circle at 92% 14%, rgb(255 255 255 / 0.18), transparent 34%), #081229;
     color: #ffffff;
     padding: clamp(1.25rem, 4vw, 2.75rem);
   }

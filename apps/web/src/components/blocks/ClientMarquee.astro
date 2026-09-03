@@ -20,27 +20,32 @@ const {
 } = Astro.props;
 ---
 
-<div class:list={['client-marquee', `client-marquee--${speed}`, `client-marquee--${direction}`]} data-reveal="up">
+<div
+  class:list={['client-marquee', `client-marquee--${speed}`, `client-marquee--${direction}`]}
+  data-reveal="up"
+>
   <div class="client-marquee__heading">
     <h2 id={titleId}>{title}</h2>
     <p>{text}</p>
   </div>
 
-  <div class="client-marquee__viewport" aria-label="Loghi clienti Netmarket">
+  <div class="client-marquee__viewport" role="list" aria-label="Loghi clienti Netmarket">
     <div class="client-marquee__track">
       <div class="client-marquee__group">
         {
           clients.map((client) => (
-            <div class="client-marquee__item" style={`--client-logo-scale: ${client.visualScale ?? 1};`}>
-              {
-                client.href ? (
-                  <a href={client.href}>
-                    <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
-                  </a>
-                ) : (
+            <div
+              class="client-marquee__item"
+              role="listitem"
+              style={`--client-logo-scale: ${client.visualScale ?? 1};`}
+            >
+              {client.href ? (
+                <a href={client.href}>
                   <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
-                )
-              }
+                </a>
+              ) : (
+                <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
+              )}
             </div>
           ))
         }
@@ -49,7 +54,10 @@ const {
       <div class="client-marquee__group" aria-hidden="true">
         {
           clients.map((client) => (
-            <div class="client-marquee__item" style={`--client-logo-scale: ${client.visualScale ?? 1};`}>
+            <div
+              class="client-marquee__item"
+              style={`--client-logo-scale: ${client.visualScale ?? 1};`}
+            >
               <img src={client.logo} alt="" loading="lazy" decoding="async" />
             </div>
           ))

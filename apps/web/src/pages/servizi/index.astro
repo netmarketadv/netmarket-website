@@ -87,10 +87,10 @@ const breadcrumb = breadcrumbJsonLd([
             servono. Un contenuto ben progettato migliora SEO, vendita e fiducia.
           </p>
         </div>
-        <div class="service-integration__list" aria-label="Ambiti integrati">
+        <div class="service-integration__list" role="list" aria-label="Ambiti integrati">
           {
             featureHighlights.map(([title, text]) => (
-              <article>
+              <article role="listitem">
                 <h3>{title}</h3>
                 <p>{text}</p>
               </article>
