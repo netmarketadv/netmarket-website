@@ -72,6 +72,7 @@ Attributi supportati:
 - `data-cursor-label`: mostra una label contestuale desktop only.
 - `data-motion-magnetic`: applica magnetic micro-effect solo a CTA importanti.
 - `data-motion-engine`: stato interno su `html`, `gsap` quando GSAP ha preso controllo.
+- `data-agency-timeline`: progressione locale della storia dell'agenzia; anima la linea e rende attivo un capitolo per volta senza nascondere informazioni.
 
 ## Usage Rules
 
@@ -87,6 +88,7 @@ Attributi supportati:
 - Services: l'archivio usa reveal progressivo sulle righe del service index; il dettaglio usa line reveal sull'H1, media reveal sul visual, stagger leggero su processo e related content.
 - Rail e carousel: lo scorrimento manuale nativo resta sempre disponibile; autoplay e animazioni si fermano durante hover, focus o interazione e non sono essenziali al contenuto.
 - Case study: media e capitoli entrano con i preset esistenti; nessun effetto deve alterare crop, aspect ratio o ordine narrativo.
+- Timeline Agenzia: una sola linea di progresso con scrub leggero e capitoli in ingresso; niente pinning e niente scroll-jacking.
 
 ## Reduced Motion
 
@@ -98,6 +100,7 @@ Con `prefers-reduced-motion: reduce`:
 - accordion cambia stato senza animazioni lunghe;
 - transitions globali sono portate a 1ms.
 - marquee e autoplay dei rail sono fermi, con contenuto comunque esplorabile manualmente.
+- la timeline Agenzia mostra linea completa e capitoli statici.
 
 ## No-JS Resilience
 
@@ -117,4 +120,4 @@ GSAP e caricato nel bundle motion del frontend e deve restare l'unica libreria d
 
 ## Eccezioni Locali
 
-La composizione social della homepage, i rail dell'archivio e le sequenze media dei case study possono definire timing o direzione locali, ma devono riusare easing, durate e criteri reduced motion del sistema. Pinning, scroll-jacking e nuove dipendenze motion non sono pattern canonici.
+La composizione social della homepage, la timeline Agenzia, i rail dell'archivio e le sequenze media dei case study possono definire timing o direzione locali, ma devono riusare easing, durate e criteri reduced motion del sistema. Pinning, scroll-jacking e nuove dipendenze motion non sono pattern canonici.

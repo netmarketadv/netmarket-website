@@ -3,7 +3,16 @@ import Button from '@/components/ui/Button.astro';
 import IconBubble from '@/components/ui/IconBubble.astro';
 import { IconMail } from '@tabler/icons-astro';
 
-type IconName = 'bolt' | 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'shield' | 'sparkles' | 'users';
+type IconName =
+  | 'bolt'
+  | 'briefcase'
+  | 'chart'
+  | 'desktop'
+  | 'palette'
+  | 'search'
+  | 'shield'
+  | 'sparkles'
+  | 'users';
 
 interface NavItem {
   label: string;
@@ -85,31 +94,19 @@ const navItems: NavItem[] = [
   {
     label: 'Agenzia',
     menuVariant: 'compact',
-    description: 'Un partner a Padova per costruire comunicazione coerente online e offline.',
+    description: 'Persone, storia e metodo dietro i progetti Netmarket.',
     children: [
       {
-        label: 'Metodo',
-        description: 'Come analizziamo, progettiamo e ottimizziamo.',
+        label: 'Agenzia',
+        description: 'La nostra storia, il metodo e le persone.',
         href: '/agenzia/',
-        icon: 'chart'
-      },
-      {
-        label: 'Team',
-        description: 'Persone reali dietro sviluppo, design, marketing e direzione.',
-        href: '/agenzia/#team',
         icon: 'users'
       },
       {
-        label: 'Progetti',
-        description: 'Casi e lavori pubblicati da usare come riferimento.',
-        href: '/progetti/',
-        icon: 'sparkles'
-      },
-      {
-        label: 'Insight',
-        description: 'Guide e contenuti per PMI e aziende.',
-        href: '/insight/',
-        icon: 'users'
+        label: 'Lavora con noi',
+        description: 'Competenze, modo di lavorare e candidatura spontanea.',
+        href: '/lavora-con-noi/',
+        icon: 'briefcase'
       }
     ]
   },
@@ -118,6 +115,16 @@ const navItems: NavItem[] = [
   { href: '/nod/', label: 'NØD' },
   { href: '/contatti/', label: 'Contatti' }
 ];
+
+const currentPath = Astro.url.pathname;
+const normalizePath = (href: string) => href.split('#')[0] || '/';
+const isCurrent = (href?: string) => Boolean(href && normalizePath(href) === currentPath);
+const isSectionCurrent = (item: NavItem) =>
+  item.label === 'Agenzia'
+    ? currentPath === '/agenzia/' || currentPath === '/lavora-con-noi/'
+    : item.label === 'Servizi'
+      ? currentPath.startsWith('/servizi/')
+      : isCurrent(item.href);
 ---
 
 <header class="site-header">
@@ -129,7 +136,7 @@ const navItems: NavItem[] = [
       {
         navItems.map((item) =>
           item.children ? (
-            <details class="mega-menu">
+            <details class="mega-menu" data-active={isSectionCurrent(item) ? 'true' : undefined}>
               <summary>{item.label}</summary>
               <div class="mega-menu__scrim" />
               <div
@@ -142,11 +149,15 @@ const navItems: NavItem[] = [
                 <div class="mega-menu__intro">
                   <h2>{item.label === 'Servizi' ? 'Servizi integrati' : 'Netmarket dal 1986'}</h2>
                   <p>{item.description}</p>
-                  {item.href && <a class="mega-menu__overview" href={item.href}>Tutti i servizi</a>}
+                  {item.href && (
+                    <a class="mega-menu__overview" href={item.href}>
+                      Tutti i servizi
+                    </a>
+                  )}
                 </div>
                 <div class="mega-menu__grid">
                   {item.children.map((child) => (
-                    <a href={child.href}>
+                    <a href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
                       <IconBubble name={child.icon} size="sm" />
                       <span>
                         <strong>{child.label}</strong>
@@ -158,7 +169,9 @@ const navItems: NavItem[] = [
               </div>
             </details>
           ) : (
-            <a href={item.href}>{item.label}</a>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
           )
         )
       }
@@ -185,6 +198,7 @@ const navItems: NavItem[] = [
                     item.menuVariant === 'compact' && 'mobile-submenu--compact',
                     item.menuVariant === 'wide' && 'mobile-submenu--wide'
                   ]}
+                  data-active={isSectionCurrent(item) ? 'true' : undefined}
                 >
                   <summary>{item.label}</summary>
                   <div class="mobile-submenu__panel">
@@ -192,7 +206,10 @@ const navItems: NavItem[] = [
                       <p class="mobile-submenu__eyebrow">{item.label}:</p>
                     )}
                     {item.children.map((child) => (
-                      <a href={child.href}>
+                      <a
+                        href={child.href}
+                        aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      >
                         <IconBubble name={child.icon} size="sm" />
                         <span>
                           <strong>{child.label}</strong>
@@ -203,7 +220,9 @@ const navItems: NavItem[] = [
                   </div>
                 </details>
               ) : (
-                <a href={item.href}>{item.label}</a>
+                <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
               )
             )
           }

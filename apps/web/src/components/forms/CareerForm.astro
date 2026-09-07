@@ -1,0 +1,193 @@
+---
+const areas = [
+  'Design e comunicazione',
+  'Sviluppo web e software',
+  'Marketing digitale',
+  'Contenuti e produzione',
+  'Organizzazione e account',
+  'Altro'
+];
+---
+
+<form
+  class="contact-form career-form"
+  data-career-form
+  aria-describedby="career-form-status"
+  novalidate
+>
+  <div class="contact-form__field contact-form__field--hidden" aria-hidden="true">
+    <label for="career-website">Sito web</label>
+    <input id="career-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="contact-form__grid">
+    <label>
+      <span>Nome</span>
+      <input
+        name="name"
+        type="text"
+        autocomplete="given-name"
+        required
+        minlength="2"
+        maxlength="60"
+      />
+    </label>
+    <label>
+      <span>Cognome</span>
+      <input
+        name="surname"
+        type="text"
+        autocomplete="family-name"
+        required
+        minlength="2"
+        maxlength="60"
+      />
+    </label>
+    <label>
+      <span>Email</span>
+      <input name="email" type="email" autocomplete="email" required />
+    </label>
+    <label>
+      <span>Area</span>
+      <select name="area" required>
+        <option value="">Scegli l’area più vicina a te</option>
+        {areas.map((area) => <option value={area}>{area}</option>)}
+      </select>
+    </label>
+  </div>
+
+  <label>
+    <span>Portfolio o LinkedIn <small>facoltativo</small></span>
+    <input
+      name="portfolio"
+      type="url"
+      inputmode="url"
+      autocomplete="url"
+      placeholder="https://"
+      maxlength="300"
+    />
+  </label>
+
+  <label>
+    <span>Raccontaci cosa sai fare e cosa vorresti costruire</span>
+    <textarea name="message" rows="6" required minlength="20" maxlength="2500"></textarea>
+  </label>
+
+  <label class="contact-form__check">
+    <input name="privacyConsent" type="checkbox" required />
+    <span
+      >Ho letto l’informativa privacy e autorizzo il trattamento dei dati per la candidatura.</span
+    >
+  </label>
+  <p>
+    <a href="https://www.iubenda.com/privacy-policy/69986431">Privacy policy</a>
+  </p>
+
+  <button type="submit" class="nm-button nm-button--primary" data-motion-magnetic>
+    Invia candidatura
+  </button>
+  <p
+    id="career-form-status"
+    class="contact-form__status"
+    role="status"
+    aria-live="polite"
+    tabindex="-1"
+  >
+  </p>
+</form>
+
+<script>
+  import { pushEvent } from '@netmarket/analytics';
+  import { submitContactForm } from '@/lib/api/forms';
+
+  const form = document.querySelector<HTMLFormElement>('[data-career-form]');
+  const status = form?.querySelector<HTMLElement>('.contact-form__status');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const startedAt = Date.now();
+  let started = false;
+  let submitting = false;
+
+  function firstInvalidControl() {
+    return form?.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      'input:invalid, textarea:invalid, select:invalid'
+    );
+  }
+
+  form?.addEventListener('input', (event) => {
+    if (!started) {
+      started = true;
+      pushEvent({ event: 'contact_form_start', form_id: 'career-page' });
+    }
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      target
+        .closest('label')
+        ?.classList.toggle('contact-form__field--invalid', !target.validity.valid);
+    }
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form || !status || !button || submitting) return;
+    if (!form.checkValidity()) {
+      status.textContent = 'Controlla i campi richiesti prima di inviare.';
+      status.dataset.state = 'error';
+      firstInvalidControl()?.focus();
+      form.reportValidity();
+      return;
+    }
+
+    const data = new FormData(form);
+    if (data.get('privacyConsent') !== 'on') {
+      status.textContent = 'Devi accettare la privacy policy per inviare la candidatura.';
+      status.dataset.state = 'error';
+      form.querySelector<HTMLInputElement>('input[name="privacyConsent"]')?.focus();
+      return;
+    }
+
+    const portfolio = String(data.get('portfolio') || '').trim();
+    const message = String(data.get('message') || '').trim();
+    const area = String(data.get('area') || '');
+    status.textContent = '';
+    status.dataset.state = '';
+    pushEvent({ event: 'contact_form_submit', form_id: 'career-page' });
+    submitting = true;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const originalLabel = button.textContent || 'Invia candidatura';
+    button.textContent = 'Invio in corso';
+
+    try {
+      await submitContactForm({
+        name: `${String(data.get('name') || '').trim()} ${String(data.get('surname') || '').trim()}`,
+        email: String(data.get('email') || ''),
+        company: 'Candidatura spontanea',
+        service: `lavora-con-noi: ${area}`,
+        message: `Area: ${area}\n${portfolio ? `Portfolio o LinkedIn: ${portfolio}\n` : ''}\n${message}`,
+        privacyConsent: true,
+        marketingConsent: false,
+        website: String(data.get('website') || ''),
+        sourceUrl: window.location.href,
+        referrer: document.referrer || undefined,
+        elapsedMs: Date.now() - startedAt
+      });
+      pushEvent({ event: 'contact_form_success', form_id: 'career-page' });
+      window.location.assign('/grazie/');
+    } catch (error) {
+      const code = error instanceof Error ? error.message : 'career_form_failed';
+      status.textContent =
+        'Non siamo riusciti a inviare la candidatura. Puoi scriverci a segreteria@netmarket.it.';
+      status.dataset.state = 'error';
+      status.focus();
+      pushEvent({ event: 'contact_form_error', form_id: 'career-page', error_code: code });
+      submitting = false;
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = originalLabel;
+    }
+  });
+</script>

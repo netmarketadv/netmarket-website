@@ -80,7 +80,9 @@ test('design system page is internal and noindexed', async ({ page }) => {
   await expect(
     page.getByRole('heading', { level: 1, name: 'Netmarket design system' })
   ).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Motion.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 2, name: 'Motion con uno scopo.' })
+  ).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
@@ -154,6 +156,8 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   const agencyMenu = page.locator('.mega-menu').filter({ hasText: 'Agenzia' }).first();
   await agencyMenu.locator('summary').click();
   await expect(agencyMenu.locator('.mega-menu__panel--compact')).toBeVisible();
+  await expect(agencyMenu.getByRole('link', { name: 'Agenzia' })).toBeVisible();
+  await expect(agencyMenu.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 900 });
   await page.getByLabel('Apri menu').click();
@@ -170,6 +174,8 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
   await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
   await expect(panel.locator('.mobile-submenu--wide .icon-bubble')).toHaveCount(9);
+  await panel.locator('.mobile-submenu summary').filter({ hasText: 'Agenzia' }).click();
+  await expect(panel.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {
@@ -462,10 +468,13 @@ test('homepage polish keeps key sections aligned and manually scrollable', async
       methodBackground: methodSection ? window.getComputedStyle(methodSection).backgroundColor : '',
       ctaSectionBackground: ctaSection ? window.getComputedStyle(ctaSection).backgroundColor : '',
       ctaCardBackground: ctaCard ? window.getComputedStyle(ctaCard).backgroundImage : '',
-      ctaCardRadius: ctaCard ? Number.parseFloat(window.getComputedStyle(ctaCard).borderTopLeftRadius) : 0,
+      ctaCardRadius: ctaCard
+        ? Number.parseFloat(window.getComputedStyle(ctaCard).borderTopLeftRadius)
+        : 0,
       linkedinCentered:
         iconRect && linkRect
-          ? Math.abs(iconRect.left + iconRect.width / 2 - (linkRect.left + linkRect.width / 2)) < 1 &&
+          ? Math.abs(iconRect.left + iconRect.width / 2 - (linkRect.left + linkRect.width / 2)) <
+              1 &&
             Math.abs(iconRect.top + iconRect.height / 2 - (linkRect.top + linkRect.height / 2)) < 1
           : false
     };
@@ -505,7 +514,8 @@ test('case study slider remains stable on mobile touch viewports', async ({ brow
       sliderScrollLeft: slider.scrollLeft,
       animationName: window.getComputedStyle(track).animationName,
       sliderMask: window.getComputedStyle(slider).maskImage,
-      imageVisible: image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0
+      imageVisible:
+        image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0
     };
   });
 

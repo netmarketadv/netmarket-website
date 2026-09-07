@@ -28,11 +28,78 @@ test.describe('insight, agency and contact', () => {
     await expect(page.locator('#team')).toBeVisible();
     await expect(page.locator('.client-marquee')).toBeVisible();
     await expect(page.locator('.agency-project-card').first()).toBeVisible();
+    await expect(page.locator('[data-agency-timeline-step]')).toHaveCount(4);
+    await expect(page.getByRole('link', { name: 'Conosciamoci' })).toHaveAttribute(
+      'href',
+      '/lavora-con-noi/'
+    );
     await page.setViewportSize({ width: 390, height: 900 });
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
       .toBeLessThanOrEqual(1);
   });
+
+  test('renders careers page and submits a spontaneous application', async ({ page }) => {
+    let requestCount = 0;
+    await page.route('**/wp-json/netmarket/v1/forms/contact', async (route) => {
+      requestCount += 1;
+      const payload = JSON.parse(route.request().postData() || '{}') as Record<string, unknown>;
+      expect(payload.name).toBe('Ada Lovelace');
+      expect(payload.company).toBe('Candidatura spontanea');
+      expect(payload.service).toContain('Sviluppo web e software');
+      expect(payload.message).toContain('https://example.com/ada');
+      expect(payload.privacyConsent).toBe(true);
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true })
+      });
+    });
+
+    await page.goto('/lavora-con-noi/', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Il tuo lavoro conta');
+    const structuredData =
+      (await page.locator('script[type="application/ld+json"]').textContent()) || '';
+    expect(structuredData).toContain('WebPage');
+    expect(structuredData).not.toContain('JobPosting');
+    await page.getByLabel('Nome', { exact: true }).fill('Ada');
+    await page.getByLabel('Cognome', { exact: true }).fill('Lovelace');
+    await page.getByLabel('Email').fill('ada@example.com');
+    await page.getByLabel('Area').selectOption({ label: 'Sviluppo web e software' });
+    await page.getByLabel(/Portfolio o LinkedIn/).fill('https://example.com/ada');
+    await page
+      .getByRole('textbox', {
+        name: 'Raccontaci cosa sai fare e cosa vorresti costruire',
+        exact: true
+      })
+      .fill('Progetto interfacce e sistemi digitali accessibili, chiari e durevoli.');
+    await page.getByRole('checkbox', { name: /informativa privacy/i }).check();
+    await page.getByRole('button', { name: 'Invia candidatura' }).click();
+
+    await expect(page).toHaveURL(/\/grazie\/$/);
+    expect(requestCount).toBe(1);
+  });
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 900 },
+    { width: 1280, height: 900 },
+    { width: 1440, height: 1000 },
+    { width: 1728, height: 1050 }
+  ]) {
+    test(`keeps agency paths inside the ${viewport.width}px viewport`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      for (const path of ['/agenzia/', '/lavora-con-noi/']) {
+        await page.goto(path, { waitUntil: 'domcontentloaded' });
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+        await expect
+          .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
+          .toBeLessThanOrEqual(1);
+      }
+    });
+  }
 
   test('renders contact form without console errors', async ({ page }) => {
     const errors = collectCriticalConsoleErrors(page);

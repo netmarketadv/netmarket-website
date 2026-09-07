@@ -17,6 +17,7 @@ export async function GET() {
   const paths = [
     '/',
     '/agenzia/',
+    '/lavora-con-noi/',
     '/contatti/',
     '/insight/',
     ...insightPages,

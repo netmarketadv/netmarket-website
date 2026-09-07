@@ -234,7 +234,8 @@ Il dettaglio operativo vive in `docs/motion-system.md`.
 - Homepage social hero: composizione art-directed unica, non componente generico.
 - Homepage case slider: rail full-viewport con larghezze variabili e autoplay leggero; non sostituisce `ProjectCard` altrove.
 - Pagina Siti web: hero browser/device, bento tipologie e blocco AI sono specifici del servizio.
-- Agenzia: timeline, matrice delle competenze e proof conclusiva sono pattern narrativi locali.
+- Agenzia: montage di progetti reali, timeline storica e diagramma editoriale delle tre aree sono pattern narrativi locali.
+- Lavora con noi: mosaico del team e form di candidatura spontanea sono specifici della pagina; principi, liste editoriali e campi form riusano primitive canoniche.
 - Archivio Progetti: featured editoriale e filtri sono propri dell'archivio.
 - Case study: variabili colore `--case-*`, ordine media e proporzioni possono cambiare per cliente.
 - NOD e pagine di campagna possono avere art direction distinta, ma devono rispettare fondazioni, accessibilita e motion.
