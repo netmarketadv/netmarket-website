@@ -1,141 +1,120 @@
 ---
-import {
-  IconArrowRight,
-  IconBriefcase,
-  IconChartBar,
-  IconDeviceDesktop,
-  IconFilter,
-  IconRocket,
-  IconSearch
-} from '@tabler/icons-astro';
+import { IconArrowRight } from '@tabler/icons-astro';
 import { absoluteCanonical, breadcrumbJsonLd } from '@netmarket/seo';
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import {
-  getProjectArchiveData,
-  projectCategory,
-  projectClient,
-  projectDescription,
-  projectPath
-} from '@/lib/projects/content';
-import type { CaseStudy } from '@netmarket/schemas';
+import { getProjectArchiveData, projectClient, projectPath } from '@/lib/projects/content';
+import type { CaseStudy, MediaAsset } from '@netmarket/schemas';
 
-type Metric = {
-  value: string;
+type ProjectSummary = {
+  sentence: string;
+  result?: string;
+};
+
+type ProjectFilter = {
+  key: string;
   label: string;
-};
-
-type ProjectNarrative = {
-  need: string;
-  intervention: string;
-  result: string;
-  kind: 'case' | 'project';
-  emphasis?: 'large' | 'wide';
-  metrics?: Metric[];
-};
-
-type Capability = {
-  title: string;
-  description: string;
-  href: string;
-  icon: typeof IconDeviceDesktop;
 };
 
 const canonicalSiteUrl = 'https://netmarket.it';
 const { projects } = await getProjectArchiveData();
 const visibleProjects = projects.filter((project) => project.projectStatus === 'published');
 
-const narratives: Record<string, ProjectNarrative> = {
+const summaries: Record<string, ProjectSummary> = {
   'casi-studio-strategia-digitale-ecommerce-brb': {
-    need: 'Far crescere un progetto alimentare con ecommerce, contenuti e acquisizione collegati.',
-    intervention:
-      'Strategia multicanale, nuova identità social, calendario contenuti, sviluppo ecommerce e struttura SEO.',
-    result:
-      'Nei primi 3 mesi dal lancio i dati disponibili riportano crescita su fatturato, ordini, valore medio e prodotti venduti.',
-    kind: 'case',
-    emphasis: 'large',
-    metrics: [
-      { value: '+292%', label: 'fatturato ecommerce' },
-      { value: '+206%', label: 'ordini' },
-      { value: '+39%', label: 'valore medio ordine' },
-      { value: '+364%', label: 'prodotti venduti' }
-    ]
+    sentence:
+      'Strategia, contenuti, social media ed ecommerce riuniti in un ecosistema digitale capace di sostenere la crescita del brand.',
+    result: '+292% di fatturato ecommerce nei primi tre mesi dal lancio.'
   },
   'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa': {
-    need: 'Rendere più solido un ecommerce dedicato ad arredo casa, tavoli e sedie.',
-    intervention:
-      'Design, sviluppo e assistenza continua per sostenere crescita e gestione operativa.',
-    result: 'Il case study documenta una crescita fino a oltre 3M€ di fatturato.',
-    kind: 'case',
-    emphasis: 'wide'
+    sentence:
+      'Design, sviluppo e assistenza continua per un ecommerce di arredamento arrivato a oltre 3 milioni di euro di fatturato.'
   },
   'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda':
     {
-      need: 'Valorizzare una realtà specializzata nella produzione moda conto terzi.',
-      intervention: 'Sito web, shooting fotografico e comunicazione visuale coordinati.',
-      result:
-        'Una presenza digitale più autorevole e adatta a raccontare qualità produttiva e identità aziendale.',
-      kind: 'case'
+      sentence:
+        'Sito web e produzione fotografica per raccontare con più autorevolezza un’azienda della moda conto terzi.'
     },
   'sviluppo-sito-web-allestimenti-fieristici-albertini': {
-    need: 'Raccontare allestimenti, design e progetti su misura con una struttura più chiara.',
-    intervention:
-      'Analisi, posizionamento, SEO research, sito istituzionale, portfolio e catalogo.',
-    result:
-      'Un sito pensato per rendere più leggibile l’offerta e più consultabile lo storico lavori.',
-    kind: 'case'
+    sentence:
+      'Un nuovo sito istituzionale e un portfolio più chiaro per valorizzare allestimenti e progetti su misura.'
   },
   'sviluppo-sito-web-fotovoltaico-progetto-e': {
-    need: 'Spiegare un’offerta tecnica nel fotovoltaico aziendale con maggiore solidità digitale.',
-    intervention: 'Sito WordPress, SEO, contenuti e landing page per il settore fotovoltaico.',
-    result:
-      'Una presenza digitale più chiara per intercettare domande e guidare utenti verso il contatto.',
-    kind: 'case'
+    sentence:
+      'Sito, contenuti e SEO per rendere comprensibile un’offerta tecnica nel fotovoltaico aziendale.'
   },
   'sviluppo-crm-custom-venitaly': {
-    need: 'Gestire utenti, dati, accessi e processi operativi con uno strumento dedicato.',
-    intervention: 'Sviluppo e manutenzione di un CRM custom con supporto applicativo.',
-    result: 'Una piattaforma gestionale costruita intorno ai flussi aziendali.',
-    kind: 'project'
+    sentence:
+      'Un CRM su misura per coordinare utenti, dati, accessi e processi operativi in un unico ambiente.'
   },
   'app-mobile-programma-fedelta-sirene-blu': {
-    need: 'Portare il programma fedeltà dentro un’esperienza mobile collegata ai sistemi di cassa.',
-    intervention: 'App mobile, programma fidelity e integrazione custom con gestionale casse.',
-    result: 'Oltre 100.000 iscritti al programma fedeltà secondo i dati del case study.',
-    kind: 'project',
-    metrics: [{ value: '100mila', label: 'iscritti programma fedeltà' }]
+    sentence:
+      'App mobile e integrazione con i sistemi di cassa per un programma fedeltà con oltre 100.000 iscritti.'
   },
   'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa': {
-    need: 'Aumentare traffico nei punti vendita e partecipazione dei clienti con una meccanica semplice.',
-    intervention: 'Strategia, sviluppo web, concorso a premi e gestione operativa.',
-    result: 'Un progetto digitale collegato a obiettivi commerciali, normativa e operatività.',
-    kind: 'project'
+    sentence:
+      'Strategia, piattaforma e gestione operativa di un concorso pensato per sostenere traffico e partecipazione.'
   }
 };
 
-function projectNarrative(project: CaseStudy): ProjectNarrative {
+const filters: ProjectFilter[] = [
+  { key: 'all', label: 'Tutti' },
+  { key: 'siti-web', label: 'Siti web' },
+  { key: 'ecommerce', label: 'Ecommerce' },
+  { key: 'software', label: 'Software' },
+  { key: 'seo', label: 'SEO' },
+  { key: 'comunicazione', label: 'Comunicazione' }
+];
+
+const projectOrder = [
+  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
+  'sviluppo-sito-web-fotovoltaico-progetto-e',
+  'sviluppo-sito-web-allestimenti-fieristici-albertini',
+  'app-mobile-programma-fedelta-sirene-blu',
+  'sviluppo-crm-custom-venitaly',
+  'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
+];
+
+function summary(project: CaseStudy): ProjectSummary {
   return (
-    narratives[project.slug] ?? {
-      need: projectDescription(project),
-      intervention: project.services.map((service) => service.title).join(', '),
-      result: projectDescription(project),
-      kind: project.seo.noindex ? 'project' : 'case'
+    summaries[project.slug] ?? {
+      sentence:
+        project.shortDescription ||
+        project.excerpt ||
+        project.seo.description ||
+        'Un progetto digitale costruito intorno alle esigenze del cliente.'
     }
   );
+}
+
+function cover(project: CaseStudy): MediaAsset | null {
+  return project.cover ?? project.image ?? null;
 }
 
 function serviceHref(slug: string): string {
   return `/servizi/${slug}/`;
 }
 
-function serviceSummary(project: CaseStudy): string {
-  return project.services.map((service) => service.title).join(', ');
-}
+function projectGroups(project: CaseStudy): string[] {
+  const groups = new Set(project.services.map((service) => service.slug));
+  const serviceSlugs = project.services.map((service) => service.slug);
 
-function cover(project: CaseStudy) {
-  return project.cover ?? project.image;
+  if (serviceSlugs.includes('software-e-integrazioni')) groups.add('software');
+  if (serviceSlugs.some((slug) => ['social-media', 'advertising'].includes(slug))) {
+    groups.add('marketing');
+  }
+  if (
+    serviceSlugs.some((slug) =>
+      ['branding-e-comunicazione', 'content-production', 'concorsi-a-premi'].includes(slug)
+    )
+  ) {
+    groups.add('comunicazione');
+  }
+
+  return [...groups];
 }
 
 const featuredProject =
@@ -144,46 +123,18 @@ const featuredProject =
   ) ??
   visibleProjects.find((project) => project.featured) ??
   visibleProjects[0];
-const featuredNarrative = featuredProject ? projectNarrative(featuredProject) : undefined;
-const caseProjects = visibleProjects.filter(
-  (project) => project.slug !== featuredProject?.slug && !project.seo.noindex
-);
-const compactProjects = visibleProjects.filter(
-  (project) => project.slug !== featuredProject?.slug && project.seo.noindex
-);
-const capabilities: Capability[] = [
-  {
-    title: 'Siti web',
-    description: 'Architettura, contenuti, SEO e interfacce per offerte aziendali complesse.',
-    href: '/servizi/siti-web/',
-    icon: IconDeviceDesktop
-  },
-  {
-    title: 'Ecommerce',
-    description:
-      'Percorsi di vendita, cataloghi e contenuti pensati per sostenere gestione e crescita.',
-    href: '/servizi/ecommerce/',
-    icon: IconBriefcase
-  },
-  {
-    title: 'SEO e contenuti',
-    description:
-      'Struttura informativa, testi e segnali utili per persone, motori di ricerca e sistemi AI.',
-    href: '/servizi/seo/',
-    icon: IconSearch
-  },
-  {
-    title: 'Marketing integrato',
-    description:
-      'Social, advertising, branding, foto e video quando il progetto richiede più competenze insieme.',
-    href: '/servizi/',
-    icon: IconChartBar
-  }
-];
+const featuredSummary = featuredProject ? summary(featuredProject) : undefined;
+const archiveProjects = visibleProjects
+  .filter((project) => project.slug !== featuredProject?.slug)
+  .sort((a, b) => {
+    const aIndex = projectOrder.indexOf(a.slug);
+    const bIndex = projectOrder.indexOf(b.slug);
+    return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+  });
 
 const title = 'Progetti e case study';
 const description =
-  'Case study e progetti Netmarket: siti web, ecommerce, software, SEO, marketing e comunicazione realizzati per aziende con esigenze diverse.';
+  'I migliori progetti Netmarket: case study di siti web, ecommerce, software, SEO, marketing e comunicazione realizzati per aziende con esigenze concrete.';
 const canonicalUrl = absoluteCanonical(canonicalSiteUrl, '/progetti/');
 const breadcrumb = breadcrumbJsonLd([
   { name: 'Home', url: `${canonicalSiteUrl}/` },
@@ -193,19 +144,10 @@ const collectionSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   '@id': `${canonicalUrl}#collection`,
-  name: 'Progetti e case study Netmarket',
+  name: 'I nostri migliori progetti',
   description,
   url: canonicalUrl,
   publisher: { '@id': absoluteCanonical(canonicalSiteUrl, '/#organization') },
-  about: [
-    'case study Netmarket',
-    'progetti web',
-    'ecommerce',
-    'software custom',
-    'SEO',
-    'marketing',
-    'comunicazione'
-  ],
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: visibleProjects.length,
@@ -213,12 +155,11 @@ const collectionSchema = {
       '@type': 'ListItem',
       position: index + 1,
       url: absoluteCanonical(canonicalSiteUrl, projectPath(project.slug)),
-      name: `${projectClient(project)} - ${project.title}`,
       item: {
         '@type': 'CreativeWork',
         name: project.title,
         url: absoluteCanonical(canonicalSiteUrl, projectPath(project.slug)),
-        description: projectNarrative(project).need,
+        description: summary(project).sentence,
         client: projectClient(project),
         provider: { '@id': absoluteCanonical(canonicalSiteUrl, '/#organization') },
         keywords: project.services.map((service) => service.title).join(', ')
@@ -234,94 +175,59 @@ const collectionSchema = {
   path="/progetti/"
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, collectionSchema]}
+  motionMode="light"
 >
   <Section labelledby="projects-title" class="projects-archive-hero">
     <Container wide>
-      <div class="projects-archive-hero__grid">
-        <div class="projects-archive-hero__inner" data-reveal="up">
-          <p class="nm-meta">Progetti Netmarket</p>
-          <h1 id="projects-title">
-            Il <span class="nm-heading-accent">lavoro reale</span>, prima delle promesse.
-          </h1>
-          <p>
-            Una selezione di siti web, ecommerce, software, SEO, marketing e comunicazione
-            realizzati per aziende con esigenze diverse.
-          </p>
-          <div class="projects-hero-actions" aria-label="Azioni principali">
-            <Button href="#archivio-progetti">Guarda i progetti</Button>
-            <Button href="/contatti/" variant="secondary">Raccontaci il progetto</Button>
-          </div>
-        </div>
-
-        {
-          featuredProject && cover(featuredProject) && (
-            <a
-              class="projects-hero-proof"
-              href={projectPath(featuredProject.slug)}
-              data-reveal="scale"
-            >
-              <img
-                src={cover(featuredProject)!.url}
-                alt={cover(featuredProject)!.alt}
-                width="1440"
-                height="1080"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-                sizes="(max-width: 900px) 92vw, 38vw"
-              />
-              <span>
-                <strong>{projectClient(featuredProject)}</strong>
-                <small>{serviceSummary(featuredProject)}</small>
-              </span>
-            </a>
-          )
-        }
+      <div class="projects-archive-hero__inner" data-reveal="up">
+        <p class="nm-meta">Progetti Netmarket</p>
+        <h1 id="projects-title">
+          I nostri <span class="nm-heading-accent">migliori</span> progetti.
+        </h1>
+        <p>
+          Una selezione di progetti tra web, ecommerce, software, marketing e comunicazione,
+          realizzati per aziende con esigenze diverse.
+        </p>
       </div>
     </Container>
   </Section>
 
   {
-    featuredProject && featuredNarrative && (
+    featuredProject && featuredSummary && cover(featuredProject) && (
       <Section compact labelledby="featured-project-title" class="projects-featured-section">
         <Container wide>
-          <article
-            class="project-featured-case"
-            style={`--project-featured-image: url(${cover(featuredProject)?.url});`}
-            data-reveal="up"
-          >
-            <div class="project-featured-case__content">
-              <p class="nm-meta">Case study in evidenza</p>
-              <h2 id="featured-project-title">
-                {projectClient(featuredProject)}: competenze diverse, un unico progetto.
-              </h2>
-              <div class="project-featured-case__story">
-                <section>
-                  <h3>Esigenza</h3>
-                  <p>{featuredNarrative.need}</p>
-                </section>
-                <section>
-                  <h3>Intervento</h3>
-                  <p>{featuredNarrative.intervention}</p>
-                </section>
-                <section>
-                  <h3>Risultato</h3>
-                  <p>{featuredNarrative.result}</p>
-                </section>
-              </div>
-              <a class="project-featured-case__link" href={projectPath(featuredProject.slug)}>
+          <article class="project-featured-editorial" data-reveal="up">
+            <a
+              class="project-featured-editorial__media"
+              href={projectPath(featuredProject.slug)}
+              aria-label={`Guarda il progetto completo di ${projectClient(featuredProject)}`}
+            >
+              <img
+                src={cover(featuredProject)!.url}
+                alt={cover(featuredProject)!.alt}
+                width="1440"
+                height="960"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                sizes="(max-width: 767px) 92vw, 83rem"
+              />
+              <span class="project-featured-editorial__label">Case study in evidenza</span>
+              <span class="project-featured-editorial__action">
                 Guarda il progetto completo
                 <IconArrowRight stroke={1.8} aria-hidden="true" />
-              </a>
-            </div>
+              </span>
+            </a>
 
-            <div class="project-featured-case__aside">
-              {featuredNarrative.metrics?.map((metric) => (
-                <div>
-                  <strong>{metric.value}</strong>
-                  <span>{metric.label}</span>
-                </div>
-              ))}
+            <div class="project-featured-editorial__caption">
+              <div>
+                <p class="nm-meta">{featuredProject.services[0]?.title ?? 'Progetto'}</p>
+                <h2 id="featured-project-title">{projectClient(featuredProject)}</h2>
+              </div>
+              <p>{featuredSummary.sentence}</p>
+              {featuredSummary.result && (
+                <p class="project-featured-editorial__result">{featuredSummary.result}</p>
+              )}
             </div>
           </article>
         </Container>
@@ -331,137 +237,95 @@ const collectionSchema = {
 
   <Section id="archivio-progetti" labelledby="projects-index-title" class="projects-index-section">
     <Container wide>
-      <div class="projects-section-heading" data-reveal="line">
-        <h2 id="projects-index-title">
-          Archivio <span class="nm-heading-marker">progetti.</span>
-        </h2>
-        <p>
-          Ogni scheda mette in chiaro cliente, bisogno, competenze coinvolte e risultato
-          disponibile.
-        </p>
+      <div class="projects-index-heading" data-reveal="line">
+        <h2 id="projects-index-title">Archivio progetti.</h2>
+        <p>Clienti, identità e obiettivi diversi. Lo stesso livello di cura.</p>
       </div>
 
-      <div class="project-filter-links" aria-label="Collegamenti per competenza" data-reveal="up">
-        <a href="/servizi/">Tutti</a>
-        <a href="/servizi/siti-web/">Siti web</a>
-        <a href="/servizi/ecommerce/">Ecommerce</a>
-        <a href="/servizi/seo/">SEO</a>
-        <a href="/servizi/software-e-integrazioni/">Software</a>
-        <a href="/servizi/social-media/">Marketing</a>
-      </div>
-
-      <div class="project-editorial-grid" data-reveal="up" data-reveal-stagger="1">
-        {
-          caseProjects.map((project, index) => {
-            const item = projectNarrative(project);
-            const image = cover(project);
-            return (
-              image && (
-                <article
-                  class:list={[
-                    'project-editorial-card',
-                    item.emphasis === 'wide' && 'project-editorial-card--wide'
-                  ]}
-                >
-                  <a
-                    class="project-editorial-card__media"
-                    href={projectPath(project.slug)}
-                    aria-label={`Leggi il progetto ${projectClient(project)}`}
-                  >
-                    <img
-                      src={image.url}
-                      alt={image.alt}
-                      width="1280"
-                      height="860"
-                      loading={index < 2 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      sizes="(max-width: 767px) 92vw, (max-width: 1200px) 46vw, 44vw"
-                    />
-                  </a>
-                  <div class="project-editorial-card__body">
-                    <div>
-                      <span>{projectCategory(project)}</span>
-                      <h3>
-                        <a href={projectPath(project.slug)}>{projectClient(project)}</a>
-                      </h3>
-                      <p>{item.need}</p>
-                    </div>
-                    <dl>
-                      <div>
-                        <dt>Intervento</dt>
-                        <dd>{item.intervention}</dd>
-                      </div>
-                      <div>
-                        <dt>Risultato</dt>
-                        <dd>{item.result}</dd>
-                      </div>
-                    </dl>
-                    <ul aria-label="Servizi applicati">
-                      {project.services.map((service) => (
-                        <li>
-                          <a href={serviceHref(service.slug)}>{service.title}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              )
-            );
-          })
-        }
-      </div>
-    </Container>
-  </Section>
-
-  {
-    compactProjects.length > 0 && (
-      <Section compact labelledby="project-more-title" class="projects-compact-section">
-        <Container wide>
-          <div class="projects-section-heading projects-section-heading--narrow" data-reveal="line">
-            <h2 id="project-more-title">Altri progetti, stessa attenzione.</h2>
-            <p>
-              Alcuni lavori sono raccontati in forma più sintetica, ma aiutano a leggere ampiezza e
-              continuità delle competenze.
-            </p>
-          </div>
-          <div class="project-compact-list" data-reveal="up" data-reveal-stagger="1">
-            {compactProjects.map((project) => {
-              const item = projectNarrative(project);
-              return (
-                <a href={projectPath(project.slug)} class="project-compact-item">
-                  <span>{projectClient(project)}</span>
-                  <strong>{item.need}</strong>
-                  <small>{serviceSummary(project)}</small>
-                  <IconArrowRight stroke={1.8} aria-hidden="true" />
-                </a>
-              );
-            })}
-          </div>
-        </Container>
-      </Section>
-    )
-  }
-
-  <Section labelledby="project-capabilities-title" class="project-capabilities-section">
-    <Container wide>
-      <div class="project-capabilities">
-        <div data-reveal="line">
-          <IconFilter stroke={1.8} aria-hidden="true" />
-          <h2 id="project-capabilities-title">Competenze che entrano nei progetti.</h2>
-          <p>
-            Un caso studio raramente nasce da una sola disciplina. Qui i servizi diventano
-            collegamenti naturali per capire metodo, processo e possibilità.
-          </p>
-        </div>
-        <div class="project-capability-grid" data-reveal="up" data-reveal-stagger="1">
+      <div data-project-filter-root>
+        <div class="project-filters" aria-label="Filtra i progetti per categoria" data-reveal="up">
           {
-            capabilities.map(({ title, description, href, icon: Icon }) => (
-              <a href={href}>
-                <Icon stroke={1.8} aria-hidden="true" />
-                <strong>{title}</strong>
-                <span>{description}</span>
-              </a>
+            filters.map((filter, index) => (
+              <button
+                type="button"
+                data-project-filter={filter.key}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+                aria-controls="project-archive-grid"
+              >
+                {filter.label}
+              </button>
             ))
+          }
+        </div>
+
+        <p class="visually-hidden" aria-live="polite" data-project-filter-status>
+          {archiveProjects.length} progetti mostrati
+        </p>
+
+        <div id="project-archive-grid" class="project-archive-grid" data-reveal="up">
+          {
+            archiveProjects.map((project, index) => {
+              const image = cover(project);
+              const item = summary(project);
+              const services = project.services.slice(0, 3);
+
+              return (
+                image && (
+                  <article
+                    class:list={[
+                      'project-archive-card',
+                      project.slug ===
+                        'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa' &&
+                        'project-archive-card--wide'
+                    ]}
+                    data-project-card
+                    data-project-groups={projectGroups(project).join(' ')}
+                  >
+                    <a
+                      class="project-archive-card__media"
+                      href={projectPath(project.slug)}
+                      aria-label={`Scopri il progetto ${projectClient(project)}`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.alt}
+                        width="1280"
+                        height="860"
+                        loading={index < 2 ? 'eager' : 'lazy'}
+                        decoding="async"
+                        sizes="(max-width: 767px) 92vw, (max-width: 1439px) 46vw, 40rem"
+                      />
+                    </a>
+
+                    <div class="project-archive-card__body">
+                      <div>
+                        <h3>
+                          <a href={projectPath(project.slug)}>{projectClient(project)}</a>
+                        </h3>
+                        <p>{item.sentence}</p>
+                      </div>
+
+                      <div class="project-archive-card__footer">
+                        <ul aria-label={`Servizi del progetto ${projectClient(project)}`}>
+                          {services.map((service) => (
+                            <li>
+                              <a href={serviceHref(service.slug)}>{service.title}</a>
+                            </li>
+                          ))}
+                        </ul>
+                        <a
+                          class="project-archive-card__arrow"
+                          href={projectPath(project.slug)}
+                          aria-label={`Apri il case study ${projectClient(project)}`}
+                        >
+                          <IconArrowRight stroke={1.8} aria-hidden="true" />
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                )
+              );
+            })
           }
         </div>
       </div>
@@ -470,16 +334,45 @@ const collectionSchema = {
 
   <Section compact labelledby="project-cta-title" class="projects-final-cta">
     <Container wide>
-      <div class="projects-final-cta__card" data-reveal="scale">
+      <div class="projects-final-cta__card">
         <div>
-          <IconRocket stroke={1.8} aria-hidden="true" />
           <h2 id="project-cta-title">Ogni progetto parte da un’esigenza diversa.</h2>
-          <p>
-            Raccontaci cosa deve diventare più chiaro, più utile o più misurabile nella tua azienda.
-          </p>
+          <p>Parliamo della tua.</p>
         </div>
-        <Button href="/contatti/" variant="inverse" magnetic>Raccontaci il progetto</Button>
+        <Button href="/contatti/" variant="inverse">Raccontaci il progetto</Button>
       </div>
     </Container>
   </Section>
+
+  <script>
+    const roots = document.querySelectorAll<HTMLElement>('[data-project-filter-root]');
+
+    roots.forEach((root) => {
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-project-filter]'));
+      const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-project-card]'));
+      const status = root.querySelector<HTMLElement>('[data-project-filter-status]');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const selected = button.dataset.projectFilter ?? 'all';
+          let visibleCount = 0;
+
+          buttons.forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+
+          cards.forEach((card) => {
+            const groups = card.dataset.projectGroups?.split(' ') ?? [];
+            const isVisible = selected === 'all' || groups.includes(selected);
+            card.hidden = !isVisible;
+            if (isVisible) visibleCount += 1;
+          });
+
+          if (status) {
+            status.textContent = `${visibleCount} ${visibleCount === 1 ? 'progetto mostrato' : 'progetti mostrati'}`;
+          }
+        });
+      });
+    });
+  </script>
 </BaseLayout>
