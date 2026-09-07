@@ -23,9 +23,14 @@ describe('agency and contact pages', () => {
 
     expect(contact).toContain('ContactForm');
     expect(contact).toContain('ContactPage');
+    expect(contact).toContain('PostalAddress');
+    expect(contact).toContain('OpeningHoursSpecification');
     expect(form).toContain('submitContactForm');
     expect(form).toContain('contact_form_success');
     expect(form).toContain("window.location.assign('/grazie/')");
+    expect(form).toContain('Raccontaci brevemente il progetto');
+    expect(form).toContain('marketingConsent: false');
+    expect(form).not.toContain('name="marketingConsent"');
     expect(form).toContain('privacyConsent');
     expect(form).toContain('elapsedMs');
     expect(thanks).toContain('Richiesta ricevuta');

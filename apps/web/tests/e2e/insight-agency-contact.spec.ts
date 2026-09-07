@@ -127,9 +127,11 @@ test.describe('insight, agency and contact', () => {
     { width: 1440, height: 1000 },
     { width: 1728, height: 1050 }
   ]) {
-    test(`keeps agency paths inside the ${viewport.width}px viewport`, async ({ page }) => {
+    test(`keeps agency and contact paths inside the ${viewport.width}px viewport`, async ({
+      page
+    }) => {
       await page.setViewportSize(viewport);
-      for (const path of ['/agenzia/', '/lavora-con-noi/']) {
+      for (const path of ['/agenzia/', '/lavora-con-noi/', '/contatti/']) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
         await expect
@@ -147,8 +149,76 @@ test.describe('insight, agency and contact', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Raccontaci');
     await expect(page.getByLabel('Nome')).toBeVisible();
     await expect(page.getByLabel('Email')).toBeVisible();
-    await expect(page.getByLabel('Messaggio')).toBeVisible();
+    await expect(page.getByLabel(/Raccontaci brevemente il progetto/)).toBeVisible();
     expect(errors).toEqual([]);
+  });
+
+  test('shows contextual contact errors and focuses the first invalid field', async ({ page }) => {
+    await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
+
+    await page.getByRole('button', { name: 'Invia la richiesta' }).click();
+
+    await expect(page.getByLabel('Nome')).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.locator('#contact-name-error')).toContainText('Inserisci il tuo nome');
+    await expect(page.locator('#contact-service-error')).toContainText(
+      'Scegli l’ambito su cui vuoi lavorare'
+    );
+    await expect(page.locator('#contact-form-status')).toContainText(
+      'Ci sono alcuni campi da controllare'
+    );
+    await expect(page.locator('#contact-name')).toBeFocused();
+  });
+
+  test('validates email and privacy while preserving a logical keyboard order', async ({
+    page
+  }) => {
+    await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
+
+    await page.locator('#contact-name').focus();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#contact-email')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#contact-company')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#contact-phone')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#contact-service')).toBeFocused();
+
+    await page.getByLabel('Nome').fill('Mario Rossi');
+    await page.getByLabel('Email').fill('email-non-valida');
+    await page.getByLabel(/Su cosa vuoi lavorare/).selectOption('nod');
+    await page
+      .getByLabel(/Raccontaci brevemente il progetto/)
+      .fill('Vorrei organizzare meglio il processo commerciale.');
+    await page.getByRole('button', { name: 'Invia la richiesta' }).click();
+
+    await expect(page.locator('#contact-email-error')).toContainText(
+      'Inserisci un indirizzo email valido'
+    );
+    await expect(page.locator('#contact-email')).toBeFocused();
+
+    await page.getByLabel('Email').fill('mario@example.com');
+    await page.getByRole('button', { name: 'Invia la richiesta' }).click();
+
+    await expect(page.locator('#contact-privacy-error')).toContainText(
+      'devi accettare l’informativa privacy'
+    );
+    await expect(page.locator('#contact-privacy')).toBeFocused();
+    await expect(page.locator('#contact-service option')).toContainText([
+      'Scegli un ambito',
+      'Siti web',
+      'Ecommerce',
+      'Software e integrazioni',
+      'SEO',
+      'Advertising',
+      'Social media',
+      'Branding e comunicazione',
+      'Content production',
+      'Concorsi a premi',
+      'NØD',
+      'Progetto integrato',
+      'Altro'
+    ]);
   });
 
   test('submits contact form, records success and redirects to thank-you page', async ({
@@ -188,12 +258,12 @@ test.describe('insight, agency and contact', () => {
     await page.getByLabel('Email').fill('mario@example.com');
     await page.getByLabel('Azienda').fill('Netmarket Test');
     await page.getByLabel('Telefono').fill('+39 049 000000');
-    await page.getByLabel('Interesse').selectOption('altro');
+    await page.getByLabel(/Su cosa vuoi lavorare/).selectOption('altro');
     await page
-      .getByLabel('Messaggio')
+      .getByLabel(/Raccontaci brevemente il progetto/)
       .fill('Vorrei parlare di un progetto digitale per la mia azienda.');
     await page.getByRole('checkbox', { name: /informativa/i }).check();
-    await page.getByRole('button', { name: 'Invia richiesta' }).click();
+    await page.getByRole('button', { name: 'Invia la richiesta' }).click();
 
     await expect(page).toHaveURL(/\/grazie\/$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Grazie.' })).toBeVisible();
@@ -219,15 +289,18 @@ test.describe('insight, agency and contact', () => {
     await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
     await page.getByLabel('Nome').fill('Mario Rossi');
     await page.getByLabel('Email').fill('mario@example.com');
-    await page.getByLabel('Messaggio').fill('Vorrei parlare di un progetto digitale.');
+    await page.getByLabel(/Su cosa vuoi lavorare/).selectOption('altro');
+    await page
+      .getByLabel(/Raccontaci brevemente il progetto/)
+      .fill('Vorrei parlare di un progetto digitale.');
     await page.getByRole('checkbox', { name: /informativa/i }).check();
-    await page.getByRole('button', { name: 'Invia richiesta' }).click();
+    await page.getByRole('button', { name: 'Invia la richiesta' }).click();
 
     await expect(page).toHaveURL(/\/contatti\/$/);
     await expect(page.locator('#contact-form-status')).toContainText(
       'Non siamo riusciti a inviare il messaggio'
     );
-    await expect(page.getByLabel('Messaggio')).toHaveValue(
+    await expect(page.getByLabel(/Raccontaci brevemente il progetto/)).toHaveValue(
       'Vorrei parlare di un progetto digitale.'
     );
     expect(await page.evaluate(() => window.dataLayer?.map((item) => item.event))).toEqual(
@@ -253,7 +326,10 @@ test.describe('insight, agency and contact', () => {
     await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
     await page.getByLabel('Nome').fill('Mario Rossi');
     await page.getByLabel('Email').fill('mario@example.com');
-    await page.getByLabel('Messaggio').fill('Vorrei parlare di un progetto digitale.');
+    await page.getByLabel(/Su cosa vuoi lavorare/).selectOption('altro');
+    await page
+      .getByLabel(/Raccontaci brevemente il progetto/)
+      .fill('Vorrei parlare di un progetto digitale.');
     await page.getByRole('checkbox', { name: /informativa/i }).check();
 
     const button = page.locator('[data-contact-form] button[type="submit"]');

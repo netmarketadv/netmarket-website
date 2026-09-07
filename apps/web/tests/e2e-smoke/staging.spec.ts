@@ -41,7 +41,7 @@ test('staging critical path is published and crawlable', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Raccontaci');
   await expect(page.getByLabel('Nome')).toBeVisible();
   await expect(page.getByLabel('Email')).toBeVisible();
-  await expect(page.getByLabel('Messaggio')).toBeVisible();
+  await expect(page.getByLabel(/Raccontaci brevemente il progetto/)).toBeVisible();
 
   await page.goto('/grazie/', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: 'Grazie.' })).toBeVisible();
