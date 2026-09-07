@@ -70,7 +70,10 @@ describe('seo utilities', () => {
         description: 'Guida per PMI.',
         url: 'https://staging.netmarket.it/insight/black-friday-2025/'
       })
-    ).toMatchObject({ '@type': 'Article' });
+    ).toMatchObject({
+      '@type': ['Article', 'BlogPosting'],
+      mainEntityOfPage: { '@type': 'WebPage' }
+    });
     expect(
       caseStudyJsonLd(
         'Sirene Blu',

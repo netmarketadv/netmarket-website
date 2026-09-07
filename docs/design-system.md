@@ -185,7 +185,9 @@ Il bianco e la superficie dominante. Il canvas grigio organizza senza separare e
 
 ### Editoriale Insight
 
-Featured ampio, metadata discreti, titolo forte, descrizione breve e griglia di articoli. Le immagini sono contenuto, non riempitivo. Le pagine articolo privilegiano misura di lettura, gerarchia semantica e collegamenti pertinenti.
+Cover story ampia su superficie scura, metadata discreti, titolo forte, descrizione breve e stream asimmetrico deterministico. Le immagini sono contenuto, non riempitivo; le card non hanno un box esterno e affidano gerarchia a ratio, scala tipografica e ritmo. Le categorie sono link a pagine statiche reali, non filtri decorativi.
+
+Le pagine articolo usano hero a due colonne, cover wide, misura di lettura entro 44rem, indice condizionale e rail contestuale. CTA servizio, progetti e approfondimenti correlati compaiono solo quando pertinenti. Cover story scura e rail restano pattern specifici del magazine, non primitive automatiche per servizi o case study.
 
 ## 7. Responsive Behaviour
 

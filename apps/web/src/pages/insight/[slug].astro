@@ -1,42 +1,66 @@
 ---
-import { articleJsonLd, breadcrumbJsonLd } from '@netmarket/seo';
+import {
+  IconArrowRight,
+  IconArrowUpRight,
+  IconCalendar,
+  IconClock,
+  IconList,
+  IconUser
+} from '@tabler/icons-astro';
+import { absoluteCanonical, articleJsonLd, breadcrumbJsonLd } from '@netmarket/seo';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
+import InsightCard from '@/components/insights/InsightCard.astro';
+import { prepareArticleContent } from '@/lib/insights/article-content';
 import {
+  categoryPath,
   formatDate,
   getInsightArchiveData,
   getInsightDetailData,
   insightDescription,
   insightPath
 } from '@/lib/insights/content';
+import { projectClient, projectPath } from '@/lib/projects/content';
 
 export async function getStaticPaths() {
   const { insights } = await getInsightArchiveData();
-  return insights.map((insight) => ({
-    params: { slug: insight.slug }
-  }));
+  return insights.map((insight) => ({ params: { slug: insight.slug } }));
 }
 
 const canonicalSiteUrl = 'https://netmarket.it';
 const { slug } = Astro.params;
 const data = slug ? await getInsightDetailData(slug) : undefined;
 if (!data) return Astro.redirect('/404/');
-const { insight, related } = data;
+const { insight, related, relatedProjects } = data;
+const { insights: archiveInsights } = await getInsightArchiveData();
+const relatedInsights = related
+  .map((item) => archiveInsights.find((candidate) => candidate.slug === item.slug))
+  .filter((item) => item !== undefined);
 const description = insightDescription(insight);
 const canonicalPath = insightPath(insight.slug);
+const canonicalUrl = absoluteCanonical(canonicalSiteUrl, canonicalPath);
+const prepared = prepareArticleContent(insight.content || insight.excerpt || '');
+const toc = prepared.headings.length >= 4 ? prepared.headings : [];
+const primaryService = insight.relatedServices[0];
+const wasUpdated = Boolean(
+  insight.publishedAt && insight.modifiedAt &&
+  Math.abs(Date.parse(insight.modifiedAt) - Date.parse(insight.publishedAt)) > 86_400_000
+);
 const breadcrumb = breadcrumbJsonLd([
   { name: 'Home', url: `${canonicalSiteUrl}/` },
   { name: 'Insight', url: `${canonicalSiteUrl}/insight/` },
-  { name: insight.title, url: `${canonicalSiteUrl}${canonicalPath}` }
+  { name: insight.title, url: canonicalUrl }
 ]);
 const schema = articleJsonLd({
   title: insight.title,
   description,
-  url: `${canonicalSiteUrl}${canonicalPath}`,
+  url: canonicalUrl,
   ...(insight.publishedAt ? { publishedAt: insight.publishedAt } : {}),
-  ...(insight.modifiedAt ? { updatedAt: insight.modifiedAt } : {})
-});
+  ...(insight.modifiedAt ? { updatedAt: insight.modifiedAt } : {}),
+  ...(insight.image?.url ? { image: absoluteCanonical(canonicalSiteUrl, insight.image.url) } : {})
+}, canonicalSiteUrl);
 ---
 
 <BaseLayout
@@ -46,73 +70,177 @@ const schema = articleJsonLd({
   noindex={insight.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, schema]}
+  socialTitle={insight.seo.socialTitle || insight.seo.title || insight.title}
+  socialDescription={insight.seo.socialDescription || description}
+  socialImage={insight.seo.socialImage || insight.image}
+  motionMode="light"
 >
-  <Section labelledby="article-title" class="article-hero">
-    <Container>
+  <Section labelledby="article-title" class="insight-article-hero">
+    <Container wide>
       <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span aria-hidden="true">/</span>
-        <a href="/insight/">Insight</a>
-        <span aria-hidden="true">/</span>
-        <span>{insight.categories[0]?.name || 'Articolo'}</span>
+        <a href="/">Home</a><span aria-hidden="true">/</span><a href="/insight/">Insight</a><span aria-hidden="true">/</span><span>{insight.categories[0]?.name || 'Articolo'}</span>
       </nav>
-      <div data-reveal="line">
-        <p class="nm-meta">{insight.categories[0]?.name || 'Insight'}</p>
-        <h1 id="article-title">{insight.title}</h1>
-      </div>
-      <p class="article-hero__lead" data-reveal="up">{description}</p>
-      <div class="article-meta" data-reveal="up">
-        <span>{formatDate(insight.publishedAt)}</span>
-        <span>{insight.readingTime} min lettura</span>
-        <span>{insight.authorPerson?.title || 'Netmarket'}</span>
-      </div>
-    </Container>
-  </Section>
-
-  {
-    insight.image && (
-      <Section compact>
-        <Container wide>
-          <figure class="article-cover" data-reveal="media">
-            <img src={insight.image.url} alt={insight.image.alt} loading="eager" decoding="async" />
-          </figure>
-        </Container>
-      </Section>
-    )
-  }
-
-  <Section labelledby="article-content-title">
-    <Container>
-      <h2 id="article-content-title" class="sr-only">Contenuto articolo</h2>
-      <article class="article-content" set:html={insight.content || insight.excerpt || ''} />
-    </Container>
-  </Section>
-
-  {
-    (insight.relatedServices.length > 0 || related.length > 0) && (
-      <Section compact labelledby="article-related-title">
-        <Container>
-          <div class="article-related" data-reveal="up">
-            <h2 id="article-related-title">Collegamenti utili.</h2>
-            {insight.relatedServices.length > 0 && (
-              <div>
-                <h3>Servizi</h3>
-                {insight.relatedServices.map((service) => (
-                  <a href={`/servizi/${service.slug}/`}>{service.title}</a>
-                ))}
-              </div>
-            )}
-            {related.length > 0 && (
-              <div>
-                <h3>Altri insight</h3>
-                {related.map((item) => (
-                  <a href={insightPath(item.slug)}>{item.title}</a>
-                ))}
-              </div>
-            )}
+      <div class="insight-article-hero__grid">
+        <div class="insight-article-hero__label" data-reveal="up">
+          {insight.categories[0] ? <a href={categoryPath(insight.categories[0].slug)}>{insight.categories[0].name}</a> : <span>Insight</span>}
+        </div>
+        <div class="insight-article-hero__copy">
+          <h1 id="article-title" data-reveal="up">{insight.title}</h1>
+          <p class="insight-article-hero__dek" data-reveal="up">{insight.subtitle || description}</p>
+          <div class="insight-article-meta" data-reveal="up">
+            <span><IconCalendar stroke={1.7} aria-hidden="true" /><time datetime={insight.publishedAt}>{formatDate(insight.publishedAt)}</time></span>
+            <span><IconClock stroke={1.7} aria-hidden="true" />{insight.readingTime} min lettura</span>
+            <span><IconUser stroke={1.7} aria-hidden="true" />{insight.authorPerson?.title || 'Netmarket'}</span>
           </div>
-        </Container>
-      </Section>
-    )
-  }
+          {wasUpdated && <p class="insight-article-updated">Aggiornato il <time datetime={insight.modifiedAt}>{formatDate(insight.modifiedAt)}</time></p>}
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  {insight.image && (
+    <Section compact class="insight-article-cover-section">
+      <Container wide>
+        <figure class="insight-article-cover" data-reveal="media">
+          <img src={insight.image.url} srcset={insight.image.srcset || undefined} sizes="(max-width: 767px) 100vw, 94vw" alt={insight.image.alt} width={insight.image.width || 1600} height={insight.image.height || 900} loading="eager" fetchpriority="high" decoding="async" />
+        </figure>
+      </Container>
+    </Section>
+  )}
+
+  <Section labelledby="article-content-title" class="insight-article-body-section">
+    <Container wide>
+      <h2 id="article-content-title" class="sr-only">Contenuto articolo</h2>
+      {toc.length > 0 && (
+        <details class="insight-article-toc-mobile">
+          <summary><IconList stroke={1.7} aria-hidden="true" /> In questo articolo</summary>
+          <ol>{toc.map((heading) => <li class:list={[heading.level === 3 && 'is-subheading']}><a href={`#${heading.id}`}>{heading.label}</a></li>)}</ol>
+        </details>
+      )}
+      <div class="insight-article-layout">
+        <aside class="insight-article-rail" aria-label="Navigazione articolo">
+          {toc.length > 0 && (
+            <nav aria-label="Indice dell'articolo">
+              <p><IconList stroke={1.7} aria-hidden="true" /> In questo articolo</p>
+              <ol>{toc.map((heading) => <li class:list={[heading.level === 3 && 'is-subheading']}><a href={`#${heading.id}`}>{heading.label}</a></li>)}</ol>
+            </nav>
+          )}
+          {primaryService && (
+            <div class="insight-context-link">
+              <span>Servizio collegato</span>
+              <strong>{primaryService.title}</strong>
+              <a href={`/servizi/${primaryService.slug}/`}>Scopri come lavoriamo <IconArrowRight stroke={1.7} aria-hidden="true" /></a>
+            </div>
+          )}
+        </aside>
+        <article class="insight-article-content" set:html={prepared.html} />
+      </div>
+    </Container>
+  </Section>
+
+  {primaryService && (
+    <Section compact class="insight-article-cta" labelledby="article-cta-title">
+      <Container>
+        <div class="insight-article-cta__inner" data-reveal="up">
+          <div><p class="nm-meta">Dal contenuto al progetto</p><h2 id="article-cta-title">Vuoi applicarlo alla tua azienda?</h2></div>
+          <Button href={`/servizi/${primaryService.slug}/`} variant="inverse">Scopri {primaryService.title} <IconArrowRight stroke={1.7} aria-hidden="true" /></Button>
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  {relatedProjects.length > 0 && (
+    <Section compact class="insight-related-projects" labelledby="insight-projects-title">
+      <Container wide>
+        <header><p class="nm-meta">Esperienza applicata</p><h2 id="insight-projects-title">Progetti sullo stesso terreno.</h2></header>
+        <div>{relatedProjects.map((project) => {
+          const image = project.cover ?? project.image;
+          return <article><a href={projectPath(project.slug)}>{image && <img src={image.url} srcset={image.srcset || undefined} sizes="(max-width: 767px) 92vw, 46vw" alt={image.alt} width={image.width || 1200} height={image.height || 800} loading="lazy" decoding="async" />}<span><small>Progetto</small><strong>{projectClient(project)}</strong><IconArrowUpRight stroke={1.7} aria-hidden="true" /></span></a></article>;
+        })}</div>
+      </Container>
+    </Section>
+  )}
+
+  {related.length > 0 && (
+    <Section class="insight-related-reading" labelledby="article-related-title">
+      <Container wide>
+        <header><p class="nm-meta">Continua a leggere</p><h2 id="article-related-title">Approfondimenti correlati.</h2></header>
+        <div class="insight-related-reading__grid">{relatedInsights.map((item) => <InsightCard insight={item} headingLevel="h3" />)}</div>
+      </Container>
+    </Section>
+  )}
 </BaseLayout>
+
+<style>
+  .insight-article-hero { background: #fff; padding-top: clamp(3.5rem, 7vw, 6rem); padding-bottom: clamp(2.5rem, 4vw, 4rem); }
+  .breadcrumb { margin-bottom: clamp(2rem, 5vw, 4.5rem); }
+  .insight-article-hero__grid { display: grid; grid-template-columns: minmax(9rem, 0.32fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 7rem); }
+  .insight-article-hero__label a, .insight-article-hero__label span { color: var(--nm-color-blue); font-size: 0.85rem; font-weight: var(--nm-weight-semibold); text-decoration: none; }
+  .insight-article-hero__copy { min-width: 0; }
+  h1 { max-width: 18ch; font-size: clamp(3.25rem, 7.2vw, 7.75rem); font-weight: var(--nm-weight-medium); line-height: 0.95; letter-spacing: 0; text-wrap: balance; }
+  .insight-article-hero__dek { max-width: 48rem; margin-top: clamp(1.5rem, 3vw, 2.5rem); color: var(--nm-color-muted); font-size: clamp(1.15rem, 1.7vw, 1.45rem); line-height: 1.48; }
+  .insight-article-meta { display: flex; flex-wrap: wrap; gap: 0.7rem 1.25rem; margin-top: 1.5rem; color: var(--nm-color-muted); font-size: 0.86rem; }
+  .insight-article-meta span { display: flex; align-items: center; gap: 0.38rem; }
+  .insight-article-meta svg { width: 1rem; height: 1rem; }
+  .insight-article-updated { margin-top: 0.65rem; color: var(--nm-color-muted); font-size: 0.8rem; }
+  .insight-article-cover-section { padding-top: 0; }
+  .insight-article-cover { aspect-ratio: 16 / 8.4; margin: 0; overflow: hidden; border-radius: var(--nm-radius-lg); background: var(--nm-color-canvas); }
+  .insight-article-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .insight-article-body-section { padding-top: clamp(3rem, 5vw, 5rem); }
+  .insight-article-layout { display: grid; grid-template-columns: minmax(12rem, 16rem) minmax(0, 44rem) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5.5rem); align-items: start; }
+  .insight-article-rail { position: sticky; top: 7rem; display: grid; gap: 2rem; }
+  .insight-article-rail nav > p { display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.9rem; font-size: 0.82rem; font-weight: var(--nm-weight-semibold); }
+  .insight-article-rail svg { width: 1rem; }
+  .insight-article-rail ol, .insight-article-toc-mobile ol { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+  .insight-article-rail li.is-subheading, .insight-article-toc-mobile li.is-subheading { padding-left: 0.75rem; }
+  .insight-article-rail li a, .insight-article-toc-mobile li a { display: block; color: var(--nm-color-muted); font-size: 0.78rem; line-height: 1.35; text-decoration: none; }
+  .insight-article-rail li a:hover, .insight-article-rail li a:focus-visible { color: var(--nm-color-blue); }
+  .insight-context-link { display: grid; gap: 0.4rem; border-top: 1px solid var(--nm-color-border); padding-top: 1rem; }
+  .insight-context-link span { color: var(--nm-color-muted); font-size: 0.75rem; }
+  .insight-context-link strong { font-size: 1.05rem; font-weight: var(--nm-weight-medium); }
+  .insight-context-link a { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; color: var(--nm-color-blue); font-size: 0.8rem; text-decoration: none; }
+  .insight-article-content { min-width: 0; font-size: clamp(1.08rem, 1.25vw, 1.2rem); line-height: 1.68; }
+  .insight-article-content :global(> * + *) { margin-top: 1.25em; }
+  .insight-article-content :global(h2), .insight-article-content :global(h3) { scroll-margin-top: 7rem; margin-top: 2.2em; margin-bottom: 0.65em; font-weight: var(--nm-weight-medium); line-height: 1.08; letter-spacing: 0; text-wrap: balance; }
+  .insight-article-content :global(h2) { font-size: clamp(2rem, 3.6vw, 3.25rem); }
+  .insight-article-content :global(h3) { font-size: clamp(1.45rem, 2.4vw, 2rem); }
+  .insight-article-content :global(p), .insight-article-content :global(li) { max-width: 68ch; }
+  .insight-article-content :global(ul), .insight-article-content :global(ol) { display: grid; gap: 0.55rem; padding-left: 1.3em; }
+  .insight-article-content :global(a) { color: var(--nm-color-blue); text-decoration-thickness: 1px; text-underline-offset: 0.18em; overflow-wrap: anywhere; }
+  .insight-article-content :global(blockquote) { margin-inline: 0; border-left: 3px solid var(--nm-color-blue); padding: 0.2rem 0 0.2rem 1.2rem; color: var(--nm-color-muted); font-size: 1.15em; }
+  .insight-article-content :global(img) { width: 100%; height: auto; margin-block: 2.5rem; border-radius: var(--nm-radius-md); }
+  .insight-article-content :global(table) { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9rem; }
+  .insight-article-content :global(th), .insight-article-content :global(td) { border-bottom: 1px solid var(--nm-color-border); padding: 0.75rem; text-align: left; }
+  .insight-article-toc-mobile { display: none; }
+  .insight-article-cta__inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: end; border-radius: var(--nm-radius-lg); background: var(--nm-color-ink); padding: clamp(1.5rem, 4vw, 3.5rem); color: #fff; }
+  .insight-article-cta h2 { max-width: 14ch; color: #fff; font-size: clamp(2rem, 4vw, 4rem); font-weight: var(--nm-weight-medium); line-height: 1; letter-spacing: 0; }
+  .insight-article-cta :global(.nm-button) { display: inline-flex; gap: 0.5rem; align-items: center; white-space: nowrap; }
+  .insight-article-cta svg { width: 1.1rem; }
+  .insight-related-projects header, .insight-related-reading header { display: grid; gap: 0.55rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+  .insight-related-projects h2, .insight-related-reading h2 { max-width: 13ch; font-size: var(--nm-text-h2); font-weight: var(--nm-weight-medium); line-height: 0.98; letter-spacing: 0; }
+  .insight-related-projects > :global(div) > div:last-child { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--nm-space-md); }
+  .insight-related-projects article, .insight-related-projects a { min-width: 0; }
+  .insight-related-projects a { display: grid; gap: 1rem; color: inherit; text-decoration: none; }
+  .insight-related-projects img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--nm-radius-md); }
+  .insight-related-projects article span { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1rem; align-items: center; }
+  .insight-related-projects small { grid-column: 1; color: var(--nm-color-muted); }
+  .insight-related-projects strong { grid-column: 1; font-size: clamp(1.4rem, 2.2vw, 2rem); font-weight: var(--nm-weight-medium); }
+  .insight-related-projects svg { grid-column: 2; grid-row: 1 / span 2; width: 1.3rem; color: var(--nm-color-blue); }
+  .insight-related-reading { background: var(--nm-color-canvas); }
+  .insight-related-reading__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--nm-space-md); }
+  @media (max-width: 980px) {
+    .insight-article-layout { grid-template-columns: minmax(0, 44rem); justify-content: center; }
+    .insight-article-rail { display: none; }
+    .insight-article-toc-mobile { display: block; max-width: 44rem; margin: 0 auto 2.5rem; border-block: 1px solid var(--nm-color-border); padding-block: 1rem; }
+    .insight-article-toc-mobile summary { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: var(--nm-weight-semibold); }
+    .insight-article-toc-mobile ol { margin-top: 1rem; }
+  }
+  @media (max-width: 700px) {
+    .insight-article-hero__grid { grid-template-columns: 1fr; gap: 1rem; }
+    h1 { font-size: clamp(2.9rem, 13.5vw, 4.4rem); }
+    .insight-article-cover { aspect-ratio: 4 / 3; border-radius: var(--nm-radius-md); }
+    .insight-article-cta__inner { grid-template-columns: 1fr; align-items: start; }
+    .insight-article-cta :global(.nm-button) { width: 100%; justify-content: center; }
+    .insight-related-projects > :global(div) > div:last-child, .insight-related-reading__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+</style>

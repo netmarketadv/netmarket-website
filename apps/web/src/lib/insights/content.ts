@@ -1,8 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
-import type { Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
+import type { CaseStudy, Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { insightSchema } from '@netmarket/schemas';
 import { getInsight, getInsights } from '@/lib/api/client';
+import { getProjectArchiveData } from '@/lib/projects/content';
 
 export type InsightSource = 'cms' | 'migration-snapshot';
 
@@ -16,6 +17,13 @@ export interface InsightDetailData {
   insight: Insight;
   source: InsightSource;
   related: RelationSummary[];
+  relatedProjects: CaseStudy[];
+}
+
+export interface InsightCategory {
+  slug: string;
+  name: string;
+  count: number;
 }
 
 type MigrationInsight = {
@@ -104,7 +112,12 @@ export async function getInsightPage(page = 1): Promise<InsightArchiveData> {
 export async function getInsightDetailData(slug: string): Promise<InsightDetailData | undefined> {
   try {
     const insight = await getInsight(slug);
-    return { insight, source: 'cms', related: await relatedFor(slug) };
+    return {
+      insight,
+      source: 'cms',
+      related: await relatedFor(insight),
+      relatedProjects: await projectsFor(insight)
+    };
   } catch (error) {
     console.warn(
       `[insights] CMS insight "${slug}" unavailable, trying snapshot fallback: ${warningMessage(error)}`
@@ -116,19 +129,49 @@ export async function getInsightDetailData(slug: string): Promise<InsightDetailD
   return {
     insight,
     source: 'migration-snapshot',
-    related: insights
-      .filter((item) => item.slug !== slug)
-      .slice(0, 3)
-      .map(toInsightRelation)
+    related: rankRelated(insight, insights).slice(0, 3).map(toInsightRelation),
+    relatedProjects: await projectsFor(insight)
   };
 }
 
-async function relatedFor(slug: string): Promise<RelationSummary[]> {
+async function relatedFor(current: Insight): Promise<RelationSummary[]> {
   const { insights } = await getInsightArchiveData();
+  return rankRelated(current, insights).slice(0, 3).map(toInsightRelation);
+}
+
+function rankRelated(current: Insight, insights: Insight[]): Insight[] {
+  const categorySlugs = new Set(current.categories.map((category) => category.slug));
+  const serviceSlugs = new Set(current.relatedServices.map((service) => service.slug));
   return insights
-    .filter((insight) => insight.slug !== slug)
-    .slice(0, 3)
-    .map(toInsightRelation);
+    .filter((candidate) => candidate.slug !== current.slug)
+    .map((candidate) => ({
+      candidate,
+      score:
+        candidate.categories.filter((category) => categorySlugs.has(category.slug)).length * 4 +
+        candidate.relatedServices.filter((service) => serviceSlugs.has(service.slug)).length * 3
+    }))
+    .sort((a, b) => b.score - a.score || byDate(a.candidate, b.candidate))
+    .map(({ candidate }) => candidate);
+}
+
+async function projectsFor(insight: Insight): Promise<CaseStudy[]> {
+  const { projects } = await getProjectArchiveData();
+  if (insight.relatedCaseStudies.length > 0) {
+    const selected = new Set(insight.relatedCaseStudies.map((project) => project.slug));
+    const explicit = projects.filter((project) => selected.has(project.slug)).slice(0, 2);
+    if (explicit.length > 0) return explicit;
+  }
+  const services = new Set(insight.relatedServices.map((service) => service.slug));
+  if (services.size === 0) return [];
+  return projects
+    .map((project) => ({
+      project,
+      score: project.services.filter((service) => services.has(service.slug)).length
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.project.priority - b.project.priority)
+    .slice(0, 2)
+    .map(({ project }) => project);
 }
 
 function fallbackInsights(): Insight[] {
@@ -243,6 +286,25 @@ export function insightPath(slug: string): string {
 
 export function insightDescription(insight: Insight): string {
   return insight.seo.description || insight.excerpt || 'Approfondimento Netmarket.';
+}
+
+export function insightCategories(insights: Insight[]): InsightCategory[] {
+  const categories = new Map<string, InsightCategory>();
+  for (const insight of insights) {
+    for (const category of insight.categories) {
+      const current = categories.get(category.slug);
+      categories.set(category.slug, {
+        slug: category.slug,
+        name: category.name,
+        count: (current?.count ?? 0) + 1
+      });
+    }
+  }
+  return [...categories.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'it'));
+}
+
+export function categoryPath(slug: string): string {
+  return `/insight/categoria/${slug}/`;
 }
 
 export function formatDate(value?: string): string {

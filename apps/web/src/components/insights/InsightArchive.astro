@@ -1,0 +1,391 @@
+---
+import { IconArrowLeft, IconArrowRight, IconArrowUpRight } from '@tabler/icons-astro';
+import type { Insight } from '@netmarket/schemas';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import InsightCard from './InsightCard.astro';
+import InsightCategoryNav from './InsightCategoryNav.astro';
+import {
+  formatDate,
+  insightCategories,
+  insightDescription,
+  insightPath
+} from '@/lib/insights/content';
+
+interface Props {
+  insights: Insight[];
+  allInsights: Insight[];
+  page?: number;
+  totalPages?: number;
+  category?: { slug: string; name: string };
+  showFeatured?: boolean;
+}
+
+const {
+  insights,
+  allInsights,
+  page = 1,
+  totalPages = 1,
+  category,
+  showFeatured = false
+} = Astro.props;
+const featured = showFeatured ? insights.find((item) => item.featured) ?? insights[0] : undefined;
+const articles = featured ? insights.filter((item) => item.slug !== featured.slug) : insights;
+const categories = insightCategories(allInsights);
+const title = category ? `Insight su ${category.name}.` : page > 1 ? 'Archivio Insights.' : 'Appunti utili per decidere meglio.';
+const lead = category
+  ? `Analisi e letture operative Netmarket dedicate a ${category.name}.`
+  : 'Analisi, guide e letture operative su web, ecommerce, marketing, comunicazione e tecnologia. Per imprenditori e manager che devono scegliere con più contesto.';
+---
+
+<Section labelledby="insight-title" class="insight-magazine-hero">
+  <Container wide>
+    <div class="insight-magazine-hero__grid">
+      <div data-reveal="line">
+        <p class="nm-meta">Insight Netmarket</p>
+        <h1 id="insight-title">{title}</h1>
+      </div>
+      <div class="insight-magazine-hero__intro" data-reveal="up">
+        <p>{lead}</p>
+        {page > 1 && <span>Pagina {page} di {totalPages}</span>}
+      </div>
+    </div>
+    <InsightCategoryNav categories={categories} current={category?.slug} />
+  </Container>
+</Section>
+
+{
+  featured && (
+    <Section compact labelledby="featured-insight-title" class="insight-cover-section">
+      <Container wide>
+        <article class="insight-cover-story" data-reveal="media">
+          <a href={insightPath(featured.slug)}>
+            <span class="insight-cover-story__media">
+              {featured.image ? (
+                <img
+                  src={featured.image.url}
+                  srcset={featured.image.srcset || undefined}
+                  sizes="(max-width: 767px) 100vw, 62vw"
+                  alt={featured.image.alt}
+                  width={featured.image.width || 1600}
+                  height={featured.image.height || 1000}
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              ) : (
+                <span aria-hidden="true">Netmarket / Insight</span>
+              )}
+            </span>
+            <span class="insight-cover-story__content">
+              <span class="nm-meta">In evidenza · {featured.categories[0]?.name || 'Insight'}</span>
+              <h2 id="featured-insight-title">{featured.title}</h2>
+              <span class="insight-cover-story__abstract">{insightDescription(featured)}</span>
+              <span class="insight-cover-story__footer">
+                <span>{formatDate(featured.publishedAt)} · {featured.readingTime} min lettura</span>
+                <span class="insight-cover-story__cta">Leggi l'analisi <IconArrowUpRight stroke={1.7} aria-hidden="true" /></span>
+              </span>
+            </span>
+          </a>
+        </article>
+      </Container>
+    </Section>
+  )
+}
+
+<Section labelledby="latest-insights-title" class="insight-stream-section">
+  <Container wide>
+    <header class="insight-stream-heading" data-reveal="line">
+      <h2 id="latest-insights-title">{category ? `Tutti gli articoli su ${category.name}.` : 'Ultimi approfondimenti.'}</h2>
+      <p>{articles.length} {articles.length === 1 ? 'articolo' : 'articoli'} in questa pagina.</p>
+    </header>
+    <div class="insight-editorial-grid" data-reveal="up">
+      {articles.map((insight) => <InsightCard insight={insight} headingLevel="h3" />)}
+    </div>
+    {
+      totalPages > 1 && !category && (
+        <nav class="insight-pagination" aria-label="Paginazione Insights">
+          <span class="insight-pagination__summary">Pagina {page} di {totalPages}</span>
+          <div>
+            {page > 1 && (
+              <a href={page === 2 ? '/insight/' : `/insight/${page - 1}/`} rel="prev">
+                <IconArrowLeft stroke={1.7} aria-hidden="true" /> Precedenti
+              </a>
+            )}
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
+              <a
+                href={number === 1 ? '/insight/' : `/insight/${number}/`}
+                aria-label={`Pagina ${number}`}
+                aria-current={number === page ? 'page' : undefined}
+              >
+                {number}
+              </a>
+            ))}
+            {page < totalPages && (
+              <a href={`/insight/${page + 1}/`} rel="next">
+                Successivi <IconArrowRight stroke={1.7} aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        </nav>
+      )
+    }
+  </Container>
+</Section>
+
+<style>
+  .insight-magazine-hero {
+    background: #fff;
+    padding-bottom: clamp(2.2rem, 4vw, 4rem);
+  }
+  .insight-magazine-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.72fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  h1 {
+    max-width: 11ch;
+    font-size: var(--nm-text-h1);
+    font-weight: var(--nm-weight-medium);
+    line-height: 0.94;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+  .insight-magazine-hero__intro {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .insight-magazine-hero__intro p {
+    max-width: 42rem;
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-lead);
+    line-height: 1.45;
+  }
+  .insight-magazine-hero__intro span {
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-small);
+  }
+  .insight-cover-section {
+    padding-top: 0;
+  }
+  .insight-cover-story {
+    overflow: hidden;
+    border-radius: var(--nm-radius-lg);
+    background: var(--nm-color-ink);
+    color: #fff;
+  }
+  .insight-cover-story > a {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.42fr) minmax(20rem, 0.78fr);
+    min-height: clamp(31rem, 48vw, 44rem);
+    color: inherit;
+    text-decoration: none;
+  }
+  .insight-cover-story__media {
+    min-width: 0;
+    overflow: hidden;
+    background: var(--nm-color-blue-deep);
+  }
+  .insight-cover-story__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--nm-motion-duration-slow) var(--nm-motion-ease-emphasized);
+  }
+  .insight-cover-story__media > span {
+    height: 100%;
+    display: grid;
+    align-items: end;
+    padding: 2rem;
+    color: rgb(255 255 255 / 0.6);
+  }
+  .insight-cover-story__content {
+    min-width: 0;
+    display: grid;
+    align-content: end;
+    gap: clamp(1rem, 2vw, 1.6rem);
+    padding: clamp(1.5rem, 4vw, 4rem);
+  }
+  .insight-cover-story h2 {
+    max-width: 13ch;
+    color: #fff;
+    font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+    font-weight: var(--nm-weight-medium);
+    line-height: 0.98;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+  .insight-cover-story__abstract {
+    display: -webkit-box;
+    overflow: hidden;
+    color: rgb(255 255 255 / 0.72);
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+  .insight-cover-story__footer,
+  .insight-cover-story__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgb(255 255 255 / 0.65);
+    font-size: 0.85rem;
+  }
+  .insight-cover-story__cta {
+    color: #fff;
+    white-space: nowrap;
+  }
+  .insight-cover-story__cta svg {
+    width: 1.15rem;
+  }
+  .insight-stream-section {
+    padding-top: clamp(3rem, 6vw, 6rem);
+  }
+  .insight-stream-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--nm-color-border);
+    padding-top: 1.2rem;
+  }
+  .insight-stream-heading h2 {
+    max-width: 14ch;
+    font-size: var(--nm-text-h2);
+    font-weight: var(--nm-weight-medium);
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+  .insight-stream-heading p {
+    color: var(--nm-color-muted);
+  }
+  .insight-editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 2.2vw, 2rem);
+  }
+  .insight-editorial-grid > :global(*) {
+    grid-column: span 4;
+  }
+  .insight-editorial-grid > :global(*:nth-child(6n + 1)),
+  .insight-editorial-grid > :global(*:nth-child(6n + 2)) {
+    grid-column: span 6;
+  }
+  .insight-editorial-grid > :global(*:nth-child(6n + 1)) :global(.insight-card-editorial__media),
+  .insight-editorial-grid > :global(*:nth-child(6n + 2)) :global(.insight-card-editorial__media) {
+    aspect-ratio: 16 / 10;
+  }
+  .insight-pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: center;
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    border-top: 1px solid var(--nm-color-border);
+    padding-top: 1rem;
+  }
+  .insight-pagination__summary {
+    color: var(--nm-color-muted);
+    font-size: 0.85rem;
+  }
+  .insight-pagination div,
+  .insight-pagination a {
+    display: flex;
+    align-items: center;
+  }
+  .insight-pagination div {
+    gap: 0.4rem;
+  }
+  .insight-pagination a {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    justify-content: center;
+    gap: 0.35rem;
+    border: 1px solid var(--nm-color-border);
+    border-radius: var(--nm-radius-pill);
+    padding: 0.55rem 0.75rem;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .insight-pagination a[aria-current='page'] {
+    border-color: var(--nm-color-blue);
+    background: var(--nm-color-blue);
+    color: #fff;
+  }
+  @media (hover: hover) {
+    .insight-cover-story > a:hover img {
+      transform: scale(1.02);
+    }
+  }
+  @media (max-width: 900px) {
+    .insight-magazine-hero__grid,
+    .insight-cover-story > a {
+      grid-template-columns: 1fr;
+    }
+    .insight-cover-story > a {
+      min-height: 0;
+    }
+    .insight-cover-story__media {
+      aspect-ratio: 16 / 10;
+    }
+    .insight-editorial-grid > :global(*) {
+      grid-column: span 6;
+    }
+  }
+  @media (max-width: 600px) {
+    .insight-magazine-hero {
+      padding-bottom: 1.8rem;
+    }
+    h1 {
+      max-width: 9.5ch;
+      font-size: clamp(3.35rem, 15vw, 5rem);
+    }
+    .insight-cover-story {
+      border-radius: var(--nm-radius-md);
+    }
+    .insight-cover-story__content {
+      padding: 1.4rem;
+    }
+    .insight-cover-story__footer {
+      display: grid;
+    }
+    .insight-cover-story__cta {
+      justify-content: start;
+    }
+    .insight-stream-heading {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    .insight-editorial-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3rem;
+    }
+    .insight-editorial-grid > :global(*),
+    .insight-editorial-grid > :global(*:nth-child(6n + 1)),
+    .insight-editorial-grid > :global(*:nth-child(6n + 2)) {
+      grid-column: 1 / -1;
+    }
+    .insight-pagination,
+    .insight-pagination div {
+      flex-wrap: wrap;
+    }
+    .insight-pagination {
+      align-items: flex-start;
+    }
+    .insight-pagination__summary {
+      width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .insight-cover-story__media img {
+      transition: none;
+    }
+  }
+</style>

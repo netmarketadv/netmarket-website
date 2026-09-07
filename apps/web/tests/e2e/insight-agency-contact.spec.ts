@@ -9,7 +9,7 @@ test.describe('insight, agency and contact', () => {
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Appunti utili');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
-    const firstArticle = page.locator('.insight-archive-card, .insight-featured').first();
+    const firstArticle = page.locator('.insight-cover-story > a, .insight-card-editorial > a').first();
     await expect(firstArticle).toBeVisible();
     const href = await firstArticle.getAttribute('href');
     expect(href).toMatch(/^\/insight\/.+\/$/);
@@ -19,6 +19,35 @@ test.describe('insight, agency and contact', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
     expect(structuredData).toContain('Article');
+    expect(structuredData).toContain('BlogPosting');
+  });
+
+  test('keeps the Insights archive and article readable across required viewports', async ({ page }) => {
+    const errors = collectCriticalConsoleErrors(page);
+    for (const viewport of [390, 430, 768, 1024, 1280, 1440, 1728]) {
+      await page.setViewportSize({ width: viewport, height: 900 });
+      for (const path of ['/insight/', '/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/']) {
+        await page.goto(path, { waitUntil: 'domcontentloaded' });
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
+        if (path === '/insight/' && viewport <= 430) {
+          const cardWidths = await page.locator('.insight-card-editorial').evaluateAll((cards) =>
+            cards.map((card) => card.getBoundingClientRect().width)
+          );
+          expect(Math.min(...cardWidths)).toBeGreaterThan(320);
+        }
+      }
+    }
+    expect(errors).toEqual([]);
+  });
+
+  test('renders semantic related content and a contextual service path', async ({ page }) => {
+    await page.goto('/insight/10-motivi-avere-e-commerce/', { waitUntil: 'domcontentloaded' });
+
+    await expect(page.getByRole('navigation', { name: "Indice dell'articolo" })).toBeVisible();
+    await expect(page.locator('.insight-article-cta')).toContainText('Ecommerce');
+    await expect(page.locator('.insight-related-projects article')).toHaveCount(1);
+    await expect(page.locator('.insight-related-reading .insight-card-editorial')).toHaveCount(3);
   });
 
   test('renders agency page with team and client systems', async ({ page }) => {

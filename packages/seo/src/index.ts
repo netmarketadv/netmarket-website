@@ -35,6 +35,7 @@ export interface ArticleMeta {
   publishedAt?: string;
   updatedAt?: string;
   author?: PersonMeta;
+  image?: string;
 }
 
 export function buildTitle(title: string, siteName = 'Netmarket'): string {
@@ -117,15 +118,25 @@ export function serviceJsonLd(
 }
 
 export function articleJsonLd(article: ArticleMeta, siteUrl?: string): Record<string, unknown> {
+  const organizationId = siteUrl ? absoluteCanonical(siteUrl, '/#organization') : undefined;
   return {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': ['Article', 'BlogPosting'],
+    '@id': `${article.url}#article`,
     headline: article.title,
     description: article.description,
     url: article.url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': article.url },
+    inLanguage: 'it-IT',
+    ...(article.image ? { image: article.image } : {}),
     ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
     ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
-    ...(article.author && siteUrl ? { author: personJsonLd(siteUrl, article.author) } : {})
+    ...(article.author && siteUrl
+      ? { author: personJsonLd(siteUrl, article.author) }
+      : organizationId
+        ? { author: { '@id': organizationId } }
+        : {}),
+    ...(organizationId ? { publisher: { '@id': organizationId } } : {})
   };
 }
 

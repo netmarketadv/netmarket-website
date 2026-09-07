@@ -39,7 +39,7 @@ I nuovi case study usano inoltre `qualitative_result` per documentare un esito v
 
 ## Frontend Insights
 
-Il sistema Insight e documentato in `docs/insight-system.md`. Le pagine `/insight/`, `/insight/[page]/` e `/insight/[slug]/` usano i post WordPress come fonte primaria. Finche il CMS non espone contenuti importati e credenziali build, il frontend usa lo snapshot reale legacy in `data/migrations/insights/`.
+Il sistema Insight e documentato in `docs/insight-system.md`. Le pagine `/insight/`, `/insight/[page]/`, `/insight/categoria/[slug]/` e `/insight/[slug]/` usano i post WordPress come fonte primaria. Finche il CMS non espone contenuti importati e credenziali build, il frontend usa lo snapshot reale legacy in `data/migrations/insights/`.
 
 Gli articoli supportano relazione opzionale con `nm_person` come autore editoriale e link reali verso servizi, progetti e risorse.
 

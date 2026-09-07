@@ -1,5 +1,5 @@
 import { getPublicEnv } from '@/lib/env';
-import { getInsightArchiveData, insightPath } from '@/lib/insights/content';
+import { categoryPath, getInsightArchiveData, insightCategories, insightPath } from '@/lib/insights/content';
 import { getProjectArchiveData, projectPath } from '@/lib/projects/content';
 import { getServiceArchiveData, servicePath } from '@/lib/services/content';
 
@@ -21,6 +21,7 @@ export async function GET() {
     '/contatti/',
     '/insight/',
     ...insightPages,
+    ...insightCategories(insightArchive.insights).map((category) => categoryPath(category.slug)),
     ...insightArchive.insights
       .filter((insight) => !insight.seo.noindex)
       .map((insight) => insightPath(insight.slug)),

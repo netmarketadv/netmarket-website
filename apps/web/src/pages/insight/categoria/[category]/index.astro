@@ -1,0 +1,30 @@
+---
+import { absoluteCanonical, breadcrumbJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import InsightArchive from '@/components/insights/InsightArchive.astro';
+import { categoryPath, getInsightArchiveData, insightCategories, insightDescription, insightPath } from '@/lib/insights/content';
+
+export async function getStaticPaths() {
+  const { insights } = await getInsightArchiveData();
+  return insightCategories(insights).map((category) => ({ params: { category: category.slug } }));
+}
+
+const canonicalSiteUrl = 'https://netmarket.it';
+const { insights: allInsights } = await getInsightArchiveData();
+const category = insightCategories(allInsights).find((item) => item.slug === Astro.params.category);
+if (!category) return Astro.redirect('/404/');
+const insights = allInsights.filter((insight) => insight.categories.some((item) => item.slug === category.slug));
+const path = categoryPath(category.slug);
+const canonicalUrl = absoluteCanonical(canonicalSiteUrl, path);
+const title = `${category.name}: analisi e approfondimenti`;
+const description = `Approfondimenti Netmarket su ${category.name}: analisi operative per imprenditori, manager e responsabili marketing.`;
+const breadcrumb = breadcrumbJsonLd([{ name: 'Home', url: `${canonicalSiteUrl}/` }, { name: 'Insight', url: `${canonicalSiteUrl}/insight/` }, { name: category.name, url: canonicalUrl }]);
+const collectionSchema = {
+  '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${canonicalUrl}#collection`, name: title, description, url: canonicalUrl,
+  mainEntity: { '@type': 'ItemList', numberOfItems: insights.length, itemListElement: insights.map((insight, index) => ({ '@type': 'ListItem', position: index + 1, url: absoluteCanonical(canonicalSiteUrl, insightPath(insight.slug)), name: insight.title, description: insightDescription(insight) })) }
+};
+---
+
+<BaseLayout title={title} description={description} path={path} canonicalSiteUrl={canonicalSiteUrl} structuredData={[breadcrumb, collectionSchema]} motionMode="light">
+  <InsightArchive insights={insights} allInsights={allInsights} category={category} />
+</BaseLayout>
