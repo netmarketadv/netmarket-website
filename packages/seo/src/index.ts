@@ -132,14 +132,30 @@ export function articleJsonLd(article: ArticleMeta, siteUrl?: string): Record<st
 export function caseStudyJsonLd(
   title: string,
   description: string,
-  url: string
+  url: string,
+  details: {
+    client?: string;
+    year?: number;
+    sector?: string;
+    services?: string[];
+    result?: string;
+    image?: string;
+    providerId?: string;
+  } = {}
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: title,
     description,
-    url
+    url,
+    ...(details.image ? { image: details.image } : {}),
+    ...(details.year ? { dateCreated: String(details.year) } : {}),
+    ...(details.client ? { about: { '@type': 'Organization', name: details.client } } : {}),
+    ...(details.sector ? { genre: details.sector } : {}),
+    ...(details.services?.length ? { keywords: details.services.join(', ') } : {}),
+    ...(details.result ? { abstract: details.result } : {}),
+    ...(details.providerId ? { provider: { '@id': details.providerId } } : {})
   };
 }
 

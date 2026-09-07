@@ -1,0 +1,169 @@
+---
+import { IconArrowUpRight } from '@tabler/icons-astro';
+import type { CaseStudy } from '@netmarket/schemas';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import { projectClient, projectPath } from '@/lib/projects/content';
+import { projectPresentation } from '@/lib/projects/presentation';
+
+interface Props {
+  projects: CaseStudy[];
+}
+const { projects } = Astro.props;
+---
+
+{
+  projects.length > 0 && (
+    <Section class="case-related" labelledby="case-related-title">
+      <Container wide>
+        <header>
+          <>
+            <p>Continua a esplorare</p>
+            <h2 id="case-related-title">Progetti con sfide affini.</h2>
+          </>
+        </header>
+        <div class="case-related__grid">
+          {projects.map((project) => {
+            const image = project.cover ?? project.image;
+            const presentation = projectPresentation(project);
+            return (
+              image && (
+                <article data-reveal="up">
+                  <a
+                    href={projectPath(project.slug)}
+                    aria-label={`Scopri il progetto ${projectClient(project)}`}
+                  >
+                    <span class="case-related__media">
+                      <img
+                        src={image.url}
+                        srcset={image.srcset || undefined}
+                        sizes="(max-width: 767px) 84vw, 30vw"
+                        alt={image.alt}
+                        width={image.width || 1200}
+                        height={image.height || 800}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                    <span class="case-related__body">
+                      <span>
+                        <small>{presentation.projectType}</small>
+                        <strong>{projectClient(project)}</strong>
+                      </span>
+                      <IconArrowUpRight stroke={1.7} aria-hidden="true" />
+                    </span>
+                  </a>
+                </article>
+              )
+            );
+          })}
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+<style>
+  .case-related {
+    background: #fff;
+  }
+  header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 32rem);
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  header p {
+    margin: 0;
+    color: var(--case-accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(2.4rem, 4.8vw, 4.8rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .case-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  article,
+  a {
+    min-width: 0;
+  }
+  a {
+    display: grid;
+    gap: 1rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  .case-related__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--case-surface);
+    border-radius: var(--nm-radius-md);
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--nm-motion-duration-slow) var(--nm-motion-ease-emphasized);
+  }
+  a:hover img,
+  a:focus-visible img {
+    transform: scale(1.025);
+  }
+  .case-related__body {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .case-related__body > span {
+    display: grid;
+    gap: 0.25rem;
+  }
+  small {
+    color: var(--nm-color-muted);
+    font-size: 0.78rem;
+  }
+  strong {
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    font-weight: 500;
+  }
+  svg {
+    flex: 0 0 auto;
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  @media (max-width: 760px) {
+    header {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .case-related__grid {
+      display: flex;
+      overflow-x: auto;
+      margin-inline: calc(var(--nm-page-margin) * -1);
+      padding-inline: var(--nm-page-margin);
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .case-related__grid::-webkit-scrollbar {
+      display: none;
+    }
+    article {
+      flex: 0 0 84%;
+      scroll-snap-align: center;
+    }
+  }
+</style>

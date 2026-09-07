@@ -9,6 +9,7 @@ import '@/styles/tokens.css';
 import '@/styles/reset.css';
 import '@/styles/global.css';
 import '@/styles/utilities.css';
+import type { MediaAsset } from '@netmarket/schemas';
 
 interface Props {
   title: string;
@@ -19,6 +20,9 @@ interface Props {
   canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
   motionMode?: 'full' | 'light';
+  socialTitle?: string | undefined;
+  socialDescription?: string | undefined;
+  socialImage?: MediaAsset | null | undefined;
 }
 
 const {
@@ -29,7 +33,10 @@ const {
   noindexFollow = false,
   canonicalSiteUrl,
   structuredData = [],
-  motionMode = 'full'
+  motionMode = 'full',
+  socialTitle,
+  socialDescription,
+  socialImage
 } = Astro.props;
 const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
 const buildTime =
@@ -62,6 +69,9 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       noindexFollow={noindexFollow}
       canonicalSiteUrl={canonicalSiteUrl}
       structuredData={structuredData}
+      socialTitle={socialTitle}
+      socialDescription={socialDescription}
+      socialImage={socialImage}
     />
   </head>
   <body>

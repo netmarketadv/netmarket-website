@@ -1,0 +1,223 @@
+---
+import type { CaseStudy } from '@netmarket/schemas';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import type { ProjectPresentation } from '@/lib/projects/presentation';
+import { projectClient } from '@/lib/projects/content';
+
+interface Props {
+  project: CaseStudy;
+  presentation: ProjectPresentation;
+}
+
+const { project, presentation } = Astro.props;
+const titleSize =
+  presentation.heroTitle.length > 58
+    ? 'long'
+    : presentation.heroTitle.length > 38
+      ? 'medium'
+      : 'short';
+const cover = project.cover ?? project.image;
+---
+
+<Section labelledby="project-title" class="case-hero">
+  <Container wide>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span><a href="/progetti/">Progetti</a><span
+        aria-hidden="true">/</span
+      ><span>{projectClient(project)}</span>
+    </nav>
+    <header class="case-hero__header" data-reveal="up">
+      <p class="case-kicker">{projectClient(project)} · {presentation.projectType}</p>
+      <h1 id="project-title" data-title-size={titleSize}>{presentation.heroTitle}</h1>
+      <p class="case-hero__intro">{presentation.intro}</p>
+      {
+        project.services.length > 0 && (
+          <ul class="case-hero__services" aria-label="Servizi applicati">
+            {project.services.map((service) => (
+              <li>
+                <a href={`/servizi/${service.slug}/`}>{service.title}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+    <dl class="case-meta" aria-label="Dati del progetto" data-reveal="up">
+      <div><dt>Cliente</dt><dd>{projectClient(project)}</dd></div>
+      <div><dt>Settore</dt><dd>{presentation.sector}</dd></div>
+      {
+        project.projectYear > 0 && (
+          <div>
+            <>
+              <dt>Anno</dt>
+              <dd>{project.projectYear}</dd>
+            </>
+          </div>
+        )
+      }
+      <div><dt>Progetto</dt><dd>{presentation.projectType}</dd></div>
+    </dl>
+    {
+      cover && (
+        <figure class="case-hero__media" data-reveal="scale">
+          <img
+            src={cover.url}
+            srcset={cover.srcset || undefined}
+            sizes={cover.sizes || '(max-width: 767px) 100vw, 92rem'}
+            alt={
+              cover.alt || `${presentation.projectType} realizzato per ${projectClient(project)}`
+            }
+            width={cover.width || 1672}
+            height={cover.height || 941}
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </figure>
+      )
+    }
+  </Container>
+</Section>
+
+<style>
+  .case-hero {
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+    background: #fff;
+  }
+  .case-hero__header {
+    display: grid;
+    justify-items: center;
+    max-width: 78rem;
+    margin: clamp(3rem, 7vw, 6.5rem) auto 0;
+    text-align: center;
+  }
+  .case-kicker {
+    margin: 0 0 1.15rem;
+    color: var(--case-accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  h1 {
+    max-width: 15ch;
+    margin: 0;
+    font-size: clamp(3.2rem, 7.6vw, 7.5rem);
+    font-weight: 500;
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  h1[data-title-size='medium'] {
+    max-width: 17ch;
+    font-size: clamp(3rem, 6.8vw, 6.7rem);
+  }
+  h1[data-title-size='long'] {
+    max-width: 19ch;
+    font-size: clamp(2.8rem, 6vw, 5.9rem);
+  }
+  .case-hero__intro {
+    max-width: 46rem;
+    margin: clamp(1.4rem, 2.5vw, 2rem) 0 0;
+    color: var(--nm-color-muted);
+    font-size: clamp(1.08rem, 1.5vw, 1.35rem);
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+  .case-hero__services {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0;
+    margin: 1.4rem 0 0;
+    list-style: none;
+  }
+  .case-hero__services a {
+    display: inline-flex;
+    padding: 0.48rem 0.72rem;
+    color: var(--nm-color-ink);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--nm-color-border);
+    border-radius: var(--nm-radius-pill);
+    transition:
+      color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover),
+      border-color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
+  }
+  .case-hero__services a:hover,
+  .case-hero__services a:focus-visible {
+    color: var(--case-accent);
+    border-color: var(--case-accent);
+  }
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 72rem;
+    margin: clamp(2.5rem, 5vw, 4.5rem) auto clamp(1.2rem, 2vw, 2rem);
+    border-top: 1px solid var(--nm-color-border);
+  }
+  .case-meta div {
+    min-width: 0;
+    padding: 1rem clamp(0.5rem, 1.5vw, 1.2rem);
+    border-right: 1px solid var(--nm-color-border);
+  }
+  .case-meta div:last-child {
+    border-right: 0;
+  }
+  .case-meta dt {
+    color: var(--nm-color-subtle);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+  .case-meta dd {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+  .case-hero__media {
+    aspect-ratio: 16 / 8.6;
+    overflow: hidden;
+    margin: 0;
+    background: var(--case-surface);
+    border-radius: var(--nm-radius-lg);
+  }
+  .case-hero__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 640px) {
+    .case-hero__header {
+      margin-top: 2.8rem;
+    }
+    h1,
+    h1[data-title-size='medium'],
+    h1[data-title-size='long'] {
+      max-width: 11ch;
+      font-size: clamp(2.85rem, 13.8vw, 4.15rem);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+    }
+    .case-hero__intro {
+      font-size: 1.05rem;
+    }
+    .case-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .case-meta div:nth-child(2) {
+      border-right: 0;
+    }
+    .case-meta div:nth-child(n + 3) {
+      border-top: 1px solid var(--nm-color-border);
+    }
+    .case-hero__media {
+      aspect-ratio: 4 / 3;
+      margin-inline: calc(var(--nm-page-margin) * -1);
+      border-radius: 0;
+    }
+  }
+</style>

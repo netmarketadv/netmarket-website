@@ -1,0 +1,142 @@
+---
+import type { CaseStudyMedia as MediaItem } from '@netmarket/schemas';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+
+interface Props {
+  items: MediaItem[];
+  client: string;
+}
+const { items, client } = Astro.props;
+const galleryClass =
+  items.length === 1
+    ? 'single'
+    : items.every((item) => item.layoutHint === 'portrait')
+      ? 'devices'
+      : 'mixed';
+---
+
+{
+  items.length > 0 && (
+    <Section class="case-media" labelledby="case-media-title">
+      <Container wide>
+        <h2 id="case-media-title" class="visually-hidden">
+          Immagini del progetto {client}
+        </h2>
+        <div
+          class:list={['case-media__grid', `case-media__grid--${galleryClass}`]}
+          data-reveal="up"
+        >
+          {items.map((item, index) => (
+            <figure
+              class:list={[
+                'case-media__item',
+                `case-media__item--${item.layoutHint}`,
+                index === 0 && 'case-media__item--lead'
+              ]}
+            >
+              <img
+                src={item.media.url}
+                srcset={item.media.srcset || undefined}
+                sizes={
+                  item.media.sizes ||
+                  (galleryClass === 'devices'
+                    ? '(max-width: 767px) 72vw, 18vw'
+                    : '(max-width: 767px) 100vw, 46vw')
+                }
+                alt={item.alt || item.media.alt}
+                width={item.media.width || 1024}
+                height={item.media.height || 768}
+                loading="lazy"
+                decoding="async"
+              />
+              {item.caption && <figcaption>{item.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+<style>
+  .case-media {
+    background: #fff;
+  }
+  .case-media__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .case-media__item {
+    grid-column: span 6;
+    min-width: 0;
+    margin: 0;
+  }
+  .case-media__grid--single .case-media__item {
+    grid-column: 1 / -1;
+  }
+  .case-media__grid--devices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: end;
+  }
+  .case-media__grid--devices .case-media__item {
+    grid-column: auto;
+  }
+  .case-media__grid--mixed .case-media__item--portrait {
+    grid-column: span 4;
+  }
+  .case-media__item--wide,
+  .case-media__item--lead {
+    grid-column: span 8;
+  }
+  .case-media__grid--single .case-media__item--lead {
+    grid-column: 1 / -1;
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--case-surface);
+    border-radius: var(--nm-radius-md);
+  }
+  .case-media__grid--single img {
+    max-height: 52rem;
+    object-fit: cover;
+  }
+  .case-media__grid--devices img {
+    box-shadow: 0 1.5rem 3.5rem rgb(9 10 15 / 0.1);
+  }
+  figcaption {
+    max-width: 42rem;
+    margin-top: 0.7rem;
+    color: var(--nm-color-muted);
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+  @media (max-width: 760px) {
+    .case-media__grid,
+    .case-media__grid--devices {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      margin-inline: calc(var(--nm-page-margin) * -1);
+      padding-inline: var(--nm-page-margin);
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .case-media__grid::-webkit-scrollbar {
+      display: none;
+    }
+    .case-media__item,
+    .case-media__item--wide,
+    .case-media__item--portrait,
+    .case-media__grid--devices .case-media__item {
+      flex: 0 0 86%;
+      scroll-snap-align: center;
+    }
+    .case-media__grid--devices .case-media__item {
+      flex-basis: 67%;
+    }
+  }
+</style>

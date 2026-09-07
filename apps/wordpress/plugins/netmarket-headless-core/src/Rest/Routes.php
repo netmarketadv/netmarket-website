@@ -373,12 +373,14 @@ final class Routes
             'objectives' => $this->metaArray($post->ID, 'objectives'),
             'approach' => $this->metaString($post->ID, 'approach'),
             'solution' => $this->metaString($post->ID, 'solution'),
+            'qualitativeResult' => $this->metaString($post->ID, 'qualitative_result'),
             'additionalContent' => $this->metaString($post->ID, 'additional_content'),
             'numericResults' => $this->metaArray($post->ID, 'numeric_results'),
-            'gallery' => $this->metaArray($post->ID, 'gallery'),
+            'gallery' => $this->caseStudyGallery($post->ID),
             'services' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_services'), ['nm_service']),
             'contributors' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_contributors'), ['nm_person']),
             'relatedInsights' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_related_insights'), ['post']),
+            'relatedCaseStudies' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_related_case_studies'), ['nm_case_study']),
             'priority' => $this->metaInt($post->ID, 'priority'),
             'featured' => $this->metaBool($post->ID, 'featured'),
             'cta' => $this->link($post->ID, 'cta_label', 'cta_url'),
@@ -561,6 +563,36 @@ final class Routes
     {
         $value = get_post_meta($postId, 'nmhc_' . $key, true);
         return is_array($value) ? $value : [];
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function caseStudyGallery(int $postId): array
+    {
+        $items = $this->metaArray($postId, 'gallery');
+        $gallery = [];
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+            $media = isset($item['media']) && is_array($item['media'])
+                ? $item['media']
+                : Media::asset(absint($item['mediaId'] ?? 0));
+            if (! is_array($media)) {
+                continue;
+            }
+            $layoutHint = sanitize_key((string) ($item['layoutHint'] ?? 'wide'));
+            if (! in_array($layoutHint, ['wide', 'portrait', 'square', 'split', 'device', 'detail'], true)) {
+                $layoutHint = 'wide';
+            }
+            $gallery[] = [
+                'media' => $media,
+                'alt' => sanitize_text_field((string) ($item['alt'] ?? $media['alt'] ?? '')),
+                'caption' => sanitize_text_field((string) ($item['caption'] ?? '')),
+                'aspectRatio' => sanitize_text_field((string) ($item['aspectRatio'] ?? '')),
+                'layoutHint' => $layoutHint,
+            ];
+        }
+        return $gallery;
     }
 
     private function readingTime(\WP_Post $post): int

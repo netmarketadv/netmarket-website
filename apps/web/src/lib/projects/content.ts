@@ -51,7 +51,7 @@ export interface ProjectArchiveData {
 export interface ProjectDetailData {
   project: CaseStudy;
   source: ProjectSource;
-  nextProject: RelationSummary | undefined;
+  projects: CaseStudy[];
 }
 
 const serviceTitles: Record<string, string> = {
@@ -73,7 +73,9 @@ function warningMessage(error: unknown): string {
 }
 
 function byPriority(a: CaseStudy, b: CaseStudy): number {
-  return a.priority - b.priority || b.projectYear - a.projectYear || a.title.localeCompare(b.title, 'it');
+  return (
+    a.priority - b.priority || b.projectYear - a.projectYear || a.title.localeCompare(b.title, 'it')
+  );
 }
 
 export async function getProjectArchiveData(): Promise<ProjectArchiveData> {
@@ -99,7 +101,8 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
 export async function getProjectDetailData(slug: string): Promise<ProjectDetailData | undefined> {
   try {
     const project = await getCaseStudy(slug);
-    return { project, source: 'cms', nextProject: await nextProjectFor(slug) };
+    const { projects } = await getProjectArchiveData();
+    return { project, source: 'cms', projects };
   } catch (error) {
     console.warn(
       `[projects] CMS case study "${slug}" unavailable, trying migration snapshot fallback: ${warningMessage(error)}`
@@ -110,29 +113,26 @@ export async function getProjectDetailData(slug: string): Promise<ProjectDetailD
   const index = projects.findIndex((project) => project.slug === slug);
   const project = projects[index];
   if (!project) return undefined;
-  const next = projects[(index + 1) % projects.length];
   return {
     project,
     source: 'migration-snapshot',
-    nextProject: next ? toProjectRelation(next) : undefined
+    projects
   };
 }
 
-async function nextProjectFor(slug: string): Promise<RelationSummary | undefined> {
-  const { projects } = await getProjectArchiveData();
-  const index = projects.findIndex((project) => project.slug === slug);
-  const next = projects[(index + 1) % projects.length];
-  return next && next.slug !== slug ? toProjectRelation(next) : undefined;
-}
-
 function fallbackProjects(): CaseStudy[] {
-  const file = resolve(process.cwd(), '../../data/migrations/case-studies/case-study-transform-dry-run.json');
+  const file = resolve(
+    process.cwd(),
+    '../../data/migrations/case-studies/case-study-transform-dry-run.json'
+  );
   const raw = JSON.parse(readFileSync(file, 'utf8')) as MigrationProject[];
   return raw.map(toCaseStudy);
 }
 
 function toCaseStudy(item: MigrationProject): CaseStudy {
-  const cover = item.media.featuredImage ? mediaAsset(item, item.media.featuredImage, item.title) : null;
+  const cover = item.media.featuredImage
+    ? mediaAsset(item, item.media.featuredImage, item.title)
+    : null;
   return caseStudySchema.parse({
     id: item.migration.legacyId,
     slug: item.slug,
@@ -151,19 +151,23 @@ function toCaseStudy(item: MigrationProject): CaseStudy {
           slug: slugify(item.client),
           title: item.client,
           type: 'nm_client',
-          image: item.media.clientLogo ? mediaFromEntry(item, item.media.clientLogo, item.client) : null
+          image: item.media.clientLogo
+            ? mediaFromEntry(item, item.media.clientLogo, item.client)
+            : null
         }
       : null,
     publicClientName: item.client || '',
     shortDescription: item.content.shortDescription,
     cover,
-    projectYear: Number(item.slug.match(/20\d{2}/)?.[0] || 0),
+    projectYear:
+      projectYears[item.migration.legacyId] ?? Number(item.slug.match(/20\d{2}/)?.[0] || 0),
     projectStatus: 'published',
     context: item.content.context,
     challenge: item.content.challenge,
     objectives: item.content.objectives || [],
     approach: item.content.approach,
     solution: item.content.solution,
+    qualitativeResult: '',
     additionalContent: item.content.additionalContent,
     numericResults: item.content.numericResults || [],
     gallery: item.media.gallery.map((entry, index) => ({
@@ -180,6 +184,7 @@ function toCaseStudy(item: MigrationProject): CaseStudy {
     })),
     contributors: [],
     relatedInsights: [],
+    relatedCaseStudies: [],
     priority: item.migration.legacyId,
     featured: !item.seo.noindex,
     cta: null
@@ -195,17 +200,59 @@ function mediaFromEntry(
   return mediaAsset(item, entry.sourceUrl, entry.alt || fallbackAlt, offset);
 }
 
-function mediaAsset(item: MigrationProject, sourceUrl: string, alt: string, offset = 0): MediaAsset {
+function mediaAsset(
+  item: MigrationProject,
+  sourceUrl: string,
+  alt: string,
+  offset = 0
+): MediaAsset {
   const filename = new URL(sourceUrl).pathname.split('/').pop() || 'media';
+  const dimensions = mediaDimensions[filename];
   return {
     id: item.migration.legacyId + offset,
     url: `/media/case-studies/legacy/${item.migration.legacyId}-${filename}`,
     alt,
-    width: null,
-    height: null,
+    width: dimensions?.[0] ?? null,
+    height: dimensions?.[1] ?? null,
     mimeType: mimeType(filename)
   };
 }
+
+const mediaDimensions: Record<string, readonly [number, number]> = {
+  'gestione-social-media-creazione-contenuti-brand-alimentare.jpg': [896, 1152],
+  'sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg': [1024, 896],
+  'feed-instagram-social-brb.png': [526, 702],
+  'branding-aziendale-.jpg': [1080, 608],
+  'branding-aziendale-sirene-blu-2-1024x576.jpg': [1024, 576],
+  'branding-aziendale--1024x576.jpg': [1024, 576],
+  'iPhone-Mockup-pazzodesign.jpg': [1760, 980],
+  'ecommerce-negozio-arredamento-1024x683.jpg': [1024, 683],
+  'Tablet-Mockup-pazzo-design.jpg': [1760, 980],
+  'sviluppo-sito-web-aziendale-progettoe.webp': [1672, 941],
+  'installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg': [1024, 1024],
+  'impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg': [1024, 1024],
+  'sviluppo-sito-web-aziendale-albertini-allestimenti.webp': [1672, 941],
+  'shooting-azienda-produzione-moda-rigomar-netmarket.webp': [1672, 941],
+  'sviluppo-sito-web-rigomar--1024x576.webp': [1024, 576],
+  'sviluppo-software-gestionale-venitaly.webp': [1672, 941],
+  'sviluppo-software-gestionale-venitaly-1024x576.webp': [1024, 576],
+  'sviluppo-app-sirene-blu-netmarket.webp': [1672, 941],
+  'sviluppo-app-sirene-blu-netmarket-1.webp': [230, 499],
+  'sviluppo-app-sirene-blu-netmarket-2.webp': [230, 499],
+  'sviluppo-app-sirene-blu-netmarket-3.webp': [230, 499],
+  'sviluppo-app-sirene-blu-netmarket-4.webp': [230, 499],
+  'sviluppo-app-sirene-blu-netmarket-5.webp': [230, 499]
+};
+
+const projectYears: Record<number, number> = {
+  5210: 2025,
+  5928: 2024,
+  6171: 2022,
+  6267: 2025,
+  6277: 2024,
+  6284: 2024,
+  6312: 2025
+};
 
 export function toProjectRelation(project: CaseStudy): RelationSummary {
   return {

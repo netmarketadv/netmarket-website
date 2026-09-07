@@ -75,8 +75,21 @@ describe('seo utilities', () => {
       caseStudyJsonLd(
         'Sirene Blu',
         'App mobile e programma fedelta.',
-        'https://staging.netmarket.it/progetti/sirene-blu/'
+        'https://staging.netmarket.it/progetti/sirene-blu/',
+        {
+          client: 'Sirene Blu',
+          year: 2025,
+          sector: 'Retail',
+          services: ['Software e integrazioni'],
+          result: 'Oltre 100.000 iscritti.',
+          providerId: 'https://staging.netmarket.it/#organization'
+        }
       )
-    ).toMatchObject({ '@type': 'CreativeWork' });
+    ).toMatchObject({
+      '@type': 'CreativeWork',
+      dateCreated: '2025',
+      about: { '@type': 'Organization', name: 'Sirene Blu' },
+      provider: { '@id': 'https://staging.netmarket.it/#organization' }
+    });
   });
 });

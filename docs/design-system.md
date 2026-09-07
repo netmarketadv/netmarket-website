@@ -155,7 +155,7 @@ I casi studio devono usare immagini reali appena disponibili dal CMS o asset esp
 
 Le immagini principali dei servizi sono visual PNG trasparenti caricati su `cms.netmarket.it`. Vanno renderizzate dentro frame grigio chiaro, con padding interno e `object-fit: contain`; non devono essere croppate come fotografie.
 
-Il sistema `/progetti/` usa un archivio editoriale con featured project e righe media-driven, non una griglia portfolio generica. Le detail page supportano hero visuale, metadata progetto, contenuto preservato, risultati dichiarati, gallery e progetto successivo. Le sezioni vuote non vengono renderizzate.
+Il sistema `/progetti/` usa un archivio editoriale con featured project e righe media-driven, non una griglia portfolio generica. Le pagine dettaglio compongono hero adattiva, metadati, capitoli narrativi, sequenze media, risultati verificati, progetti correlati per affinità e CTA. Le sezioni vuote non vengono renderizzate e l’art direction può variare per progetto senza cambiare griglia o tipografia.
 
 ## 12. Iconography
 

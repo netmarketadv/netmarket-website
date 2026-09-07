@@ -82,8 +82,9 @@ describe('shared schemas', () => {
         projectStatus: 'published',
         services: [relation],
         numericResults: [{ label: 'Conversioni', value: '+292%' }],
+        gallery: [{ media: image, caption: 'Homepage', layoutHint: 'wide' }],
         seo
-      }).services
+      }).gallery
     ).toHaveLength(1);
     expect(
       insightSchema.parse({

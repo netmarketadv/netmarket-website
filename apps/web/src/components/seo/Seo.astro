@@ -6,6 +6,7 @@ import {
   webPageJsonLd,
   webSiteJsonLd
 } from '@netmarket/seo';
+import type { MediaAsset } from '@netmarket/schemas';
 import { currentRobots } from '@/lib/seo/robots';
 import { getPublicEnv } from '@/lib/env';
 
@@ -17,6 +18,9 @@ interface Props {
   noindexFollow?: boolean;
   canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
+  socialTitle?: string | undefined;
+  socialDescription?: string | undefined;
+  socialImage?: MediaAsset | null | undefined;
 }
 
 const {
@@ -26,7 +30,10 @@ const {
   noindex = false,
   noindexFollow = false,
   canonicalSiteUrl,
-  structuredData = []
+  structuredData = [],
+  socialTitle,
+  socialDescription,
+  socialImage
 } = Astro.props;
 const env = getPublicEnv();
 const pageTitle = buildTitle(title);
@@ -37,6 +44,9 @@ const faviconLargeUrl = absoluteCanonical(seoSiteUrl, '/icon-512.png');
 const appleTouchIconUrl = absoluteCanonical(seoSiteUrl, '/apple-touch-icon.png');
 const manifestUrl = absoluteCanonical(seoSiteUrl, '/site.webmanifest');
 const robots = currentRobots(noindex, noindexFollow);
+const socialImageUrl = socialImage?.url
+  ? absoluteCanonical(seoSiteUrl, socialImage.url)
+  : undefined;
 const jsonLd = [
   organizationJsonLd(seoSiteUrl),
   webSiteJsonLd(seoSiteUrl),
@@ -64,11 +74,28 @@ const jsonLd = [
 <link rel="shortcut icon" type="image/png" href={faviconUrl} />
 <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
 <link rel="manifest" href={manifestUrl} />
-<meta property="og:title" content={pageTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:type" content="website" />
+<meta property="og:title" content={socialTitle || pageTitle} />
+<meta property="og:description" content={socialDescription || description} />
+<meta property="og:type" content={socialImageUrl ? 'article' : 'website'} />
 <meta property="og:url" content={canonical} />
+{socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
+{
+  socialImageUrl && socialImage?.width && (
+    <meta property="og:image:width" content={String(socialImage.width)} />
+  )
+}
+{
+  socialImageUrl && socialImage?.height && (
+    <meta property="og:image:height" content={String(socialImage.height)} />
+  )
+}
+{
+  socialImageUrl && (
+    <meta property="og:image:alt" content={socialImage?.alt || socialTitle || pageTitle} />
+  )
+}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={pageTitle} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:title" content={socialTitle || pageTitle} />
+<meta name="twitter:description" content={socialDescription || description} />
+{socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
 <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

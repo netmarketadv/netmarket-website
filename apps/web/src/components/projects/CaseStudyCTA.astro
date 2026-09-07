@@ -1,0 +1,75 @@
+---
+import { IconArrowRight } from '@tabler/icons-astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<Section compact class="case-cta" labelledby="case-cta-title">
+  <Container wide>
+    <div class="case-cta__panel" data-reveal="up">
+      <div>
+        <p>Il prossimo progetto</p><h2 id="case-cta-title">Partiamo dalla tua esigenza.</h2>
+      </div>
+      <Button href="/contatti/" variant="inverse"
+        >Raccontaci il progetto <IconArrowRight stroke={1.8} aria-hidden="true" /></Button
+      >
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .case-cta {
+    background: #fff;
+  }
+  .case-cta__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    padding: clamp(2rem, 5vw, 5rem);
+    color: #fff;
+    background: var(--case-ink);
+    border-radius: var(--nm-radius-lg);
+  }
+  .case-cta__panel div {
+    display: grid;
+    gap: 0.8rem;
+  }
+  p {
+    margin: 0;
+    color: var(--case-accent-light);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 13ch;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2.7rem, 5.5vw, 5.5rem);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  :global(.case-cta .nm-button) {
+    gap: 0.55rem;
+    white-space: nowrap;
+  }
+  :global(.case-cta .nm-button svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  @media (max-width: 700px) {
+    .case-cta__panel {
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding: 1.5rem;
+      border-radius: 1.1rem;
+    }
+    :global(.case-cta .nm-button) {
+      width: 100%;
+    }
+  }
+</style>

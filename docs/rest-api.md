@@ -70,6 +70,8 @@ Case Study detail include anche `additionalContent` quando una migrazione legacy
 
 Insight detail include `content`, `publishedAt`, `modifiedAt`, `categories`, `authorPerson`, `readingTime`, stato featured/priority e relazioni verso servizi, case study e risorse.
 
+Case study detail include narrativa strutturata, `qualitativeResult`, metriche verificate, gallery normalizzata con asset media e `relatedCaseStudies`. Il frontend usa le relazioni esplicite quando presenti e applica un fallback per affinità solo durante la build.
+
 Endpoint admin autenticato:
 
 - `GET /netmarket/v1/admin/relation-search?search=...&types=nm_service,nm_client`

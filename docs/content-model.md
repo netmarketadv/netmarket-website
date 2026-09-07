@@ -35,6 +35,8 @@ Il sistema frontend dei progetti è documentato in `docs/project-system.md`. Le 
 
 Il campo `additional_content` su `nm_case_study` conserva testo legacy non classificabile in modo affidabile dentro `context`, `challenge`, `approach` o `solution`.
 
+I nuovi case study usano inoltre `qualitative_result` per documentare un esito verificato quando non esistono KPI pubblicabili e `related_case_studies` per una selezione editoriale opzionale. La gallery è gestita come selezione multipla dalla Media Library e viene normalizzata dalla REST API nel contratto `CaseStudyMedia`.
+
 ## Frontend Insights
 
 Il sistema Insight e documentato in `docs/insight-system.md`. Le pagine `/insight/`, `/insight/[page]/` e `/insight/[slug]/` usano i post WordPress come fonte primaria. Finche il CMS non espone contenuti importati e credenziali build, il frontend usa lo snapshot reale legacy in `data/migrations/insights/`.

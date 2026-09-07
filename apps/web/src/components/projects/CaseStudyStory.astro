@@ -1,0 +1,94 @@
+---
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import type { ProjectStorySection } from '@/lib/projects/presentation';
+
+interface Props {
+  sections: ProjectStorySection[];
+}
+const { sections } = Astro.props;
+---
+
+{
+  sections.length > 0 && (
+    <Section class="case-story" labelledby="case-story-title">
+      <Container>
+        <h2 id="case-story-title" class="visually-hidden">
+          Il progetto
+        </h2>
+        <div class="case-story__list">
+          {sections.map((section, index) => (
+            <article
+              class:list={['case-story__item', index % 2 === 1 && 'case-story__item--offset']}
+              data-reveal="up"
+            >
+              <p>{section.eyebrow}</p>
+              <div>
+                <h3>{section.title}</h3>
+                <p>{section.body}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+<style>
+  .case-story {
+    background: #fff;
+  }
+  .case-story__list {
+    display: grid;
+    gap: clamp(4rem, 8vw, 8rem);
+  }
+  .case-story__item {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.42fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 7rem);
+    max-width: 62rem;
+  }
+  .case-story__item--offset {
+    margin-left: auto;
+  }
+  .case-story__item > p {
+    margin: 0.3rem 0 0;
+    color: var(--case-accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .case-story__item div {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 44rem;
+  }
+  h3 {
+    margin: 0;
+    font-size: clamp(2.2rem, 4.5vw, 4.4rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .case-story__item div p {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--nm-color-muted);
+    font-size: clamp(1.06rem, 1.3vw, 1.18rem);
+    line-height: 1.62;
+  }
+  @media (max-width: 640px) {
+    .case-story__item {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .case-story__item--offset {
+      margin-left: 0;
+    }
+    h3 {
+      font-size: clamp(2.1rem, 10.5vw, 3.15rem);
+    }
+  }
+</style>
