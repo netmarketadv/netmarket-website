@@ -25,7 +25,8 @@
   --color-muted: var(--nm-color-muted);
   --color-surface: var(--nm-color-canvas);
   --color-line: var(--nm-color-border);
-  --nm-font-sans: 'Mona Sans', 'Aptos', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --nm-font-sans:
+    'Mona Sans', 'Aptos', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: var(--nm-font-sans);
   --nm-text-display: clamp(3.75rem, 8.25vw, 7.8rem);
   --nm-text-h1: clamp(3rem, 6vw, 5.85rem);
@@ -37,11 +38,11 @@
   --nm-text-small: 0.875rem;
   --nm-text-label: 0.78rem;
   --nm-text-meta: 0.75rem;
-  --nm-tracking-display: -0.025em;
-  --nm-tracking-h1: -0.027em;
-  --nm-tracking-h2: -0.028em;
-  --nm-tracking-h3: -0.016em;
-  --nm-tracking-heading-small: -0.01em;
+  --nm-tracking-display: 0;
+  --nm-tracking-h1: 0;
+  --nm-tracking-h2: 0;
+  --nm-tracking-h3: 0;
+  --nm-tracking-heading-small: 0;
   --nm-tracking-body: 0;
   --nm-heading-gap-xs: clamp(0.55rem, 0.7vw, 0.85rem);
   --nm-heading-gap-sm: clamp(0.75rem, 0.9vw, 1.05rem);
@@ -77,9 +78,16 @@
   --space-6: var(--nm-space-lg);
   --space-8: var(--nm-space-xl);
   --space-12: var(--nm-space-2xl);
-  --nm-layout-max: 76rem;
-  --nm-layout-wide: 92rem;
+  --nm-layout-content: 75rem;
+  --nm-layout-wide: 83rem;
+  --nm-layout-shell: 92rem;
+  --nm-layout-max: var(--nm-layout-content);
   --nm-page-margin: clamp(1rem, 4vw, 3.5rem);
+  --nm-grid-gutter: clamp(1rem, 1vw, 1.5rem);
+  --nm-section-space: clamp(4rem, 7vw, 7.5rem);
+  --nm-section-space-compact: clamp(2.75rem, 5.5vw, 5rem);
+  --nm-measure-body: 58ch;
+  --nm-measure-editorial: 44rem;
   --layout-max: var(--nm-layout-max);
   --nm-aspect-team-portrait: 3 / 4;
   --nm-radius-xs: 0.375rem;
@@ -88,6 +96,10 @@
   --nm-radius-lg: 1.5rem;
   --nm-radius-xl: 2.25rem;
   --nm-radius-pill: 999rem;
+  --nm-radius-control: var(--nm-radius-sm);
+  --nm-radius-media: var(--nm-radius-md);
+  --nm-radius-card: var(--nm-radius-lg);
+  --nm-radius-feature: var(--nm-radius-xl);
   --radius-sm: var(--nm-radius-xs);
   --radius-md: var(--nm-radius-sm);
   --nm-border: 1px solid var(--nm-color-border);

@@ -32,7 +32,10 @@ test('staging critical path is published and crawlable', async ({ page }) => {
   await page.goto('/progetti/casi-studio-strategia-digitale-ecommerce-brb/', {
     waitUntil: 'domcontentloaded'
   });
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('BRB');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Un ecosistema digitale che accelera l’ecommerce.'
+  );
+  await expect(page.locator('.case-kicker')).toContainText('BRB');
 
   await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Raccontaci');

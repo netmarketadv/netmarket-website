@@ -1,6 +1,6 @@
 # Netmarket Motion System
 
-Il motion Netmarket deve comunicare qualita, precisione e controllo. Non serve a decorare la pagina: guida lo sguardo, chiarisce gerarchie e rende piu naturale l'interazione.
+Il motion Netmarket comunica qualita, precisione e controllo. Questa pagina documenta il comportamento realmente implementato; nuove animazioni non entrano nel sistema finche non sono riutilizzate e verificate.
 
 ## Principles
 
@@ -52,7 +52,7 @@ Distanze:
 - `down`: fade + translateY negativo, solo per piccoli elementi sopra heading.
 - `scale`: scale morbido + fade + blur minimo, per card e moduli.
 - `media`: clip reveal + scale + brightness/fade, per immagini importanti.
-- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve.
+- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve e padding di sicurezza per ascendenti, discendenti, “o” obliqua e marker.
 
 ## Data Attribute API
 
@@ -85,6 +85,8 @@ Attributi supportati:
 - Mobile: niente magnetic e niente cursor label, durata/distanza ridotte.
 - Media scroll: immagini importanti possono avere scale/brightness scrub leggero, senza pinning obbligatorio e senza bloccare la navigazione.
 - Services: l'archivio usa reveal progressivo sulle righe del service index; il dettaglio usa line reveal sull'H1, media reveal sul visual, stagger leggero su processo e related content.
+- Rail e carousel: lo scorrimento manuale nativo resta sempre disponibile; autoplay e animazioni si fermano durante hover, focus o interazione e non sono essenziali al contenuto.
+- Case study: media e capitoli entrano con i preset esistenti; nessun effetto deve alterare crop, aspect ratio o ordine narrativo.
 
 ## Reduced Motion
 
@@ -95,6 +97,7 @@ Con `prefers-reduced-motion: reduce`:
 - magnetic e cursor label sono disabilitati;
 - accordion cambia stato senza animazioni lunghe;
 - transitions globali sono portate a 1ms.
+- marquee e autoplay dei rail sono fermi, con contenuto comunque esplorabile manualmente.
 
 ## No-JS Resilience
 
@@ -110,4 +113,8 @@ Gli elementi sopra o gia vicini al viewport vengono rivelati in modo fail-safe. 
 
 ## Performance Budget
 
-GSAP e caricato nel bundle motion del frontend e deve restare l'unica libreria di animazione. Usare ScrollTrigger solo su elementi chiave, passive listeners e `requestAnimationFrame` per pointer/magnetic. Evitare `will-change` permanente su molte card.
+GSAP e caricato nel bundle motion del frontend e deve restare l'unica libreria di animazione. Usare ScrollTrigger solo su elementi chiave, passive listeners e `requestAnimationFrame` per pointer/magnetic. `will-change` e ammesso solo durante l'interazione o sull'elemento attivamente animato, mai come stato permanente di liste numerose.
+
+## Eccezioni Locali
+
+La composizione social della homepage, i rail dell'archivio e le sequenze media dei case study possono definire timing o direzione locali, ma devono riusare easing, durate e criteri reduced motion del sistema. Pinning, scroll-jacking e nuove dipendenze motion non sono pattern canonici.

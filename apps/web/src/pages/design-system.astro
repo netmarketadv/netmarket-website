@@ -1,317 +1,305 @@
 ---
-import Metric from '@/components/content/Metric.astro';
-import ProjectCard from '@/components/content/ProjectCard.astro';
-import ApprovalSteps from '@/components/blocks/ApprovalSteps.astro';
-import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
 import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
-import FeatureIconGrid from '@/components/blocks/FeatureIconGrid.astro';
-import GoogleTrustBadge from '@/components/blocks/GoogleTrustBadge.astro';
-import OperationsBento from '@/components/blocks/OperationsBento.astro';
-import PainPointPanel from '@/components/blocks/PainPointPanel.astro';
 import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
 import TeamSection from '@/components/blocks/TeamSection.astro';
-import TrustBadges from '@/components/blocks/TrustBadges.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import Stack from '@/components/layout/Stack.astro';
-import Button from '@/components/ui/Button.astro';
 import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import IconBubble from '@/components/ui/IconBubble.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { approvalSteps, clientLogos, cmsMedia, featureHighlights, googleTrust, painPoints, questions, trustBadges } from '@/data/home';
+import { clientLogos, cmsMedia, googleTrust, questions } from '@/data/home';
 import { teamMembers } from '@/data/team';
 
 const swatches = [
-  ['Blue', 'var(--nm-color-blue)', '#0E51FE'],
+  ['Brand blue', 'var(--nm-color-blue)', '#0E51FE'],
   ['Ink', 'var(--nm-color-ink)', '#090A0F'],
-  ['Canvas', 'var(--nm-color-canvas)', '#F4F5F7'],
-  ['Surface', 'var(--nm-color-surface)', '#FFFFFF'],
   ['Muted', 'var(--nm-color-muted)', '#5B6472'],
+  ['Canvas', 'var(--nm-color-canvas)', '#F6F7F9'],
+  ['Surface', 'var(--nm-color-surface)', '#FFFFFF'],
   ['Border', 'var(--nm-color-border)', '#DDE2EA']
 ];
 
 const scale = [
-  ['Display', 'Comunichiamo valore attraverso strategie, tecnologia e creatività.', 'ds-type-sample ds-type-sample--display'],
-  ['H1', 'Progetti digitali pensati per costruire valore nel tempo.', 'ds-type-sample ds-type-sample--h1'],
-  ['H2', 'Soluzioni ecommerce per il mondo digitale.', 'ds-type-sample ds-type-sample--h2'],
-  ['H3', 'Ecommerce, marketing e comunicazione.', 'ds-type-sample ds-type-sample--h3'],
-  ['H4', 'ORO, metodo e controllo.', 'ds-type-sample ds-type-sample--h4'],
-  ['Heading senza o', 'Strategia digitale', 'ds-type-sample ds-type-sample--h3']
+  [
+    'Display',
+    'Comunichiamo valore attraverso progetti reali.',
+    'ds-type-sample ds-type-sample--display'
+  ],
+  ['H1', 'Una direzione chiara per il progetto.', 'ds-type-sample ds-type-sample--h1'],
+  ['H2', 'Competenze che lavorano insieme.', 'ds-type-sample ds-type-sample--h2'],
+  ['H3', 'Strategia, contenuti e tecnologia.', 'ds-type-sample ds-type-sample--h3'],
+  ['H4', 'Metodo e controllo.', 'ds-type-sample ds-type-sample--h4']
 ];
 
-const faq = [
-  ['Accordion chiuso', 'Summary visibile, risposta contenuta dentro un pannello morbido.'],
-  ['Accordion aperto', 'La risposta resta breve, senza tabelle lunghe o testo decorativo.']
-] satisfies [string, string][];
+const classifications = [
+  [
+    'Design tokens',
+    'Colore, tipo, spazio, griglia, radius, bordi e motion. Sono valori condivisi, non componenti.'
+  ],
+  [
+    'Primitive',
+    'Container, Section, Stack e Cluster governano contenimento e ritmo senza imporre una scenografia.'
+  ],
+  [
+    'Componenti',
+    'Azioni, navigazione, progetti, team, recensioni, FAQ e form con responsabilita stabili.'
+  ],
+  [
+    'Pattern editoriali',
+    'Hero, split, featured e archivi condividono principi, ma mantengono composizioni adatte al contenuto.'
+  ],
+  [
+    'Eccezioni di pagina',
+    'Hero social, visual Siti web, timeline Agenzia e art direction dei case study restano locali.'
+  ]
+];
 
 const motionExamples = [
-  ['Fade', 'Per elementi leggeri e metadati.', 'fade'],
-  ['Fade up', 'Default per contenuti editoriali.', 'up'],
-  ['Scale soft', 'Per moduli e card importanti.', 'scale'],
-  ['Image reveal', 'Per media e visual scenici.', 'media']
+  ['Fade', 'Metadata ed elementi leggeri.', 'fade'],
+  ['Fade up', 'Blocchi editoriali e contenuti.', 'up'],
+  ['Scale soft', 'Pannelli e card importanti.', 'scale'],
+  ['Image reveal', 'Media principali e progetti.', 'media']
 ] satisfies [string, string, 'fade' | 'up' | 'scale' | 'media'][];
 ---
 
 <BaseLayout
   title="Design System"
-  description="Pagina interna di sviluppo per il design system Netmarket."
+  description="Fonte visuale interna del design system Netmarket."
   path="/design-system/"
   noindex
 >
   <Container wide>
     <header class="ds-hero nm-stack">
-      <Badge>Internal design system</Badge>
-      <h1 id="page-title">Netmarket design system</h1>
-      <p class="nm-lead">Fondazioni, pattern e componenti per ricostruire una landing completa in stile Awesomic, con identità Netmarket.</p>
+      <Badge>Fonte interna</Badge>
+      <h1 id="page-title">Netmarket <span class="nm-heading-marker">design system.</span></h1>
+      <p class="nm-lead">
+        Il linguaggio reale del sito: editoriale, essenziale, project-led e costruito su contenuti
+        verificabili.
+      </p>
     </header>
   </Container>
+
+  <Section compact labelledby="classification-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <div class="center-heading">
+          <h2 id="classification-title">
+            Un sistema con <span class="nm-heading-accent">confini chiari.</span>
+          </h2>
+          <p>
+            Il riuso nasce da responsabilita comprovate. Le eccezioni non diventano standard per
+            somiglianza.
+          </p>
+        </div>
+        <div class="ds-component-grid">
+          {
+            classifications.map(([title, text]) => (
+              <article class="ds-spec nm-stack">
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </Stack>
+    </Container>
+  </Section>
 
   <Section labelledby="foundations-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
         <div class="center-heading">
           <h2 id="foundations-title">Fondazioni visive.</h2>
-          <p>Mona Sans, blu Netmarket, canvas chiaro, radius morbidi e componenti con contrasto netto.</p>
+          <p>Mona Sans, neutri freddi, bianco dominante e blu Netmarket usato come segnale.</p>
         </div>
         <div class="ds-swatch-grid">
-          {swatches.map(([name, value, hex]) => (
-            <article class="ds-swatch">
-              <div class="ds-swatch__chip" style={`background: ${value};`}></div>
-              <h3>{name}</h3>
-              <p class="nm-meta">{hex}</p>
-            </article>
-          ))}
+          {
+            swatches.map(([name, value, hex]) => (
+              <article class="ds-swatch">
+                <div class="ds-swatch__chip" style={`background: ${value};`} />
+                <h3>{name}</h3>
+                <p class="nm-meta">{hex}</p>
+              </article>
+            ))
+          }
         </div>
         <div class="ds-spec">
-          {scale.map(([name, text, className]) => (
-            <div class="ds-type-row">
-              <p class="nm-meta">{name}</p>
-              <h3 class={className}>{text}</h3>
-            </div>
-          ))}
+          {
+            scale.map(([name, text, className]) => (
+              <div class="ds-type-row">
+                <p class="nm-meta">{name}</p>
+                <h3 class={className}>{text}</h3>
+              </div>
+            ))
+          }
         </div>
-        <div class="ds-spec ds-spacing-demo">
-          <article class="ds-spacing-demo__h1">
-            <h2 class="ds-type-sample ds-type-sample--h1">Comunichiamo valore.</h2>
-            <p class="nm-lead">Lead con ritmo più aperto: la distanza dal titolo deve dare respiro senza separare il messaggio.</p>
+        <div class="ds-spacing-demo">
+          <article class="ds-spacing-demo__h2">
+            <h2 class="ds-type-sample ds-type-sample--h2">
+              Una parola in <span class="nm-heading-accent">blu.</span>
+            </h2>
+            <p>Accento cromatico per il concetto principale, massimo uno per titolo.</p>
           </article>
           <article class="ds-spacing-demo__h2">
-            <h2 class="ds-type-sample ds-type-sample--h2">Progetti che costruiscono valore.</h2>
-            <p>Paragrafo descrittivo con spaziatura sistemica per sezioni editoriali, blocchi riutilizzabili e contenuti CMS.</p>
-          </article>
-          <article class="ds-spacing-demo__h2">
-            <h2 class="ds-type-sample ds-type-sample--h2">Titolo con <span class="nm-heading-accent">accento blu</span>.</h2>
-            <p>Pattern scuro + blu Netmarket per parole chiave dentro heading editoriali.</p>
-          </article>
-          <article class="ds-spacing-demo__h2">
-            <h2 class="ds-type-sample ds-type-sample--h2">Titolo con <span class="nm-heading-marker">evidenziatore tipografico</span>.</h2>
-            <p>Marker blu chiaro per dare enfasi senza cambiare il colore del testo.</p>
-          </article>
-          <article class="ds-spacing-demo__h3">
-            <h3 class="ds-type-sample ds-type-sample--h3">Soluzioni digitali per aziende.</h3>
-            <p>Testo di supporto per card e moduli: più compatto del ritmo H2 ma comunque leggibile.</p>
-          </article>
-          <article class="ds-spacing-demo__h3">
-            <h3 class="ds-type-sample ds-type-sample--h3">Strategia digitale</h3>
-            <p>Questo heading non contiene la lettera o: non deve generare span tipografici inutili.</p>
-          </article>
-          <article class="ds-spacing-demo__h3">
-            <h3 class="ds-type-sample ds-type-sample--h3">Paragraph, label ed eyebrow non cambiano.</h3>
-            <p>Nel body text la o resta roman: controllo, contenuto, ecommerce, comunicazione.</p>
-            <span class="nm-badge">Eyebrow con o non italic</span>
+            <h2 class="ds-type-sample ds-type-sample--h2">
+              Una selezione <span class="nm-heading-marker">intenzionale.</span>
+            </h2>
+            <p>Marker con barre e handle, compatibile con la “o” obliqua e con il reveal.</p>
           </article>
         </div>
       </Stack>
     </Container>
   </Section>
 
-  <Section labelledby="controls-title">
+  <Section compact labelledby="controls-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
         <div class="center-heading">
-          <h2 id="controls-title">Controlli e moduli.</h2>
-          <p>Bottoni, badge, form, card e stati base per CTA, richieste progetto, filtri e sezioni editoriali.</p>
+          <h2 id="controls-title">Azioni e segnali.</h2>
+          <p>Poche varianti, gerarchia netta, icone funzionali e focus sempre riconoscibile.</p>
         </div>
         <div class="ds-component-grid">
-          <article class="ds-spec nm-stack">
-            <h3>Buttons</h3>
+          <article class="ds-spec ds-spec--dark nm-stack">
+            <h3>Bottoni</h3>
             <div class="nm-cluster">
               <Button href="#controls-title">Parliamone</Button>
-              <Button href="#controls-title" variant="secondary">Vedi i progetti</Button>
-              <Button disabled>Disabilitato</Button>
+              <Button href="#controls-title" variant="secondary">Guarda i progetti</Button>
+              <Button href="#controls-title" variant="inverse">Azione su scuro</Button>
             </div>
           </article>
           <article class="ds-spec nm-stack">
-            <h3>Badges</h3>
+            <h3>Badge e tassonomie</h3>
             <div class="nm-cluster">
               <Badge>Padova</Badge>
               <Badge>SEO</Badge>
-              <Badge>Brand</Badge>
               <Badge>Dal 1986</Badge>
-              <GoogleTrustBadge rating={googleTrust.rating} reviewCount={googleTrust.reviewCount} href={googleTrust.profileHref} compact />
             </div>
           </article>
           <article class="ds-spec nm-stack">
-            <h3>Hero form</h3>
-            <form class="hero-form" action="#controls-title">
-              <label for="ds-email">Email aziendale</label>
-              <div class="hero-form__row">
-                <input id="ds-email" type="email" placeholder="nome@azienda.it" />
-                <button type="submit">Parliamone</button>
-              </div>
-            </form>
+            <h3>Icone</h3>
+            <div class="nm-cluster">
+              <IconBubble name="desktop" label="Siti web" />
+              <IconBubble name="palette" label="Branding" />
+              <IconBubble name="chart" label="Marketing" />
+              <IconBubble name="arrow" label="Approfondisci" />
+            </div>
           </article>
         </div>
       </Stack>
     </Container>
   </Section>
 
-  <Section labelledby="blocks-title">
+  <Section labelledby="projects-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
         <div class="center-heading">
-          <h2 id="blocks-title">Blocchi pagina.</h2>
-          <p>Gli elementi coprono hero, rail progetti, servizio bento, proof, CTA paesaggio, processo, insight e FAQ.</p>
-        </div>
-        <div class="hero-showcase">
-          <article class="hero-showcase__card hero-showcase__card--dark">
-            <h2>Card scura per problemi e focus.</h2>
-            <ul>
-              <li>Strategia</li>
-              <li>Design</li>
-              <li>Marketing</li>
-            </ul>
-          </article>
-          <article class="hero-showcase__card hero-showcase__card--image">
-            <img src={cmsMedia.projects.sireneBlu} alt="Anteprima card visuale Sirene Blu" loading="eager" decoding="async" />
-          </article>
-          <article class="hero-showcase__card hero-showcase__card--blue">
-            <h2>Card blu per claim e CTA.</h2>
-          </article>
+          <h2 id="projects-title">Progetti come <span class="nm-heading-accent">prova.</span></h2>
+          <p>
+            Media reali, tipologia, cliente e sintesi. Il featured resta un pattern editoriale
+            distinto.
+          </p>
         </div>
         <div class="project-rail">
-          <ProjectCard title="Sirene Blu" category="Card progetto" description="Formato portfolio con immagine, categoria e descrizione breve." image={cmsMedia.projects.sireneBlu} alt="Anteprima progetto Sirene Blu" loading="eager" large />
-          <ProjectCard title="Albertini Allestimenti" category="Card progetto" description="Formato compatto per casi studio secondari." image={cmsMedia.projects.albertini} alt="Anteprima progetto Albertini Allestimenti" loading="eager" />
-          <ProjectCard title="Progettoe" category="Card progetto" description="Formato compatto per casi studio secondari." image={cmsMedia.projects.progettoe} alt="Anteprima progetto Progettoe" loading="eager" />
+          <ProjectCard
+            title="Sirene Blu"
+            category="Sito corporate"
+            description="Card media-first per contesti secondari e contenuti correlati."
+            image={cmsMedia.projects.sireneBlu}
+            alt="Anteprima progetto Sirene Blu"
+            href="/progetti/"
+          />
+          <ProjectCard
+            title="Albertini Allestimenti"
+            category="Sito web"
+            description="Immagine reale, categoria nel media e testo breve allineato a sinistra."
+            image={cmsMedia.projects.albertini}
+            alt="Anteprima progetto Albertini Allestimenti"
+            href="/progetti/"
+          />
+          <ProjectCard
+            title="Progetto-e"
+            category="Sito web"
+            description="Hover misurato e contenuto leggibile anche senza JavaScript."
+            image={cmsMedia.projects.progettoe}
+            alt="Anteprima progetto Progetto-e"
+            href="/progetti/"
+          />
         </div>
       </Stack>
     </Container>
   </Section>
 
-  <Section labelledby="motion-title">
+  <Section compact labelledby="motion-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
         <div class="center-heading" data-reveal="line">
-          <h2 id="motion-title">Motion.</h2>
-          <p>Preset leggeri per entrance, scroll, hover, navigazione, contenuto e reduced motion.</p>
+          <h2 id="motion-title">Motion con uno scopo.</h2>
+          <p>Progressive enhancement, distanze brevi e contenuto sempre disponibile.</p>
         </div>
-
         <div class="motion-demo-grid">
-          {motionExamples.map(([title, text, variant], index) => (
-            <article class="motion-demo-card" data-reveal={variant} data-reveal-delay={index}>
-              <span>{variant}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
+          {
+            motionExamples.map(([title, text, variant], index) => (
+              <article class="motion-demo-card" data-reveal={variant} data-reveal-delay={index}>
+                <span>{variant}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))
+          }
         </div>
-
-        <div class="motion-playground">
-          <div class="motion-playground__copy" data-reveal="line">
-            <h3>Hover, cursor e CTA.</h3>
-            <p>Project card con label contestuale, bottone magnetico contenuto, underline link e feedback tattile.</p>
-            <div class="nm-cluster">
-              <Button href="#motion-title" magnetic>CTA magnetic</Button>
-              <a href="#motion-title">Text link hover</a>
-            </div>
-          </div>
-          <ProjectCard
-            title="Project hover"
-            category="Cursor label"
-            description="Passa sopra la card: il movimento resta minimo e la label compare solo su desktop."
-            image={cmsMedia.projects.albertini}
-            alt="Esempio motion su progetto"
-            loading="eager"
-            href="#motion-title"
-          />
-        </div>
-
-        <div class="motion-demo-grid motion-demo-grid--content">
-          <Metric value="1986" label="count-up leggero" />
-          <Metric value="40+" label="suffisso preservato" />
-          <Metric value="5.0" label="decimali supportati" />
-          <article class="motion-demo-card" data-reveal="scale">
-            <span>Reduced motion</span>
-            <h3>Contenuto sempre pronto.</h3>
-            <p>Con preferenza reduce: reveal, cursor e magnetic si disattivano.</p>
-          </article>
-        </div>
-
-        <FAQBlock title="Accordion motion" text="Apertura con altezza misurata, aria-expanded e fallback reduced motion." items={faq} />
       </Stack>
     </Container>
   </Section>
 
-  <Section labelledby="section-library-title">
+  <Section labelledby="shared-title">
     <Container wide>
       <Stack gap="var(--nm-space-2xl)">
         <div class="center-heading">
-          <h2 id="section-library-title">Sezioni riutilizzabili.</h2>
-          <p>Blocchi pronti per landing, pagine servizio, pagine progetto e campagne verticali.</p>
+          <h2 id="shared-title">Componenti canonici.</h2>
+          <p>Pattern condivisi gia verificati nelle pagine principali.</p>
         </div>
-        <FeatureIconGrid title="Perché lavorare con Netmarket?" items={featureHighlights} />
-        <PainPointPanel
-          title="Problemi da risolvere prima di aumentare i canali."
-          items={painPoints}
-        />
-        <ApprovalSteps title="Filtro operativo." text="Una sequenza di blocchi per spiegare metodo, scelte e controllo qualità." items={approvalSteps} />
-        <OperationsBento title="Sistema condiviso." text="Un bento per raccontare libreria, ruoli, contenuti, controllo e misurazione." />
-        <CTAInlineForm title="CTA con form," highlight="senza uscire dalla pagina." />
-        <TrustBadges items={trustBadges} />
         <ClientMarquee clients={clientLogos} />
         <TeamSection
-          title="People / Team."
-          text="Sistema ritratto 3:4 per persone, autori e contributor futuri."
+          title="Persone reali, competenze coordinate."
+          text="Ritratti 3:4, ruoli verificati e LinkedIn discreto."
           people={teamMembers}
         />
         <ReviewsSection
-          title="Recensioni e Google trust."
-          text="Slider full-width per recensioni reali, card compatte, stelle gialle e modal per testi lunghi."
+          title="Recensioni reali, leggibili."
+          text="Badge, rail manuale, fade condizionale e dialog per il testo completo."
           rating={googleTrust.rating}
           reviewCount={googleTrust.reviewCount}
           googleHref={googleTrust.profileHref}
         />
+        <FAQBlock
+          title="FAQ essenziali."
+          text="Introduzione e accordion accessibile, senza card annidate."
+          items={questions.slice(0, 4)}
+        />
+        <div id="contatti">
+          <CTAInlineForm title="Un modulo breve quando serve" highlight="un contatto diretto." />
+        </div>
       </Stack>
     </Container>
   </Section>
 
-  <Section labelledby="proof-title">
-    <Container>
-      <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading">
-          <h2 id="proof-title">Proof e FAQ.</h2>
-          <p>Numeri verificati, accordion e contenuti brevi per sezioni di fiducia e supporto alla scelta.</p>
-        </div>
-        <div class="trust-grid">
-          <Metric value="1986" label="metrica grande" />
-          <Metric value="40+" label="metrica grande" />
-          <Metric value="5/5" label="metrica grande" />
-          <Metric value="1" label="metrica grande" />
-        </div>
-        <FAQBlock title="FAQ compact" text="Versione base per pagine servizio e landing." items={faq} />
-        <FAQBlock title="FAQ estesa" text="Versione con domande reali della homepage." items={questions} />
-      </Stack>
-    </Container>
-  </Section>
-
-  <Section class="landscape-cta" labelledby="media-title">
+  <Section compact labelledby="exceptions-title">
     <Container wide>
-      <div class="landscape-cta__image">
-        <img src="/media/generated/netmarket-flow-hills.png" alt="" loading="eager" decoding="async" />
-        <div>
-          <h2 id="media-title">Media scenico per CTA e transizioni.</h2>
-          <Button href="/" variant="inverse">Vai alla homepage</Button>
-        </div>
+      <div class="ds-spec nm-stack">
+        <p class="nm-meta">Eccezioni specifiche di pagina</p>
+        <h2 id="exceptions-title" class="ds-type-sample ds-type-sample--h2">
+          Art direction senza nuovi standard.
+        </h2>
+        <p class="nm-lead">
+          Hero social della homepage, browser e bento Siti web, timeline Agenzia, featured degli
+          archivi e colori dei singoli case study restano locali. Riutilizzano fondazioni e motion,
+          ma non sono componenti universali.
+        </p>
       </div>
     </Container>
   </Section>

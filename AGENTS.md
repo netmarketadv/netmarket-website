@@ -78,6 +78,10 @@ Target WCAG 2.2 AA, senza dichiarare conformità finché non verificata manualme
 
 `docs/motion-system.md` è la source of truth per animazioni, easing, durate, distanze e preset. Non creare easing arbitrari o nuove animazioni non documentate. Usare i preset esistenti, rispettare sempre `prefers-reduced-motion`, e dare priorità a performance, accessibilità e contenuto visibile senza JavaScript.
 
+## Design System
+
+`docs/design-system.md` è la source of truth del linguaggio visivo Netmarket e `apps/web/src/styles/tokens.css` contiene i token implementati. Prima di introdurre un nuovo pattern, verificare se è già coperto da primitive o componenti canonici; le eccezioni di pagina restano locali e non diventano standard senza riuso comprovato. La pagina interna `/design-system/` è il catalogo visuale di controllo e deve rimanere coerente con la documentazione.
+
 ## Sicurezza
 
 Nessun secret versionato. Gli script distruttivi devono richiedere parametri espliciti, usare `set -Eeuo pipefail`, supportare dry-run e rifiutare target non autorizzati.
