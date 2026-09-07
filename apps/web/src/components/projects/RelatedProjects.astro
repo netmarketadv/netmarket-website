@@ -49,6 +49,8 @@ const { projects } = Astro.props;
                       <span>
                         <small>{presentation.projectType}</small>
                         <strong>{projectClient(project)}</strong>
+                        <span class="case-related__summary">{presentation.intro}</span>
+                        <span class="case-related__cta">Scopri il progetto</span>
                       </span>
                       <IconArrowUpRight stroke={1.7} aria-hidden="true" />
                     </span>
@@ -139,6 +141,23 @@ const { projects } = Astro.props;
   strong {
     font-size: clamp(1.4rem, 2.2vw, 2rem);
     font-weight: 500;
+  }
+  .case-related__summary {
+    display: -webkit-box;
+    max-width: 29rem;
+    margin-top: 0.35rem;
+    overflow: hidden;
+    color: var(--nm-color-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .case-related__cta {
+    margin-top: 0.55rem;
+    color: var(--case-accent);
+    font-size: 0.82rem;
+    font-weight: 600;
   }
   svg {
     flex: 0 0 auto;
