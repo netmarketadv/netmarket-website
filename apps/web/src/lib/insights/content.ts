@@ -80,8 +80,14 @@ async function loadArchive(): Promise<InsightArchiveData> {
         const next = await getInsights({ page, perPage, sort: 'date' });
         pages.push(next.data);
       }
+      const fallbackBySlug = new Map(
+        fallbackInsights().map((insight) => [insight.slug, insight])
+      );
       return {
-        insights: pages.flat().sort(byDate),
+        insights: pages
+          .flat()
+          .map((insight) => enrichCmsInsight(insight, fallbackBySlug.get(insight.slug)))
+          .sort(byDate),
         totalPages: Math.max(1, first.pagination.totalPages),
         source: 'cms'
       };
@@ -111,7 +117,9 @@ export async function getInsightPage(page = 1): Promise<InsightArchiveData> {
 
 export async function getInsightDetailData(slug: string): Promise<InsightDetailData | undefined> {
   try {
-    const insight = await getInsight(slug);
+    const cmsInsight = await getInsight(slug);
+    const fallback = fallbackInsights().find((item) => item.slug === slug);
+    const insight = enrichCmsInsight(cmsInsight, fallback);
     return {
       insight,
       source: 'cms',
@@ -131,6 +139,26 @@ export async function getInsightDetailData(slug: string): Promise<InsightDetailD
     source: 'migration-snapshot',
     related: rankRelated(insight, insights).slice(0, 3).map(toInsightRelation),
     relatedProjects: await projectsFor(insight)
+  };
+}
+
+function enrichCmsInsight(insight: Insight, fallback?: Insight): Insight {
+  if (!fallback) return insight;
+  const image = insight.image ?? fallback.image;
+  return {
+    ...insight,
+    image,
+    content: insight.content || fallback.content,
+    excerpt: insight.excerpt || fallback.excerpt,
+    categories: insight.categories.length > 0 ? insight.categories : fallback.categories,
+    readingTime: insight.readingTime || fallback.readingTime,
+    relatedServices:
+      insight.relatedServices.length > 0 ? insight.relatedServices : fallback.relatedServices,
+    seo: {
+      ...fallback.seo,
+      ...insight.seo,
+      socialImage: insight.seo.socialImage ?? image ?? fallback.seo.socialImage
+    }
   };
 }
 
