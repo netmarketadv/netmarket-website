@@ -152,6 +152,9 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(servicesMenu.locator('.mega-menu__panel--wide')).toBeVisible();
   await expect(servicesMenu.locator('.mega-menu__scrim')).toHaveCSS('top', '0px');
   await expect(servicesMenu.getByRole('link', { name: /Concorsi a premi/ })).toBeVisible();
+  await expect(
+    page.locator('.site-header__nav').getByRole('link', { name: /NØD new/ })
+  ).toBeVisible();
 
   const agencyMenu = page.locator('.mega-menu').filter({ hasText: 'Agenzia' }).first();
   await agencyMenu.locator('summary').click();
@@ -174,6 +177,7 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
   await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
   await expect(panel.locator('.mobile-submenu--wide .icon-bubble')).toHaveCount(9);
+  await expect(panel.getByRole('link', { name: /NØD new/ })).toBeVisible();
   await panel.locator('.mobile-submenu summary').filter({ hasText: 'Agenzia' }).click();
   await expect(panel.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
 });

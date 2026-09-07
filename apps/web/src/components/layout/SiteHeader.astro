@@ -17,6 +17,7 @@ type IconName =
 interface NavItem {
   label: string;
   href?: string;
+  badge?: 'new';
   description?: string;
   menuVariant?: 'compact' | 'wide';
   children?: Array<{
@@ -112,7 +113,7 @@ const navItems: NavItem[] = [
   },
   { href: '/progetti/', label: 'Progetti' },
   { href: '/insight/', label: 'Insight' },
-  { href: '/nod/', label: 'NØD' },
+  { href: '/nod/', label: 'NØD', badge: 'new' },
   { href: '/contatti/', label: 'Contatti' }
 ];
 
@@ -170,7 +171,8 @@ const isSectionCurrent = (item: NavItem) =>
             </details>
           ) : (
             <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-              {item.label}
+              <span>{item.label}</span>
+              {item.badge && <small class="site-header__badge">{item.badge}</small>}
             </a>
           )
         )
@@ -221,7 +223,8 @@ const isSectionCurrent = (item: NavItem) =>
                 </details>
               ) : (
                 <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.badge && <small class="site-header__badge">{item.badge}</small>}
                 </a>
               )
             )
