@@ -1,0 +1,15 @@
+---
+import { IconBolt } from '@tabler/icons-astro';
+interface Props {
+  title: string;
+  text: string;
+  meta: string;
+  active?: boolean;
+}
+const { title, text, meta, active = false } = Astro.props;
+---
+
+<article class:list={[active && 'nod-automation-active']}>
+  <span><IconBolt /></span><div><b>{title}</b><p>{text}</p><small>{meta}</small></div><i
+    class="nod-toggle"></i>
+</article>

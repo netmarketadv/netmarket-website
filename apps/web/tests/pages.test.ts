@@ -33,13 +33,22 @@ describe('agency and contact pages', () => {
     expect(thanks).toContain('noindexFollow');
   });
 
-  it('registers NOD as a product page with CMS visuals and schema', () => {
+  it('registers the NOD product page with coded product demos', () => {
     const nod = readFileSync(new URL('../src/pages/nod.astro', import.meta.url), 'utf8');
+    const demo = readFileSync(
+      new URL('../src/components/nod/NodProductDemo.astro', import.meta.url),
+      'utf8'
+    );
 
     expect(nod).toContain('nod-logo.svg');
-    expect(nod).toContain('dashboard-scaled.webp');
-    expect(nod).toContain('ai-assistant-scaled.webp');
-    expect(nod).toContain('reports-scaled.webp');
+    expect(nod).not.toContain('dashboard-scaled.webp');
+    expect(nod).not.toContain('ai-assistant-scaled.webp');
+    expect(nod).not.toContain('reports-scaled.webp');
+    expect(nod).toContain('sistema operativo commerciale per PMI');
+    expect(nod).toContain('featureList');
+    expect(demo).toContain("variant === 'leads'");
+    expect(demo).toContain("variant === 'assistant'");
+    expect(demo).toContain('prefers-reduced-motion');
     expect(nod).toContain('SoftwareApplication');
     expect(nod).toContain('canonicalSiteUrl');
   });

@@ -9,7 +9,9 @@ test.describe('insight, agency and contact', () => {
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Appunti utili');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
-    const firstArticle = page.locator('.insight-cover-story > a, .insight-card-editorial > a').first();
+    const firstArticle = page
+      .locator('.insight-cover-story > a, .insight-card-editorial > a')
+      .first();
     await expect(firstArticle).toBeVisible();
     const href = await firstArticle.getAttribute('href');
     expect(href).toMatch(/^\/insight\/.+\/$/);
@@ -22,18 +24,25 @@ test.describe('insight, agency and contact', () => {
     expect(structuredData).toContain('BlogPosting');
   });
 
-  test('keeps the Insights archive and article readable across required viewports', async ({ page }) => {
+  test('keeps the Insights archive and article readable across required viewports', async ({
+    page
+  }) => {
     const errors = collectCriticalConsoleErrors(page);
     for (const viewport of [390, 430, 768, 1024, 1280, 1440, 1728]) {
       await page.setViewportSize({ width: viewport, height: 900 });
-      for (const path of ['/insight/', '/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/']) {
+      for (const path of [
+        '/insight/',
+        '/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/'
+      ]) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
+        await expect
+          .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
+          .toBeLessThanOrEqual(1);
         if (path === '/insight/' && viewport <= 430) {
-          const cardWidths = await page.locator('.insight-card-editorial').evaluateAll((cards) =>
-            cards.map((card) => card.getBoundingClientRect().width)
-          );
+          const cardWidths = await page
+            .locator('.insight-card-editorial')
+            .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().width));
           expect(Math.min(...cardWidths)).toBeGreaterThan(320);
         }
       }
@@ -255,14 +264,14 @@ test.describe('insight, agency and contact', () => {
     expect(requestCount).toBe(1);
   });
 
-  test('renders NOD product page with CMS screenshots and crawlable SEO', async ({ page }) => {
+  test('renders NOD product page with coded UI demos and crawlable SEO', async ({ page }) => {
     const errors = collectCriticalConsoleErrors(page);
 
     await page.goto('/nod/', { waitUntil: 'domcontentloaded' });
 
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('CRM operativo');
-    await expect(page.getByAltText('NØD by Netmarket')).toBeVisible();
-    await expect(page.getByAltText(/Dashboard NOD/)).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Marketing, vendite e AI');
+    await expect(page.getByRole('img', { name: 'NØD by Netmarket' }).first()).toBeVisible();
+    await expect(page.getByRole('img', { name: /Dashboard NØD/ })).toBeVisible();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',

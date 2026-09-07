@@ -1,0 +1,1829 @@
+---
+import {
+  IconBell,
+  IconBolt,
+  IconCalendar,
+  IconChartLine,
+  IconCheck,
+  IconChevronDown,
+  IconLayoutDashboard,
+  IconRobot,
+  IconRoute,
+  IconSearch,
+  IconSparkles,
+  IconTargetArrow,
+  IconUserPlus,
+  IconUsers
+} from '@tabler/icons-astro';
+import Automation from './demo/Automation.astro';
+import Chart from './demo/Chart.astro';
+import Deal from './demo/Deal.astro';
+import Event from './demo/Event.astro';
+import FlowStep from './demo/FlowStep.astro';
+import LeadRow from './demo/LeadRow.astro';
+import PipelineColumn from './demo/PipelineColumn.astro';
+import ScreenHeading from './demo/ScreenHeading.astro';
+import Source from './demo/Source.astro';
+
+type Variant =
+  'overview' | 'leads' | 'pipeline' | 'calendar' | 'assistant' | 'automations' | 'reports';
+interface Props {
+  variant: Variant;
+  label: string;
+}
+const { variant, label } = Astro.props;
+const navigation = [
+  [IconLayoutDashboard, 'Dashboard', 'overview'],
+  [IconUsers, 'Lead', 'leads'],
+  [IconRoute, 'Pipeline', 'pipeline'],
+  [IconCalendar, 'Calendario', 'calendar'],
+  [IconRobot, 'AI Assistant', 'assistant'],
+  [IconBolt, 'Automazioni', 'automations'],
+  [IconChartLine, 'Report', 'reports']
+] as const;
+---
+
+<div class:list={['nod-ui', `nod-ui--${variant}`]} role="img" aria-label={label}>
+  <div class="nod-ui__topbar" aria-hidden="true">
+    <div class="nod-ui__mobile-brand"><span class="nod-ui__orbit"></span>NØD</div>
+    <div class="nod-ui__search">
+      <IconSearch stroke={1.8} /><span>Cerca lead, contatti, task...</span>
+    </div>
+    <IconBell class="nod-ui__bell" stroke={1.7} />
+    <span class="nod-ui__avatar">E</span>
+  </div>
+
+  <aside class="nod-ui__sidebar" aria-hidden="true">
+    <div class="nod-ui__brand">
+      <span class="nod-ui__orbit"></span><b>NØD</b><small>by Netmarket</small>
+    </div>
+    <div class="nod-ui__workspace">
+      <span>AH</span><div><b>Aurora Habitat</b><small>Pro</small></div><IconChevronDown />
+    </div>
+    <span class="nod-ui__menu-label">Menu</span>
+    <nav>
+      {
+        navigation.map(([Icon, text, key]) => (
+          <span class:list={[key === variant && 'is-active']}>
+            <Icon stroke={1.7} />
+            {text}
+          </span>
+        ))
+      }
+    </nav>
+  </aside>
+
+  <div class="nod-ui__content" aria-hidden="true">
+    {
+      variant === 'overview' && (
+        <div class="nod-screen nod-screen--overview">
+          <ScreenHeading
+            eyebrow="Oggi, 9:41"
+            title="Buongiorno, Enrico."
+            description="Ecco dove serve attenzione."
+          />
+          <div class="nod-kpis">
+            <article>
+              <>
+                <span>Lead totali</span>
+                <strong>66</strong>
+                <small class="is-positive">+47%</small>
+              </>
+            </article>
+            <article>
+              <>
+                <span>Da seguire</span>
+                <strong>16</strong>
+                <small>oggi</small>
+              </>
+            </article>
+            <article>
+              <>
+                <span>Conversione</span>
+                <strong>31%</strong>
+                <small class="is-positive">+6%</small>
+              </>
+            </article>
+            <article>
+              <>
+                <span>Valore pipeline</span>
+                <strong>€573k</strong>
+                <small>attivo</small>
+              </>
+            </article>
+          </div>
+          <div class="nod-overview-grid">
+            <article class="nod-chart-card">
+              <div>
+                <>
+                  <b>Andamento lead</b>
+                  <small>Lead creati per mese</small>
+                </>
+              </div>
+              <Chart />
+            </article>
+            <article class="nod-priority-card">
+              <div>
+                <>
+                  <IconSparkles />
+                  <b>Priorità</b>
+                </>
+              </div>
+              <span>
+                <>
+                  <i class="is-orange" />
+                  <b>3</b>
+                </>{' '}
+                preventivi da seguire
+              </span>
+              <span>
+                <>
+                  <i class="is-red" />
+                  <b>2</b>
+                </>{' '}
+                task in scadenza
+              </span>
+              <span>
+                <>
+                  <i class="is-blue" />
+                  <b>5</b>
+                </>{' '}
+                nuovi lead
+              </span>
+            </article>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'leads' && (
+        <div class="nod-screen nod-screen--leads">
+          <ScreenHeading
+            eyebrow="Relazioni commerciali"
+            title="Lead e contatti"
+            description="111 contatti, una sola vista."
+            action="Nuovo lead"
+          />
+          <div class="nod-leads-toolbar">
+            <>
+              <IconSearch />
+              <span>Cerca per nome, azienda o email</span>
+              <b>Tutti gli stati</b>
+            </>
+          </div>
+          <div class="nod-leads-table">
+            <div class="nod-leads-row is-head">
+              <>
+                <span>Contatto</span>
+                <span>Richiesta</span>
+                <span>Fonte</span>
+                <span>Stato</span>
+                <span>Valore</span>
+              </>
+            </div>
+            <LeadRow
+              initials="GM"
+              name="Giulia Moretti"
+              email="giulia@aurora.it"
+              request="Nuovo showroom"
+              source="Website"
+              state="Nuovo"
+              tone="new"
+              value="€18.500"
+              fresh
+            />
+            <LeadRow
+              initials="CV"
+              name="Carlo Verdi"
+              email="carlo@studioverdi.it"
+              request="Consulenza"
+              source="Google Ads"
+              state="Follow-up"
+              tone="follow"
+              value="€28.000"
+            />
+            <LeadRow
+              initials="MB"
+              name="Martina Bassi"
+              email="martina@bassi.it"
+              request="Ristrutturazione"
+              source="Referral"
+              state="Qualificato"
+              tone="qualified"
+              value="€9.800"
+            />
+            <LeadRow
+              initials="LP"
+              name="Luca Pavan"
+              email="luca@pavan.it"
+              request="Ecommerce"
+              source="Instagram"
+              state="Vinto"
+              tone="won"
+              value="€14.200"
+            />
+          </div>
+          <div class="nod-toast">
+            <>
+              <IconUserPlus />
+              <span>
+                <>
+                  <b>Nuovo lead acquisito</b>
+                  <small>Giulia Moretti · Website form</small>
+                </>
+              </span>
+              <IconCheck />
+            </>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'pipeline' && (
+        <div class="nod-screen nod-screen--pipeline">
+          <ScreenHeading
+            eyebrow="Opportunità"
+            title="Pipeline commerciale"
+            description="€128.400 di valore aperto."
+          />
+          <div class="nod-pipeline">
+            <PipelineColumn title="Nuovi lead" count="4" tone="blue">
+              <>
+                <Deal name="Atelier Nord" subject="Sito corporate" value="€8.400" />
+                <Deal name="Forma Casa" subject="Campagna lead" value="€5.900" />
+              </>
+            </PipelineColumn>
+            <PipelineColumn title="Qualificati" count="3" tone="purple">
+              <>
+                <Deal name="Studio Verdi" subject="Portale riservato" value="€28.000" />
+                <Deal name="Casa 21" subject="Ecommerce" value="€14.200" />
+              </>
+            </PipelineColumn>
+            <PipelineColumn title="Proposta" count="2" tone="orange">
+              <Deal name="Aurora Habitat" subject="CRM e marketing" value="€18.500" moving />
+            </PipelineColumn>
+            <PipelineColumn title="Vinto" count="6" tone="green">
+              <article class="nod-won-target">
+                <>
+                  <IconCheck />
+                  <div>
+                    <>
+                      <b>Aurora Habitat</b>
+                      <small>Accordo confermato</small>
+                    </>
+                  </div>
+                  <strong>€18.500</strong>
+                </>
+              </article>
+            </PipelineColumn>
+          </div>
+          <div class="nod-pipeline-note">
+            <>
+              <IconRoute />
+              <span>Il prossimo passo è visibile a tutto il team.</span>
+            </>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'calendar' && (
+        <div class="nod-screen nod-screen--calendar">
+          <ScreenHeading
+            eyebrow="Agenda condivisa"
+            title="Calendario e task"
+            description="Impegni commerciali, senza passaggi persi."
+          />
+          <div class="nod-calendar">
+            <div class="nod-calendar__hours">
+              <>
+                <i />
+                <span>09</span>
+                <span>11</span>
+                <span>13</span>
+                <span>15</span>
+              </>
+            </div>
+            <section>
+              <>
+                <header>Lun 07</header>
+                <Event row="2" title="Call qualifica" detail="Atelier Nord" tone="blue" />
+              </>
+            </section>
+            <section>
+              <>
+                <header>Mar 08</header>
+                <Event row="4" title="Preparare proposta" detail="Casa 21" tone="gray" />
+              </>
+            </section>
+            <section>
+              <>
+                <header class="is-today">Mer 09</header>
+                <Event row="3" title="Follow-up" detail="Aurora · 14:30" tone="blue" fresh />
+              </>
+            </section>
+            <section>
+              <>
+                <header>Gio 10</header>
+                <Event row="1" title="Review campagne" detail="Team marketing" tone="gray" />
+              </>
+            </section>
+            <section>
+              <>
+                <header>Ven 11</header>
+                <Event row="3" title="Chiusura accordo" detail="Studio Verdi" tone="green" />
+              </>
+            </section>
+          </div>
+          <div class="nod-task-strip">
+            <>
+              <span>
+                <b>Oggi</b>
+              </span>
+              <p>Richiamare Aurora Habitat</p>
+              <em>14:30</em>
+              <button>
+                <IconCheck />
+                Completa
+              </button>
+            </>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'assistant' && (
+        <div class="nod-screen nod-screen--assistant">
+          <div class="nod-assistant-head">
+            <>
+              <span>
+                <IconRobot />
+              </span>
+              <div>
+                <>
+                  <h3>AI Assistant</h3>
+                  <p>Conosce lead, task e attività del workspace.</p>
+                </>
+              </div>
+              <em>Online</em>
+            </>
+          </div>
+          <div class="nod-chat">
+            <p class="nod-chat__question">Quali lead devo seguire prima?</p>
+            <div class="nod-chat__thinking">
+              <>
+                <i />
+                <i />
+                <i />
+              </>
+            </div>
+            <div class="nod-chat__answer">
+              <>
+                <span>
+                  <IconSparkles />
+                </span>
+                <div>
+                  <>
+                    <p>Partirei da questi tre contatti:</p>
+                    <ol>
+                      <>
+                        <li>
+                          <>
+                            <b>Studio Verdi</b>
+                            <small>€28.000 · proposta da chiudere</small>
+                          </>
+                        </li>
+                        <li>
+                          <>
+                            <b>Aurora Habitat</b>
+                            <small>€18.500 · follow-up oggi</small>
+                          </>
+                        </li>
+                        <li>
+                          <>
+                            <b>Casa 21</b>
+                            <small>€14.200 · preventivo visualizzato</small>
+                          </>
+                        </li>
+                      </>
+                    </ol>
+                    <p class="nod-chat__action">
+                      <IconCheck />
+                      Ho preparato i prossimi task.
+                    </p>
+                  </>
+                </div>
+              </>
+            </div>
+          </div>
+          <div class="nod-chat-input">
+            <>
+              <span>Chiedi qualcosa sui tuoi lead...</span>
+              <button>
+                <IconTargetArrow />
+              </button>
+            </>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'automations' && (
+        <div class="nod-screen nod-screen--automations">
+          <ScreenHeading
+            eyebrow="Processi attivi"
+            title="Automazioni"
+            description="Il lavoro ripetitivo procede anche quando il team è occupato."
+            action="Nuova automazione"
+          />
+          <div class="nod-automation-flow">
+            <>
+              <FlowStep icon="users" text="Nuovo lead" />
+              <i />
+              <FlowStep icon="sparkles" text="Qualifica AI" />
+              <i />
+              <FlowStep icon="calendar" text="Crea task" />
+              <i />
+              <FlowStep icon="mail" text="Follow-up" complete />
+            </>
+          </div>
+          <div class="nod-automation-list">
+            <Automation
+              title="Follow-up preventivo automatico"
+              text="Dopo 2 giorni senza risposta, crea un task di ricontatto."
+              meta="Stato lead → Crea task"
+            />
+            <Automation
+              title="Qualificazione nuovo lead"
+              text="Analizza la richiesta e suggerisce priorità e prossima azione."
+              meta="Nuovo lead → Analisi AI"
+              active
+            />
+            <Automation
+              title="Reminder appuntamento"
+              text="Invia un promemoria il giorno precedente."
+              meta="Evento creato → Promemoria"
+            />
+          </div>
+          <div class="nod-automation-toast">
+            <>
+              <IconCheck />
+              <span>
+                <>
+                  <b>Automazione eseguita</b>
+                  <small>Task assegnato a Enrico</small>
+                </>
+              </span>
+            </>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      variant === 'reports' && (
+        <div class="nod-screen nod-screen--reports">
+          <ScreenHeading
+            eyebrow="Controllo commerciale"
+            title="Report"
+            description="Dati leggibili, decisioni più rapide."
+          />
+          <div class="nod-report-kpis">
+            <>
+              <article>
+                <>
+                  <span>Valore vinto</span>
+                  <strong>€162.000</strong>
+                  <small>+22% sul periodo</small>
+                </>
+              </article>
+              <article>
+                <>
+                  <span>Conversione</span>
+                  <strong>31%</strong>
+                  <small>+6 punti</small>
+                </>
+              </article>
+              <article>
+                <>
+                  <span>Lead vinti</span>
+                  <strong>15</strong>
+                  <small>su 48 qualificati</small>
+                </>
+              </article>
+            </>
+          </div>
+          <div class="nod-report-grid">
+            <article class="nod-report-chart">
+              <>
+                <header>
+                  <>
+                    <b>Lead creati e vinti</b>
+                    <span>
+                      <i />
+                      Creati <i />
+                      Vinti
+                    </span>
+                  </>
+                </header>
+                <Chart dual />
+              </>
+            </article>
+            <article class="nod-report-sources">
+              <>
+                <b>Fonti migliori</b>
+                <Source name="Google Ads" value="42%" width="84%" />
+                <Source name="Website" value="31%" width="62%" />
+                <Source name="Referral" value="19%" width="38%" />
+                <Source name="Social" value="8%" width="16%" />
+              </>
+            </article>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style is:global>
+  .nod-ui {
+    --ui-blue: #1764f6;
+    --ui-ink: #17191f;
+    --ui-muted: #747983;
+    --ui-line: #e1e4e8;
+    --ui-bg: #f4f5f3;
+    position: relative;
+    display: grid;
+    grid-template: 3.5rem minmax(0, 1fr) / 10.75rem minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 16/9.35;
+    overflow: hidden;
+    border: 1px solid var(--ui-line);
+    border-radius: var(--nm-radius-lg);
+    background: var(--ui-bg);
+    color: var(--ui-ink);
+    box-shadow: var(--nm-shadow-soft);
+    font-size: clamp(0.58rem, 0.72vw, 0.78rem);
+  }
+  .nod-ui *,
+  .nod-ui *::before,
+  .nod-ui *::after {
+    box-sizing: border-box;
+  }
+  .nod-ui svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+  }
+  .nod-ui button {
+    font: inherit;
+  }
+  .nod-ui__topbar {
+    grid-area: 1/2;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--ui-line);
+    background: #fff;
+  }
+  .nod-ui__search {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: min(55%, 24rem);
+    height: 2.15rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.7rem;
+    background: #f7f8f7;
+    color: #9a9da4;
+  }
+  .nod-ui__bell {
+    margin-left: auto;
+  }
+  .nod-ui__avatar,
+  .nod-leads-row i {
+    display: grid;
+    place-items: center;
+    width: 1.8rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #e9efff;
+    color: var(--ui-blue);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .nod-ui__mobile-brand {
+    display: none;
+  }
+  .nod-ui__orbit {
+    width: 1.8rem;
+    aspect-ratio: 1;
+    border: 2px solid var(--ui-blue);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 0.28rem #fff,
+      inset 0 0 0 0.42rem var(--ui-blue);
+  }
+  .nod-ui__sidebar {
+    grid-area: 1/1/3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 0.85rem 0.6rem;
+    border-right: 1px solid var(--ui-line);
+    background: #eceeec;
+  }
+  .nod-ui__brand,
+  .nod-ui__workspace,
+  .nod-ui__sidebar nav span {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .nod-ui__brand {
+    min-height: 2.4rem;
+    padding-inline: 0.3rem;
+  }
+  .nod-ui__brand b {
+    font-size: 1rem;
+  }
+  .nod-ui__brand small,
+  .nod-ui__workspace small {
+    color: var(--ui-muted);
+  }
+  .nod-ui__workspace {
+    padding: 0.7rem 0.45rem;
+    border-block: 1px solid var(--ui-line);
+  }
+  .nod-ui__workspace > span {
+    display: grid;
+    place-items: center;
+    width: 1.8rem;
+    aspect-ratio: 1;
+    border-radius: 0.5rem;
+    background: #dfe7fb;
+    color: var(--ui-blue);
+    font-weight: 600;
+  }
+  .nod-ui__workspace div {
+    display: grid;
+  }
+  .nod-ui__workspace svg {
+    margin-left: auto;
+  }
+  .nod-ui__menu-label {
+    padding: 0.25rem 0.45rem 0;
+    color: var(--ui-muted);
+    font-size: 0.72em;
+    text-transform: uppercase;
+  }
+  .nod-ui__sidebar nav {
+    display: grid;
+    gap: 0.18rem;
+  }
+  .nod-ui__sidebar nav span {
+    min-height: 2rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: 0.55rem;
+    color: #686d75;
+  }
+  .nod-ui__sidebar nav span.is-active {
+    background: #fff;
+    color: var(--ui-ink);
+    font-weight: 600;
+  }
+  .nod-ui__content {
+    grid-area: 2/2;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .nod-screen {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.95rem;
+    height: 100%;
+    padding: clamp(0.9rem, 2.1vw, 1.6rem);
+  }
+  .nod-screen__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .nod-screen__heading > div {
+    min-width: 0;
+  }
+  .nod-screen__heading small:first-child {
+    color: var(--ui-blue);
+    font-weight: 600;
+  }
+  .nod-screen__heading h3 {
+    margin: 0.15rem 0 0;
+    font-size: 1.65em;
+    line-height: 1.1;
+  }
+  .nod-screen__heading p {
+    margin: 0.2rem 0 0;
+    color: var(--ui-muted);
+  }
+  .nod-screen__heading button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 0.8rem;
+    border: 1px solid var(--ui-blue);
+    border-radius: 0.65rem;
+    background: var(--ui-blue);
+    color: #fff;
+    white-space: nowrap;
+  }
+  .nod-kpis,
+  .nod-report-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .nod-kpis article,
+  .nod-chart-card,
+  .nod-priority-card,
+  .nod-report-kpis article,
+  .nod-report-chart,
+  .nod-report-sources {
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+  }
+  .nod-kpis article {
+    display: grid;
+    gap: 0.12rem;
+    padding: 0.75rem;
+  }
+  .nod-kpis span,
+  .nod-report-kpis span {
+    color: var(--ui-muted);
+    font-size: 0.82em;
+    text-transform: uppercase;
+  }
+  .nod-kpis strong {
+    font-size: 1.75em;
+  }
+  .nod-kpis small {
+    color: var(--ui-muted);
+  }
+  .nod-kpis .is-positive,
+  .nod-report-kpis small {
+    color: #159668;
+  }
+  .nod-overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(9rem, 0.7fr);
+    gap: 0.65rem;
+    min-height: 0;
+  }
+  .nod-chart-card {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 0.8rem;
+  }
+  .nod-chart-card > div,
+  .nod-report-chart header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .nod-chart-card small {
+    color: var(--ui-muted);
+  }
+  .nod-chart-card svg,
+  .nod-report-chart svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .nod-chart-grid path {
+    fill: none;
+    stroke: #e8eaed;
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+  }
+  .nod-chart-area {
+    fill: rgb(23 100 246/0.08);
+  }
+  .nod-chart-line,
+  .nod-report-line-green {
+    fill: none;
+    stroke: var(--ui-blue);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 900;
+    animation: nod-draw 6s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-chart-points circle {
+    fill: var(--ui-blue);
+  }
+  .nod-priority-card {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    padding: 0.85rem;
+  }
+  .nod-priority-card > div {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    color: var(--ui-blue);
+  }
+  .nod-priority-card > span {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    padding-block: 0.55rem;
+    border-top: 1px solid var(--ui-line);
+  }
+  .nod-priority-card i,
+  .nod-pipeline header i {
+    width: 0.48rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+  .is-orange {
+    background: #e98c2b;
+  }
+  .is-red {
+    background: #e94b56;
+  }
+  .is-blue {
+    background: var(--ui-blue);
+  }
+  .is-purple {
+    background: #8f55d4;
+  }
+  .is-green {
+    background: #22a875;
+  }
+  .nod-leads-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.7rem;
+    background: #fff;
+    color: #989ca3;
+  }
+  .nod-leads-toolbar b {
+    margin-left: auto;
+    padding-left: 0.8rem;
+    border-left: 1px solid var(--ui-line);
+    color: var(--ui-ink);
+    font-weight: 500;
+  }
+  .nod-leads-table {
+    overflow: hidden;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+  }
+  .nod-leads-row {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr 0.75fr 0.8fr 0.55fr;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 3.2rem;
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--ui-line);
+  }
+  .nod-leads-row:first-child {
+    border-top: 0;
+  }
+  .nod-leads-row > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .nod-leads-row b {
+    display: grid;
+    min-width: 0;
+  }
+  .nod-leads-row small {
+    overflow: hidden;
+    color: var(--ui-muted);
+    font-weight: 400;
+    text-overflow: ellipsis;
+  }
+  .nod-leads-row em {
+    display: inline-flex;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 0.3rem 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+  }
+  .nod-leads-row em.is-new {
+    background: #eaf1ff;
+    color: #1764f6;
+  }
+  .nod-leads-row em.is-follow {
+    background: #fff0f7;
+    color: #bd3775;
+  }
+  .nod-leads-row em.is-qualified {
+    background: #f5edff;
+    color: #8f55d4;
+  }
+  .nod-leads-row em.is-won {
+    background: #e9f9f2;
+    color: #16865e;
+  }
+  .nod-leads-row.is-head {
+    min-height: 2.2rem;
+    background: #fafafa;
+    color: var(--ui-muted);
+    font-size: 0.78em;
+    text-transform: uppercase;
+  }
+  .nod-leads-row--new {
+    animation: nod-row-in 7s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-toast,
+  .nod-automation-toast {
+    position: absolute;
+    right: 1.4rem;
+    bottom: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #cbd8fc;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 12px 35px rgb(18 31 62/0.14);
+    animation: nod-toast 7s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-toast > svg:first-child,
+  .nod-automation-toast > svg {
+    color: var(--ui-blue);
+  }
+  .nod-toast > svg:last-child {
+    margin-left: 0.5rem;
+    color: #159668;
+  }
+  .nod-toast span,
+  .nod-automation-toast span {
+    display: grid;
+  }
+  .nod-toast small,
+  .nod-automation-toast small {
+    color: var(--ui-muted);
+  }
+  .nod-pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.6rem;
+    min-height: 0;
+  }
+  .nod-pipeline section {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding: 0.55rem;
+    border-radius: 0.75rem;
+    background: #eceeec;
+  }
+  .nod-pipeline header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem;
+  }
+  .nod-pipeline header span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+  .nod-pipeline header b {
+    display: grid;
+    place-items: center;
+    min-width: 1.4rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .nod-pipeline article {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.7rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.65rem;
+    background: #fff;
+    box-shadow: 0 3px 10px rgb(15 20 30/0.04);
+  }
+  .nod-pipeline article small {
+    color: var(--ui-muted);
+  }
+  .nod-pipeline article strong {
+    margin-top: 0.3rem;
+    font-size: 1.05em;
+  }
+  .nod-won-target {
+    opacity: 0;
+    animation: nod-won 8s var(--nm-motion-ease-layout) infinite;
+  }
+  .nod-won-target > svg {
+    color: #159668;
+  }
+  .nod-won-target div {
+    display: grid;
+  }
+  .nod-moving-lead {
+    position: relative;
+    z-index: 2;
+    animation: nod-move-lead 8s var(--nm-motion-ease-layout) infinite;
+  }
+  .nod-pipeline-note {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+    color: var(--ui-muted);
+  }
+  .nod-pipeline-note svg {
+    color: var(--ui-blue);
+  }
+  .nod-calendar {
+    display: grid;
+    grid-template-columns: 2rem repeat(5, minmax(0, 1fr));
+    min-height: 0;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+    overflow: hidden;
+  }
+  .nod-calendar__hours {
+    display: grid;
+    grid-template-rows: 2rem repeat(4, 1fr);
+    color: var(--ui-muted);
+    text-align: center;
+  }
+  .nod-calendar__hours span {
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--ui-line);
+    font-size: 0.75em;
+  }
+  .nod-calendar section {
+    display: grid;
+    grid-template-rows: 2rem repeat(5, 1fr);
+    min-width: 0;
+    border-left: 1px solid var(--ui-line);
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(20% - 1px),
+      var(--ui-line) calc(20% - 1px),
+      var(--ui-line) 20%
+    );
+  }
+  .nod-calendar header {
+    display: grid;
+    place-items: center;
+    border-bottom: 1px solid var(--ui-line);
+    background: #fff;
+    color: var(--ui-muted);
+  }
+  .nod-calendar header.is-today {
+    color: var(--ui-blue);
+    font-weight: 700;
+  }
+  .nod-calendar article {
+    grid-row: var(--event-row) / span 2;
+    align-self: start;
+    display: grid;
+    gap: 0.15rem;
+    margin: 0.28rem;
+    padding: 0.45rem;
+    border-radius: 0.48rem;
+    background: #eff3fc;
+    color: #2a58b8;
+  }
+  .nod-calendar article.is-gray {
+    background: #f0f1f2;
+    color: #555c65;
+  }
+  .nod-calendar article.is-green {
+    background: #e8f7f1;
+    color: #167c59;
+  }
+  .nod-calendar article small {
+    opacity: 0.78;
+  }
+  .nod-calendar__new {
+    animation: nod-event-in 7s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-task-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.7rem;
+    background: #fff;
+  }
+  .nod-task-strip p {
+    margin: 0;
+  }
+  .nod-task-strip em {
+    margin-left: auto;
+    color: var(--ui-muted);
+    font-style: normal;
+  }
+  .nod-task-strip button {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.65rem;
+    background: var(--ui-blue);
+    color: #fff;
+  }
+  .nod-screen--assistant {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+  .nod-assistant-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .nod-assistant-head > span,
+  .nod-chat__answer > span {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    aspect-ratio: 1;
+    border-radius: 0.7rem;
+    background: #e6edff;
+    color: var(--ui-blue);
+  }
+  .nod-assistant-head div {
+    display: grid;
+  }
+  .nod-assistant-head h3 {
+    font-size: 1.55em;
+  }
+  .nod-assistant-head p {
+    color: var(--ui-muted);
+  }
+  .nod-assistant-head em {
+    margin-left: auto;
+    color: #159668;
+    font-style: normal;
+  }
+  .nod-chat {
+    display: grid;
+    align-content: start;
+    gap: 0.65rem;
+    padding-top: 0.7rem;
+  }
+  .nod-chat__question {
+    justify-self: end;
+    margin: 0;
+    border-radius: 0.8rem 0.8rem 0.2rem 0.8rem;
+    padding: 0.7rem 0.85rem;
+    background: #17191f;
+    color: #fff;
+    animation: nod-question 8s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-chat__thinking {
+    display: flex;
+    gap: 0.2rem;
+    width: fit-content;
+    margin-left: 3rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+    animation: nod-thinking 8s both infinite;
+  }
+  .nod-chat__thinking i {
+    width: 0.3rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #8d9299;
+    animation: nod-dot 0.8s ease-in-out infinite alternate;
+  }
+  .nod-chat__thinking i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .nod-chat__thinking i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .nod-chat__answer {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.6rem;
+    opacity: 0;
+    animation: nod-answer 8s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-chat__answer > div {
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    padding: 0.75rem;
+    background: #fff;
+  }
+  .nod-chat__answer p {
+    margin: 0;
+  }
+  .nod-chat__answer ol {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.65rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nod-chat__answer li {
+    display: grid;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--ui-line);
+  }
+  .nod-chat__answer small {
+    color: var(--ui-muted);
+  }
+  .nod-chat__action {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    color: #159668;
+    font-weight: 600;
+  }
+  .nod-chat-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.8rem;
+    padding: 0.45rem 0.5rem 0.45rem 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+    color: #a1a4aa;
+  }
+  .nod-chat-input button {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    aspect-ratio: 1;
+    margin-left: auto;
+    border: 0;
+    border-radius: 0.55rem;
+    background: var(--ui-blue);
+    color: #fff;
+  }
+  .nod-automation-flow {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr auto 1fr auto;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.8rem;
+    background: #fff;
+  }
+  .nod-automation-flow span {
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    min-width: 5.4rem;
+  }
+  .nod-automation-flow span svg {
+    color: var(--ui-blue);
+  }
+  .nod-automation-flow > i {
+    height: 2px;
+    background: linear-gradient(90deg, #b9c8f5 50%, transparent 50%) 0 0/8px 2px;
+    animation: nod-flow-line 1.2s linear infinite;
+  }
+  .nod-automation-flow .is-complete {
+    color: #16865e;
+  }
+  .nod-automation-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .nod-automation-list article {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--ui-line);
+    border-radius: 0.7rem;
+    background: #fff;
+  }
+  .nod-automation-list article > span {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    aspect-ratio: 1;
+    border-radius: 0.6rem;
+    background: #e7edff;
+    color: var(--ui-blue);
+  }
+  .nod-automation-list article div {
+    display: grid;
+  }
+  .nod-automation-list p {
+    color: var(--ui-muted);
+  }
+  .nod-automation-list small {
+    width: fit-content;
+    margin-top: 0.2rem;
+    border-radius: 999px;
+    padding: 0.2rem 0.4rem;
+    background: #f0f1f2;
+    color: var(--ui-muted);
+  }
+  .nod-toggle {
+    position: relative;
+    width: 2rem;
+    height: 1.05rem;
+    border-radius: 999px;
+    background: var(--ui-blue);
+  }
+  .nod-toggle::after {
+    content: '';
+    position: absolute;
+    top: 0.14rem;
+    left: 1.08rem;
+    width: 0.77rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .nod-automation-active {
+    animation: nod-automation-highlight 7s ease-in-out infinite;
+  }
+  .nod-automation-toast {
+    animation-name: nod-automation-toast;
+  }
+  .nod-report-kpis {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .nod-report-kpis article {
+    display: grid;
+    gap: 0.12rem;
+    padding: 0.75rem;
+  }
+  .nod-report-kpis strong {
+    font-size: 1.7em;
+  }
+  .nod-report-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(10rem, 0.7fr);
+    gap: 0.65rem;
+    min-height: 0;
+  }
+  .nod-report-chart {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 0.8rem;
+  }
+  .nod-report-chart header span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--ui-muted);
+  }
+  .nod-report-chart header i {
+    width: 0.45rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--ui-blue);
+  }
+  .nod-report-chart header i:nth-of-type(2) {
+    background: #22a875;
+  }
+  .nod-report-line-green {
+    stroke: #22a875;
+    animation-delay: 0.25s;
+  }
+  .nod-report-sources {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    padding: 0.85rem;
+  }
+  .nod-report-sources div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .nod-report-sources i {
+    grid-column: 1/-1;
+    display: block;
+    width: var(--bar);
+    height: 0.35rem;
+    border-radius: 999px;
+    background: var(--ui-blue);
+    transform-origin: left;
+    animation: nod-bars 6s var(--nm-motion-ease-enter) infinite;
+  }
+  .nod-report-sources em {
+    color: var(--ui-muted);
+    font-style: normal;
+  }
+  @keyframes nod-draw {
+    0%,
+    10% {
+      stroke-dashoffset: 900;
+    }
+    34%,
+    90% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: 900;
+    }
+  }
+  @keyframes nod-row-in {
+    0%,
+    8% {
+      opacity: 0;
+      transform: translateY(-0.6rem);
+      background: #eaf1ff;
+    }
+    20%,
+    82% {
+      opacity: 1;
+      transform: none;
+      background: #fff;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes nod-toast {
+    0%,
+    12%,
+    88%,
+    100% {
+      opacity: 0;
+      transform: translateY(0.7rem);
+    }
+    24%,
+    76% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-move-lead {
+    0%,
+    28% {
+      opacity: 1;
+      transform: none;
+    }
+    50%,
+    74% {
+      opacity: 0;
+      transform: translateX(calc(100% + 0.6rem));
+    }
+    86%,
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-won {
+    0%,
+    38%,
+    88%,
+    100% {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+    52%,
+    78% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-event-in {
+    0%,
+    15%,
+    90%,
+    100% {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    28%,
+    80% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-question {
+    0%,
+    8%,
+    92%,
+    100% {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    18%,
+    84% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-thinking {
+    0%,
+    22%,
+    52%,
+    100% {
+      opacity: 0;
+    }
+    30%,
+    45% {
+      opacity: 1;
+    }
+  }
+  @keyframes nod-dot {
+    to {
+      transform: translateY(-0.15rem);
+    }
+  }
+  @keyframes nod-answer {
+    0%,
+    42% {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    56%,
+    90% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes nod-flow-line {
+    to {
+      background-position: 8px 0;
+    }
+  }
+  @keyframes nod-automation-highlight {
+    0%,
+    18%,
+    78%,
+    100% {
+      border-color: var(--ui-line);
+      box-shadow: none;
+    }
+    34%,
+    64% {
+      border-color: #97b2fb;
+      box-shadow: 0 0 0 3px rgb(23 100 246/0.08);
+    }
+  }
+  @keyframes nod-automation-toast {
+    0%,
+    35%,
+    92%,
+    100% {
+      opacity: 0;
+      transform: translateY(0.7rem);
+    }
+    50%,
+    82% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes nod-bars {
+    0%,
+    12% {
+      transform: scaleX(0);
+    }
+    34%,
+    90% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(0);
+    }
+  }
+  @media (width <= 780px) {
+    .nod-ui {
+      grid-template: 3rem minmax(0, 1fr) / 1fr;
+      aspect-ratio: 4/3.25;
+      font-size: clamp(0.52rem, 1.6vw, 0.68rem);
+      border-radius: var(--nm-radius-md);
+    }
+    .nod-ui__sidebar {
+      display: none;
+    }
+    .nod-ui__topbar {
+      grid-area: 1/1;
+      padding: 0.5rem 0.65rem;
+    }
+    .nod-ui__mobile-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 650;
+    }
+    .nod-ui__mobile-brand .nod-ui__orbit {
+      width: 1.3rem;
+    }
+    .nod-ui__search {
+      width: auto;
+      flex: 1;
+      min-width: 0;
+    }
+    .nod-ui__search span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .nod-ui__bell {
+      display: none;
+    }
+    .nod-ui__avatar {
+      width: 1.6rem;
+    }
+    .nod-ui__content {
+      grid-area: 2/1;
+    }
+    .nod-screen {
+      gap: 0.65rem;
+      padding: 0.7rem;
+    }
+    .nod-screen__heading h3 {
+      font-size: 1.5em;
+    }
+    .nod-screen__heading p,
+    .nod-screen__heading small:first-child {
+      display: none;
+    }
+    .nod-screen__heading button {
+      min-height: 1.85rem;
+      padding: 0 0.5rem;
+    }
+    .nod-kpis {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .nod-kpis article:nth-child(n + 3) {
+      display: none;
+    }
+    .nod-kpis article {
+      padding: 0.55rem;
+    }
+    .nod-kpis strong {
+      font-size: 1.55em;
+    }
+    .nod-overview-grid {
+      grid-template-columns: 1fr;
+    }
+    .nod-priority-card {
+      display: none;
+    }
+    .nod-leads-row {
+      grid-template-columns: 1.35fr 0.7fr 0.55fr;
+      min-height: 2.65rem;
+      padding: 0.4rem 0.5rem;
+    }
+    .nod-leads-row > span:nth-child(2),
+    .nod-leads-row > span:nth-child(3) {
+      display: none;
+    }
+    .nod-leads-row:nth-child(n + 5) {
+      display: none;
+    }
+    .nod-leads-toolbar {
+      padding: 0.5rem;
+    }
+    .nod-leads-toolbar b {
+      display: none;
+    }
+    .nod-toast,
+    .nod-automation-toast {
+      right: 0.65rem;
+      bottom: 0.65rem;
+    }
+    .nod-pipeline {
+      grid-template-columns: repeat(3, minmax(7rem, 1fr));
+      overflow: hidden;
+    }
+    .nod-pipeline section:nth-child(2) {
+      display: none;
+    }
+    .nod-pipeline article:nth-of-type(2) {
+      display: none;
+    }
+    .nod-pipeline-note {
+      display: none;
+    }
+    .nod-calendar {
+      grid-template-columns: 1.6rem repeat(3, minmax(0, 1fr));
+    }
+    .nod-calendar section:nth-of-type(n + 4) {
+      display: none;
+    }
+    .nod-task-strip p {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .nod-task-strip span {
+      display: none;
+    }
+    .nod-screen--assistant {
+      padding-inline: 0.8rem;
+    }
+    .nod-chat {
+      padding-top: 0;
+    }
+    .nod-chat__answer ol li:nth-child(3) {
+      display: none;
+    }
+    .nod-chat__answer > span {
+      width: 1.9rem;
+    }
+    .nod-chat__answer > div {
+      padding: 0.6rem;
+    }
+    .nod-chat-input {
+      min-height: 2.35rem;
+    }
+    .nod-automation-flow {
+      grid-template-columns: repeat(4, 1fr);
+      padding: 0.5rem;
+    }
+    .nod-automation-flow > i {
+      display: none;
+    }
+    .nod-automation-flow span {
+      min-width: 0;
+      font-size: 0.88em;
+      text-align: center;
+    }
+    .nod-automation-list article {
+      padding: 0.5rem;
+    }
+    .nod-automation-list article:nth-child(3) {
+      display: none;
+    }
+    .nod-automation-list p {
+      display: none;
+    }
+    .nod-report-kpis article {
+      padding: 0.55rem;
+    }
+    .nod-report-kpis article:nth-child(3) {
+      display: none;
+    }
+    .nod-report-kpis {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .nod-report-grid {
+      grid-template-columns: 1fr;
+    }
+    .nod-report-sources {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nod-ui *,
+    .nod-ui *::before,
+    .nod-ui *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .nod-leads-row--new,
+    .nod-won-target,
+    .nod-chat__answer,
+    .nod-calendar__new {
+      opacity: 1;
+      transform: none;
+    }
+    .nod-moving-lead,
+    .nod-toast,
+    .nod-automation-toast,
+    .nod-chat__thinking {
+      display: none;
+    }
+  }
+</style>

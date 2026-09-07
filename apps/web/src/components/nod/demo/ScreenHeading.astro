@@ -1,0 +1,23 @@
+---
+import { IconBolt, IconUserPlus } from '@tabler/icons-astro';
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  action?: string;
+}
+const { eyebrow, title, description, action } = Astro.props;
+const ActionIcon = action?.includes('lead') ? IconUserPlus : IconBolt;
+---
+
+<div class="nod-screen__heading">
+  <div><small>{eyebrow}</small><h3>{title}</h3><p>{description}</p></div>
+  {
+    action && (
+      <button>
+        <ActionIcon />
+        {action}
+      </button>
+    )
+  }
+</div>

@@ -1,0 +1,40 @@
+---
+interface Props {
+  dual?: boolean;
+}
+const { dual = false } = Astro.props;
+---
+
+<svg viewBox="0 0 650 220" preserveAspectRatio="none">
+  <g class="nod-chart-grid"><path d="M16 38H634M16 96H634M16 154H634M16 212H634"></path></g>
+  {
+    !dual && (
+      <path
+        class="nod-chart-area"
+        d="M18 180 C88 160 126 135 188 140 S296 86 366 96 S488 56 632 32 L632 212 L18 212Z"
+      />
+    )
+  }
+  <path class="nod-chart-line" d="M18 180 C88 160 126 135 188 140 S296 86 366 96 S488 56 632 32"
+  ></path>
+  {
+    dual && (
+      <path
+        class="nod-report-line-green"
+        d="M18 207 C102 201 144 188 210 191 S332 163 404 168 S528 127 632 136"
+      />
+    )
+  }
+  {
+    !dual && (
+      <g class="nod-chart-points">
+        <>
+          <circle cx="18" cy="180" r="5" />
+          <circle cx="188" cy="140" r="5" />
+          <circle cx="366" cy="96" r="5" />
+          <circle cx="632" cy="32" r="5" />
+        </>
+      </g>
+    )
+  }
+</svg>

@@ -1,0 +1,13 @@
+---
+interface Props {
+  name: string;
+  subject: string;
+  value: string;
+  moving?: boolean;
+}
+const { name, subject, value, moving = false } = Astro.props;
+---
+
+<article class:list={[moving && 'nod-moving-lead']}>
+  <b>{name}</b><small>{subject}</small><strong>{value}</strong>
+</article>
