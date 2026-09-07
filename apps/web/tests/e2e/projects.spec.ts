@@ -37,24 +37,36 @@ test.describe('projects', () => {
     expect(structuredData).toContain('BRB');
   });
 
-  for (const slug of [
-    'app-mobile-programma-fedelta-sirene-blu',
-    'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
-    'sviluppo-sito-web-fotovoltaico-progetto-e',
-    'sviluppo-sito-web-allestimenti-fieristici-albertini',
-    'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
-    'sviluppo-crm-custom-venitaly'
-  ]) {
-    test(`${slug} stays inside a 390px viewport`, async ({ page }) => {
-      await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto(`/progetti/${slug}/`, { waitUntil: 'networkidle' });
+  test('keeps every case study inside all supported viewports', async ({ page }) => {
+    const slugs = [
+      'app-mobile-programma-fedelta-sirene-blu',
+      'sviluppo-crm-custom-venitaly',
+      'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
+      'sviluppo-sito-web-allestimenti-fieristici-albertini',
+      'sviluppo-sito-web-fotovoltaico-progetto-e',
+      'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+      'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa',
+      'casi-studio-strategia-digitale-ecommerce-brb'
+    ];
+    const widths = [390, 430, 768, 1024, 1280, 1440, 1728];
 
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-      await expect(page.locator('.case-hero__media img')).toBeVisible();
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-      );
-      expect(overflow).toBeLessThanOrEqual(1);
-    });
-  }
+    for (const width of widths) {
+      await page.setViewportSize({ width, height: width < 768 ? 844 : 1000 });
+      for (const slug of slugs) {
+        await page.goto(`/progetti/${slug}/`, { waitUntil: 'domcontentloaded' });
+        await expect(
+          page.getByRole('heading', { level: 1 }),
+          `${slug} at ${width}px`
+        ).toBeVisible();
+        await expect(
+          page.locator('.case-hero__media img'),
+          `${slug} cover at ${width}px`
+        ).toBeVisible();
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+        );
+        expect(overflow, `${slug} overflow at ${width}px`).toBeLessThanOrEqual(1);
+      }
+    }
+  });
 });
