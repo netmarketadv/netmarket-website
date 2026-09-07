@@ -27,7 +27,7 @@ Output principali:
 - `docs/migration/insight-url-map.md`;
 - `docs/migration/insight-migration-report.md`.
 
-Sono stati rilevati 26 post pubblici legacy. La migrazione media verso il nuovo CMS non viene eseguita senza credenziali/autorizzazione di import: il frontend non renderizza immagini locali mancanti per evitare 404.
+Sono stati rilevati 26 post pubblici legacy. Le 20 cover disponibili sono conservate nel frontend come fallback WebP responsive a 800, 1200 e 1600px; i sei articoli privi di featured image usano la superficie editoriale neutra. La migrazione dei media nel nuovo CMS non viene eseguita senza credenziali/autorizzazione di import.
 
 ## Archivio editoriale
 

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { basename, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import type { CaseStudy, Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { insightSchema } from '@netmarket/schemas';
 import { getInsight, getInsights } from '@/lib/api/client';
@@ -185,7 +185,7 @@ function fallbackInsights(): Insight[] {
 
 function toInsight(item: MigrationInsight): Insight {
   const image = item.media.find((media) => media.role === 'featured');
-  const asset = image ? mediaAsset(item.id, image.sourceUrl, image.alt || item.title) : null;
+  const asset = image ? mediaAsset(item.id, image.alt || item.title) : null;
   const description = clampText(item.seo.description || item.excerpt || item.title, 190);
   return insightSchema.parse({
     id: item.id,
@@ -222,19 +222,50 @@ function toInsight(item: MigrationInsight): Insight {
   });
 }
 
-function mediaAsset(id: number, sourceUrl: string, alt: string): MediaAsset | null {
-  const filename = `${id}-${basename(new URL(sourceUrl).pathname)}`;
+function mediaAsset(id: number, alt: string): MediaAsset | null {
+  const filename = `${id}-cover.webp`;
   const localPath = resolve(process.cwd(), `public/media/insights/legacy/${filename}`);
   if (!existsSync(localPath)) return null;
+  const dimensions = insightImageDimensions[id];
   return {
     id,
     url: `/media/insights/legacy/${filename}`,
+    srcset: [800, 1200, 1600]
+      .map((width) =>
+        width === 1600
+          ? `/media/insights/legacy/${filename} ${width}w`
+          : `/media/insights/legacy/${id}-cover-${width}.webp ${width}w`
+      )
+      .join(', '),
     alt,
-    width: null,
-    height: null,
-    mimeType: mimeType(filename)
+    width: dimensions?.[0] ?? null,
+    height: dimensions?.[1] ?? null,
+    mimeType: 'image/webp'
   };
 }
+
+const insightImageDimensions: Record<number, readonly [number, number]> = {
+  720: [1600, 901],
+  959: [1600, 902],
+  962: [1600, 844],
+  966: [1600, 1067],
+  970: [1600, 1067],
+  974: [1600, 1067],
+  983: [1600, 915],
+  2957: [1600, 1200],
+  2981: [1600, 1060],
+  2999: [1600, 1060],
+  3021: [1600, 1060],
+  3028: [1600, 1060],
+  3034: [1600, 1068],
+  3040: [1600, 1245],
+  3050: [1600, 900],
+  3111: [1600, 1067],
+  3123: [1600, 1245],
+  4401: [1600, 900],
+  5264: [1600, 1067],
+  5297: [1600, 1067]
+};
 
 function removeMissingImages(markup: string): string {
   return markup.replace(
@@ -260,14 +291,6 @@ function stableId(value: string): number {
   let hash = 0;
   for (const char of value) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   return hash;
-}
-
-function mimeType(filename: string): string {
-  if (filename.endsWith('.svg')) return 'image/svg+xml';
-  if (filename.endsWith('.png')) return 'image/png';
-  if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) return 'image/jpeg';
-  if (filename.endsWith('.webp')) return 'image/webp';
-  return 'application/octet-stream';
 }
 
 function clampText(value: string, maxLength: number): string {
