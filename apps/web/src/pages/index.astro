@@ -1,22 +1,16 @@
 ---
 import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import CaseStudyShowcase from '@/components/blocks/CaseStudyShowcase.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
 import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
 import TeamSection from '@/components/blocks/TeamSection.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
-import Stack from '@/components/layout/Stack.astro';
 import Button from '@/components/ui/Button.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { clientLogos, cmsMedia, googleTrust, questions, workSteps } from '@/data/home';
 import { teamMembers } from '@/data/team';
-import {
-  getProjectArchiveData,
-  projectCategory,
-  projectClient,
-  projectDescription,
-  projectPath
-} from '@/lib/projects/content';
+import { getProjectArchiveData } from '@/lib/projects/content';
 import { getServiceArchiveData, servicePath } from '@/lib/services/content';
 import { personJsonLd } from '@netmarket/seo';
 import type { Service } from '@netmarket/schemas';
@@ -251,64 +245,7 @@ const faqJsonLd = {
     </Container>
   </Section>
 
-  {
-    featuredProject && (
-      <Section class="home-work-section" labelledby="work-title">
-        <Container wide>
-          <Stack gap="var(--nm-space-xl)">
-            <div class="home-section-heading" data-reveal="line">
-              <p class="nm-meta">Progetti</p>
-              <h2 id="work-title">Case study e progetti reali.</h2>
-              <p>
-                Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne
-                e comunicazione.
-              </p>
-            </div>
-            <div
-              class="home-case-slider"
-              role="region"
-              aria-label="Slider case study Netmarket"
-              data-reveal="up"
-            >
-              <div class="home-case-slider__track">
-                {[...visibleProjects, ...visibleProjects].map((project, index) => (
-                  <a
-                    class:list={[
-                      'home-case-card',
-                      index % 5 === 0 && 'home-case-card--info',
-                      index % 5 === 1 && 'home-case-card--portrait',
-                      index % 5 === 2 && 'home-case-card--wide'
-                    ]}
-                    href={projectPath(project.slug)}
-                    data-cursor-label="Guarda"
-                  >
-                    <div class="home-case-card__media">
-                      <img
-                        src={project.cover!.url}
-                        alt={project.cover!.alt || project.title}
-                        loading={index < visibleProjects.length ? 'eager' : 'lazy'}
-                        decoding="async"
-                      />
-                      <span>{projectCategory(project)}</span>
-                    </div>
-                    <div class="home-case-card__body">
-                      <h3>{projectClient(project)}</h3>
-                      <p>{projectDescription(project)}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div class="home-work-section__actions">
-              <Button href="/progetti/" variant="secondary">
-                Tutti i casi studio
-              </Button>
-            </div>
-          </Stack>
-        </Container>
-      </Section>
-    )
-  }
+  {featuredProject && <CaseStudyShowcase projects={visibleProjects} titleId="work-title" />}
 
   <Section class="home-method-section" labelledby="method-title">
     <Container wide>

@@ -9,7 +9,9 @@ describe('agency and contact pages', () => {
     expect(agency).toContain('ClientMarquee');
     expect(agency).toContain('personJsonLd');
     expect(agency).toContain('id="team"');
-    expect(agency).toContain('agency-team__grid');
+    expect(agency).toContain('TeamSection');
+    expect(agency).toContain('CaseStudyShowcase');
+    expect(agency).not.toContain('agency-careers');
     expect(agency).toContain('/servizi/siti-web/');
   });
 

@@ -65,12 +65,33 @@ test.describe('insight, agency and contact', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Padova');
     await expect(page.locator('#team')).toBeVisible();
     await expect(page.locator('.client-marquee')).toBeVisible();
-    await expect(page.locator('.agency-project-card').first()).toBeVisible();
+    await expect(page.locator('.home-case-slider')).toBeVisible();
+    await expect(page.locator('.home-case-card').first()).toBeVisible();
+    await expect(page.locator('.person-card')).toHaveCount(5);
     await expect(page.locator('[data-agency-timeline-step]')).toHaveCount(4);
-    await expect(page.getByRole('link', { name: 'Conosciamoci' })).toHaveAttribute(
-      'href',
-      '/lavora-con-noi/'
+    await expect(page.getByRole('link', { name: 'Conosciamoci' })).toHaveCount(0);
+
+    const methodTitleStyles = await page.locator('.agency-method__steps h3').evaluateAll((titles) =>
+      titles.map((title) => {
+        const style = window.getComputedStyle(title);
+        return [style.color, style.fontSize, style.fontWeight, style.lineHeight].join('|');
+      })
     );
+    expect(methodTitleStyles).toHaveLength(6);
+    expect(new Set(methodTitleStyles).size).toBe(1);
+    await expect(page.locator('.agency-method__steps .nm-heading-o-word')).toHaveCount(0);
+
+    const desktopHeadingSizes = await page.evaluate(() => ({
+      h1: Number.parseFloat(
+        window.getComputedStyle(document.querySelector<HTMLElement>('.agency-hero h1')!).fontSize
+      ),
+      h2: Number.parseFloat(
+        window.getComputedStyle(document.querySelector<HTMLElement>('.agency-intro h2')!).fontSize
+      )
+    }));
+    expect(desktopHeadingSizes.h1).toBeLessThanOrEqual(92);
+    expect(desktopHeadingSizes.h2).toBeLessThanOrEqual(74);
+
     await page.setViewportSize({ width: 390, height: 900 });
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))

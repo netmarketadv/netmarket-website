@@ -5,6 +5,10 @@ describe('homepage source', () => {
   it('contains required Netmarket positioning copy', () => {
     const source = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
     const dataSource = readFileSync(new URL('../src/data/home.ts', import.meta.url), 'utf8');
+    const caseStudyShowcase = readFileSync(
+      new URL('../src/components/blocks/CaseStudyShowcase.astro', import.meta.url),
+      'utf8'
+    );
     expect(source).toContain('Netmarket');
     expect(source).toContain('Agenzia marketing e siti web a');
     expect(source).toContain('Netmarket, Padova dal 1986');
@@ -12,8 +16,9 @@ describe('homepage source', () => {
     expect(source).toContain('nm-heading-marker');
     expect(source).toContain('Servizi integrati, non attività scollegate.');
     expect(source).toContain('servicePath(service.slug)');
-    expect(source).toContain('home-case-slider');
-    expect(source).toContain('projectPath(project.slug)');
+    expect(source).toContain('CaseStudyShowcase');
+    expect(caseStudyShowcase).toContain('home-case-slider');
+    expect(caseStudyShowcase).toContain('projectPath(project.slug)');
     expect(source).not.toContain('insightPath(insight.slug)');
     expect(source).toContain('href="/contatti/"');
     expect(source).toContain('href="/progetti/"');
@@ -104,7 +109,9 @@ describe('homepage source', () => {
     expect(agency).toContain('Netmarket, agenzia a Padova');
     expect(agency).toContain('data-agency-timeline');
     expect(agency).toContain('1986');
-    expect(agency).toContain('href="/lavora-con-noi/"');
+    expect(agency).not.toContain('href="/lavora-con-noi/"');
+    expect(agency).toContain('CaseStudyShowcase');
+    expect(agency).toContain('TeamSection');
     expect(agency).toContain('personJsonLd');
     expect(careers).toContain('Candidatura spontanea');
     expect(careers).toContain('webPageJsonLd');

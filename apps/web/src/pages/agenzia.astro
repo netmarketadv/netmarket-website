@@ -4,23 +4,18 @@ import {
   IconCode,
   IconMessageCircle,
   IconRoute,
-  IconSparkles,
   IconTargetArrow
 } from '@tabler/icons-astro';
 import { breadcrumbJsonLd, organizationJsonLd, personJsonLd, webPageJsonLd } from '@netmarket/seo';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseStudyShowcase from '@/components/blocks/CaseStudyShowcase.astro';
 import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import TeamSection from '@/components/blocks/TeamSection.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import { clientLogos } from '@/data/home';
 import { teamMembers } from '@/data/team';
-import {
-  getProjectArchiveData,
-  projectCategory,
-  projectClient,
-  projectDescription,
-  projectPath
-} from '@/lib/projects/content';
+import { getProjectArchiveData, projectClient, projectPath } from '@/lib/projects/content';
 
 const canonicalSiteUrl = 'https://netmarket.it';
 const title = 'Agenzia di comunicazione e marketing a Padova dal 1986';
@@ -67,24 +62,10 @@ const people = teamMembers.map((person) =>
 );
 
 const { projects } = await getProjectArchiveData();
-const preferredProjectSlugs = [
-  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
-  'app-mobile-programma-fedelta-sirene-blu',
-  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
-  'casi-studio-strategia-digitale-ecommerce-brb'
-];
-const publishedProjects = projects.filter(
-  (project) => project.projectStatus === 'published' && project.cover
-);
-const selectedProjects = preferredProjectSlugs
-  .map((slug) => publishedProjects.find((project) => project.slug === slug))
-  .filter((project): project is (typeof publishedProjects)[number] => Boolean(project));
-for (const project of publishedProjects) {
-  if (selectedProjects.length >= 4) break;
-  if (!selectedProjects.some((selected) => selected.id === project.id))
-    selectedProjects.push(project);
-}
-const heroProjects = selectedProjects.slice(0, 3);
+const publishedProjects = projects
+  .filter((project) => project.projectStatus === 'published' && project.cover)
+  .slice(0, 8);
+const heroProjects = publishedProjects.slice(0, 3);
 
 const history = [
   {
@@ -287,7 +268,7 @@ const methodSteps = [
           methodSteps.map(([stepTitle, text], index) => (
             <li>
               <span>{String(index + 1).padStart(2, '0')}</span>
-              <h3>{stepTitle}</h3>
+              <h3 class="nm-heading-o-none">{stepTitle}</h3>
               <p>{text}</p>
             </li>
           ))
@@ -301,97 +282,23 @@ const methodSteps = [
   </Section>
 
   {
-    selectedProjects.length > 0 && (
-      <Section labelledby="agency-projects-title" class="agency-projects">
-        <Container wide>
-          <div class="agency-projects__header" data-reveal="line">
-            <p class="nm-meta">Il lavoro, nella realtà</p>
-            <h2 id="agency-projects-title">
-              Progetti diversi. La stessa cura nel renderli{' '}
-              <span class="nm-heading-accent">utili.</span>
-            </h2>
-          </div>
-          <div class="agency-projects__grid" data-reveal="up" data-reveal-stagger="1">
-            {selectedProjects.map((project, index) => (
-              <a
-                class:list={['agency-project-card', index === 0 && 'agency-project-card--featured']}
-                href={projectPath(project.slug)}
-                data-cursor-label="Guarda"
-              >
-                <img
-                  src={project.cover?.url}
-                  alt={project.cover?.alt}
-                  width="900"
-                  height="675"
-                  loading="lazy"
-                  decoding="async"
-                  sizes={
-                    index === 0 ? '(max-width: 767px) 92vw, 58vw' : '(max-width: 767px) 92vw, 28vw'
-                  }
-                />
-                <div>
-                  <span>
-                    {project.services.map((service) => service.title).join(' · ') ||
-                      projectCategory(project)}
-                  </span>
-                  <h3>{projectClient(project)}</h3>
-                  <p>{projectDescription(project)}</p>
-                  <strong>
-                    Leggi il caso studio <IconArrowRight stroke={1.7} aria-hidden="true" />
-                  </strong>
-                </div>
-              </a>
-            ))}
-          </div>
-          <a class="agency-projects__link" href="/progetti/">
-            Tutti i progetti
-            <IconArrowRight stroke={1.7} aria-hidden="true" />
-          </a>
-        </Container>
-      </Section>
+    publishedProjects.length > 0 && (
+      <CaseStudyShowcase
+        projects={publishedProjects}
+        titleId="agency-projects-title"
+        prioritizeImages={false}
+      />
     )
   }
 
-  <Section id="team" labelledby="agency-team-title" class="agency-team">
+  <Section id="team" class="home-team-section" labelledby="agency-team-title">
     <Container wide>
-      <div class="agency-team__header" data-reveal="line">
-        <p class="nm-meta">Le persone</p>
-        <h2 id="agency-team-title">
-          Competenze diverse, responsabilità <span class="nm-heading-marker">condivisa.</span>
-        </h2>
-        <p>Un gruppo compatto che lavora sullo stesso progetto, non in reparti distanti.</p>
-      </div>
-      <div class="agency-team__grid" data-reveal="up" data-reveal-stagger="1">
-        {
-          teamMembers.map((person) => (
-            <article class="agency-person" data-person-id={person.id}>
-              <img
-                src={person.image}
-                alt={person.imageAlt}
-                width="900"
-                height="1200"
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 640px) 72vw, (max-width: 1024px) 31vw, 18vw"
-                style={`object-position: ${person.imagePosition};`}
-              />
-              <div>
-                <h3>{person.displayName}</h3>
-                <p>{person.role}</p>
-                <a
-                  href={person.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Profilo LinkedIn di ${person.fullName}`}
-                >
-                  LinkedIn
-                  <IconArrowRight stroke={1.7} aria-hidden="true" />
-                </a>
-              </div>
-            </article>
-          ))
-        }
-      </div>
+      <TeamSection
+        titleId="agency-team-title"
+        title="Competenze diverse. Una sola direzione."
+        text="Sviluppo, design, marketing e direzione lavorano dentro lo stesso processo, con responsabilità chiare."
+        people={teamMembers}
+      />
     </Container>
   </Section>
 
@@ -404,26 +311,6 @@ const methodSteps = [
         clients={clientLogos}
         speed="calm"
       />
-    </Container>
-  </Section>
-
-  <Section labelledby="agency-careers-title" compact class="agency-careers">
-    <Container>
-      <div class="agency-careers__layout" data-reveal="up">
-        <IconSparkles stroke={1.6} aria-hidden="true" />
-        <div>
-          <p class="nm-meta">Lavora con noi</p>
-          <h2 id="agency-careers-title">Il prossimo punto di vista potrebbe essere il tuo.</h2>
-        </div>
-        <p>
-          Cerchiamo persone curiose, responsabili e capaci di far dialogare il proprio mestiere con
-          quello degli altri.
-        </p>
-        <a href="/lavora-con-noi/">
-          Conosciamoci
-          <IconArrowRight stroke={1.7} aria-hidden="true" />
-        </a>
-      </div>
     </Container>
   </Section>
 

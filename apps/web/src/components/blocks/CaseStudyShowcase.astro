@@ -1,0 +1,76 @@
+---
+import type { CaseStudy } from '@netmarket/schemas';
+import {
+  projectCategory,
+  projectClient,
+  projectDescription,
+  projectPath
+} from '@/lib/projects/content';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Stack from '@/components/layout/Stack.astro';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  projects: CaseStudy[];
+  titleId: string;
+  prioritizeImages?: boolean;
+}
+
+const { projects, titleId, prioritizeImages = true } = Astro.props;
+---
+
+<Section class="home-work-section" labelledby={titleId}>
+  <Container wide>
+    <Stack gap="var(--nm-space-xl)">
+      <div class="home-section-heading" data-reveal="line">
+        <p class="nm-meta">Progetti</p>
+        <h2 id={titleId}>Case study e progetti reali.</h2>
+        <p>
+          Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne e
+          comunicazione.
+        </p>
+      </div>
+      <div
+        class="home-case-slider"
+        role="region"
+        aria-label="Slider case study Netmarket"
+        data-reveal="up"
+      >
+        <div class="home-case-slider__track">
+          {
+            [...projects, ...projects].map((project, index) => (
+              <a
+                class:list={[
+                  'home-case-card',
+                  index % 5 === 0 && 'home-case-card--info',
+                  index % 5 === 1 && 'home-case-card--portrait',
+                  index % 5 === 2 && 'home-case-card--wide'
+                ]}
+                href={projectPath(project.slug)}
+                data-cursor-label="Guarda"
+              >
+                <div class="home-case-card__media">
+                  <img
+                    src={project.cover!.url}
+                    alt={project.cover!.alt || project.title}
+                    loading={prioritizeImages && index < projects.length ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                  <span>{projectCategory(project)}</span>
+                </div>
+                <div class="home-case-card__body">
+                  <h3>{projectClient(project)}</h3>
+                  <p>{projectDescription(project)}</p>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="home-work-section__actions">
+        <Button href="/progetti/" variant="secondary">Tutti i casi studio</Button>
+      </div>
+    </Stack>
+  </Container>
+</Section>
