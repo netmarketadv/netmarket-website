@@ -12,6 +12,9 @@ import {
 describe('seo utilities', () => {
   it('builds titles', () => {
     expect(buildTitle('Ambiente di sviluppo')).toBe('Ambiente di sviluppo | Netmarket');
+    expect(buildTitle('ChatGPT Ads in Italia | Netmarket')).toBe(
+      'ChatGPT Ads in Italia | Netmarket'
+    );
   });
 
   it('creates absolute canonicals', () => {

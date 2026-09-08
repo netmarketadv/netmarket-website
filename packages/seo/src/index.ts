@@ -46,7 +46,10 @@ export interface ArticleMeta {
 }
 
 export function buildTitle(title: string, siteName = 'Netmarket'): string {
-  return title === siteName ? siteName : `${title} | ${siteName}`;
+  const normalizedTitle = title.trim();
+  return normalizedTitle === siteName || normalizedTitle.endsWith(`| ${siteName}`)
+    ? normalizedTitle
+    : `${normalizedTitle} | ${siteName}`;
 }
 
 export function absoluteCanonical(siteUrl: string, path = '/'): string {
