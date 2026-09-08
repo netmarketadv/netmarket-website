@@ -85,6 +85,9 @@ final class Routes
         $requestId = function_exists('wp_generate_uuid4') ? wp_generate_uuid4() : uniqid('nmhc_', true);
         $payload = $request->get_json_params();
         if (! is_array($payload)) {
+            $payload = $request->get_body_params();
+        }
+        if (! is_array($payload)) {
             $this->logContactEvent($requestId, 'invalid_payload');
             return new WP_REST_Response(['code' => 'invalid_payload', 'message' => 'Richiesta non valida.'], 400);
         }
@@ -96,12 +99,22 @@ final class Routes
         $service = sanitize_text_field((string) ($payload['service'] ?? ''));
         $message = sanitize_textarea_field((string) ($payload['message'] ?? ''));
         $website = sanitize_text_field((string) ($payload['website'] ?? ''));
-        $privacy = (bool) ($payload['privacyConsent'] ?? false);
-        $marketing = (bool) ($payload['marketingConsent'] ?? false);
+        $privacy = filter_var($payload['privacyConsent'] ?? false, FILTER_VALIDATE_BOOL);
+        $marketing = filter_var($payload['marketingConsent'] ?? false, FILTER_VALIDATE_BOOL);
         $sourceUrl = esc_url_raw((string) ($payload['sourceUrl'] ?? ''));
         $referrer = esc_url_raw((string) ($payload['referrer'] ?? ''));
-        $utm = is_array($payload['utm'] ?? null) ? $payload['utm'] : [];
+        $utmValue = $payload['utm'] ?? [];
+        if (is_string($utmValue)) {
+            $decodedUtm = json_decode($utmValue, true);
+            $utmValue = is_array($decodedUtm) ? $decodedUtm : [];
+        }
+        $utm = is_array($utmValue) ? $utmValue : [];
         $elapsedMs = isset($payload['elapsedMs']) ? (int) $payload['elapsedMs'] : 0;
+        $isCareer = $service === 'lavora-con-noi';
+        $files = $request->get_file_params();
+        $cv = is_array($files['cv'] ?? null) ? $files['cv'] : null;
+        $cvPath = '';
+        $cvName = '';
 
         $errors = [];
         if ($website !== '') {
@@ -137,6 +150,26 @@ final class Routes
         if (! $privacy) {
             $errors['privacyConsent'] = 'privacy_required';
         }
+        if ($isCareer) {
+            if ($cv === null || (int) ($cv['error'] ?? 1) !== 0) {
+                $errors['cv'] = 'cv_required';
+            } else {
+                $cvPath = (string) ($cv['tmp_name'] ?? '');
+                $cvName = sanitize_file_name((string) ($cv['name'] ?? 'curriculum'));
+                $cvSize = (int) ($cv['size'] ?? 0);
+                $allowedCvTypes = [
+                    'pdf' => 'application/pdf',
+                    'doc' => 'application/msword',
+                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                ];
+                $fileType = wp_check_filetype_and_ext($cvPath, $cvName, $allowedCvTypes);
+                if ($cvSize <= 0 || $cvSize > 5 * 1024 * 1024) {
+                    $errors['cv'] = 'cv_too_large';
+                } elseif ($cvPath === '' || ! is_file($cvPath) || empty($fileType['ext']) || empty($fileType['type'])) {
+                    $errors['cv'] = 'invalid_cv';
+                }
+            }
+        }
         if ($this->looksLikeSpam($message . ' ' . $name . ' ' . $company)) {
             $errors['message'] = 'spam_pattern';
         }
@@ -157,13 +190,17 @@ final class Routes
         $recipient = $this->contactToEmail();
         $cc = $this->contactCcEmail();
         $from = $this->contactFromEmail();
-        $subject = sprintf('Nuova richiesta dal sito Netmarket - %s', $this->sanitizeHeaderValue($name));
+        $subject = sprintf(
+            $isCareer ? 'Nuova candidatura dal sito Netmarket - %s' : 'Nuova richiesta dal sito Netmarket - %s',
+            $this->sanitizeHeaderValue($name)
+        );
         $body = $this->contactEmailBody([
             'Nome' => $name,
             'Email' => $email,
             'Azienda' => $company,
             'Telefono' => $phone,
             'Servizio' => $service,
+            'Curriculum' => $isCareer ? $cvName : '',
             'Marketing' => $marketing ? 'si' : 'no',
             'Pagina di provenienza' => $sourceUrl,
             'Referrer' => $referrer,
@@ -181,7 +218,8 @@ final class Routes
             $headers[] = 'Cc: ' . $cc;
         }
 
-        $sent = wp_mail($recipient, $subject, $body, $headers);
+        $attachments = $isCareer && $cvPath !== '' ? [$cvPath] : [];
+        $sent = wp_mail($recipient, $subject, $body, $headers, $attachments);
         if (! $sent) {
             $this->logContactEvent($requestId, 'mail_failed');
             return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);

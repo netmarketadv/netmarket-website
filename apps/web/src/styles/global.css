@@ -8946,7 +8946,6 @@ main {
 .agency-team h2,
 .agency-careers h2,
 .agency-cta h2,
-.career-work h2,
 .career-disciplines h2,
 .career-application h2 {
   max-width: 13ch;
@@ -9229,8 +9228,7 @@ main {
 }
 
 .agency-method__link,
-.agency-projects__link,
-.career-application__copy > a {
+.agency-projects__link {
   width: fit-content;
   display: inline-flex;
   align-items: center;
@@ -9242,8 +9240,7 @@ main {
 }
 
 .agency-method__link svg,
-.agency-projects__link svg,
-.career-application__copy > a svg {
+.agency-projects__link svg {
   width: 1rem;
   height: 1rem;
 }
@@ -9493,10 +9490,12 @@ main {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(0.55rem, 1.2vw, 1rem);
   min-width: 0;
+  padding-bottom: clamp(1.5rem, 3vw, 3rem);
 }
 
 .career-hero__people figure {
   position: relative;
+  align-self: start;
   min-width: 0;
   margin: 0;
   overflow: hidden;
@@ -9504,7 +9503,7 @@ main {
 }
 
 .career-hero__people figure:nth-child(even) {
-  transform: translateY(clamp(1.5rem, 3vw, 3rem));
+  margin-top: clamp(1.5rem, 3vw, 3rem);
 }
 
 .career-hero__people img {
@@ -9516,65 +9515,8 @@ main {
   background: var(--nm-color-canvas);
 }
 
-.career-hero__people figcaption {
-  position: absolute;
-  right: 0.7rem;
-  bottom: 0.7rem;
-  left: 0.7rem;
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-shadow: 0 1px 12px rgb(0 0 0 / 0.65);
-}
-
-.career-work {
+.career-disciplines {
   background: var(--nm-color-canvas);
-}
-
-.career-work__intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
-  gap: clamp(2rem, 7vw, 7rem);
-  align-items: end;
-  margin-bottom: clamp(3rem, 6vw, 6rem);
-}
-
-.career-work__intro > p {
-  max-width: 38rem;
-  color: var(--nm-color-muted);
-  font-size: var(--nm-text-lead);
-  line-height: 1.58;
-}
-
-.career-work__principles {
-  display: grid;
-  border-top: 1px solid var(--nm-color-border-strong);
-}
-
-.career-work__principles li {
-  display: grid;
-  grid-template-columns: 4rem minmax(12rem, 0.45fr) minmax(0, 1fr);
-  gap: clamp(1rem, 3vw, 3rem);
-  align-items: baseline;
-  border-bottom: 1px solid var(--nm-color-border-strong);
-  padding: clamp(1.4rem, 3vw, 2.4rem) 0;
-}
-
-.career-work__principles span {
-  color: var(--nm-color-blue);
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.career-work__principles h3 {
-  font-size: clamp(1.8rem, 3vw, 3.2rem);
-  font-weight: 500;
-}
-
-.career-work__principles p {
-  max-width: 39rem;
-  color: var(--nm-color-muted);
-  line-height: 1.55;
 }
 
 .career-disciplines__list {
@@ -9615,21 +9557,26 @@ main {
 }
 
 .career-application {
-  background: var(--nm-color-canvas);
+  background: var(--nm-color-surface);
 }
 
 .career-application__layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(22rem, 1.15fr);
-  gap: clamp(3rem, 8vw, 8rem);
+  grid-template-columns: minmax(0, 0.82fr) minmax(32rem, 1.18fr);
+  gap: clamp(3rem, 7vw, 7rem);
   align-items: start;
 }
 
 .career-application__copy {
-  position: sticky;
-  top: calc(var(--site-header-height, 4.55rem) + 2rem);
   display: grid;
   gap: 1.2rem;
+  padding-top: 0.35rem;
+}
+
+.career-application__copy h2 {
+  max-width: 9ch;
+  font-size: clamp(3.25rem, 5vw, 5.25rem);
+  line-height: 0.96;
 }
 
 .career-application__copy > p:not(.nm-meta) {
@@ -9641,10 +9588,9 @@ main {
 
 .career-application__form {
   min-width: 0;
-  border: 1px solid var(--nm-color-border);
-  border-radius: var(--nm-radius-card);
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  background: var(--nm-color-surface);
+  border: 0;
+  padding: 0;
+  background: transparent;
 }
 
 .career-form {
@@ -9657,12 +9603,29 @@ main {
   font-weight: 400;
 }
 
+.career-hero .nm-container {
+  padding-top: clamp(1.25rem, 2.5vw, 3rem);
+  padding-bottom: clamp(2.25rem, 4vw, 4.5rem);
+}
+
+.career-hero {
+  --section-padding: 0;
+}
+
+.career-hero__copy {
+  margin-bottom: clamp(1.75rem, 3vw, 3rem);
+}
+
+.career-hero__copy h1 {
+  max-width: 10.5ch;
+  font-size: clamp(3.25rem, 5vw, 5.5rem);
+}
+
 @media (max-width: 1024px) {
   .agency-hero__copy,
   .career-hero__copy,
   .agency-intro__grid,
   .agency-history__layout,
-  .career-work__intro,
   .career-application__layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -9787,7 +9750,6 @@ main {
   .agency-projects h2,
   .agency-team h2,
   .agency-cta h2,
-  .career-work h2,
   .career-disciplines h2,
   .career-application h2 {
     max-width: 100%;
@@ -9862,14 +9824,12 @@ main {
     padding-inline: 0;
   }
 
-  .agency-method__steps li,
-  .career-work__principles li {
+  .agency-method__steps li {
     grid-template-columns: 2.4rem minmax(0, 1fr);
     gap: 0.7rem 1rem;
   }
 
-  .agency-method__steps p,
-  .career-work__principles p {
+  .agency-method__steps p {
     grid-column: 2;
   }
 
@@ -9953,12 +9913,7 @@ main {
   }
 
   .career-hero__people figure:nth-child(even) {
-    transform: none;
-  }
-
-  .career-work__intro {
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    margin-top: 1rem;
   }
 
   .career-disciplines__list {
@@ -9981,8 +9936,16 @@ main {
   }
 
   .career-application__form {
-    border-radius: var(--nm-radius-md);
-    padding: 1rem;
+    padding: 0;
+  }
+
+  .career-hero .nm-container {
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .career-hero__copy h1 {
+    font-size: clamp(2.75rem, 12vw, 3.9rem);
   }
 }
 

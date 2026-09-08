@@ -109,8 +109,11 @@ describe('homepage source', () => {
     expect(careers).toContain('Candidatura spontanea');
     expect(careers).toContain('webPageJsonLd');
     expect(careers).not.toContain('JobPosting');
-    expect(careerForm).toContain('submitContactForm');
-    expect(careerForm).not.toContain('type="file"');
+    expect(careers).not.toContain('Qui il lavoro passa da una persona all’altra');
+    expect(careers).not.toContain('<figcaption>');
+    expect(careerForm).toContain('submitCareerForm');
+    expect(careerForm).toContain('type="file"');
+    expect(careerForm).toContain('name="cv"');
     expect(header).toContain('/lavora-con-noi/');
     expect(footer).toContain('/lavora-con-noi/');
     expect(sitemap).toContain('/lavora-con-noi/');

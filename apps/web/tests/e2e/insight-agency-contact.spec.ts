@@ -81,12 +81,14 @@ test.describe('insight, agency and contact', () => {
     let requestCount = 0;
     await page.route('**/wp-json/netmarket/v1/forms/contact', async (route) => {
       requestCount += 1;
-      const payload = JSON.parse(route.request().postData() || '{}') as Record<string, unknown>;
-      expect(payload.name).toBe('Ada Lovelace');
-      expect(payload.company).toBe('Candidatura spontanea');
-      expect(payload.service).toContain('Sviluppo web e software');
-      expect(payload.message).toContain('https://example.com/ada');
-      expect(payload.privacyConsent).toBe(true);
+      expect(route.request().headers()['content-type']).toContain('multipart/form-data');
+      const payload = route.request().postData() || '';
+      expect(payload).toContain('Ada Lovelace');
+      expect(payload).toContain('Candidatura spontanea');
+      expect(payload).toContain('lavora-con-noi');
+      expect(payload).toContain('Sviluppo web e software');
+      expect(payload).toContain('https://example.com/ada');
+      expect(payload).toContain('ada-cv.pdf');
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -100,16 +102,18 @@ test.describe('insight, agency and contact', () => {
       (await page.locator('script[type="application/ld+json"]').textContent()) || '';
     expect(structuredData).toContain('WebPage');
     expect(structuredData).not.toContain('JobPosting');
-    await page.getByLabel('Nome', { exact: true }).fill('Ada');
-    await page.getByLabel('Cognome', { exact: true }).fill('Lovelace');
-    await page.getByLabel('Email').fill('ada@example.com');
-    await page.getByLabel('Area').selectOption({ label: 'Sviluppo web e software' });
-    await page.getByLabel(/Portfolio o LinkedIn/).fill('https://example.com/ada');
+    await page.locator('#career-name').fill('Ada');
+    await page.locator('#career-surname').fill('Lovelace');
+    await page.locator('#career-email').fill('ada@example.com');
+    await page.locator('#career-area').selectOption({ label: 'Sviluppo web e software' });
+    await page.locator('#career-portfolio').fill('https://example.com/ada');
+    await page.locator('#career-cv').setInputFiles({
+      name: 'ada-cv.pdf',
+      mimeType: 'application/pdf',
+      buffer: Buffer.from('%PDF-1.4 test curriculum')
+    });
     await page
-      .getByRole('textbox', {
-        name: 'Raccontaci cosa sai fare e cosa vorresti costruire',
-        exact: true
-      })
+      .locator('#career-message')
       .fill('Progetto interfacce e sistemi digitali accessibili, chiari e durevoli.');
     await page.getByRole('checkbox', { name: /informativa privacy/i }).check();
     await page.getByRole('button', { name: 'Invia candidatura' }).click();

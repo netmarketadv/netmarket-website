@@ -1,7 +1,6 @@
 ---
 import {
   IconArrowDown,
-  IconArrowRight,
   IconCode,
   IconMessageCircle,
   IconPalette,
@@ -88,44 +87,10 @@ const disciplines = [
                 sizes="(max-width: 767px) 42vw, 18vw"
                 style={`object-position: ${person.imagePosition};`}
               />
-              <figcaption>{person.displayName}</figcaption>
             </figure>
           ))
         }
       </div>
-    </Container>
-  </Section>
-
-  <Section labelledby="career-work-title" class="career-work">
-    <Container>
-      <div class="career-work__intro">
-        <h2 id="career-work-title" data-reveal="line">
-          Qui il lavoro passa da una persona all’altra. E deve arrivare <span
-            class="nm-heading-accent">meglio.</span
-          >
-        </h2>
-        <p data-reveal="up">
-          Non cerchiamo esecutori isolati. Ci interessa chi sa prendersi responsabilità, spiegare le
-          proprie scelte e migliorare un’idea insieme agli altri.
-        </p>
-      </div>
-      <ol class="career-work__principles" data-reveal="up" data-reveal-stagger="1">
-        <li>
-          <span>01</span><h3>Cura</h3><p>
-            Per i dettagli, per il risultato e per il tempo degli altri.
-          </p>
-        </li>
-        <li>
-          <span>02</span><h3>Confronto</h3><p>
-            Le idee si discutono con chiarezza, senza difendere il proprio recinto.
-          </p>
-        </li>
-        <li>
-          <span>03</span><h3>Responsabilità</h3><p>
-            Chi prende in mano un pezzo di lavoro lo accompagna fino a quando funziona.
-          </p>
-        </li>
-      </ol>
     </Container>
   </Section>
 
@@ -153,7 +118,7 @@ const disciplines = [
   </Section>
 
   <Section id="candidatura" labelledby="career-application-title" class="career-application">
-    <Container>
+    <Container wide>
       <div class="career-application__layout">
         <div class="career-application__copy" data-reveal="line">
           <p class="nm-meta">Candidatura spontanea</p>
@@ -167,10 +132,6 @@ const disciplines = [
             spontanee quando mostrano competenze, pensiero e un interesse concreto per il nostro
             modo di lavorare.
           </p>
-          <a href="/agenzia/">
-            Conosci l’agenzia
-            <IconArrowRight stroke={1.7} aria-hidden="true" />
-          </a>
         </div>
         <div class="career-application__form" data-reveal="up">
           <CareerForm />
