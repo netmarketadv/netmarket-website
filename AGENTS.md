@@ -13,7 +13,7 @@ Per migrazione e audit contenuti sono consentite richieste HTTP `GET` e `HEAD` r
 ## Branch E Deploy
 
 - `develop` pubblica automaticamente il frontend su `staging.netmarket.it` tramite `Deploy Staging`.
-- `main` pubblica `netmarket.it` esclusivamente tramite il workflow production protetto e approvato manualmente.
+- `main` pubblica `netmarket.it` esclusivamente tramite il workflow production protetto, avviato manualmente con conferma esplicita.
 - Branch `feature/*` e `fix/*` non pubblicano su SiteGround; la full QA automatica passa dalle Pull Request verso `develop` o `main`.
 - Il deploy frontend e il deploy CMS sono separati: una modifica Astro non deve deployare automaticamente il plugin WordPress.
 - Ogni build staging deve esporre `netmarket-build`, `netmarket-build-time` e `netmarket-environment`; lo smoke test deve verificare lo SHA online.

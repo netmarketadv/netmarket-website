@@ -2,7 +2,8 @@
 
 `deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`.
 `deploy-production.yml` pubblica `netmarket.it` esclusivamente da `main`, attraverso il
-GitHub Environment protetto `production` e dopo approvazione manuale.
+GitHub Environment protetto `production` e un avvio manuale confermato dalla stringa
+`DEPLOY NETMARKET`.
 
 La preparazione locale del candidato production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload.
 

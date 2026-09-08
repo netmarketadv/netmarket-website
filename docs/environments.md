@@ -28,7 +28,8 @@ Branch strategy:
 - Tracking: GTM `GTM-K782CJ46`, caricato solo in production con Consent Mode iniziale denied.
 
 Il workflow `Deploy Production` usa esclusivamente il branch `main`, il GitHub Environment
-`production` con approvazione manuale e un document root dedicato. Non riutilizza il path staging.
+`production`, avvio manuale con conferma esplicita e un document root dedicato. Non
+riutilizza il path staging.
 
 Segreti richiesti nel GitHub Environment `production`:
 

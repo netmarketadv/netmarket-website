@@ -75,6 +75,8 @@ describe('go-live safeguards', () => {
     );
 
     expect(workflow).toContain('environment: production');
+    expect(workflow).not.toContain('push:');
+    expect(workflow).toContain("inputs.confirm == 'DEPLOY NETMARKET'");
     expect(workflow).toContain('SG_PRODUCTION_DEPLOY_PATH');
     expect(workflow).not.toContain('SG_STAGING_DEPLOY_PATH');
     expect(workflow).toContain("failure() && env.DEPLOY_COMPLETED == 'true'");

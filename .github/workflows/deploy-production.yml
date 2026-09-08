@@ -1,22 +1,6 @@
 name: Deploy Production
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'apps/web/**'
-      - 'packages/**'
-      - 'data/migrations/go-live/**'
-      - 'infrastructure/scripts/audit-production-build.mjs'
-      - 'infrastructure/scripts/deploy-production.sh'
-      - 'infrastructure/scripts/rollback-production.sh'
-      - 'infrastructure/scripts/seo-smoke-production.mjs'
-      - 'infrastructure/scripts/smoke-production.mjs'
-      - 'infrastructure/scripts/validate-production-redirects.mjs'
-      - '.github/workflows/deploy-production.yml'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
   workflow_dispatch:
     inputs:
       confirm:
@@ -30,7 +14,7 @@ permissions:
 jobs:
   deploy:
     name: Build, Audit, Deploy, Smoke
-    if: ${{ github.event_name == 'push' || inputs.confirm == 'DEPLOY NETMARKET' }}
+    if: ${{ inputs.confirm == 'DEPLOY NETMARKET' }}
     environment: production
     runs-on: ubuntu-latest
     timeout-minutes: 20
