@@ -25,6 +25,10 @@ describe('agency and contact pages', () => {
     expect(contact).toContain('ContactPage');
     expect(contact).toContain('PostalAddress');
     expect(contact).toContain('OpeningHoursSpecification');
+    expect(contact).toContain('https://maps.app.goo.gl/S9Gb82NiJrYWJsZ67');
+    expect(contact).toContain('<h1 id="contact-title" data-reveal="line">');
+    expect(contact).not.toContain('Partiamo dal contesto.');
+    expect(contact).not.toContain('Cosa succede dopo.');
     expect(form).toContain('submitContactForm');
     expect(form).toContain('contact_form_success');
     expect(form).toContain("window.location.assign('/grazie/')");

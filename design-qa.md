@@ -31,27 +31,27 @@
 
 ## Contact page
 
-- Date: 2026-09-07
+- Date: 2026-09-08
 - Route: `/contatti/`
 - Viewports checked: 390, 430, 768, 1024, 1280, 1440, 1728 px
 - Motion mode checked: `light`, including `prefers-reduced-motion: reduce`
 
 ### Issues and resolutions
 
-| Area         | Issue                                                                | Resolution                                                                                       | Status |
-| ------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------ |
-| Hero         | The page opened with excessive passive space and generic positioning | Built a compact editorial split with explicit agency, service and Padova context                 | Pass   |
-| Form         | Controls and submit action looked browser-default and administrative | Added consistent fields, labels, microcopy, focus, loading, success and error states             | Pass   |
-| Validation   | Errors were summarized but not explained beside each field           | Added contextual error copy, `aria-invalid` and focus on the first invalid control               | Pass   |
-| Privacy      | Marketing consent added unnecessary friction                         | Removed newsletter consent and integrated the required privacy link into one accessible control  | Pass   |
-| Contact data | The supporting card lacked presence and local information            | Added a dark responsive contact surface with email, address, hours, company data and Maps CTA    | Pass   |
-| Mobile       | Form and supporting information needed a deliberate stacked flow     | Switched to one-column fields, full-width submit and non-sticky contact data below the form      | Pass   |
-| Responsive   | Wide content could escape smaller viewports                          | Measured document width across all seven required breakpoints                                    | Pass   |
-| Submission   | Redesign risked changing the existing confirmation flow              | Preserved success tracking and `window.location.assign('/grazie/')`; verified end to end         | Pass   |
-| SEO/GEO      | Local intent was mainly implicit                                     | Added crawlable Padova copy plus ContactPage, PostalAddress, ContactPoint and opening hours data | Pass   |
+| Area         | Issue                                                            | Resolution                                                                                      | Status |
+| ------------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------ |
+| Hero         | The page was split across too many competing sections            | Consolidated the title, supporting copy and form into one restrained two-column hero            | Pass   |
+| Form         | The bordered panel made the form read as a separate card         | Removed the panel, header and proof block while preserving accessible controls and states       | Pass   |
+| Validation   | Errors were summarized but not explained beside each field       | Kept contextual error copy, `aria-invalid` and focus on the first invalid control               | Pass   |
+| Privacy      | Marketing consent added unnecessary friction                     | Kept one required privacy control with an integrated policy link                                | Pass   |
+| Contact data | Contact details competed with the form inside a dark card        | Moved email, linked address, hours and company data into one horizontal white information band  | Pass   |
+| Mobile       | Form and supporting information needed a deliberate stacked flow | Stacked hero copy, form fields and contact details without decorative containers                | Pass   |
+| Responsive   | Wide content could escape smaller viewports                      | Measured document width across all seven required breakpoints                                   | Pass   |
+| Submission   | Redesign risked changing the existing confirmation flow          | Preserved success tracking and `window.location.assign('/grazie/')`; verified on static preview | Pass   |
+| SEO/GEO      | Local intent was mainly implicit                                 | Kept ContactPage, PostalAddress, ContactPoint and opening hours data                            | Pass   |
 
 ### Final checks
 
-- Hero, full form, dark contact card, process sequence and footer reviewed on desktop and mobile.
+- Hero, open form, horizontal contact details and footer reviewed on desktop and mobile.
 - Valid submit, invalid fields, invalid email, missing privacy, backend failure and duplicate submission tested.
 - Keyboard order and responsive containment verified with Playwright.
