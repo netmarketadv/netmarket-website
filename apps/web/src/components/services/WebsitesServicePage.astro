@@ -324,7 +324,7 @@ const displayedFaq = fallbackFaq;
 
 <div class="websites-service-page">
   <section class="websites-hero" aria-labelledby="page-title">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb service-page-breadcrumb" aria-label="Breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">/</span>
       <a href="/servizi/">Servizi</a>
@@ -335,8 +335,9 @@ const displayedFaq = fallbackFaq;
     <div class="websites-hero__copy" data-reveal="line">
       <p class="websites-kicker">Netmarket · Padova · dal 1986</p>
       <h1 id="page-title">
-        Siti web che <span class="nm-heading-marker nm-heading-marker--strong">lavorano</span> per la
-        tua azienda.
+        Realizzazione siti web a Padova, progettati per <span
+          class="nm-heading-marker nm-heading-marker--strong">lavorare</span
+        >.
       </h1>
       <p>
         Da Padova progettiamo siti corporate, ecommerce e piattaforme digitali che uniscono
@@ -432,7 +433,7 @@ const displayedFaq = fallbackFaq;
       {
         projectTypes.map(({ title, text, icon: Icon }) => (
           <article>
-            <span class="websites-type-rail__icon" aria-hidden="true">
+            <span class="websites-type-rail__icon service-icon-medallion" aria-hidden="true">
               <Icon stroke={1.8} />
             </span>
             <h3 class="nm-heading-o-none">{title}</h3>
@@ -513,7 +514,7 @@ const displayedFaq = fallbackFaq;
       {
         seoAiItems.map(({ title, text, icon: Icon }) => (
           <article>
-            <span class="websites-ai__card-icon" aria-hidden="true">
+            <span class="websites-ai__card-icon service-icon-medallion" aria-hidden="true">
               <Icon stroke={1.8} />
             </span>
             <h3 class="nm-heading-o-none">{title}</h3>

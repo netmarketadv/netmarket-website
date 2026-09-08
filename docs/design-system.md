@@ -156,7 +156,11 @@ Queste primitive di supporto non sono obbligatorie e non vanno presentate come c
 
 ### Icone
 
-Tabler Icons e il set canonico: stroke 1.7-1.8, normalmente 16-20px. `IconBubble` e adatto a menu e liste tassonomiche. Le icone chiariscono categoria, azione o stato; non riempiono griglie solo per decorazione.
+Tabler Icons e il set canonico: stroke 1.7-1.8, normalmente 16-20px. `IconBubble` resta adatto a menu e liste tassonomiche. Nelle pagine servizio il pattern canonico e il medaglione circolare neutro: superficie bianca, pittogramma nero, bordo hairline e secondo anello esterno molto leggero. Non usa fondi colorati e non eredita l'accento del servizio. Le icone chiariscono categoria, azione o stato; non riempiono griglie solo per decorazione.
+
+### Breadcrumb di servizio
+
+Tutte le pagine dettaglio servizio riservano la stessa riga iniziale al breadcrumb: altezza, margine inferiore e distanza dall'header sono condivisi. Il nome corrente resta su una riga e viene abbreviato con ellissi soltanto quando non entra nel viewport, senza cambiare la quota della hero.
 
 ## 6. Pattern Editoriali
 

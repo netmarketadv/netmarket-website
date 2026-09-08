@@ -57,8 +57,9 @@ const results = service.results
 const capabilities = service.capabilities.slice(0, 6);
 const projects = related.caseStudies.filter((item) => item.image).slice(0, 3);
 const accentIndex = experience.h1.indexOf(experience.accent);
-const h1Before = experience.h1.slice(0, accentIndex);
-const h1After = experience.h1.slice(accentIndex + experience.accent.length);
+const hasH1Accent = accentIndex >= 0;
+const h1Before = hasH1Accent ? experience.h1.slice(0, accentIndex) : experience.h1;
+const h1After = hasH1Accent ? experience.h1.slice(accentIndex + experience.accent.length) : '';
 
 const iconSet = {
   ecommerce: [IconShoppingBag, IconSearch, IconTargetArrow, IconChartBar],
@@ -119,7 +120,7 @@ const projectCopy: Record<string, { client: string; description: string }> = {
 
 <article class:list={['service-x', `service-x--${variant}`]}>
   <section class="service-x-hero" aria-labelledby="page-title">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb service-page-breadcrumb" aria-label="Breadcrumb">
       <a href="/">Home</a><span aria-hidden="true">/</span><a href="/servizi/">Servizi</a><span
         aria-hidden="true">/</span
       ><span>{service.title}</span>
@@ -127,7 +128,9 @@ const projectCopy: Record<string, { client: string; description: string }> = {
     <div class="service-x-hero__copy" data-reveal="line">
       <p class="nm-meta">{experience.eyebrow}</p>
       <h1 id="page-title">
-        {h1Before}<span class="nm-heading-accent">{experience.accent}</span>{h1After}
+        {h1Before}{hasH1Accent && <span class="nm-heading-accent">{experience.accent}</span>}{
+          h1After
+        }
       </h1>
       <p>{service.shortDescription}</p>
       <div class="service-x-actions">
@@ -152,7 +155,7 @@ const projectCopy: Record<string, { client: string; description: string }> = {
       {
         valueItems.map(({ title, description, icon: Icon }) => (
           <article>
-            <span>
+            <span class="service-icon-medallion">
               <Icon stroke={1.7} aria-hidden="true" />
             </span>
             <h3>{title}</h3>
@@ -194,7 +197,7 @@ const projectCopy: Record<string, { client: string; description: string }> = {
       {
         technicalItems.map(({ title, description, icon: Icon }) => (
           <article>
-            <span>
+            <span class="service-icon-medallion">
               <Icon stroke={1.7} aria-hidden="true" />
             </span>
             <div>

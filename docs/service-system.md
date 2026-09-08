@@ -78,6 +78,8 @@ Ecommerce, Software e integrazioni, SEO, Advertising, Social media, Branding e c
 Il pattern canonico comprende:
 
 - hero editoriale tipografica, centrata e proporzionata sul modello validato di `Siti web`, con un solo highlight blu;
+- riga breadcrumb con altezza, margine e posizione iniziale invarianti tra tutte le pagine servizio;
+- H1 descrittivo che unisce servizio, intento principale e riferimento naturale a Padova, senza keyword stuffing;
 - sintesi di valore e problemi espressi dal punto di vista del decisore aziendale;
 - sistema del servizio, evidenze contestualizzate, metodo e perimetro delle competenze;
 - progetti reali con immagini di altezza coerente, nome cliente e descrizione sintetica del lavoro;
@@ -85,7 +87,7 @@ Il pattern canonico comprende:
 
 La hero non usa simulazioni UI o mockup generici. In assenza di fotografie, video o case study approvati per l'apertura, la tipografia e il copy restano protagonisti. Il valore del servizio deve essere espresso nell'HTML e dimostrato più avanti attraverso contenuti e progetti reali.
 
-Il solo accento canonico delle pagine servizio è il blu Netmarket. `#F2FF83` è ammesso soltanto per rare evidenziazioni funzionali ad alto contrasto; non identifica singoli servizi. Le icone usano il contenitore neutro del design system, senza box colorati. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
+Il solo accento canonico delle pagine servizio è il blu Netmarket. `#F2FF83` è ammesso soltanto per rare evidenziazioni funzionali ad alto contrasto; non identifica singoli servizi. Le icone usano il medaglione circolare neutro del design system: superficie bianca, doppio bordo leggero, pittogramma nero e nessun box colorato. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
 
 La presenza territoriale va espressa con linguaggio naturale: Padova compare nell'eyebrow, nei metadata e in almeno un passaggio utile del corpo pagina. Non sono ammessi elenchi di località o ripetizioni artificiose pensate soltanto per i motori di ricerca.
 

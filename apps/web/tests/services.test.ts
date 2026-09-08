@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { serviceFallbacks } from '../src/data/service-fallbacks';
+import { serviceExperiences } from '../src/data/service-experiences';
 import {
   getServiceDetailData,
   relationPath,
@@ -10,6 +11,13 @@ import {
 } from '../src/lib/services/content';
 
 describe('service system', () => {
+  it('keeps every service hero accent inside its SEO heading', () => {
+    for (const experience of Object.values(serviceExperiences)) {
+      expect(experience.h1).toContain(experience.accent);
+      expect(experience.h1).toContain('Padova');
+    }
+  });
+
   it('ships the initial service set as schema-valid build fallback', () => {
     expect(serviceFallbacks.map((service) => service.slug)).toEqual([
       'siti-web',
@@ -114,16 +122,12 @@ describe('service system', () => {
     const imageBySlug = Object.fromEntries(
       serviceFallbacks.map((service) => [service.slug, service.image])
     );
-    expect(imageBySlug['siti-web']?.url).toContain(
-      'sviluppo-realizzazione-siti-web_netmarket.png'
-    );
+    expect(imageBySlug['siti-web']?.url).toContain('sviluppo-realizzazione-siti-web_netmarket.png');
     expect(imageBySlug.ecommerce?.url).toContain('sviluppo-ecommerce_netmarket-1.png');
     expect(imageBySlug['branding-e-comunicazione']?.url).toContain(
       'comunicazione-grafica-branding_netmarket.png'
     );
-    expect(imageBySlug.advertising?.url).toContain(
-      'pubblicita-tradizionale-radio_netmarket-1.png'
-    );
+    expect(imageBySlug.advertising?.url).toContain('pubblicita-tradizionale-radio_netmarket-1.png');
     expect(imageBySlug['social-media']?.url).toContain('social-media-management_netmarket.png');
     expect(imageBySlug['concorsi-a-premi']?.mimeType).toBe('image/png');
   });

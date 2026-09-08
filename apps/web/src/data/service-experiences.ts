@@ -34,8 +34,8 @@ export interface ServiceExperience {
 export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience> = {
   ecommerce: {
     eyebrow: 'Ecommerce a Padova',
-    h1: 'Uno store che vende. E resta governabile.',
-    accent: 'vende',
+    h1: 'Siti ecommerce a Padova progettati per vendere.',
+    accent: 'vendere',
     introTitle: 'Vendere online richiede più di un catalogo.',
     territoryText:
       'Da Padova progettiamo ecommerce per aziende del Veneto e di tutta Italia, collegando vendita online e operatività quotidiana.',
@@ -56,8 +56,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   'software-e-integrazioni': {
     eyebrow: 'Software e integrazioni a Padova',
-    h1: 'Meno passaggi manuali. Più lavoro che scorre.',
-    accent: 'scorre',
+    h1: 'Sviluppo software a Padova per processi che scorrono.',
+    accent: 'scorrono',
     introTitle: 'Il software utile parte dal modo in cui lavorate.',
     territoryText:
       'Il team Netmarket sviluppa a Padova software e integrazioni per imprese locali e nazionali, partendo dai processi reali.',
@@ -77,8 +77,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   seo: {
     eyebrow: 'Consulenza SEO a Padova',
-    h1: 'Essere trovati quando la ricerca conta.',
-    accent: 'trovati',
+    h1: 'Consulenza SEO a Padova per farti trovare.',
+    accent: 'trovare',
     introTitle: 'La visibilità nasce da pagine utili e segnali coerenti.',
     territoryText:
       'Da Padova affianchiamo aziende che vogliono consolidare la visibilità locale, in Veneto e sui mercati nazionali.',
@@ -99,8 +99,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   advertising: {
     eyebrow: 'Advertising a Padova',
-    h1: 'Ogni campagna deve portare da qualche parte.',
-    accent: 'portare',
+    h1: 'Advertising e Google Ads a Padova, senza dispersioni.',
+    accent: 'dispersioni',
     introTitle: 'Media, messaggio e destinazione formano un unico percorso.',
     territoryText:
       'Gestiamo da Padova campagne rivolte a pubblici locali e nazionali, mantenendo messaggio, landing e misurazione nello stesso percorso.',
@@ -122,8 +122,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   'social-media': {
     eyebrow: 'Social media management a Padova',
-    h1: 'Una presenza riconoscibile, non un feed da riempire.',
-    accent: 'riconoscibile',
+    h1: 'Social media marketing a Padova, con una direzione.',
+    accent: 'direzione',
     introTitle: 'I social funzionano quando hanno un ruolo nel marketing.',
     territoryText:
       'Da Padova seguiamo la presenza social di aziende del territorio e brand nazionali con una regia editoriale continuativa.',
@@ -143,8 +143,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   'branding-e-comunicazione': {
     eyebrow: 'Branding e comunicazione a Padova',
-    h1: 'Rendere visibile ciò che vi rende diversi.',
-    accent: 'diversi',
+    h1: 'Branding e comunicazione a Padova per distinguersi.',
+    accent: 'distinguersi',
     introTitle: 'Un’identità è utile quando orienta ogni scelta.',
     territoryText:
       'A Padova lavoriamo con imprese che vogliono rendere più riconoscibile la propria identità, sul territorio e oltre.',
@@ -164,8 +164,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   'content-production': {
     eyebrow: 'Produzione contenuti a Padova',
-    h1: 'Contenuti nati per essere guardati. E usati.',
-    accent: 'usati',
+    h1: 'Produzione foto, video e contenuti a Padova.',
+    accent: 'contenuti',
     introTitle: 'Ogni contenuto deve sapere dove andrà a vivere.',
     territoryText:
       'Produciamo a Padova contenuti per aziende, prodotti e persone, organizzandoli per siti, campagne e canali social.',
@@ -185,8 +185,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
   },
   'concorsi-a-premi': {
     eyebrow: 'Concorsi a premi a Padova',
-    h1: 'Un’idea promozionale, governata fino all’ultimo passaggio.',
-    accent: 'governata',
+    h1: 'Concorsi a premi a Padova, gestiti dall’idea al lancio.',
+    accent: 'lancio',
     introTitle: 'Un concorso è un progetto di comunicazione e operatività.',
     territoryText:
       'Da Padova coordiniamo concorsi a premi per iniziative locali e nazionali, dalla meccanica alla piattaforma digitale.',
