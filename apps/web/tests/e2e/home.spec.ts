@@ -75,6 +75,54 @@ test('homepage exposes staging essentials', async ({ page }) => {
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
 });
 
+test('homepage FAQ answers commercial intent and publishes matching structured data', async ({
+  page
+}) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  const faqTriggers = page.locator('.faq-list__trigger');
+  await expect(faqTriggers).toHaveCount(9);
+  await expect(
+    page.getByRole('button', {
+      name: 'Quanto costa un progetto di comunicazione, marketing o sviluppo web?'
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', {
+      name: /Potete rifare un sito esistente senza perdere contenuti e visibilit. SEO\?/
+    })
+  ).toBeVisible();
+
+  const faqState = await page.evaluate(() => {
+    const visibleQuestions = Array.from(
+      document.querySelectorAll<HTMLElement>('.faq-list__trigger > span:first-child')
+    ).map((element) => element.textContent?.trim() ?? '');
+    const schemas = Array.from(
+      document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]')
+    ).flatMap((script) => {
+      const parsed = JSON.parse(script.textContent || '[]') as
+        | Record<string, unknown>
+        | Array<Record<string, unknown>>;
+      return Array.isArray(parsed) ? parsed : [parsed];
+    });
+    const faqSchema = schemas.find((schema) => schema['@type'] === 'FAQPage') as
+      | { mainEntity?: Array<{ name?: string; acceptedAnswer?: { text?: string } }> }
+      | undefined;
+
+    return {
+      visibleQuestions,
+      schemaQuestions: faqSchema?.mainEntity?.map((item) => item.name ?? '') ?? [],
+      answersComplete:
+        faqSchema?.mainEntity?.every(
+          (item) => (item.acceptedAnswer?.text?.trim().length ?? 0) > 80
+        ) ?? false
+    };
+  });
+
+  expect(faqState.schemaQuestions).toEqual(faqState.visibleQuestions);
+  expect(faqState.answersComplete).toBe(true);
+});
+
 test('homepage publishes the complete same-origin favicon suite', async ({ page, request }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
@@ -177,7 +225,9 @@ test('interactive motion controls remain accessible', async ({ page }) => {
   await servicesSummary.click();
   await expect(servicesMenu).not.toHaveAttribute('open', '');
 
-  const faqTrigger = page.getByRole('button', { name: 'Avete già un sito da rifare?' });
+  const faqTrigger = page.getByRole('button', {
+    name: 'Quali servizi offre Netmarket alle aziende di Padova?'
+  });
   await faqTrigger.click();
   await expect(faqTrigger).toHaveAttribute('aria-expanded', 'true');
   await expect(faqTrigger.locator('.faq-list__icon')).toBeVisible();

@@ -95,6 +95,18 @@ const teamJsonLd = teamMembers.map((person) =>
     image: person.image
   })
 );
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: questions.map(([question, answer]) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer
+    }
+  }))
+};
 ---
 
 <BaseLayout
@@ -102,7 +114,7 @@ const teamJsonLd = teamMembers.map((person) =>
   description="Netmarket è un'agenzia di comunicazione, marketing e siti web a Padova attiva dal 1986: strategia, branding, ecommerce, SEO, advertising, social e software per aziende."
   path="/"
   canonicalSiteUrl={canonicalSiteUrl}
-  structuredData={teamJsonLd}
+  structuredData={[...teamJsonLd, faqJsonLd]}
 >
   <section class="home-hero home-hero--editorial" aria-labelledby="page-title">
     <Container wide>
@@ -353,7 +365,7 @@ const teamJsonLd = teamMembers.map((person) =>
       <FAQBlock
         titleId="faq-title"
         title="FAQ essenziali."
-        text="Le prime risposte per capire se il percorso è quello giusto."
+        text="Risposte concrete per scegliere un’agenzia di comunicazione, marketing e siti web a Padova."
         items={questions}
       />
     </Container>

@@ -62,11 +62,42 @@ export const workSteps = [
 ] satisfies [string, string][];
 
 export const questions = [
-  ['Avete già un sito da rifare?', 'Sì. Possiamo partire da contenuti, dati, SEO e criticità del sito attuale per progettare una migrazione ordinata.'],
-  ['Lavorate solo a Padova?', 'No. La sede è a Padova, ma i progetti possono coinvolgere aziende in Veneto e in altri territori.'],
-  ['Gestite anche marketing e social?', 'Sì. Il valore del sito cresce quando SEO, campagne, contenuti e social vengono progettati insieme.'],
-  ['Il CMS resta privato?', 'Sì. Il CMS headless non è pensato come destinazione pubblica: il frontend governa SEO, media e indicizzazione.'],
-  ['Da dove si comincia?', 'Da una conversazione su obiettivi, vincoli, strumenti già attivi e priorità commerciali.']
+  [
+    'Quali servizi offre Netmarket alle aziende di Padova?',
+    'Netmarket è un’agenzia di comunicazione, marketing e tecnologia con sede a Padova. Seguiamo strategia, branding, siti web, ecommerce, SEO, advertising, social media, produzione di contenuti, software e concorsi a premi, coordinando le competenze necessarie in un unico progetto.'
+  ],
+  [
+    'Come scegliere un’agenzia di comunicazione e marketing?',
+    'Conviene valutare la capacità di comprendere il business, la qualità dei progetti reali, le competenze disponibili e il modo in cui vengono misurati i risultati. Prima di proporre strumenti o canali, Netmarket parte da obiettivi, pubblico, processi e priorità dell’azienda.'
+  ],
+  [
+    'Quanto costa un progetto di comunicazione, marketing o sviluppo web?',
+    'Il costo dipende dal perimetro: obiettivi, contenuti, funzionalità, integrazioni, canali e continuità richiesta. Dopo un primo confronto prepariamo una proposta trasparente con attività, tempi, responsabilità e investimento, evitando pacchetti standard poco adatti al contesto.'
+  ],
+  [
+    'Quanto tempo serve per realizzare un sito web o avviare un progetto marketing?',
+    'Un sito aziendale richiede normalmente alcune settimane; ecommerce, software e progetti articolati possono richiedere alcuni mesi. Campagne e attività continuative seguono tempi diversi. La pianificazione definitiva viene condivisa dopo aver verificato contenuti, approvazioni, integrazioni e priorità.'
+  ],
+  [
+    'Potete rifare un sito esistente senza perdere contenuti e visibilità SEO?',
+    'Sì. Prima della migrazione analizziamo pagine, contenuti, posizionamenti, dati e collegamenti esistenti. Il nuovo progetto considera struttura degli URL, metadata, redirect, performance, tracciamento e controlli prima e dopo la pubblicazione.'
+  ],
+  [
+    'Seguite SEO, Google Ads e social media in modo coordinato?',
+    'Sì. SEO, advertising, social e contenuti possono lavorare nello stesso piano, con obiettivi e misurazione condivisi. Questo riduce attività scollegate e aiuta a capire quali canali generano attenzione, contatti e opportunità commerciali.'
+  ],
+  [
+    'Progettate siti e contenuti comprensibili anche dai sistemi AI?',
+    'Sì. Organizziamo informazioni, pagine, collegamenti e dati strutturati perché siano chiari alle persone, ai motori di ricerca e ai sistemi basati sull’intelligenza artificiale. Non promettiamo citazioni o posizionamenti automatici: lavoriamo sulla qualità e leggibilità delle fonti.'
+  ],
+  [
+    'Lavorate soltanto con aziende di Padova e del Veneto?',
+    'No. La sede di Netmarket è a Padova e lavoriamo direttamente con molte imprese del territorio, ma seguiamo anche aziende in altre regioni italiane. Incontri in presenza e collaborazione da remoto vengono organizzati in base al progetto.'
+  ],
+  [
+    'Offrite assistenza e attività continuative dopo il lancio?',
+    'Sì. In base alle necessità possiamo seguire manutenzione ed evoluzione del sito, contenuti, SEO, campagne, social media, analytics e ottimizzazione. Frequenza, responsabilità e indicatori vengono definiti prima di iniziare la collaborazione continuativa.'
+  ]
 ] satisfies [string, string][];
 
 export const insights = [
