@@ -4655,7 +4655,7 @@ main {
   position: relative;
   left: 50%;
   width: min(100vw - 2rem, 82rem);
-  height: clamp(24rem, 36vw, 34rem);
+  height: clamp(31.25rem, 38vw, 42.5rem);
   margin-inline: auto;
   overflow: hidden;
   transform: translateX(-50%);

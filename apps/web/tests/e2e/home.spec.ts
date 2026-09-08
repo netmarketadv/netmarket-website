@@ -75,6 +75,23 @@ test('homepage exposes staging essentials', async ({ page }) => {
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
 });
 
+test('homepage phone stays fully visible at desktop widths', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.home-hero__device img')).toBeVisible();
+
+  for (const width of [1025, 1280, 1440, 1728, 1920]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const clippedTop = await page.evaluate(() => {
+      const visual = document.querySelector<HTMLElement>('.home-hero__visual');
+      const phone = document.querySelector<HTMLImageElement>('.home-hero__device img');
+      if (!visual || !phone) return Number.POSITIVE_INFINITY;
+      return Math.max(0, visual.getBoundingClientRect().top - phone.getBoundingClientRect().top);
+    });
+
+    expect(clippedTop).toBeLessThanOrEqual(0.5);
+  }
+});
+
 test('design system page is internal and noindexed', async ({ page }) => {
   await page.goto('/design-system/', { waitUntil: 'domcontentloaded' });
   await expect(
