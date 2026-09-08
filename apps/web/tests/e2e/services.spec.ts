@@ -68,8 +68,12 @@ test('all definitive service experiences stay semantic and inside supported view
   ] as const;
   const viewports = [
     { width: 390, height: 844 },
+    { width: 430, height: 932 },
     { width: 768, height: 1024 },
-    { width: 1440, height: 900 }
+    { width: 1024, height: 768 },
+    { width: 1280, height: 800 },
+    { width: 1440, height: 900 },
+    { width: 1728, height: 1117 }
   ];
 
   for (const viewport of viewports) {
