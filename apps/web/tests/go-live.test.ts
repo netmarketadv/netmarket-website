@@ -59,4 +59,30 @@ describe('go-live safeguards', () => {
     expect(tracking).toContain("analytics_storage: 'denied'");
     expect(tracking).toContain("window.setTimeout(loadTagManager, 2500)");
   });
+
+  it('keeps production deploy isolated behind exact host and path guards', () => {
+    const workflow = readFileSync(
+      new URL('../../../.github/workflows/deploy-production.yml', import.meta.url),
+      'utf8'
+    );
+    const deploy = readFileSync(
+      new URL('../../../infrastructure/scripts/deploy-production.sh', import.meta.url),
+      'utf8'
+    );
+    const rollback = readFileSync(
+      new URL('../../../infrastructure/scripts/rollback-production.sh', import.meta.url),
+      'utf8'
+    );
+
+    expect(workflow).toContain('environment: production');
+    expect(workflow).toContain('SG_PRODUCTION_DEPLOY_PATH');
+    expect(workflow).not.toContain('SG_STAGING_DEPLOY_PATH');
+    expect(workflow).toContain("failure() && env.DEPLOY_COMPLETED == 'true'");
+    expect(workflow).toContain('rollback-production.sh --execute');
+    expect(deploy).toContain('HOST" != "netmarket.it');
+    expect(deploy).toContain('PATH_TARGET" != *"/netmarket.it/"*');
+    expect(deploy).toContain('PUBLIC_DEPLOY_ENV:-}" != "production');
+    expect(rollback).toContain('HOST" != "netmarket.it');
+    expect(rollback).toContain('PATH_TARGET" != *"/netmarket.it/"*');
+  });
 });

@@ -1,8 +1,10 @@
 # Deployment
 
-Il deploy reale è attivo solo per ambienti non produttivi. `deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`. `main` è riservato al futuro deploy production e non pubblica staging.
+`deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`.
+`deploy-production.yml` pubblica `netmarket.it` esclusivamente da `main`, attraverso il
+GitHub Environment protetto `production` e dopo approvazione manuale.
 
-La preparazione locale del candidato production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload e non modifica il divieto operativo verso `netmarket.it`.
+La preparazione locale del candidato production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload.
 
 Lo staging statico viene pubblicato con `infrastructure/scripts/deploy-staging.sh`, che richiede build Astro già generata, SSH con known hosts espliciti e path assoluto.
 
@@ -34,6 +36,38 @@ infrastructure/scripts/rollback-staging.sh --execute --host staging.netmarket.it
 ```
 
 `latest` ripristina lo snapshot più recente. In alternativa si può passare il nome file del backup, ad esempio `before-<sha>.tgz`.
+
+## Production
+
+Il deploy production esegue nell'ordine: guard host/branch, controllo secret, pull della
+cache CMS, fast quality gates, audit del build production, dry-run rsync, upload in una
+release separata, sostituzione del document root, smoke funzionale, smoke SEO e verifica
+completa della redirect map. Se un controllo post-deploy fallisce, il workflow ripristina
+automaticamente la release precedente; errori anteriori allo switch non attivano rollback.
+
+Il document root precedente viene conservato come
+`.netmarket-rollbacks/before-<sha>`. La directory `.well-known` viene copiata nella nuova
+release prima dello switch. Il rollback è separato e deve essere invocato esplicitamente:
+
+```sh
+infrastructure/scripts/rollback-production.sh --dry-run --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH"
+infrastructure/scripts/rollback-production.sh --execute --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH" --release latest
+```
+
+Secret richiesti nel GitHub Environment `production`:
+
+- `SG_SSH_HOST`
+- `SG_SSH_PORT`
+- `SG_SSH_USER`
+- `SG_SSH_PRIVATE_KEY`
+- `SG_SSH_KNOWN_HOSTS`
+- `SG_PRODUCTION_DEPLOY_PATH`
+- `SG_CMS_WORDPRESS_PATH`
+- `CMS_BASIC_AUTH_USER`
+- `CMS_BASIC_AUTH_PASSWORD`
+
+Il path production deve essere assoluto, contenere `/netmarket.it/` e terminare con
+`/public_html`; lo script rifiuta ogni altra destinazione.
 
 Il plugin proprietario del CMS viene pubblicato e attivato con `deploy-cms.yml`, che usa `infrastructure/scripts/bootstrap-wordpress.sh` su `cms.netmarket.it`, imposta `blog_public=0`, aggiorna i permalink e verifica `/wp-json/netmarket/v1/health`.
 

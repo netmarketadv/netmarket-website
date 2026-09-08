@@ -6,14 +6,14 @@ Netmarket è un'agenzia italiana attiva dal 1986. Questo repository prepara la n
 
 ## Regola Di Produzione
 
-Non modificare, testare deploy o usare come target operativo di scrittura `netmarket.it`. Target operativi consentiti per scritture, deploy, test di pubblicazione e integrazioni sono solo `staging.netmarket.it` e `cms.netmarket.it`.
+Target operativi consentiti per scritture, deploy, test di pubblicazione e integrazioni sono `staging.netmarket.it`, `cms.netmarket.it` e, per il go-live finale tramite pipeline production protetta, `netmarket.it`.
 
-Eccezione autorizzata per migrazione e audit contenuti: sono consentite richieste HTTP `GET` e `HEAD` read-only verso `https://netmarket.it` esclusivamente per crawl responsabile, inventory, confronto SEO, raccolta URL, analisi HTML, sitemap, robots, media pubblici e WordPress REST pubblico. Questa eccezione non autorizza login, POST/PUT/PATCH/DELETE, modifiche a WordPress legacy, installazione plugin, redirect, DNS, Search Console, robots/sitemap di produzione, cancellazioni, upload o qualunque operazione che cambi stato sul sito legacy.
+Per migrazione e audit contenuti sono consentite richieste HTTP `GET` e `HEAD` read-only verso `https://netmarket.it`. Le modifiche production sono consentite esclusivamente dal workflow production approvato, per pubblicare il frontend statico, redirect, robots e sitemap previsti dal candidate validato; restano vietate modifiche manuali al WordPress legacy, plugin, database, DNS e Search Console.
 
 ## Branch E Deploy
 
 - `develop` pubblica automaticamente il frontend su `staging.netmarket.it` tramite `Deploy Staging`.
-- `main` è riservato al futuro production deploy, ma oggi non deve pubblicare su `netmarket.it`.
+- `main` pubblica `netmarket.it` esclusivamente tramite il workflow production protetto e approvato manualmente.
 - Branch `feature/*` e `fix/*` non pubblicano su SiteGround; la full QA automatica passa dalle Pull Request verso `develop` o `main`.
 - Il deploy frontend e il deploy CMS sono separati: una modifica Astro non deve deployare automaticamente il plugin WordPress.
 - Ogni build staging deve esporre `netmarket-build`, `netmarket-build-time` e `netmarket-environment`; lo smoke test deve verificare lo SHA online.
@@ -88,4 +88,4 @@ Nessun secret versionato. Gli script distruttivi devono richiedere parametri esp
 
 ## Definition Of Done
 
-Codice verificato, documentazione aggiornata, limiti dichiarati, nessun target produzione configurato per deploy, nessun segreto nel repository.
+Codice verificato, documentazione aggiornata, limiti dichiarati, deploy production consentito solo tramite environment protetto, nessun segreto nel repository.
