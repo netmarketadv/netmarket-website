@@ -76,6 +76,7 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       socialImage={socialImage}
       socialType={socialType}
     />
+    <TrackingController />
   </head>
   <body>
     <SkipLink />
@@ -84,7 +85,6 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       <slot />
     </main>
     <SiteFooter />
-    <TrackingController />
     <MotionController />
   </body>
 </html>

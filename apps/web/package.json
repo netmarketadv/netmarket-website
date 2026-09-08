@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && node ../../infrastructure/scripts/write-deployment-config.mjs",
     "preview": "astro preview",
     "typecheck": "astro check",
     "test": "vitest run --passWithNoTests",

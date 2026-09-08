@@ -19,6 +19,7 @@ export async function GET() {
     '/agenzia/',
     '/lavora-con-noi/',
     '/contatti/',
+    '/nod/',
     '/insight/',
     ...insightPages,
     ...insightCategories(insightArchive.insights).map((category) => categoryPath(category.slug)),

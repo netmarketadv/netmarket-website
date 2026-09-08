@@ -11,6 +11,8 @@
   "scripts": {
     "dev": "pnpm --filter @netmarket/web dev",
     "build": "pnpm --filter @netmarket/web build",
+    "build:production-candidate": "PUBLIC_SITE_URL=https://netmarket.it PUBLIC_CMS_URL=https://cms.netmarket.it PUBLIC_DEPLOY_ENV=production PUBLIC_ANALYTICS_ENABLED=true PUBLIC_GTM_ID=GTM-K782CJ46 CMS_API_BASE_URL=https://cms.netmarket.it/wp-json/netmarket/v1/ pnpm build && node infrastructure/scripts/audit-production-build.mjs",
+    "audit:production-build": "node infrastructure/scripts/audit-production-build.mjs",
     "lint": "eslint .",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",

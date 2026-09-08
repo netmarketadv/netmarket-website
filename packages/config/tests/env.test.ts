@@ -31,6 +31,42 @@ describe('environment validation', () => {
     expect(robotsForEnv('production')).toBe('index, follow');
   });
 
+  it('requires the canonical host and GTM configuration in production', () => {
+    expect(() =>
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://www.netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'true',
+        PUBLIC_GTM_ID: 'GTM-K782CJ46'
+      })
+    ).toThrow(/https:\/\/netmarket.it/);
+
+    expect(() =>
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'false',
+        PUBLIC_GTM_ID: ''
+      })
+    ).toThrow(/ANALYTICS_ENABLED/);
+
+    expect(
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'true',
+        PUBLIC_GTM_ID: 'GTM-K782CJ46'
+      })
+    ).toMatchObject({
+      PUBLIC_SITE_URL: 'https://netmarket.it',
+      PUBLIC_ANALYTICS_ENABLED: true,
+      PUBLIC_GTM_ID: 'GTM-K782CJ46'
+    });
+  });
+
   it('requires the proprietary CMS REST namespace outside local', () => {
     expect(() =>
       validateServerEnv(

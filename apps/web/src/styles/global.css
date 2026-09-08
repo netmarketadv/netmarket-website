@@ -5255,17 +5255,6 @@ main {
   filter: drop-shadow(0 2rem 3rem rgb(9 10 15 / 0.2));
 }
 
-.home-hero__device[data-reveal][data-motion-state='ready'] {
-  clip-path: none;
-  transform: translateX(-50%) scale(1.015);
-}
-
-.home-hero__device[data-reveal].is-visible,
-.home-hero__device[data-reveal][data-motion-state='revealed'] {
-  clip-path: none;
-  transform: translateX(-50%);
-}
-
 .home-hero__tile,
 .home-hero__rating,
 .home-hero__mini-card {

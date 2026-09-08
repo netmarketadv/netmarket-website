@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { collectCriticalConsoleErrors } from './helpers';
+import { collectCriticalConsoleErrors, expectEnvironmentRobots } from './helpers';
 
 test.setTimeout(120_000);
 
@@ -14,10 +14,10 @@ test('services archive renders the editorial index', async ({ page }) => {
   await expect(
     page.locator('.service-index').getByRole('link', { name: /Concorsi a premi/ })
   ).toHaveAttribute('href', /\/servizi\/concorsi-a-premi\//);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await expectEnvironmentRobots(page);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
-    'https://www.netmarket.it/servizi/'
+    'https://netmarket.it/servizi/'
   );
   expect(errors).toEqual([]);
 });
@@ -36,10 +36,10 @@ test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
     .locator('script[type="application/ld+json"]')
     .evaluate((element) => element.textContent ?? '');
   expect(jsonLd).toContain('"@type":"Service"');
-  expect(jsonLd).toContain('https://www.netmarket.it/servizi/siti-web/#service');
+  expect(jsonLd).toContain('https://netmarket.it/servizi/siti-web/#service');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
-    'https://www.netmarket.it/servizi/siti-web/'
+    'https://netmarket.it/servizi/siti-web/'
   );
   await expect(page.locator('#service-faq-title')).toBeVisible();
   await expect(page.locator('.faq-list__trigger').first()).toBeVisible();

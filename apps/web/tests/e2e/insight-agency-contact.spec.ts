@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { collectCriticalConsoleErrors } from './helpers';
+import { collectCriticalConsoleErrors, expectEnvironmentRobots } from './helpers';
 
 test.describe('insight, agency and contact', () => {
   test.setTimeout(120_000);
@@ -8,7 +8,7 @@ test.describe('insight, agency and contact', () => {
     await page.goto('/insight/', { waitUntil: 'domcontentloaded' });
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Appunti utili');
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expectEnvironmentRobots(page);
     const firstArticle = page
       .locator('.insight-cover-story > a, .insight-card-editorial > a')
       .first();
@@ -373,10 +373,10 @@ test.describe('insight, agency and contact', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Marketing, vendite e AI');
     await expect(page.getByRole('img', { name: 'NØD by Netmarket' }).first()).toBeVisible();
     await expect(page.getByRole('img', { name: /Dashboard NØD/ })).toBeVisible();
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expectEnvironmentRobots(page);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',
-      'https://www.netmarket.it/nod/'
+      'https://netmarket.it/nod/'
     );
     const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
     expect(structuredData).toContain('SoftwareApplication');

@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { collectCriticalConsoleErrors, waitForInteractivePage } from './helpers';
+import {
+  collectCriticalConsoleErrors,
+  expectEnvironmentRobots,
+  waitForInteractivePage
+} from './helpers';
 
 test.setTimeout(120_000);
 
@@ -69,7 +73,7 @@ test('homepage exposes staging essentials', async ({ page }) => {
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
   ).toHaveCount(12);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await expectEnvironmentRobots(page);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: /Salta al contenuto/ })).toBeFocused();
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
@@ -157,7 +161,10 @@ test('homepage publishes the complete same-origin favicon suite', async ({ page,
 
 test('homepage phone stays fully visible at desktop widths', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.home-hero__device img')).toBeVisible();
+  const phoneImage = page.locator('.home-hero__device img');
+  await expect(phoneImage).toBeVisible();
+  await expect(phoneImage).toHaveAttribute('src', '/media/generated/home-hero-social-phone.webp');
+  await expect(phoneImage).toHaveAttribute('srcset', /home-hero-social-phone-388\.webp 388w/);
 
   for (const width of [1025, 1280, 1440, 1728, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
@@ -791,8 +798,8 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   const engine = await page.evaluate(() => document.documentElement.dataset.motionEngine ?? 'css');
   expect(['gsap', 'css']).toContain(engine);
 
-  const visiblePreset = async (variant: string) =>
-    page
+  const visiblePreset = async (variant: string, targetPage = page) =>
+    targetPage
       .locator(`[data-reveal="${variant}"].is-visible`)
       .first()
       .evaluate((element) => {
@@ -808,8 +815,11 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   await expect.poll(() => visiblePreset('up')).toMatchObject({ state: 'revealed' });
   await expect.poll(() => visiblePreset('scale')).toMatchObject({ state: 'revealed' });
 
-  await page.locator('[data-reveal="media"]').first().scrollIntoViewIfNeeded();
-  await expect.poll(() => visiblePreset('media')).toMatchObject({ state: 'revealed' });
+  const mediaPage = await page.context().newPage();
+  await mediaPage.goto('/agenzia/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(mediaPage);
+  await mediaPage.locator('[data-reveal="media"]').first().scrollIntoViewIfNeeded();
+  await expect.poll(() => visiblePreset('media', mediaPage)).toMatchObject({ state: 'revealed' });
 
   await page.locator('[data-reveal="line"]').first().scrollIntoViewIfNeeded();
   await expect.poll(() => visiblePreset('line')).toMatchObject({ state: 'revealed' });
@@ -824,9 +834,11 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   } else {
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'nm-reveal-up' });
     await expect
-      .poll(() => visiblePreset('media'))
+      .poll(() => visiblePreset('media', mediaPage))
       .toMatchObject({ animationName: 'nm-reveal-media' });
   }
+
+  await mediaPage.close();
 });
 
 test('motion reveal is robust on mobile and reduced motion', async ({ browser }) => {

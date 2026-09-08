@@ -15,7 +15,7 @@ import { getServiceArchiveData, servicePath } from '@/lib/services/content';
 import { personJsonLd } from '@netmarket/seo';
 import type { Service } from '@netmarket/schemas';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
+const canonicalSiteUrl = 'https://netmarket.it';
 const { services } = await getServiceArchiveData();
 const { projects } = await getProjectArchiveData();
 
@@ -136,12 +136,16 @@ const faqJsonLd = {
 
         <div class="home-hero__visual">
           <div class="home-hero__orbit" aria-hidden="true"></div>
-          <figure class="home-hero__device" data-reveal="media">
+          <figure class="home-hero__device">
             <img
               src={heroPrimaryImage.url}
+              srcset="/media/generated/home-hero-social-phone-388.webp 388w, /media/generated/home-hero-social-phone.webp 776w"
+              sizes="(max-width: 767px) 62vw, 320px"
               alt={heroPrimaryImage.alt || 'Visual siti web Netmarket'}
+              width="776"
+              height="1499"
               loading="eager"
-              decoding="async"
+              decoding="sync"
               fetchpriority="high"
             />
           </figure>
@@ -153,8 +157,9 @@ const faqJsonLd = {
             <img
               src={heroSecondaryImage.url}
               alt={heroSecondaryImage.alt || 'Visual marketing Netmarket'}
-              loading="eager"
+              loading="lazy"
               decoding="async"
+              fetchpriority="low"
             />
             <figcaption>Product</figcaption>
           </figure>
@@ -166,8 +171,9 @@ const faqJsonLd = {
             <img
               src={heroTertiaryImage.url}
               alt={heroTertiaryImage.alt || 'Visual ecommerce Netmarket'}
-              loading="eager"
+              loading="lazy"
               decoding="async"
+              fetchpriority="low"
             />
             <figcaption>Ecommerce</figcaption>
           </figure>
@@ -175,8 +181,9 @@ const faqJsonLd = {
             <img
               src={heroSocialPostImage.url}
               alt={heroSocialPostImage.alt}
-              loading="eager"
+              loading="lazy"
               decoding="async"
+              fetchpriority="low"
             />
           </figure>
           <div

@@ -34,7 +34,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
+const canonicalSiteUrl = 'https://netmarket.it';
 const { service } = Astro.props;
 const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;

@@ -35,6 +35,7 @@ export type ServerEnv = z.infer<typeof serverEnvSchema>;
 export function validatePublicEnv(input: Record<string, unknown>): PublicEnv {
   const env = publicEnvSchema.parse(input);
   assertAllowedUrls(env);
+  assertAnalyticsConfig(env);
   return env;
 }
 
@@ -72,5 +73,18 @@ function assertAllowedUrls(env: PublicEnv): void {
   }
   if (env.PUBLIC_DEPLOY_ENV !== 'local' && !env.PUBLIC_CMS_URL.includes('cms.netmarket.it')) {
     throw new Error('PUBLIC_CMS_URL deve puntare a cms.netmarket.it fuori dal locale.');
+  }
+  if (env.PUBLIC_DEPLOY_ENV === 'production' && env.PUBLIC_SITE_URL !== 'https://netmarket.it') {
+    throw new Error('PUBLIC_SITE_URL deve essere https://netmarket.it in production.');
+  }
+}
+
+function assertAnalyticsConfig(env: PublicEnv): void {
+  if (env.PUBLIC_DEPLOY_ENV !== 'production') return;
+  if (!env.PUBLIC_ANALYTICS_ENABLED) {
+    throw new Error('PUBLIC_ANALYTICS_ENABLED deve essere true in production.');
+  }
+  if (!/^GTM-[A-Z0-9]+$/.test(env.PUBLIC_GTM_ID)) {
+    throw new Error('PUBLIC_GTM_ID deve contenere un container GTM valido in production.');
   }
 }

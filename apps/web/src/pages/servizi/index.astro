@@ -12,7 +12,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { clientLogos, cmsMedia, featureHighlights } from '@/data/home';
 import { getServiceArchiveData } from '@/lib/services/content';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
+const canonicalSiteUrl = 'https://netmarket.it';
 const { services } = await getServiceArchiveData();
 const featuredServices = services.filter((service) => service.featured).slice(0, 3);
 const breadcrumb = breadcrumbJsonLd([

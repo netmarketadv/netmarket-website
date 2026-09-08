@@ -2,6 +2,8 @@
 
 Il deploy reale è attivo solo per ambienti non produttivi. `deploy-staging.yml` pubblica automaticamente staging a ogni push su `develop`. `main` è riservato al futuro deploy production e non pubblica staging.
 
+La preparazione locale del candidato production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload e non modifica il divieto operativo verso `netmarket.it`.
+
 Lo staging statico viene pubblicato con `infrastructure/scripts/deploy-staging.sh`, che richiede build Astro già generata, SSH con known hosts espliciti e path assoluto.
 
 Il deploy usa `rsync -az --delete` senza `--checksum`, perché Astro produce asset fingerprinted e il confronto checksum rallenterebbe inutilmente il normale ciclo di sviluppo. Prima del deploy reale viene salvato uno snapshot `before-<sha>.tgz` della build online, esclusa `.well-known`, nella directory `.netmarket-backups` accanto al document root.

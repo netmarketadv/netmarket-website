@@ -8,9 +8,12 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   await page.goto('/servizi/siti-web/', { waitUntil: 'domcontentloaded' });
 
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Siti web che lavorano per la tua azienda.' })
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Realizzazione siti web a Padova, progettati per lavorare.'
+    })
   ).toBeVisible();
-  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorano');
+  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorare');
   await expect(page).toHaveTitle(/Realizzazione siti web a Padova/);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
@@ -18,12 +21,12 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
-    'https://www.netmarket.it/servizi/siti-web/'
+    'https://netmarket.it/servizi/siti-web/'
   );
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
-    'https://www.netmarket.it/media/rigomar.webp'
+    'https://netmarket.it/media/rigomar.webp'
   );
   await expect(page.locator('meta[name="twitter:image:alt"]')).toHaveAttribute(
     'content',
@@ -137,9 +140,14 @@ test('siti web content remains semantic and readable without javascript', async 
   await page.goto('/servizi/siti-web/', { waitUntil: 'domcontentloaded' });
 
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Siti web che lavorano per la tua azienda.' })
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Realizzazione siti web a Padova, progettati per lavorare.'
+    })
   ).toBeVisible();
-  await expect(page.locator('h1')).toHaveText(/Siti web che lavorano per la\s+tua azienda\./);
+  await expect(page.locator('h1')).toHaveText(
+    /Realizzazione siti web a Padova, progettati per\s+lavorare\./
+  );
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('main h2')).toHaveCount(11);
   await expect(page.locator('body')).toContainText('Da Padova progettiamo siti corporate');

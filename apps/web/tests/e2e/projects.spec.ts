@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { collectCriticalConsoleErrors } from './helpers';
+import { collectCriticalConsoleErrors, expectEnvironmentRobots } from './helpers';
 
 test.describe('projects', () => {
   test.setTimeout(120_000);
@@ -13,7 +13,7 @@ test.describe('projects', () => {
     await expect(
       page.getByRole('link', { name: /BRB|Sirene Blu|Albertini/i }).first()
     ).toBeVisible();
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expectEnvironmentRobots(page);
     expect(errors).toEqual([]);
   });
 
