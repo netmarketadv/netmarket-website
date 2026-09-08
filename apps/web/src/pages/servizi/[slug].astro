@@ -12,8 +12,14 @@ import ServiceProof from '@/components/services/ServiceProof.astro';
 import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
 import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
 import ServiceTechnicalFocus from '@/components/services/ServiceTechnicalFocus.astro';
+import ServiceExperiencePage from '@/components/services/ServiceExperiencePage.astro';
 import WebsitesServicePage from '@/components/services/WebsitesServicePage.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+  isServiceExperienceSlug,
+  serviceExperiences,
+  type ServiceExperienceSlug
+} from '@/data/service-experiences';
 import { getServiceArchiveData, resolveRelated, serviceDescription } from '@/lib/services/content';
 
 interface Props {
@@ -34,12 +40,16 @@ const { service } = Astro.props;
 const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;
 const isWebsitesService = service.slug === 'siti-web';
+const isExperienceService = isServiceExperienceSlug(service.slug);
+const experience = isExperienceService
+  ? serviceExperiences[service.slug as ServiceExperienceSlug]
+  : undefined;
 const description = isWebsitesService
   ? 'Realizzazione siti web a Padova per aziende: corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia integrate.'
-  : serviceDescription(service);
+  : experience?.description ?? serviceDescription(service);
 const title = isWebsitesService
   ? 'Realizzazione siti web a Padova'
-  : service.seo.title || service.title;
+  : (experience?.title ?? service.seo.title) || service.title;
 const faqItems = service.faq
   .map((item) => {
     if (!item || typeof item !== 'object') return null;
@@ -57,11 +67,13 @@ const breadcrumb = breadcrumbJsonLd([
 ]);
 const serviceSchema = serviceJsonLd(
   canonicalSiteUrl,
-  isWebsitesService ? 'Realizzazione siti web a Padova' : service.title,
+  isWebsitesService
+    ? 'Realizzazione siti web a Padova'
+    : experience?.eyebrow ?? service.title,
   description,
   absoluteCanonical(canonicalSiteUrl, path),
   isWebsitesService ? 'Realizzazione siti web' : service.title,
-  isWebsitesService
+  isWebsitesService || isExperienceService
     ? [
         { '@type': 'City', name: 'Padova' },
         { '@type': 'Country', name: 'Italia' }
@@ -78,6 +90,21 @@ const websitesSocialImage = isWebsitesService
       mimeType: 'image/webp'
     }
   : undefined;
+const experienceSocialImage = isExperienceService
+  ? related.caseStudies.find((item) => item.image)?.image ?? service.image ?? undefined
+  : undefined;
+const faqSchema = faqItems.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map(([question, answer]) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer }
+      }))
+    }
+  : undefined;
+const structuredData = [breadcrumb, serviceSchema, ...(faqSchema ? [faqSchema] : [])];
 const hasProof = service.results.length > 0;
 ---
 
@@ -87,16 +114,25 @@ const hasProof = service.results.length > 0;
   path={path}
   noindex={service.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
-  structuredData={[breadcrumb, serviceSchema]}
-  socialTitle={isWebsitesService ? 'Realizzazione siti web a Padova | Netmarket' : undefined}
-  socialDescription={isWebsitesService ? description : undefined}
-  socialImage={websitesSocialImage}
-  motionMode={isWebsitesService ? 'light' : 'full'}
+  structuredData={structuredData}
+  socialTitle={isWebsitesService ? 'Realizzazione siti web a Padova | Netmarket' : experience?.title}
+  socialDescription={isWebsitesService || isExperienceService ? description : undefined}
+  socialImage={websitesSocialImage ?? experienceSocialImage}
+  motionMode={isWebsitesService || isExperienceService ? 'light' : 'full'}
 >
   {
     isWebsitesService ? (
       <Container wide>
         <WebsitesServicePage service={service} related={related} faqItems={faqItems} />
+      </Container>
+    ) : isExperienceService ? (
+      <Container wide>
+        <ServiceExperiencePage
+          service={service}
+          related={related}
+          faqItems={faqItems}
+          variant={service.slug as ServiceExperienceSlug}
+        />
       </Container>
     ) : (
       <>

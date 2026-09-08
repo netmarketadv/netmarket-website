@@ -70,7 +70,12 @@ const fallbackCaseStudyPriority: Record<string, string[]> = {
     'casi-studio-strategia-digitale-ecommerce-brb',
     'sviluppo-sito-web-fotovoltaico-progetto-e'
   ],
+  advertising: ['casi-studio-strategia-digitale-ecommerce-brb'],
   'social-media': ['casi-studio-strategia-digitale-ecommerce-brb'],
+  'branding-e-comunicazione': [
+    'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+    'casi-studio-strategia-digitale-ecommerce-brb'
+  ],
   'content-production': [
     'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda'
   ],
@@ -319,7 +324,10 @@ async function fallbackCaseStudies(slug: string): Promise<RelationSummary[]> {
     const { projects } = await getProjectArchiveData();
     const priority = fallbackCaseStudyPriority[slug] ?? [];
     return projects
-      .filter((project) => project.services.some((service) => service.slug === slug))
+      .filter(
+        (project) =>
+          project.services.some((service) => service.slug === slug) || priority.includes(project.slug)
+      )
       .sort((a, b) => priorityIndex(a.slug, priority) - priorityIndex(b.slug, priority))
       .slice(0, relationLimits.caseStudies)
       .map(toProjectRelation);

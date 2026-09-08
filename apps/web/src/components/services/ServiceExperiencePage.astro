@@ -1,0 +1,197 @@
+---
+import type { RelationSummary, Service } from '@netmarket/schemas';
+import {
+  IconArrowRight,
+  IconBolt,
+  IconBrandInstagram,
+  IconBrush,
+  IconChartBar,
+  IconCheck,
+  IconCode,
+  IconFileText,
+  IconLink,
+  IconPhoto,
+  IconSearch,
+  IconShoppingBag,
+  IconSparkles,
+  IconTargetArrow
+} from '@tabler/icons-astro';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
+import Button from '@/components/ui/Button.astro';
+import ServiceExperienceVisual from '@/components/services/ServiceExperienceVisual.astro';
+import {
+  serviceExperiences,
+  type ServiceExperienceSlug
+} from '@/data/service-experiences';
+import { serviceTechnicalFocus } from '@/data/service-pilots';
+import { relationPath, textItems } from '@/lib/services/content';
+
+interface Props {
+  service: Service;
+  related: {
+    caseStudies: RelationSummary[];
+    insights: RelationSummary[];
+    resources: RelationSummary[];
+    services: RelationSummary[];
+  };
+  faqItems: [string, string][];
+  variant: ServiceExperienceSlug;
+}
+
+const { service, related, faqItems, variant } = Astro.props;
+const experience = serviceExperiences[variant];
+const values = textItems(service.valueProps).slice(0, 4);
+const problems = textItems(service.problems).slice(0, 4);
+const process = textItems(service.process).slice(0, 4);
+const technical = serviceTechnicalFocus(service).slice(0, 3);
+const results = service.results
+  .filter((item) => Boolean(item) && typeof item === 'object')
+  .map((item) => {
+    const record = item as Record<string, unknown>;
+    return {
+      label: typeof record.label === 'string' ? record.label : '',
+      value: typeof record.value === 'string' ? record.value : '',
+      context: typeof record.context === 'string' ? record.context : ''
+    };
+  })
+  .filter((item) => item.label && item.value)
+  .slice(0, 3);
+const capabilities = service.capabilities.slice(0, 6);
+const projects = related.caseStudies.filter((item) => item.image).slice(0, 3);
+const editorial = [...related.insights, ...related.resources].slice(0, 3);
+const relatedServices = related.services.slice(0, 4);
+const accentIndex = experience.h1.indexOf(experience.accent);
+const h1Before = experience.h1.slice(0, accentIndex);
+const h1After = experience.h1.slice(accentIndex + experience.accent.length);
+
+const iconSet = {
+  ecommerce: [IconShoppingBag, IconSearch, IconTargetArrow, IconChartBar],
+  'software-e-integrazioni': [IconLink, IconCode, IconBolt, IconChartBar],
+  seo: [IconSearch, IconFileText, IconLink, IconChartBar],
+  advertising: [IconTargetArrow, IconSparkles, IconChartBar, IconArrowRight],
+  'social-media': [IconBrandInstagram, IconFileText, IconSparkles, IconChartBar],
+  'branding-e-comunicazione': [IconBrush, IconSparkles, IconFileText, IconPhoto],
+  'content-production': [IconPhoto, IconFileText, IconSparkles, IconBrandInstagram],
+  'concorsi-a-premi': [IconSparkles, IconFileText, IconCode, IconCheck]
+} as const;
+const icons = iconSet[variant];
+
+const projectDescriptions: Record<string, string> = {
+  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa':
+    'Catalogo, UX e acquisizione per un ecommerce cresciuto insieme al business.',
+  'casi-studio-strategia-digitale-ecommerce-brb':
+    'Ecommerce, SEO, social e contenuti dentro una strategia digitale coordinata.',
+  'app-mobile-programma-fedelta-sirene-blu':
+    'App, programma fedeltà e integrazione con i sistemi dei punti vendita.',
+  'sviluppo-crm-custom-venitaly':
+    'Un CRM custom costruito attorno a flussi, dati e attività operative.',
+  'sviluppo-sito-web-allestimenti-fieristici-albertini':
+    'Architettura e contenuti per rendere leggibili servizi e competenze.',
+  'sviluppo-sito-web-fotovoltaico-progetto-e':
+    'Sito e contenuti per spiegare un’offerta tecnica a un pubblico aziendale.',
+  'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda':
+    'Sito e shooting fotografico per valorizzare produzione e competenze B2B.',
+  'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa':
+    'Concept, piattaforma e gestione completa di un concorso multicanale.'
+};
+---
+
+<article class:list={['service-x', `service-x--${variant}`]}>
+  <section class="service-x-hero" aria-labelledby="page-title">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span><a href="/servizi/">Servizi</a><span aria-hidden="true">/</span><span>{service.title}</span>
+    </nav>
+    <div class="service-x-hero__grid">
+      <div class="service-x-hero__copy" data-reveal="line">
+        <p class="nm-meta">{experience.eyebrow}</p>
+        <h1 id="page-title">{h1Before}<span class="nm-heading-accent">{experience.accent}</span>{h1After}</h1>
+        <p>{service.shortDescription}</p>
+        <div class="service-x-actions">
+          <Button href="#contatti" magnetic>Parliamone</Button>
+          <a href="#come-lavoriamo">Come lavoriamo <IconArrowRight stroke={1.8} aria-hidden="true" /></a>
+        </div>
+      </div>
+      <ServiceExperienceVisual variant={variant} />
+    </div>
+  </section>
+
+  <section class="service-x-intro" aria-labelledby="service-x-intro-title">
+    <div class="service-x-heading" data-reveal="line">
+      <p class="nm-meta">Il punto di partenza</p>
+      <h2 id="service-x-intro-title">{experience.introTitle}</h2>
+      <p>{service.excerpt}</p>
+    </div>
+    <div class="service-x-values" data-reveal="up" data-reveal-stagger="1">
+      {values.map((item, index) => {
+        const Icon = icons[index] as typeof IconSparkles;
+        return <article><span><Icon stroke={1.7} aria-hidden="true" /></span><h3>{item.title}</h3>{item.description && <p>{item.description}</p>}</article>;
+      })}
+    </div>
+  </section>
+
+  <section class="service-x-problems" aria-labelledby="service-x-problems-title">
+    <div class="service-x-heading" data-reveal="line">
+      <p class="nm-meta">Cosa risolviamo</p>
+      <h2 id="service-x-problems-title">{experience.problemsTitle}</h2>
+    </div>
+    <div data-reveal="up" data-reveal-stagger="1">
+      {problems.map((item, index) => <article><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{item.title}</h3>{item.description && <p>{item.description}</p>}</div></article>)}
+    </div>
+  </section>
+
+  {variant === 'content-production' && projects.length > 0 && (
+    <section class="service-x-projects service-x-projects--early" aria-labelledby="service-x-projects-early-title">
+      <div class="service-x-heading" data-reveal="line"><p class="nm-meta">Prova reale</p><h2 id="service-x-projects-early-title">{experience.projectsTitle}</h2><p>{experience.projectsText}</p></div>
+      <div class="service-x-project-grid">{projects.slice(0, 1).map((project) => <ProjectCard title={project.title} category="Progetto" description={projectDescriptions[project.slug] ?? 'Un progetto Netmarket collegato a questo servizio.'} image={project.image!.url} alt={project.image!.alt} href={relationPath(project)} large />)}</div>
+    </section>
+  )}
+
+  <section class="service-x-system" aria-labelledby="service-x-system-title">
+    <div class="service-x-heading" data-reveal="line">
+      <p class="nm-meta">Il sistema</p>
+      <h2 id="service-x-system-title">{experience.systemTitle}</h2>
+    </div>
+    <div class="service-x-system__list" data-reveal="up" data-reveal-stagger="1">
+      {technical.map((item, index) => { const Icon = icons[(index + 1) % icons.length] as typeof IconSparkles; return <article><span><Icon stroke={1.7} aria-hidden="true" /></span><div><h3>{item.title}</h3><p>{item.description}</p></div></article>; })}
+    </div>
+  </section>
+
+  {results.length > 0 && (
+    <section class="service-x-proof" aria-labelledby="service-x-proof-title">
+      <div class="service-x-heading" data-reveal="line"><p class="nm-meta">Evidenze</p><h2 id="service-x-proof-title">{experience.proofTitle}</h2><p>{experience.proofText}</p></div>
+      <div class="service-x-proof__grid" data-reveal="up" data-reveal-stagger="1">{results.map((item) => <article><span>{item.label}</span><strong>{item.value}</strong>{item.context && <p>{item.context}</p>}</article>)}</div>
+    </section>
+  )}
+
+  <section class="service-x-process" id="come-lavoriamo" aria-labelledby="service-x-process-title">
+    <div class="service-x-heading" data-reveal="line"><p class="nm-meta">Metodo</p><h2 id="service-x-process-title">{experience.processTitle}</h2></div>
+    <ol data-reveal="up" data-reveal-stagger="1">{process.map((item, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{item.title}</h3>{item.description && <p>{item.description}</p>}</div></li>)}</ol>
+  </section>
+
+  {variant !== 'content-production' && projects.length > 0 && (
+    <section class="service-x-projects" aria-labelledby="service-x-projects-title">
+      <div class="service-x-heading" data-reveal="line"><p class="nm-meta">Progetti</p><h2 id="service-x-projects-title">{experience.projectsTitle}</h2><p>{experience.projectsText}</p></div>
+      <div class="service-x-project-grid" data-reveal="up" data-reveal-stagger="1">{projects.map((project, index) => <ProjectCard title={project.title} category="Progetto" description={projectDescriptions[project.slug] ?? 'Un progetto Netmarket collegato a questo servizio.'} image={project.image!.url} alt={project.image!.alt} href={relationPath(project)} large={index === 0} />)}</div>
+    </section>
+  )}
+
+  <section class="service-x-scope" aria-labelledby="service-x-scope-title">
+    <div class="service-x-heading"><p class="nm-meta">Competenze</p><h2 id="service-x-scope-title">Il perimetro prende forma sul progetto.</h2></div>
+    <ul>{capabilities.map((item) => <li><IconCheck stroke={1.8} aria-hidden="true" />{item.name}</li>)}</ul>
+  </section>
+
+  {(editorial.length > 0 || relatedServices.length > 0) && (
+    <section class="service-x-links" aria-labelledby="service-x-links-title">
+      <div class="service-x-heading"><p class="nm-meta">Approfondire</p><h2 id="service-x-links-title">Contenuti e competenze collegate.</h2></div>
+      <div>{editorial.map((item) => <a href={relationPath(item)}><span>Insight</span><strong>{item.title}</strong><IconArrowRight stroke={1.7} aria-hidden="true" /></a>)}{relatedServices.map((item) => <a href={relationPath(item)}><span>Servizio</span><strong>{item.title}</strong><IconArrowRight stroke={1.7} aria-hidden="true" /></a>)}</div>
+    </section>
+  )}
+
+  {faqItems.length > 0 && <section class="service-x-faq"><FAQBlock titleId="service-faq-title" title="FAQ essenziali." text={`Le prime risposte per valutare un progetto di ${service.title.toLowerCase()}.`} items={faqItems} /></section>}
+
+  <section class="service-x-cta" id="contatti" aria-labelledby="service-x-cta-title">
+    <div><p class="nm-meta">Parliamone</p><h2 id="service-x-cta-title">{experience.ctaTitle}</h2><p>{experience.ctaText}</p></div>
+    <Button href="/contatti/" variant="inverse" magnetic>Raccontaci il progetto <IconArrowRight stroke={1.8} aria-hidden="true" /></Button>
+  </section>
+</article>

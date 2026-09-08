@@ -46,7 +46,63 @@ test('services remain visible without javascript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   const page = await context.newPage();
   await page.goto('/servizi/ecommerce/', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { level: 1, name: 'Ecommerce' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Metodo operativo' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Uno store che vende. E resta governabile.' })
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Dal prodotto al checkout/ })).toBeVisible();
   await context.close();
+});
+
+test('all definitive service experiences stay semantic and inside supported viewports', async ({
+  page
+}) => {
+  const services = [
+    ['ecommerce', 'Uno store che vende. E resta governabile.'],
+    ['software-e-integrazioni', 'Meno passaggi manuali. Più lavoro che scorre.'],
+    ['seo', 'Essere trovati quando la ricerca conta.'],
+    ['advertising', 'Ogni campagna deve portare da qualche parte.'],
+    ['social-media', 'Una presenza riconoscibile, non un feed da riempire.'],
+    ['branding-e-comunicazione', 'Rendere visibile ciò che vi rende diversi.'],
+    ['content-production', 'Contenuti nati per essere guardati. E usati.'],
+    ['concorsi-a-premi', 'Un’idea promozionale, governata fino all’ultimo passaggio.']
+  ] as const;
+  const viewports = [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 }
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    for (const [slug, heading] of services) {
+      await page.goto(`/servizi/${slug}/`, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+      await expect(page.locator('main h1')).toHaveCount(1);
+      await expect(page.locator('.service-x-visual')).toHaveClass(new RegExp(slug));
+      await expect(page.locator('#service-faq-title')).toBeVisible();
+      await expect(page).toHaveTitle(/Padova.+Netmarket|Netmarket.+Padova/);
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /Padova/i);
+
+      const schemas = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
+        nodes.flatMap((node) => {
+          const parsed = JSON.parse(node.textContent ?? '[]');
+          return Array.isArray(parsed) ? parsed : [parsed];
+        })
+      );
+      expect(schemas.some((schema) => schema['@type'] === 'Service')).toBe(true);
+      expect(schemas.some((schema) => schema['@type'] === 'FAQPage')).toBe(true);
+
+      const layout = await page.evaluate(() => ({
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        invalidSections: Array.from(document.querySelectorAll<HTMLElement>('.service-x > section'))
+          .filter((section) => {
+            const rect = section.getBoundingClientRect();
+            return rect.left < -2 || rect.right > document.documentElement.clientWidth + 2;
+          }).length
+      }));
+      expect(layout.overflow, `${slug} at ${viewport.width}px`).toBeLessThanOrEqual(2);
+      expect(layout.invalidSections, `${slug} section bounds at ${viewport.width}px`).toBe(0);
+    }
+  }
 });

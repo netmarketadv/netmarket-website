@@ -71,6 +71,22 @@ La pagina dettaglio è statica tramite `getStaticPaths`. Ogni sezione è opziona
 
 Regola: se un gruppo dati è vuoto, la sezione non viene renderizzata.
 
+### Esperienza canonica servizi
+
+Ecommerce, Software e integrazioni, SEO, Advertising, Social media, Branding e comunicazione, Content production e Concorsi a premi usano `ServiceExperiencePage`. Il componente definisce una struttura comune affidabile, mentre `service-experiences.ts` assegna a ogni servizio una narrazione, una gerarchia, un colore di accento e un visual operativo distinti.
+
+Il pattern canonico comprende:
+
+- hero editoriale con beneficio, riferimento naturale a Padova e visual realizzato a codice;
+- sintesi di valore e problemi espressi dal punto di vista del decisore aziendale;
+- sistema del servizio, evidenze contestualizzate, metodo e perimetro delle competenze;
+- progetti reali, insight e servizi collegati solo quando esistono fonti pubbliche;
+- FAQ e CTA finale coerenti con il contenuto della pagina.
+
+I visual non simulano risultati, dashboard cliente o metriche non documentate. Servono a spiegare un flusso: catalogo e checkout, integrazioni, ricerca, percorso advertising, piano social, sistema di marca, produzione multiformato o gestione del concorso. Sono HTML e CSS, restano leggibili senza JavaScript e non richiedono immagini above the fold.
+
+Le differenze cromatiche sono accenti funzionali locali, non nuovi token globali del brand. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
+
 ### Variante editoriale Siti web
 
 `/servizi/siti-web/` usa una pagina editoriale dedicata, non il template generico. La pagina e progettata per imprenditori, responsabili marketing e decisori aziendali: parte dal valore del sito come asset aziendale, mostra progetti reali e traduce tecnologia, SEO e AI-readiness in benefici comprensibili.
@@ -139,7 +155,9 @@ Dettaglio:
 - meta description da SEO override, poi short description, excerpt, subtitle, fallback controllato;
 - canonical assoluto verso `https://www.netmarket.it/servizi/[slug]/`;
 - breadcrumb `Home > Servizi > Nome servizio`;
-- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed`; la variante Siti web dichiara Padova come `City` e Italia come `Country`.
+- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed`; tutte le pagine definitive dichiarano Padova come `City` e Italia come `Country`;
+- JSON-LD `FAQPage` quando le domande sono presenti e visibili nella pagina;
+- social title, description e immagine da un progetto reale collegato, con fallback al media del servizio.
 
 Staging resta `noindex, nofollow, noarchive` tramite robots environment.
 
