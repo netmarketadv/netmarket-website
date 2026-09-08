@@ -21,6 +21,7 @@ interface Props {
   socialTitle?: string | undefined;
   socialDescription?: string | undefined;
   socialImage?: MediaAsset | null | undefined;
+  socialType?: 'website' | 'article';
 }
 
 const {
@@ -33,7 +34,8 @@ const {
   structuredData = [],
   socialTitle,
   socialDescription,
-  socialImage
+  socialImage,
+  socialType = 'website'
 } = Astro.props;
 const env = getPublicEnv();
 const pageTitle = buildTitle(title);
@@ -66,6 +68,27 @@ const jsonLd = [
 <meta name="msapplication-TileColor" content="#155BFF" />
 <meta name="msapplication-TileImage" content="/mstile-150x150.png" />
 <meta name="msapplication-config" content="/browserconfig.xml" />
+<link
+  rel="preload"
+  href="/fonts/MonaSans-Regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  href="/fonts/MonaSans-Medium.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  href="/fonts/MonaSans-SemiBold.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
 <link rel="canonical" href={canonical} />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -78,7 +101,7 @@ const jsonLd = [
 <link rel="manifest" href="/site.webmanifest" />
 <meta property="og:title" content={socialTitle || pageTitle} />
 <meta property="og:description" content={socialDescription || description} />
-<meta property="og:type" content={socialImageUrl ? 'article' : 'website'} />
+<meta property="og:type" content={socialType} />
 <meta property="og:url" content={canonical} />
 {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
 {
@@ -100,4 +123,9 @@ const jsonLd = [
 <meta name="twitter:title" content={socialTitle || pageTitle} />
 <meta name="twitter:description" content={socialDescription || description} />
 {socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
+{
+  socialImageUrl && (
+    <meta name="twitter:image:alt" content={socialImage?.alt || socialTitle || pageTitle} />
+  )
+}
 <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

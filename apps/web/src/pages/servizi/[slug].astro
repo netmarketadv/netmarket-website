@@ -35,7 +35,7 @@ const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;
 const isWebsitesService = service.slug === 'siti-web';
 const description = isWebsitesService
-  ? 'Realizzazione siti web a Padova: Netmarket progetta siti corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia.'
+  ? 'Realizzazione siti web a Padova per aziende: corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia integrate.'
   : serviceDescription(service);
 const title = isWebsitesService
   ? 'Realizzazione siti web a Padova'
@@ -60,8 +60,24 @@ const serviceSchema = serviceJsonLd(
   isWebsitesService ? 'Realizzazione siti web a Padova' : service.title,
   description,
   absoluteCanonical(canonicalSiteUrl, path),
-  isWebsitesService ? 'Realizzazione siti web' : service.title
+  isWebsitesService ? 'Realizzazione siti web' : service.title,
+  isWebsitesService
+    ? [
+        { '@type': 'City', name: 'Padova' },
+        { '@type': 'Country', name: 'Italia' }
+      ]
+    : 'Italy'
 );
+const websitesSocialImage = isWebsitesService
+  ? {
+      id: 9101,
+      url: '/media/rigomar.webp',
+      alt: 'Progetto del sito web Rigomar realizzato da Netmarket',
+      width: 1024,
+      height: 576,
+      mimeType: 'image/webp'
+    }
+  : undefined;
 const hasProof = service.results.length > 0;
 ---
 
@@ -72,6 +88,9 @@ const hasProof = service.results.length > 0;
   noindex={service.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, serviceSchema]}
+  socialTitle={isWebsitesService ? 'Realizzazione siti web a Padova | Netmarket' : undefined}
+  socialDescription={isWebsitesService ? description : undefined}
+  socialImage={websitesSocialImage}
   motionMode={isWebsitesService ? 'light' : 'full'}
 >
   {

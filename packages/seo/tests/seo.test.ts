@@ -23,7 +23,15 @@ describe('seo utilities', () => {
   it('creates stable person structured data linked to the organization', () => {
     expect(organizationJsonLd('https://staging.netmarket.it')).toMatchObject({
       '@id': 'https://staging.netmarket.it/#organization',
-      logo: 'https://staging.netmarket.it/icon-512.png'
+      logo: 'https://staging.netmarket.it/icon-512.png',
+      legalName: 'Netmarket Srl',
+      vatID: '03618730281',
+      foundingDate: '1986',
+      address: {
+        addressLocality: 'Padova',
+        addressCountry: 'IT'
+      },
+      contactPoint: { email: 'segreteria@netmarket.it' }
     });
     expect(
       personJsonLd('https://staging.netmarket.it', {
@@ -43,6 +51,27 @@ describe('seo utilities', () => {
         '@id': 'https://staging.netmarket.it/#organization'
       },
       sameAs: ['https://www.linkedin.com/in/enricopaolotoso/']
+    });
+  });
+
+  it('supports explicit local and national service areas', () => {
+    expect(
+      serviceJsonLd(
+        'https://www.netmarket.it',
+        'Realizzazione siti web a Padova',
+        'Siti corporate ed ecommerce.',
+        'https://www.netmarket.it/servizi/siti-web/',
+        'Realizzazione siti web',
+        [
+          { '@type': 'City', name: 'Padova' },
+          { '@type': 'Country', name: 'Italia' }
+        ]
+      )
+    ).toMatchObject({
+      areaServed: [
+        { '@type': 'City', name: 'Padova' },
+        { '@type': 'Country', name: 'Italia' }
+      ]
     });
   });
 

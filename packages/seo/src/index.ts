@@ -28,6 +28,13 @@ export interface OrganizationMeta {
   logo?: string;
 }
 
+export type AreaServed =
+  | string
+  | {
+      '@type': 'City' | 'Country';
+      name: string;
+    };
+
 export interface ArticleMeta {
   title: string;
   description: string;
@@ -55,10 +62,30 @@ export function organizationJsonLd(
     '@type': 'Organization',
     '@id': absoluteCanonical(siteUrl, '/#organization'),
     name: organization.name ?? 'Netmarket',
-    ...(organization.legalName ? { legalName: organization.legalName } : {}),
-    ...(organization.vatId ? { vatID: organization.vatId } : {}),
+    legalName: organization.legalName ?? 'Netmarket Srl',
+    vatID: organization.vatId ?? '03618730281',
     logo: organization.logo ?? absoluteCanonical(siteUrl, '/icon-512.png'),
-    url: organization.url ?? siteUrl
+    url: organization.url ?? siteUrl,
+    foundingDate: '1986',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Viale della Navigazione Interna, 51/b',
+      postalCode: '35129',
+      addressLocality: 'Padova',
+      addressRegion: 'PD',
+      addressCountry: 'IT'
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'segreteria@netmarket.it',
+      contactType: 'customer service',
+      availableLanguage: 'Italian'
+    },
+    sameAs: [
+      'https://www.linkedin.com/company/netmarket-s.r.l./',
+      'https://www.instagram.com/netmarket.it/',
+      'https://www.facebook.com/Netmarket.adv/'
+    ]
   };
 }
 
@@ -102,7 +129,8 @@ export function serviceJsonLd(
   name: string,
   description: string,
   url: string,
-  serviceType = name
+  serviceType = name,
+  areaServed: AreaServed | AreaServed[] = 'Italy'
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
@@ -113,7 +141,7 @@ export function serviceJsonLd(
     url,
     serviceType,
     provider: { '@id': absoluteCanonical(siteUrl, '/#organization') },
-    areaServed: 'Italy'
+    areaServed
   };
 }
 

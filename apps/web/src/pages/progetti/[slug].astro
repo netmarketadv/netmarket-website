@@ -56,6 +56,7 @@ const schema = caseStudyJsonLd(project.title, description, `${canonicalSiteUrl}$
   socialTitle={project.seo.socialTitle || presentation.heroTitle}
   socialDescription={project.seo.socialDescription || description}
   socialImage={project.seo.socialImage || cover}
+  socialType="article"
   structuredData={[breadcrumb, schema]}
   motionMode="light"
 >

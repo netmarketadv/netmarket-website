@@ -23,6 +23,7 @@ interface Props {
   socialTitle?: string | undefined;
   socialDescription?: string | undefined;
   socialImage?: MediaAsset | null | undefined;
+  socialType?: 'website' | 'article';
 }
 
 const {
@@ -36,7 +37,8 @@ const {
   motionMode = 'full',
   socialTitle,
   socialDescription,
-  socialImage
+  socialImage,
+  socialType = 'website'
 } = Astro.props;
 const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
 const buildTime =
@@ -72,6 +74,7 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       socialTitle={socialTitle}
       socialDescription={socialDescription}
       socialImage={socialImage}
+      socialType={socialType}
     />
   </head>
   <body>

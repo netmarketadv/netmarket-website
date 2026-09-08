@@ -82,6 +82,9 @@ Regole della variante:
 - mantenere contenuti essenziali nel DOM iniziale, senza dipendere da JavaScript;
 - preferire prove reali e internal link contestuali a liste generiche;
 - non promettere risultati non controllabili su AI Overview, ChatGPT o altri sistemi di risposta.
+- il portfolio full-bleed e il bento delle tipologie sono pattern specifici della variante, non primitive da replicare automaticamente;
+- il portfolio deve restare manualmente scorribile, fermarsi durante l'interazione e diventare statico con reduced motion;
+- le card progetto sono link solo quando esiste un case study pubblico corrispondente.
 
 ## Related Content
 
@@ -136,7 +139,7 @@ Dettaglio:
 - meta description da SEO override, poi short description, excerpt, subtitle, fallback controllato;
 - canonical assoluto verso `https://www.netmarket.it/servizi/[slug]/`;
 - breadcrumb `Home > Servizi > Nome servizio`;
-- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed: Italy`.
+- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed`; la variante Siti web dichiara Padova come `City` e Italia come `Country`.
 
 Staging resta `noindex, nofollow, noarchive` tramite robots environment.
 

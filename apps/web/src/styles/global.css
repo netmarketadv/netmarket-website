@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Mona Sans';
-  src: url('/fonts/MonaSans-Regular.ttf') format('truetype');
+  src: url('/fonts/MonaSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'Mona Sans';
-  src: url('/fonts/MonaSans-Medium.ttf') format('truetype');
+  src: url('/fonts/MonaSans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: 'Mona Sans';
-  src: url('/fonts/MonaSans-SemiBold.ttf') format('truetype');
+  src: url('/fonts/MonaSans-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -3479,6 +3479,7 @@ main {
 
 .websites-portfolio__viewport:active {
   cursor: grabbing;
+  user-select: none;
 }
 
 .websites-portfolio__viewport::-webkit-scrollbar {
@@ -3486,22 +3487,33 @@ main {
 }
 
 .websites-portfolio__track {
+  --websites-portfolio-gap: clamp(0.75rem, 1.2vw, 1.15rem);
   display: flex;
   width: max-content;
-  gap: clamp(0.75rem, 1.2vw, 1.15rem);
+  gap: var(--websites-portfolio-gap);
+  margin: 0;
   padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+  list-style: none;
   animation: websitesPortfolioLoop 68s linear infinite;
   will-change: transform;
 }
 
 .websites-portfolio__viewport:hover .websites-portfolio__track,
-.websites-portfolio__viewport:focus-within .websites-portfolio__track {
+.websites-portfolio__viewport:focus-within .websites-portfolio__track,
+.websites-portfolio__viewport.is-paused .websites-portfolio__track {
   animation-play-state: paused;
+}
+
+.websites-portfolio__item {
+  display: flex;
+  flex: 0 0 clamp(23rem, 34vw, 38rem);
+  min-width: 0;
 }
 
 .websites-portfolio-card {
   position: relative;
-  flex: 0 0 clamp(23rem, 34vw, 38rem);
+  display: block;
+  width: 100%;
   aspect-ratio: 1.34;
   overflow: hidden;
   contain: paint;
@@ -3567,7 +3579,7 @@ main {
   }
 
   to {
-    transform: translate3d(calc(-50% - (clamp(0.9rem, 1.6vw, 1.4rem) / 2)), 0, 0);
+    transform: translate3d(calc(-50% - (var(--websites-portfolio-gap) / 2)), 0, 0);
   }
 }
 
@@ -4156,7 +4168,7 @@ main {
     margin-block: calc(var(--websites-section-gap) * -0.18) 0;
   }
 
-  .websites-portfolio-card {
+  .websites-portfolio__item {
     flex-basis: min(48vw, 30rem);
   }
 
@@ -6240,12 +6252,16 @@ main {
   }
 
   .websites-portfolio__track {
-    gap: 0.85rem;
+    --websites-portfolio-gap: 0.85rem;
+    gap: var(--websites-portfolio-gap);
     padding-inline: var(--nm-page-margin);
   }
 
-  .websites-portfolio-card {
+  .websites-portfolio__item {
     flex-basis: min(78vw, 21rem);
+  }
+
+  .websites-portfolio-card {
     border-radius: var(--nm-radius-md);
   }
 
@@ -8152,7 +8168,7 @@ main {
   }
 
   .client-marquee__group[aria-hidden='true'],
-  .websites-portfolio-card[aria-hidden='true'] {
+  .websites-portfolio__item[aria-hidden='true'] {
     display: none;
   }
 }

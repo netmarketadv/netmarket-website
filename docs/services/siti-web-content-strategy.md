@@ -61,22 +61,21 @@ Decisione Netmarket: evitare headline costruite per keyword e differenziarsi su 
 
 ## Struttura
 
-1. Hero con breadcrumb, H1 umano e visual servizio.
-2. Posizionamento: sito come sistema tra contenuti, tecnologia e marketing.
-3. Value proposition.
-4. Esigenze/problemi reali.
-5. Proof: esperienza, storico case study, sistema CMS+SEO+UX.
-6. Processo operativo.
-7. Focus tecnico: WordPress, headless, performance.
-8. Capability e tecnologie.
-9. Case study e insight correlati.
-10. FAQ commerciali reali.
-11. CTA finale.
+1. Hero tipografica con breadcrumb, kicker locale, promessa e due CTA.
+2. Portfolio full-bleed di progetti reali, continuo su desktop e manuale a ogni viewport.
+3. Tipologie di sito in bento editoriale.
+4. Problemi reali e criteri di qualità di un sito aziendale.
+5. Regia integrata tra contenuti, esperienza, visibilità, marketing, dati e integrazioni.
+6. Ricerca contemporanea: persone, Google e sistemi AI.
+7. Case study reali e metodo operativo.
+8. Tecnologia, servizi collegati e ragioni per scegliere Netmarket.
+9. FAQ commerciali reali.
+10. CTA finale.
 
 ## Copy Decisions
 
 - H1: mantiene “Siti web” per chiarezza e coerenza menu.
-- SEO title: `Siti web aziendali | Netmarket`.
+- SEO title: `Realizzazione siti web a Padova | Netmarket`.
 - Meta description: include Padova in modo naturale e una sola volta.
 - CTA: resta `Parliamone`.
 - Nessun prezzo o tempo fisso: non esistono policy pubbliche approvate.
@@ -102,7 +101,8 @@ Insight pertinenti:
 
 ## Images
 
-- Hero: asset servizio trasparente `sviluppo-realizzazione-siti-web_netmarket.png`, renderizzato su frame grigio come da design system.
+- Hero: tipografica, senza visual decorativo. Il primo progetto reale del portfolio è la risorsa LCP e viene reso immediatamente rilevabile.
+- Social preview: progetto reale Rigomar in formato landscape, con dimensioni e alt dichiarati.
 - Case study: media reali da snapshot legacy quando il CMS non espone ancora dettaglio e media completi.
 - Nessuna immagine stock.
 
@@ -112,6 +112,8 @@ Insight pertinenti:
 - Canonical production-ready: `https://www.netmarket.it/servizi/siti-web/`.
 - Breadcrumb visibile e JSON-LD.
 - JSON-LD `Service` collegato a Organization.
+- `areaServed` esplicita Padova come `City` e Italia come `Country`.
+- `FAQPage` non viene aggiunto: le FAQ restano contenuto HTML utile, ma il rich result non e pertinente a una pagina commerciale di agenzia e duplicarne il contenuto non aggiungerebbe informazione.
 - Entity chiare: Netmarket, Padova, WordPress, WooCommerce, Astro, REST API, servizio Siti web.
 - Claim principali collegati a prove o ridotti a scelte metodologiche verificabili.
 
@@ -137,3 +139,4 @@ La pagina usa un content pack frontend transitorio per arricchire `siti-web` fin
 - Il CMS detail dei case study su staging risponde ancora `404` per alcuni slug migrati; la pagina usa snapshot legacy reali come fallback.
 - Il content pack pilota deve essere migrato in `nm_service` quando sarà disponibile una pipeline contenuti CMS sicura.
 - Non sono stati aggiunti redirect produzione.
+- La variante nasconde su mobile i blocchi tecnologia e storico per mantenere il percorso essenziale; i contenuti principali restano disponibili nell'HTML desktop e nei collegamenti contestuali.
