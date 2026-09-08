@@ -73,19 +73,21 @@ Regola: se un gruppo dati è vuoto, la sezione non viene renderizzata.
 
 ### Esperienza canonica servizi
 
-Ecommerce, Software e integrazioni, SEO, Advertising, Social media, Branding e comunicazione, Content production e Concorsi a premi usano `ServiceExperiencePage`. Il componente definisce una struttura comune affidabile, mentre `service-experiences.ts` assegna a ogni servizio una narrazione, una gerarchia, un colore di accento e un visual operativo distinti.
+Ecommerce, Software e integrazioni, SEO, Advertising, Social media, Branding e comunicazione, Content production e Concorsi a premi usano `ServiceExperiencePage`. Il componente definisce una struttura comune affidabile, mentre `service-experiences.ts` assegna a ogni servizio una narrazione e contenuti territoriali specifici.
 
 Il pattern canonico comprende:
 
-- hero editoriale con beneficio, riferimento naturale a Padova e visual realizzato a codice;
+- hero editoriale tipografica, centrata e proporzionata sul modello validato di `Siti web`, con un solo highlight blu;
 - sintesi di valore e problemi espressi dal punto di vista del decisore aziendale;
 - sistema del servizio, evidenze contestualizzate, metodo e perimetro delle competenze;
-- progetti reali, insight e servizi collegati solo quando esistono fonti pubbliche;
+- progetti reali con immagini di altezza coerente, nome cliente e descrizione sintetica del lavoro;
 - FAQ e CTA finale coerenti con il contenuto della pagina.
 
-I visual non simulano risultati, dashboard cliente o metriche non documentate. Servono a spiegare un flusso: catalogo e checkout, integrazioni, ricerca, percorso advertising, piano social, sistema di marca, produzione multiformato o gestione del concorso. Sono HTML e CSS, restano leggibili senza JavaScript e non richiedono immagini above the fold.
+La hero non usa simulazioni UI o mockup generici. In assenza di fotografie, video o case study approvati per l'apertura, la tipografia e il copy restano protagonisti. Il valore del servizio deve essere espresso nell'HTML e dimostrato più avanti attraverso contenuti e progetti reali.
 
-Le differenze cromatiche sono accenti funzionali locali, non nuovi token globali del brand. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
+Il solo accento canonico delle pagine servizio è il blu Netmarket. `#F2FF83` è ammesso soltanto per rare evidenziazioni funzionali ad alto contrasto; non identifica singoli servizi. Le icone usano il contenitore neutro del design system, senza box colorati. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
+
+La presenza territoriale va espressa con linguaggio naturale: Padova compare nell'eyebrow, nei metadata e in almeno un passaggio utile del corpo pagina. Non sono ammessi elenchi di località o ripetizioni artificiose pensate soltanto per i motori di ricerca.
 
 ### Variante editoriale Siti web
 
@@ -117,7 +119,7 @@ Limiti frontend:
 - resource: 3;
 - related service: 4.
 
-I link sono normali `<a>` e restano crawlable.
+Le relazioni restano disponibili al layer dati per metadata, immagini sociali e selezione dei progetti. Le pagine servizio non mostrano un blocco generico “Approfondire” con articoli o servizi collegati: i collegamenti editoriali devono comparire soltanto quando sono inseriti in modo contestuale nel contenuto.
 
 Quando il CMS non espone ancora relazioni complete, il dettaglio servizio puo usare snapshot reali gia validati come fallback per case study e insight, ordinati per pertinenza editoriale del servizio. Questo fallback non deve introdurre contenuti inventati e va sostituito da relazioni CMS appena disponibili.
 

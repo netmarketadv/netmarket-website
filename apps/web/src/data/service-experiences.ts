@@ -16,6 +16,7 @@ export interface ServiceExperience {
   h1: string;
   accent: string;
   introTitle: string;
+  territoryText: string;
   problemsTitle: string;
   systemTitle: string;
   processTitle: string;
@@ -36,13 +37,16 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Uno store che vende. E resta governabile.',
     accent: 'vende',
     introTitle: 'Vendere online richiede più di un catalogo.',
+    territoryText:
+      'Da Padova progettiamo ecommerce per aziende del Veneto e di tutta Italia, collegando vendita online e operatività quotidiana.',
     problemsTitle: 'Dove si interrompe davvero un acquisto.',
     systemTitle: 'Catalogo, contenuti e gestione lavorano insieme.',
     processTitle: 'Dal prodotto al checkout, senza passaggi scollegati.',
     proofTitle: 'I numeri hanno senso quando raccontano un sistema.',
     proofText: 'Dati pubblicati nei case study Netmarket, con contesto e fonte leggibili.',
     projectsTitle: 'Ecommerce costruiti su prodotti e processi reali.',
-    projectsText: 'Progetti in cui piattaforma, comunicazione e operatività sono stati affrontati insieme.',
+    projectsText:
+      'Progetti in cui piattaforma, comunicazione e operatività sono stati affrontati insieme.',
     ctaTitle: 'Il tuo ecommerce deve vendere senza complicare il lavoro.',
     ctaText: 'Partiamo da catalogo, margini, flussi e obiettivi. Poi scegliamo la piattaforma.',
     title: 'Ecommerce a Padova per aziende | Netmarket',
@@ -55,6 +59,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Meno passaggi manuali. Più lavoro che scorre.',
     accent: 'scorre',
     introTitle: 'Il software utile parte dal modo in cui lavorate.',
+    territoryText:
+      'Il team Netmarket sviluppa a Padova software e integrazioni per imprese locali e nazionali, partendo dai processi reali.',
     problemsTitle: 'Quando gli strumenti aumentano, il processo si frammenta.',
     systemTitle: 'Dati, persone e strumenti dentro lo stesso flusso.',
     processTitle: 'Prima il processo. Poi il codice necessario.',
@@ -74,11 +80,14 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Essere trovati quando la ricerca conta.',
     accent: 'trovati',
     introTitle: 'La visibilità nasce da pagine utili e segnali coerenti.',
+    territoryText:
+      'Da Padova affianchiamo aziende che vogliono consolidare la visibilità locale, in Veneto e sui mercati nazionali.',
     problemsTitle: 'Il traffico non basta se non incontra l’intento giusto.',
     systemTitle: 'Struttura, contenuti e autorevolezza si sostengono a vicenda.',
     processTitle: 'Dalla domanda alla pagina che merita di rispondere.',
     proofTitle: 'La SEO si dimostra nelle scelte, non nelle promesse.',
-    proofText: 'Progetti in cui architettura, contenuti e visibilità sono parte dello stesso lavoro.',
+    proofText:
+      'Progetti in cui architettura, contenuti e visibilità sono parte dello stesso lavoro.',
     projectsTitle: 'Siti resi più leggibili per persone e motori di ricerca.',
     projectsText: 'Applicazioni reali del metodo SEO Netmarket.',
     ctaTitle: 'Capire dove intervenire viene prima di produrre contenuti.',
@@ -93,13 +102,17 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Ogni campagna deve portare da qualche parte.',
     accent: 'portare',
     introTitle: 'Media, messaggio e destinazione formano un unico percorso.',
+    territoryText:
+      'Gestiamo da Padova campagne rivolte a pubblici locali e nazionali, mantenendo messaggio, landing e misurazione nello stesso percorso.',
     problemsTitle: 'La dispersione inizia prima del click.',
     systemTitle: 'Dall’attenzione al contatto, con passaggi misurabili.',
     processTitle: 'Strategia, creatività, attivazione e lettura dei dati.',
     proofTitle: 'Risultati letti nel contesto del progetto.',
-    proofText: 'Niente metriche isolate o promesse di rendimento: colleghiamo campagne, contenuti e destinazioni.',
+    proofText:
+      'Niente metriche isolate o promesse di rendimento: colleghiamo campagne, contenuti e destinazioni.',
     projectsTitle: 'Campagne dentro sistemi di comunicazione più ampi.',
-    projectsText: 'Esperienze in cui media, social, contenuti e presenza digitale lavorano insieme.',
+    projectsText:
+      'Esperienze in cui media, social, contenuti e presenza digitale lavorano insieme.',
     ctaTitle: 'Prima del budget, mettiamo a fuoco il percorso.',
     ctaText: 'Obiettivo, pubblico, messaggio, landing e misurazione devono partire allineati.',
     title: 'Advertising a Padova: campagne e media | Netmarket',
@@ -112,6 +125,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Una presenza riconoscibile, non un feed da riempire.',
     accent: 'riconoscibile',
     introTitle: 'I social funzionano quando hanno un ruolo nel marketing.',
+    territoryText:
+      'Da Padova seguiamo la presenza social di aziende del territorio e brand nazionali con una regia editoriale continuativa.',
     problemsTitle: 'Pubblicare senza una direzione consuma tempo e identità.',
     systemTitle: 'Strategia, format e continuità danno forma alla presenza.',
     processTitle: 'Dal piano editoriale alla lettura dei segnali.',
@@ -131,6 +146,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Rendere visibile ciò che vi rende diversi.',
     accent: 'diversi',
     introTitle: 'Un’identità è utile quando orienta ogni scelta.',
+    territoryText:
+      'A Padova lavoriamo con imprese che vogliono rendere più riconoscibile la propria identità, sul territorio e oltre.',
     problemsTitle: 'La marca perde forza quando ogni materiale parla da solo.',
     systemTitle: 'Messaggi, segni e applicazioni dentro un sistema riconoscibile.',
     processTitle: 'Dalla memoria dell’azienda alla sua forma contemporanea.',
@@ -150,6 +167,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Contenuti nati per essere guardati. E usati.',
     accent: 'usati',
     introTitle: 'Ogni contenuto deve sapere dove andrà a vivere.',
+    territoryText:
+      'Produciamo a Padova contenuti per aziende, prodotti e persone, organizzandoli per siti, campagne e canali social.',
     problemsTitle: 'La qualità si perde quando la produzione è scollegata dal piano.',
     systemTitle: 'Un contenuto madre, molti formati coerenti.',
     processTitle: 'Dal brief alla libreria di asset pronta per i canali.',
@@ -169,6 +188,8 @@ export const serviceExperiences: Record<ServiceExperienceSlug, ServiceExperience
     h1: 'Un’idea promozionale, governata fino all’ultimo passaggio.',
     accent: 'governata',
     introTitle: 'Un concorso è un progetto di comunicazione e operatività.',
+    territoryText:
+      'Da Padova coordiniamo concorsi a premi per iniziative locali e nazionali, dalla meccanica alla piattaforma digitale.',
     problemsTitle: 'La partecipazione sembra semplice solo quando la regia è solida.',
     systemTitle: 'Meccanica, piattaforma e comunicazione dentro lo stesso percorso.',
     processTitle: 'Dall’obiettivo alla chiusura dell’iniziativa.',

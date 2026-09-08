@@ -9,7 +9,6 @@ import ServiceDetailHero from '@/components/services/ServiceDetailHero.astro';
 import ServiceIntro from '@/components/services/ServiceIntro.astro';
 import ServiceProcess from '@/components/services/ServiceProcess.astro';
 import ServiceProof from '@/components/services/ServiceProof.astro';
-import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
 import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
 import ServiceTechnicalFocus from '@/components/services/ServiceTechnicalFocus.astro';
 import ServiceExperiencePage from '@/components/services/ServiceExperiencePage.astro';
@@ -46,7 +45,7 @@ const experience = isExperienceService
   : undefined;
 const description = isWebsitesService
   ? 'Realizzazione siti web a Padova per aziende: corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia integrate.'
-  : experience?.description ?? serviceDescription(service);
+  : (experience?.description ?? serviceDescription(service));
 const title = isWebsitesService
   ? 'Realizzazione siti web a Padova'
   : (experience?.title ?? service.seo.title) || service.title;
@@ -67,9 +66,7 @@ const breadcrumb = breadcrumbJsonLd([
 ]);
 const serviceSchema = serviceJsonLd(
   canonicalSiteUrl,
-  isWebsitesService
-    ? 'Realizzazione siti web a Padova'
-    : experience?.eyebrow ?? service.title,
+  isWebsitesService ? 'Realizzazione siti web a Padova' : (experience?.eyebrow ?? service.title),
   description,
   absoluteCanonical(canonicalSiteUrl, path),
   isWebsitesService ? 'Realizzazione siti web' : service.title,
@@ -91,19 +88,20 @@ const websitesSocialImage = isWebsitesService
     }
   : undefined;
 const experienceSocialImage = isExperienceService
-  ? related.caseStudies.find((item) => item.image)?.image ?? service.image ?? undefined
+  ? (related.caseStudies.find((item) => item.image)?.image ?? service.image ?? undefined)
   : undefined;
-const faqSchema = faqItems.length > 0
-  ? {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqItems.map(([question, answer]) => ({
-        '@type': 'Question',
-        name: question,
-        acceptedAnswer: { '@type': 'Answer', text: answer }
-      }))
-    }
-  : undefined;
+const faqSchema =
+  faqItems.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map(([question, answer]) => ({
+          '@type': 'Question',
+          name: question,
+          acceptedAnswer: { '@type': 'Answer', text: answer }
+        }))
+      }
+    : undefined;
 const structuredData = [breadcrumb, serviceSchema, ...(faqSchema ? [faqSchema] : [])];
 const hasProof = service.results.length > 0;
 ---
@@ -115,7 +113,9 @@ const hasProof = service.results.length > 0;
   noindex={service.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={structuredData}
-  socialTitle={isWebsitesService ? 'Realizzazione siti web a Padova | Netmarket' : experience?.title}
+  socialTitle={isWebsitesService
+    ? 'Realizzazione siti web a Padova | Netmarket'
+    : experience?.title}
   socialDescription={isWebsitesService || isExperienceService ? description : undefined}
   socialImage={websitesSocialImage ?? experienceSocialImage}
   motionMode={isWebsitesService || isExperienceService ? 'light' : 'full'}
@@ -164,17 +164,6 @@ const hasProof = service.results.length > 0;
           <Container>
             <ServiceTechnicalFocus service={service} />
             <ServiceTaxonomyList service={service} />
-          </Container>
-        </Section>
-
-        <Section>
-          <Container wide>
-            <ServiceRelatedContent
-              caseStudies={related.caseStudies}
-              insights={related.insights}
-              resources={related.resources}
-              services={related.services}
-            />
           </Container>
         </Section>
 
