@@ -539,8 +539,15 @@ main {
 }
 
 .mega-menu__panel--compact .mega-menu__grid a {
+  align-items: center;
   border-radius: 0.85rem;
   padding: 0.62rem 0.65rem;
+}
+
+.mega-menu__panel--compact .mega-menu__grid a > span {
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
 }
 
 .mega-menu__panel--compact .mega-menu__grid span span {
@@ -644,13 +651,16 @@ main {
   z-index: 65;
   inset: 0;
   display: grid;
-  grid-template-rows: 1fr auto;
-  gap: clamp(2.5rem, 6vh, 4.75rem);
+  grid-template-rows: 1fr;
   overflow-y: auto;
   overscroll-behavior: contain;
   background: #f4f5f7;
   padding: clamp(6rem, 11vh, 7.25rem) var(--nm-page-margin)
     max(var(--nm-space-lg), env(safe-area-inset-bottom));
+  will-change: transform;
+}
+
+.site-header__mobile:not([data-motion-mobile-menu='ready']) .site-header__mobile-panel {
   animation: nm-mobile-menu-enter 420ms var(--nm-motion-ease-emphasized) both;
 }
 
@@ -674,24 +684,6 @@ main {
 .site-header__mobile-panel a:hover {
   background: transparent;
   color: var(--nm-color-blue);
-}
-
-.site-header__mobile-panel .site-header__mobile-brand {
-  position: fixed;
-  z-index: 66;
-  top: calc((4.55rem - 2.65rem) / 2);
-  left: var(--nm-page-margin);
-  min-height: 2.65rem;
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  border-radius: 0;
-  padding: 0;
-}
-
-.site-header__mobile-brand img {
-  width: 8.15rem;
-  height: auto;
 }
 
 .mobile-submenu {
@@ -744,6 +736,11 @@ main {
   gap: 0.45rem;
   overflow: clip;
   padding: 0.3rem 0 0.8rem;
+  transform-origin: top center;
+  will-change: height, opacity, transform;
+}
+
+.mobile-submenu:not([data-motion-submenu='ready']) .mobile-submenu__panel {
   animation: nm-submenu-enter 260ms var(--nm-motion-ease-emphasized) both;
 }
 
@@ -763,17 +760,24 @@ main {
   background: transparent;
 }
 
-.mobile-submenu__eyebrow {
-  color: var(--nm-color-subtle);
-  font-size: 0.88rem;
-  line-height: 1.35;
-  padding: 0.2rem 0 0.35rem;
+.mobile-submenu__panel .icon-bubble {
+  align-self: center;
+  justify-self: center;
+}
+
+.mobile-submenu__panel .icon-bubble svg {
+  margin: 0;
 }
 
 .mobile-submenu__panel strong,
 .mobile-submenu__panel span,
 .mobile-submenu__panel small {
   display: block;
+}
+
+.mobile-submenu__panel span.icon-bubble {
+  display: inline-grid;
+  place-items: center;
 }
 
 .mobile-submenu__panel strong {
@@ -818,40 +822,6 @@ main {
 
 .mobile-submenu--wide .mobile-submenu__panel {
   padding-bottom: 1.15rem;
-}
-
-.site-header__mobile-actions {
-  display: grid;
-  align-self: end;
-  padding-top: var(--nm-space-md);
-}
-
-.site-header__mobile-panel .site-header__mobile-cta {
-  width: 100%;
-  min-height: 3.35rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  border-radius: var(--nm-radius-pill);
-  background: var(--nm-color-blue);
-  color: #ffffff;
-  font-size: 0.98rem;
-  font-weight: 600;
-  line-height: 1;
-  text-decoration: none;
-  box-shadow: 0 1rem 2rem rgb(14 81 254 / 0.2);
-}
-
-.site-header__mobile-panel .site-header__mobile-cta:hover {
-  background: var(--nm-color-blue-deep);
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-.site-header__mobile-panel .site-header__mobile-cta svg {
-  width: 1.1rem;
-  height: 1.1rem;
 }
 
 .site-footer {
@@ -4483,7 +4453,8 @@ main {
   overflow: hidden;
   transition:
     background-color var(--nm-motion-duration-base) var(--nm-motion-ease-hover),
-    border-color var(--nm-motion-duration-base) var(--nm-motion-ease-hover);
+    border-color var(--nm-motion-duration-base) var(--nm-motion-ease-hover),
+    box-shadow var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
 }
 
 .faq-list summary,
@@ -4546,17 +4517,15 @@ main {
   transform: rotate(225deg);
 }
 
-.faq-list__item:has(.faq-list__trigger[aria-expanded='true']) {
+.faq-list__item.is-open {
   border-color: rgb(9 10 15 / 0.08);
-  background: #f3f3f5;
-  padding: 0.45rem;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 0.45rem #f3f3f5;
 }
 
-.faq-list__item:has(.faq-list__trigger[aria-expanded='true']) .faq-list__trigger {
-  min-height: auto;
-  border-radius: 1.58rem 1.58rem 0 0;
+.faq-list__item.is-open .faq-list__trigger {
+  border-radius: 2rem 2rem 0 0;
   background: #ffffff;
-  padding: 1.35rem 1.55rem 0.62rem;
 }
 
 .faq-list__trigger[aria-expanded='true'] {
@@ -4581,10 +4550,9 @@ main {
   padding: 0 1.9rem 1.35rem;
 }
 
-.faq-list__item:has(.faq-list__trigger[aria-expanded='true']) .faq-list__panel {
-  border-radius: 0 0 1.58rem 1.58rem;
+.faq-list__item.is-open .faq-list__panel {
+  border-radius: 0 0 2rem 2rem;
   background: #ffffff;
-  padding: 0 1.55rem 1.5rem;
 }
 
 .faq-list__panel[hidden] {
@@ -6061,6 +6029,11 @@ main {
     grid-template-columns: 1fr auto;
   }
 
+  .site-header__brand {
+    position: relative;
+    z-index: 80;
+  }
+
   .site-header__nav,
   .site-header__actions {
     display: none;
@@ -6492,22 +6465,20 @@ main {
     height: 1.36rem;
   }
 
-  .faq-list__item:has(.faq-list__trigger[aria-expanded='true']) {
-    padding: 0.32rem;
+  .faq-list__item.is-open {
+    box-shadow: inset 0 0 0 0.32rem #f3f3f5;
   }
 
-  .faq-list__item:has(.faq-list__trigger[aria-expanded='true']) .faq-list__trigger {
-    border-radius: 1.28rem 1.28rem 0 0;
-    padding: 1.05rem 1.05rem 0.52rem;
+  .faq-list__item.is-open .faq-list__trigger {
+    border-radius: 1.55rem 1.55rem 0 0;
   }
 
   .faq-list__panel {
     padding: 0 1.2rem 1.2rem;
   }
 
-  .faq-list__item:has(.faq-list__trigger[aria-expanded='true']) .faq-list__panel {
-    border-radius: 0 0 1.28rem 1.28rem;
-    padding: 0 1.05rem 1.15rem;
+  .faq-list__item.is-open .faq-list__panel {
+    border-radius: 0 0 1.55rem 1.55rem;
   }
 
   .plan-card h2,

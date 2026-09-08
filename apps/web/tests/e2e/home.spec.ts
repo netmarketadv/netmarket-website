@@ -204,6 +204,50 @@ test('interactive motion controls remain accessible', async ({ page }) => {
   await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('faq accordions open and close without shifting their labels', async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await waitForInteractivePage(page);
+
+    const trigger = page.locator('.faq-list__trigger').first();
+    const label = trigger.locator(':scope > span').first();
+    const panelId = await trigger.getAttribute('aria-controls');
+    expect(panelId).toBeTruthy();
+    const panel = page.locator(`#${panelId}`);
+    const measureLabel = () =>
+      label.evaluate((element) => {
+        const labelRect = element.getBoundingClientRect();
+        const triggerRect = element.parentElement?.getBoundingClientRect();
+        return {
+          x: labelRect.x - (triggerRect?.x ?? 0),
+          y: labelRect.y - (triggerRect?.y ?? 0),
+          triggerHeight: triggerRect?.height ?? 0
+        };
+      });
+
+    await trigger.scrollIntoViewIfNeeded();
+    const closedPosition = await measureLabel();
+    await trigger.click();
+    const openingPosition = await measureLabel();
+
+    expect(Math.abs(openingPosition.x - closedPosition.x)).toBeLessThan(1);
+    expect(Math.abs(openingPosition.y - closedPosition.y)).toBeLessThan(1);
+    expect(Math.abs(openingPosition.triggerHeight - closedPosition.triggerHeight)).toBeLessThan(1);
+    await expect(panel).toBeVisible();
+
+    await trigger.click();
+    const closingPosition = await measureLabel();
+    expect(Math.abs(closingPosition.x - closedPosition.x)).toBeLessThan(1);
+    expect(Math.abs(closingPosition.y - closedPosition.y)).toBeLessThan(1);
+    expect(Math.abs(closingPosition.triggerHeight - closedPosition.triggerHeight)).toBeLessThan(1);
+    await expect(panel).toBeHidden({ timeout: 450 });
+  }
+});
+
 test('header matches the clean responsive navigation model', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.site-header')).toHaveCSS('border-bottom-width', '0px');
@@ -225,23 +269,56 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(agencyMenu.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 900 });
+  const headerLogo = page.locator('.site-header__brand img');
+  const closedLogoBox = await headerLogo.boundingBox();
   await page.getByLabel('Apri menu').click();
   const panel = page.locator('.site-header__mobile-panel');
   await expect(panel).toBeVisible();
   await expect(panel).toHaveCSS('position', 'fixed');
   await expect(panel).toHaveCSS('height', '900px');
   await expect(page.getByLabel('Chiudi menu')).toHaveCSS('position', 'fixed');
-  await expect(panel.getByRole('link', { name: /Contattaci/ })).toHaveCSS(
-    'background-color',
-    'rgb(14, 81, 254)'
-  );
+  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'open');
+  await expect(panel.getByRole('link', { name: /Contattaci/ })).toHaveCount(0);
+  await expect(panel.locator('.site-header__mobile-brand')).toHaveCount(0);
+  expect(await headerLogo.boundingBox()).toEqual(closedLogoBox);
 
-  await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
+  const servicesSummary = panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' });
+  await servicesSummary.click();
+  await expect(servicesSummary).toHaveAttribute('aria-expanded', 'true');
   await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
+  await expect(panel.locator('.mobile-submenu__eyebrow')).toHaveCount(0);
   await expect(panel.locator('.mobile-submenu--wide .icon-bubble')).toHaveCount(9);
+  const iconAlignment = await panel
+    .locator('.mobile-submenu--wide .icon-bubble')
+    .first()
+    .evaluate((bubble) => {
+      const bubbleBox = bubble.getBoundingClientRect();
+      const iconBox = bubble.querySelector('svg')?.getBoundingClientRect();
+      return {
+        x: Math.abs(
+          bubbleBox.left + bubbleBox.width / 2 - ((iconBox?.left ?? 0) + (iconBox?.width ?? 0) / 2)
+        ),
+        y: Math.abs(
+          bubbleBox.top + bubbleBox.height / 2 - ((iconBox?.top ?? 0) + (iconBox?.height ?? 0) / 2)
+        )
+      };
+    });
+  expect(iconAlignment.x).toBeLessThan(1);
+  expect(iconAlignment.y).toBeLessThan(1);
   await expect(panel.getByRole('link', { name: /NØD new/ })).toBeVisible();
-  await panel.locator('.mobile-submenu summary').filter({ hasText: 'Agenzia' }).click();
+  const agencySummary = panel.locator('.mobile-submenu summary').filter({ hasText: 'Agenzia' });
+  await agencySummary.click();
+  await expect(agencySummary).toHaveAttribute('aria-expanded', 'true');
+  await expect(servicesSummary).toHaveAttribute('aria-expanded', 'false');
   await expect(panel.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
+
+  await page.getByLabel('Chiudi menu').click();
+  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'closing');
+  await expect(panel).toBeVisible();
+  await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false', {
+    timeout: 700
+  });
+  await expect(panel).toBeHidden();
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {

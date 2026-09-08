@@ -99,47 +99,232 @@ function initMegaMenus(): void {
 
 function initMobileMenu(): void {
   const menu = document.querySelector<HTMLDetailsElement>('.site-header__mobile');
-  const summary = menu?.querySelector('summary');
-  const focusables = Array.from(menu?.querySelectorAll<HTMLElement>('.site-header__mobile-links > a, .mobile-submenu > summary, .site-header__mobile-actions a, button') ?? []);
+  const summary = menu?.querySelector<HTMLElement>(':scope > summary');
+  const panel = menu?.querySelector<HTMLElement>(':scope > .site-header__mobile-panel');
+  const focusables = Array.from(menu?.querySelectorAll<HTMLElement>('.site-header__mobile-links > a, .mobile-submenu > summary, button') ?? []);
   const closers = Array.from(menu?.querySelectorAll<HTMLElement>('.site-header__mobile-panel a, .site-header__mobile-panel button') ?? []);
   const submenus = Array.from(menu?.querySelectorAll<HTMLDetailsElement>('.mobile-submenu') ?? []);
-  if (!menu || !summary) return;
+  if (!menu || !summary || !panel) return;
   if (menu.dataset.motionMobileMenu === 'ready') return;
   menu.dataset.motionMobileMenu = 'ready';
 
-  summary.setAttribute('aria-expanded', String(menu.open));
-  summary.setAttribute('aria-label', menu.open ? 'Chiudi menu' : 'Apri menu');
+  const reduced = prefersReducedMotion();
+  const rootStyles = getComputedStyle(document.documentElement);
+  const readDuration = (property: string, fallback: number) => {
+    const value = Number.parseFloat(rootStyles.getPropertyValue(property));
+    return Number.isFinite(value) ? value : fallback;
+  };
+  const baseDuration = readDuration('--nm-motion-duration-base', 320);
+  const fastDuration = readDuration('--nm-motion-duration-fast', 190);
+  const menuOpenDuration = baseDuration + fastDuration / 2;
+  const emphasizedEase =
+    rootStyles.getPropertyValue('--nm-motion-ease-emphasized').trim() ||
+    'cubic-bezier(0.16, 1, 0.16, 1)';
+  const layoutEase =
+    rootStyles.getPropertyValue('--nm-motion-ease-layout').trim() ||
+    'cubic-bezier(0.22, 1, 0.25, 1)';
+  const exitEase =
+    rootStyles.getPropertyValue('--nm-motion-ease-exit').trim() || 'cubic-bezier(0.4, 0, 1, 1)';
+  const submenuAnimations = new WeakMap<HTMLDetailsElement, Animation>();
+  let menuAnimation: Animation | undefined;
+
+  const syncMenuA11y = (open: boolean) => {
+    summary.setAttribute('aria-expanded', String(open));
+    summary.setAttribute('aria-label', open ? 'Chiudi menu' : 'Apri menu');
+  };
+
+  const resetSubmenu = (submenu: HTMLDetailsElement) => {
+    submenuAnimations.get(submenu)?.cancel();
+    submenuAnimations.delete(submenu);
+    submenu.open = false;
+    submenu.dataset.submenuState = 'closed';
+    submenu.querySelector<HTMLElement>(':scope > summary')?.setAttribute('aria-expanded', 'false');
+    const submenuPanel = submenu.querySelector<HTMLElement>(':scope > .mobile-submenu__panel');
+    submenuPanel?.removeAttribute('style');
+  };
+
+  const animateSubmenu = (submenu: HTMLDetailsElement, shouldOpen: boolean) => {
+    const trigger = submenu.querySelector<HTMLElement>(':scope > summary');
+    const submenuPanel = submenu.querySelector<HTMLElement>(':scope > .mobile-submenu__panel');
+    if (!trigger || !submenuPanel) return;
+
+    const running = submenuAnimations.get(submenu);
+    if (running) {
+      try {
+        running.commitStyles();
+      } catch {
+        // Older WebKit versions do not expose commitStyles.
+      }
+      running.cancel();
+    }
+
+    const wasOpen = submenu.open;
+    const currentHeight = wasOpen ? submenuPanel.getBoundingClientRect().height : 0;
+    const currentOpacity = wasOpen
+      ? Number.parseFloat(getComputedStyle(submenuPanel).opacity) || 1
+      : 0;
+
+    if (shouldOpen && !wasOpen) submenu.open = true;
+    trigger.setAttribute('aria-expanded', String(shouldOpen));
+    submenu.dataset.submenuState = shouldOpen ? 'opening' : 'closing';
+
+    if (reduced) {
+      submenu.open = shouldOpen;
+      submenu.dataset.submenuState = shouldOpen ? 'open' : 'closed';
+      submenuPanel.removeAttribute('style');
+      return;
+    }
+
+    submenuPanel.style.height = `${currentHeight}px`;
+    submenuPanel.style.overflow = 'hidden';
+    const targetHeight = shouldOpen ? submenuPanel.scrollHeight : 0;
+    const progress = Math.abs(targetHeight - currentHeight) / Math.max(submenuPanel.scrollHeight, 1);
+    const duration = Math.max(90, (shouldOpen ? baseDuration : fastDuration) * progress);
+    const animation = submenuPanel.animate(
+      [
+        {
+          height: `${currentHeight}px`,
+          opacity: currentOpacity,
+          transform: currentHeight === 0 ? 'translateY(-0.35rem)' : 'translateY(0)'
+        },
+        {
+          height: `${targetHeight}px`,
+          opacity: shouldOpen ? 1 : 0,
+          transform: shouldOpen ? 'translateY(0)' : 'translateY(-0.35rem)'
+        }
+      ],
+      {
+        duration,
+        easing: shouldOpen ? layoutEase : exitEase,
+        fill: 'forwards'
+      }
+    );
+    submenuAnimations.set(submenu, animation);
+    animation.finished
+      .catch(() => undefined)
+      .finally(() => {
+        if (submenuAnimations.get(submenu) !== animation) return;
+        submenuAnimations.delete(submenu);
+        submenu.open = shouldOpen;
+        submenu.dataset.submenuState = shouldOpen ? 'open' : 'closed';
+        animation.cancel();
+        submenuPanel.removeAttribute('style');
+      });
+  };
 
   submenus.forEach((submenu) => {
-    const trigger = submenu.querySelector('summary');
+    submenu.dataset.motionSubmenu = 'ready';
+    submenu.dataset.submenuState = submenu.open ? 'open' : 'closed';
+    const trigger = submenu.querySelector<HTMLElement>(':scope > summary');
     if (!trigger) return;
     trigger.setAttribute('aria-expanded', String(submenu.open));
-    submenu.addEventListener('toggle', () => {
-      trigger.setAttribute('aria-expanded', String(submenu.open));
-      if (!submenu.open) return;
-      submenus.forEach((other) => {
-        if (other !== submenu) other.open = false;
-      });
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const shouldOpen = !submenu.open || submenu.dataset.submenuState === 'closing';
+      if (shouldOpen) {
+        submenus.forEach((other) => {
+          if (other !== submenu && other.open) animateSubmenu(other, false);
+        });
+      }
+      animateSubmenu(submenu, shouldOpen);
     });
   });
 
-  menu.addEventListener('toggle', () => {
-    summary.setAttribute('aria-expanded', String(menu.open));
-    summary.setAttribute('aria-label', menu.open ? 'Chiudi menu' : 'Apri menu');
-    document.documentElement.classList.toggle('has-mobile-menu', menu.open);
-    if (menu.open) window.setTimeout(() => focusables[0]?.focus(), 80);
-    if (!menu.open) submenus.forEach((submenu) => (submenu.open = false));
+  const openMenu = () => {
+    if (menu.dataset.menuState === 'open' || menu.dataset.menuState === 'opening') return;
+    menuAnimation?.cancel();
+    menu.open = true;
+    menu.dataset.menuState = 'opening';
+    document.documentElement.classList.add('has-mobile-menu');
+    syncMenuA11y(true);
+
+    if (reduced) {
+      menu.dataset.menuState = 'open';
+      focusables[0]?.focus();
+      return;
+    }
+
+    menuAnimation = panel.animate(
+      [
+        { transform: 'translateY(-100%)', opacity: 0.98 },
+        { transform: 'translateY(0)', opacity: 1 }
+      ],
+      { duration: menuOpenDuration, easing: emphasizedEase, fill: 'forwards' }
+    );
+    const currentAnimation = menuAnimation;
+    currentAnimation.finished
+      .catch(() => undefined)
+      .finally(() => {
+        if (menuAnimation !== currentAnimation) return;
+        menuAnimation = undefined;
+        menu.dataset.menuState = 'open';
+        currentAnimation.cancel();
+        focusables[0]?.focus();
+      });
+  };
+
+  const closeMenu = (restoreFocus = false) => {
+    if (!menu.open || menu.dataset.menuState === 'closing') return;
+    if (menuAnimation) {
+      try {
+        menuAnimation.commitStyles();
+      } catch {
+        // Older WebKit versions do not expose commitStyles.
+      }
+      menuAnimation.cancel();
+    }
+    menu.dataset.menuState = 'closing';
+
+    const finish = () => {
+      menu.open = false;
+      menu.dataset.menuState = 'closed';
+      panel.removeAttribute('style');
+      document.documentElement.classList.remove('has-mobile-menu');
+      submenus.forEach(resetSubmenu);
+      syncMenuA11y(false);
+      if (restoreFocus) summary.focus();
+    };
+
+    if (reduced) {
+      finish();
+      return;
+    }
+
+    const startTransform = getComputedStyle(panel).transform;
+    menuAnimation = panel.animate(
+      [
+        { transform: startTransform === 'none' ? 'translateY(0)' : startTransform, opacity: 1 },
+        { transform: 'translateY(-100%)', opacity: 0.98 }
+      ],
+      { duration: baseDuration, easing: exitEase, fill: 'forwards' }
+    );
+    const currentAnimation = menuAnimation;
+    currentAnimation.finished
+      .catch(() => undefined)
+      .finally(() => {
+        if (menuAnimation !== currentAnimation) return;
+        menuAnimation = undefined;
+        currentAnimation.cancel();
+        finish();
+      });
+  };
+
+  menu.dataset.menuState = menu.open ? 'open' : 'closed';
+  syncMenuA11y(menu.open);
+  summary.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (menu.open) closeMenu();
+    else openMenu();
   });
 
   document.addEventListener('keydown', (event) => {
     if (!menu.open || event.key !== 'Escape') return;
-    menu.open = false;
-    summary.focus();
+    closeMenu(true);
   });
 
   closers.forEach((closer) => {
     closer.addEventListener('click', () => {
-      menu.open = false;
+      closeMenu();
     });
   });
 }
@@ -148,6 +333,18 @@ function initAccordions(): void {
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-accordion-trigger]'));
   const reduced = prefersReducedMotion();
   const animations = new WeakMap<HTMLElement, Animation>();
+  const rootStyles = getComputedStyle(document.documentElement);
+  const readDuration = (property: string, fallback: number) => {
+    const value = Number.parseFloat(rootStyles.getPropertyValue(property));
+    return Number.isFinite(value) ? value : fallback;
+  };
+  const openDuration = readDuration('--nm-motion-duration-base', 320);
+  const closeDuration = readDuration('--nm-motion-duration-fast', 190);
+  const layoutEase =
+    rootStyles.getPropertyValue('--nm-motion-ease-layout').trim() ||
+    'cubic-bezier(0.22, 1, 0.25, 1)';
+  const exitEase =
+    rootStyles.getPropertyValue('--nm-motion-ease-exit').trim() || 'cubic-bezier(0.4, 0, 1, 1)';
 
   buttons.forEach((button) => {
     if (button.dataset.motionAccordion === 'ready') return;
@@ -155,35 +352,62 @@ function initAccordions(): void {
     const panelId = button.getAttribute('aria-controls');
     const panel = panelId ? document.getElementById(panelId) : null;
     if (!panel) return;
+    const item = button.closest<HTMLElement>('.faq-list__item');
 
     button.addEventListener('click', () => {
       const expanded = button.getAttribute('aria-expanded') === 'true';
       const nextExpanded = !expanded;
+      const runningAnimation = animations.get(panel);
+      const currentHeight = panel.hidden ? 0 : panel.getBoundingClientRect().height;
+      const currentOpacity = panel.hidden
+        ? 0
+        : Number.parseFloat(getComputedStyle(panel).opacity) || 0;
+
       button.setAttribute('aria-expanded', String(nextExpanded));
-      animations.get(panel)?.cancel();
+      runningAnimation?.cancel();
       panel.hidden = false;
 
       if (reduced) {
         panel.hidden = !nextExpanded;
+        item?.classList.toggle('is-open', nextExpanded);
         return;
       }
 
-      const start = expanded ? panel.scrollHeight : 0;
-      const end = nextExpanded ? panel.scrollHeight : 0;
+      if (nextExpanded) item?.classList.add('is-open');
+
+      panel.style.height = `${currentHeight}px`;
       panel.style.overflow = 'hidden';
-      const animation = panel.animate([{ height: `${start}px`, opacity: expanded ? 1 : 0 }, { height: `${end}px`, opacity: nextExpanded ? 1 : 0 }], {
-        duration: 240,
-        easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
-      });
+      panel.style.willChange = 'height, opacity';
+      const fullHeight = panel.scrollHeight;
+      const targetHeight = nextExpanded ? fullHeight : 0;
+      const progress = Math.abs(targetHeight - currentHeight) / Math.max(fullHeight, 1);
+      const duration = Math.max(90, (nextExpanded ? openDuration : closeDuration) * progress);
+      const animation = panel.animate(
+        [
+          { height: `${currentHeight}px`, opacity: currentOpacity },
+          { height: `${targetHeight}px`, opacity: nextExpanded ? 1 : 0 }
+        ],
+        {
+          duration,
+          easing: nextExpanded ? layoutEase : exitEase,
+          fill: 'forwards'
+        }
+      );
       animations.set(panel, animation);
       animation.finished
         .catch(() => undefined)
         .finally(() => {
           if (animations.get(panel) !== animation) return;
           animations.delete(panel);
+          panel.style.height = `${targetHeight}px`;
+          panel.style.opacity = nextExpanded ? '1' : '0';
+          animation.cancel();
           panel.hidden = !nextExpanded;
+          if (!nextExpanded) item?.classList.remove('is-open');
           panel.style.height = '';
+          panel.style.opacity = '';
           panel.style.overflow = '';
+          panel.style.willChange = '';
         });
     });
   });
