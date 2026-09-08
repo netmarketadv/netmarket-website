@@ -1,7 +1,9 @@
 <script>
   import { initMotion } from '@/lib/motion/lifecycle';
 
+  const fullMotion = document.documentElement.dataset.motionMode !== 'light';
   initMotion({
-    useGsap: document.documentElement.dataset.motionMode !== 'light'
+    useGsap: fullMotion,
+    useGsapForLines: !fullMotion
   });
 </script>

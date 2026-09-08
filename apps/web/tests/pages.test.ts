@@ -60,5 +60,27 @@ describe('agency and contact pages', () => {
     expect(demo).toContain('prefers-reduced-motion');
     expect(nod).toContain('SoftwareApplication');
     expect(nod).toContain('canonicalSiteUrl');
+    expect(nod).toContain('id="nod-title" data-reveal="line"');
+    expect(nod).toContain('id="nod-reports-title"');
+  });
+
+  it('uses the canonical line reveal for headings on light-motion pages', () => {
+    const controller = readFileSync(
+      new URL('../src/components/motion/MotionController.astro', import.meta.url),
+      'utf8'
+    );
+    const motion = readFileSync(
+      new URL('../src/lib/motion/gsap-motion.ts', import.meta.url),
+      'utf8'
+    );
+    const projects = readFileSync(
+      new URL('../src/pages/progetti/index.astro', import.meta.url),
+      'utf8'
+    );
+
+    expect(controller).toContain('useGsapForLines: !fullMotion');
+    expect(motion).toContain('lineOnly?: boolean');
+    expect(motion).toContain("'motion-gsap-lines'");
+    expect(projects).toContain('id="projects-title" data-reveal="line"');
   });
 });

@@ -52,7 +52,7 @@ Distanze:
 - `down`: fade + translateY negativo, solo per piccoli elementi sopra heading.
 - `scale`: scale morbido + fade + blur minimo, per card e moduli.
 - `media`: clip reveal + scale + brightness/fade, per immagini importanti.
-- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve e padding di sicurezza per ascendenti, discendenti, “o” obliqua e marker.
+- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve e padding di sicurezza per ascendenti, discendenti, “o” obliqua e marker. Usa lo stesso motore GSAP anche nelle pagine `light`; in quel caso GSAP gestisce soltanto i titoli e non attiva gli enhancement della pagina completa.
 
 ## Data Attribute API
 
@@ -77,7 +77,7 @@ Attributi supportati:
 ## Usage Rules
 
 - Hero: header visibile subito, badge/heading/form/rail con stagger leggero e differenza iniziale percepibile.
-- Section headings: reveal `line` su titoli editoriali e sezioni chiave.
+- Section headings: reveal `line` su H1 e titoli editoriali di sezione; applicarlo al titolo, o a un wrapper che contiene il titolo, senza includere intere card o liste.
 - Project cards: hover curato con image scale massimo 1.035, border blu tenue, cursor label e preview immagine desktop.
 - Service cards: hover piu sobrio, image scale massimo 1.025.
 - Buttons: nessun layout jump, translate massimo 1px e background interpolation.

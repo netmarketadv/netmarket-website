@@ -21,15 +21,15 @@ const proofItems = items
 
 {
   proofItems.length > 0 && (
-    <div class="service-proof" data-reveal="up" data-reveal-stagger="1">
+    <div class="service-proof">
       <div class="service-proof__heading">
-        <h2 id="service-proof-title">Prove prima delle promesse.</h2>
-        <p>
+        <h2 id="service-proof-title" data-reveal="line">Prove prima delle promesse.</h2>
+        <p data-reveal="up">
           Usiamo esperienza, casi pubblicati e scelte tecniche verificabili per spiegare il valore
           del lavoro.
         </p>
       </div>
-      <div class="service-proof__grid">
+      <div class="service-proof__grid" data-reveal="up" data-reveal-stagger="1">
         {proofItems.map((item) => (
           <article>
             <span>{item.label}</span>

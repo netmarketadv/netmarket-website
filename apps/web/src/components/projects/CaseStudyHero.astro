@@ -27,9 +27,11 @@ const cover = project.cover ?? project.image;
         aria-hidden="true">/</span
       ><span>{projectClient(project)}</span>
     </nav>
-    <header class="case-hero__header" data-reveal="up">
+    <header class="case-hero__header">
       <p class="case-kicker">{projectClient(project)} · {presentation.projectType}</p>
-      <h1 id="project-title" data-title-size={titleSize}>{presentation.heroTitle}</h1>
+      <h1 id="project-title" data-title-size={titleSize} data-reveal="line">
+        {presentation.heroTitle}
+      </h1>
       <p class="case-hero__intro">{presentation.intro}</p>
       {
         project.services.length > 0 && (

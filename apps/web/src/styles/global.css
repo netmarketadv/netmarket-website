@@ -5801,6 +5801,14 @@ main {
   animation-name: none;
 }
 
+.motion-gsap-lines [data-reveal='line'] {
+  transition: none;
+}
+
+.motion-gsap-lines [data-reveal='line'].is-visible {
+  animation-name: none;
+}
+
 .nm-motion-word {
   display: inline-block;
   overflow: clip;

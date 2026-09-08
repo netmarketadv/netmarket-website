@@ -313,10 +313,11 @@ function initMagnetic(): void {
 
 interface MotionInitOptions {
   useGsap?: boolean;
+  useGsapForLines?: boolean;
 }
 
 export function initMotion(options: MotionInitOptions = {}): void {
-  const { useGsap = true } = options;
+  const { useGsap = true, useGsapForLines = false } = options;
 
   initHeader();
   if (useGsap) {
@@ -325,6 +326,11 @@ export function initMotion(options: MotionInitOptions = {}): void {
       .then((handled) => {
         if (!handled) initReveal();
       })
+      .catch(() => initReveal());
+  } else if (useGsapForLines && document.querySelector('[data-reveal="line"]')) {
+    void import('./gsap-motion')
+      .then(({ initGsapMotion }) => initGsapMotion({ lineOnly: true }))
+      .then(() => initReveal())
       .catch(() => initReveal());
   } else {
     initReveal();

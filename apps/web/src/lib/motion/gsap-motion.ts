@@ -16,6 +16,10 @@ type ScrollTrigger = {
   getAll: () => Array<{ refresh: () => void }>;
 };
 
+interface GsapMotionOptions {
+  lineOnly?: boolean;
+}
+
 const revealSelector = '[data-reveal]';
 const lineRevealSelector = '[data-reveal="line"]';
 const mediaRevealSelector = '[data-reveal="media"]';
@@ -198,10 +202,11 @@ function finalVarsFor(target: HTMLElement) {
   return { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' };
 }
 
-function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger): void {
-  const targets = collectRevealTargets().filter(
-    (target) => target.dataset.motionState !== 'revealed'
-  );
+function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = false): void {
+  const candidates = lineOnly
+    ? Array.from(document.querySelectorAll<HTMLElement>(lineRevealSelector))
+    : collectRevealTargets();
+  const targets = candidates.filter((target) => target.dataset.motionState !== 'revealed');
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
     target.dataset.motionReveal = 'ready';
@@ -397,7 +402,7 @@ function enhanceAgencyTimeline(gsap: Gsap): void {
   });
 }
 
-export async function initGsapMotion(): Promise<boolean> {
+export async function initGsapMotion(options: GsapMotionOptions = {}): Promise<boolean> {
   if (prefersReducedMotion()) return false;
 
   try {
@@ -408,13 +413,15 @@ export async function initGsapMotion(): Promise<boolean> {
     const gsap = gsapModule.gsap as Gsap;
     const ScrollTrigger = scrollTriggerModule.ScrollTrigger as ScrollTrigger;
     gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add('motion-gsap');
-    document.documentElement.dataset.motionEngine = 'gsap';
-    revealWithGsap(gsap, ScrollTrigger);
-    enhanceMediaScroll(gsap);
-    enhanceScrollProgress(gsap);
-    enhanceAgencyTimeline(gsap);
-    enhanceCursorPreview(gsap);
+    document.documentElement.classList.add(options.lineOnly ? 'motion-gsap-lines' : 'motion-gsap');
+    document.documentElement.dataset.motionEngine = options.lineOnly ? 'gsap-lines' : 'gsap';
+    revealWithGsap(gsap, ScrollTrigger, options.lineOnly);
+    if (!options.lineOnly) {
+      enhanceMediaScroll(gsap);
+      enhanceScrollProgress(gsap);
+      enhanceAgencyTimeline(gsap);
+      enhanceCursorPreview(gsap);
+    }
     window.setTimeout(() => ScrollTrigger.refresh(), 250);
     document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => undefined);
     return true;

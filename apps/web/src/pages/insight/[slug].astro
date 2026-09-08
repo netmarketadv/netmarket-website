@@ -85,7 +85,7 @@ const schema = articleJsonLd({
           {insight.categories[0] ? <a href={categoryPath(insight.categories[0].slug)}>{insight.categories[0].name}</a> : <span>Insight</span>}
         </div>
         <div class="insight-article-hero__copy">
-          <h1 id="article-title" data-reveal="up">{insight.title}</h1>
+          <h1 id="article-title" data-reveal="line">{insight.title}</h1>
           <p class="insight-article-hero__dek" data-reveal="up">{insight.subtitle || description}</p>
           <div class="insight-article-meta" data-reveal="up">
             <span><IconCalendar stroke={1.7} aria-hidden="true" /><time datetime={insight.publishedAt}>{formatDate(insight.publishedAt)}</time></span>

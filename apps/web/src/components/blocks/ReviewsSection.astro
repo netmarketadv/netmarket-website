@@ -16,11 +16,13 @@ const { title, titleId, text, rating, reviewCount, googleHref } = Astro.props;
 ---
 
 <div class="reviews-section">
-  <div class="reviews-section__header" data-reveal="up">
+  <div class="reviews-section__header">
     <div>
-      <GoogleTrustBadge rating={rating} reviewCount={reviewCount} href={googleHref} showReviewCount={false} />
-      <h2 id={titleId}>{title}</h2>
-      <p>{text}</p>
+      <div data-reveal="up">
+        <GoogleTrustBadge rating={rating} reviewCount={reviewCount} href={googleHref} showReviewCount={false} />
+      </div>
+      <h2 id={titleId} data-reveal="line">{title}</h2>
+      <p data-reveal="up">{text}</p>
     </div>
   </div>
 

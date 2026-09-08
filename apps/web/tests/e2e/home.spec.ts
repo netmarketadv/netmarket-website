@@ -121,6 +121,19 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
   await context.close();
 });
 
+test('light pages use the homepage line reveal for editorial headings', async ({ page }) => {
+  for (const [path, heading] of [
+    ['/contatti/', '#contact-title'],
+    ['/progetti/', '#projects-title'],
+    ['/nod/', '#nod-title']
+  ] as const) {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap-lines');
+    await expect(page.locator(`${heading} .nm-motion-word__inner`).first()).toBeVisible();
+    expect(await page.locator(`${heading} .nm-motion-word__inner`).count()).toBeGreaterThan(2);
+  }
+});
+
 test('interactive motion controls remain accessible', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await waitForInteractivePage(page);
