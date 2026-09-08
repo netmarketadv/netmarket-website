@@ -75,6 +75,38 @@ test('homepage exposes staging essentials', async ({ page }) => {
   expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
 });
 
+test('homepage publishes the complete same-origin favicon suite', async ({ page, request }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  await expect(page.locator('link[rel="icon"][sizes="48x48"]')).toHaveAttribute(
+    'href',
+    '/favicon-48x48.png'
+  );
+  await expect(page.locator('link[rel="shortcut icon"]')).toHaveAttribute(
+    'href',
+    '/favicon.ico'
+  );
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+    'href',
+    '/apple-touch-icon.png'
+  );
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/site.webmanifest');
+
+  for (const path of [
+    '/favicon.ico',
+    '/favicon-16x16.png',
+    '/favicon-32x32.png',
+    '/favicon-48x48.png',
+    '/apple-touch-icon.png',
+    '/icon-192.png',
+    '/icon-512.png',
+    '/site.webmanifest'
+  ]) {
+    const response = await request.get(path);
+    expect(response.ok(), `${path} should be publicly available`).toBe(true);
+  }
+});
+
 test('homepage phone stays fully visible at desktop widths', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.home-hero__device img')).toBeVisible();

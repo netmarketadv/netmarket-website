@@ -39,10 +39,6 @@ const env = getPublicEnv();
 const pageTitle = buildTitle(title);
 const seoSiteUrl = canonicalSiteUrl ?? env.PUBLIC_SITE_URL;
 const canonical = absoluteCanonical(seoSiteUrl, path);
-const faviconUrl = absoluteCanonical(seoSiteUrl, '/icon-192.png');
-const faviconLargeUrl = absoluteCanonical(seoSiteUrl, '/icon-512.png');
-const appleTouchIconUrl = absoluteCanonical(seoSiteUrl, '/apple-touch-icon.png');
-const manifestUrl = absoluteCanonical(seoSiteUrl, '/site.webmanifest');
 const robots = currentRobots(noindex, noindexFollow);
 const socialImageUrl = socialImage?.url
   ? absoluteCanonical(seoSiteUrl, socialImage.url)
@@ -65,15 +61,21 @@ const jsonLd = [
 <meta name="description" content={description} />
 <meta name="robots" content={robots} />
 <meta name="application-name" content="Netmarket" />
+<meta name="apple-mobile-web-app-title" content="Netmarket" />
 <meta name="theme-color" content="#155BFF" />
 <meta name="msapplication-TileColor" content="#155BFF" />
-<meta name="msapplication-TileImage" content={faviconUrl} />
+<meta name="msapplication-TileImage" content="/mstile-150x150.png" />
+<meta name="msapplication-config" content="/browserconfig.xml" />
 <link rel="canonical" href={canonical} />
-<link rel="icon" type="image/png" sizes="192x192" href={faviconUrl} />
-<link rel="icon" type="image/png" sizes="512x512" href={faviconLargeUrl} />
-<link rel="shortcut icon" type="image/png" href={faviconUrl} />
-<link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
-<link rel="manifest" href={manifestUrl} />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 <meta property="og:title" content={socialTitle || pageTitle} />
 <meta property="og:description" content={socialDescription || description} />
 <meta property="og:type" content={socialImageUrl ? 'article' : 'website'} />
