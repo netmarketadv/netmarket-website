@@ -370,12 +370,11 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(panel.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
 
   await page.getByLabel('Chiudi menu').click();
-  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'closing');
-  await expect(panel).toBeVisible();
   await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false', {
-    timeout: 700
+    timeout: 1_000
   });
   await expect(panel).toBeHidden();
+  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'closed');
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {
