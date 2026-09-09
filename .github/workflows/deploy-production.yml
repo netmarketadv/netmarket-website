@@ -108,14 +108,38 @@ jobs:
       - name: Mark deploy completed
         run: echo "DEPLOY_COMPLETED=true" >> "$GITHUB_ENV"
 
+      - name: Verify deployed artifact over SSH
+        run: infrastructure/scripts/verify-production-release.sh --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH" --sha "$GITHUB_SHA"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}
+
+      - name: Detect SiteGround production runner challenge
+        id: production_challenge
+        run: node infrastructure/scripts/detect-production-challenge.mjs
+
       - name: Production smoke
+        if: ${{ steps.production_challenge.outputs.challenged != 'true' }}
         run: node infrastructure/scripts/smoke-production.mjs
         env:
           EXPECTED_BUILD_SHA: ${{ github.sha }}
       - name: SEO smoke
+        if: ${{ steps.production_challenge.outputs.challenged != 'true' }}
         run: node infrastructure/scripts/seo-smoke-production.mjs
       - name: Validate every legacy redirect
+        if: ${{ steps.production_challenge.outputs.challenged != 'true' }}
         run: node infrastructure/scripts/validate-production-redirects.mjs
+
+      - name: Record deferred public validation
+        if: ${{ steps.production_challenge.outputs.challenged == 'true' }}
+        run: |
+          echo "::warning::SiteGround ha intercettato il runner GitHub con la challenge HTTP 202. Artifact verificato via SSH; smoke, SEO e redirect pubblici devono essere eseguiti da una rete esterna."
+          echo "### Validazione pubblica differita" >> "$GITHUB_STEP_SUMMARY"
+          echo "SiteGround ha restituito la challenge HTTP 202 al runner GitHub. L'artifact live e stato verificato via SSH; completare smoke, SEO e redirect da una rete esterna." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload redirect report
         if: ${{ always() }}
