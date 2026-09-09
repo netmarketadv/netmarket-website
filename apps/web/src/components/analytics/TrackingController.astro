@@ -35,8 +35,17 @@ const gtmId = env.PUBLIC_GTM_ID;
           event: 'netmarket_consent_default',
           netmarket_environment: 'production'
         });
+        function signalConsentReady() {
+          window.setTimeout(function () {
+            window.dataLayer.push({ event: 'netmarket_consent_ready' });
+          }, 0);
+        }
         window._iub = window._iub || [];
         window._iub.csConfiguration = {
+          callback: {
+            onConsentRead: signalConsentReady,
+            onPreferenceExpressed: signalConsentReady
+          },
           countryDetection: true,
           enableLgpd: true,
           enableUspr: true,

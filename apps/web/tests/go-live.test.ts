@@ -60,6 +60,9 @@ describe('go-live safeguards', () => {
     expect(tracking).toContain('https://cs.iubenda.com/sync/2837332.js');
     expect(tracking).toContain('googleConsentMode: true');
     expect(tracking).toContain('emitGtmEvents: true');
+    expect(tracking).toContain('onConsentRead: signalConsentReady');
+    expect(tracking).toContain('onPreferenceExpressed: signalConsentReady');
+    expect(tracking).toContain("event: 'netmarket_consent_ready'");
     expect(tracking).toContain("document.addEventListener('DOMContentLoaded', loadTagManager");
     expect(tracking).toContain("event: 'page_context'");
     expect(tracking).toContain("event: 'generate_lead'");
