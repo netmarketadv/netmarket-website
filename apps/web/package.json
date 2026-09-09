@@ -19,7 +19,7 @@
     "@netmarket/schemas": "workspace:*",
     "@netmarket/seo": "workspace:*",
     "@tabler/icons-astro": "^3.46.0",
-    "astro": "^5.12.0",
+    "astro": "^7.3.1",
     "gsap": "^3.15.0",
     "parse5": "^7.3.0",
     "zod": "^3.25.76"
