@@ -53,6 +53,10 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   );
   await expect(page.locator('[data-portfolio-viewport]')).toHaveAttribute('role', 'region');
   await expect(page.locator('[data-portfolio-viewport]')).toHaveAttribute('tabindex', '0');
+  await expect(page.locator('[data-portfolio-viewport]')).toHaveAttribute(
+    'data-infinite-rail-ready',
+    'true'
+  );
   await expect(
     page.getByRole('heading', { level: 2, name: /modo in cui cerchiamo oggi/ })
   ).toBeVisible();
@@ -120,6 +124,10 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
   expect(mobileState.typeRailColumns.split(' ').length).toBe(1);
   expect(mobileState.portfolioRailOverflow).toBe('auto');
   expect(mobileState.portfolioRailScrollLeft).toBeGreaterThan(0);
+  await expect(page.locator('[data-portfolio-viewport]')).toHaveCSS(
+    'touch-action',
+    /pan-y|manipulation/
+  );
   expect(mobileState.projectRailOverflow).toBe('auto');
   expect(mobileState.projectRailScrollLeft).toBeGreaterThan(0);
   expect(mobileState.technologyDisplay).toBe('none');

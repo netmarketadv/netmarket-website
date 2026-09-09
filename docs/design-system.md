@@ -238,7 +238,7 @@ Il dettaglio operativo vive in `docs/motion-system.md`.
 ## 11. Eccezioni Specifiche Di Pagina
 
 - Homepage social hero: composizione art-directed unica, non componente generico.
-- Homepage case slider: rail full-viewport con larghezze variabili e autoplay leggero; non sostituisce `ProjectCard` altrove.
+- Homepage case slider: rail full-viewport con larghezze variabili, loop continuo, touch nativo e drag mouse; l'autoplay leggero e riservato ai puntatori precisi e non sostituisce `ProjectCard` altrove.
 - Pagina Siti web: hero browser/device, bento tipologie e blocco AI sono specifici del servizio.
 - Agenzia: montage di progetti reali, timeline storica e diagramma editoriale delle tre aree sono pattern narrativi locali.
 - Lavora con noi: mosaico del team e form di candidatura spontanea sono specifici della pagina; principi, liste editoriali e campi form riusano primitive canoniche.

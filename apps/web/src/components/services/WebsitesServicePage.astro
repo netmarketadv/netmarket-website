@@ -357,9 +357,14 @@ const displayedFaq = fallbackFaq;
       aria-label="Portfolio siti web Netmarket"
       tabindex="0"
       data-portfolio-viewport
+      data-infinite-rail
       data-reveal="up"
     >
-      <ul class="websites-portfolio__track" aria-label="Progetti web selezionati">
+      <ul
+        class="websites-portfolio__track"
+        aria-label="Progetti web selezionati"
+        data-infinite-rail-track
+      >
         {
           portfolioSlides.map((slide, index) => {
             const Tag = slide.href ? 'a' : 'article';
@@ -368,6 +373,7 @@ const displayedFaq = fallbackFaq;
                 <Tag
                   class="websites-portfolio-card"
                   {...(slide.href ? { href: slide.href } : {})}
+                  tabindex={slide.href ? -1 : undefined}
                   style={`--portfolio-position: ${slide.position}`}
                   data-portfolio-card
                 >
@@ -395,7 +401,11 @@ const displayedFaq = fallbackFaq;
           portfolioSlides.map((slide, index) => {
             const Tag = slide.href ? 'a' : 'article';
             return (
-              <li class="websites-portfolio__item" aria-hidden="true">
+              <li
+                class="websites-portfolio__item"
+                aria-hidden="true"
+                data-infinite-rail-clone-start={index === 0 ? '' : undefined}
+              >
                 <Tag
                   class="websites-portfolio-card"
                   {...(slide.href ? { href: slide.href, tabindex: -1 } : {})}
@@ -688,75 +698,7 @@ const displayedFaq = fallbackFaq;
 </div>
 
 <script>
-  const viewport = document.querySelector<HTMLElement>('[data-portfolio-viewport]');
+  import { initInfiniteHorizontalRails } from '@/lib/ui/infinite-horizontal-rail';
 
-  if (viewport) {
-    let dragStartX = 0;
-    let dragStartScroll = 0;
-    let dragged = false;
-    let resumeTimer = 0;
-
-    const pause = () => {
-      window.clearTimeout(resumeTimer);
-      viewport.classList.add('is-paused');
-    };
-
-    const resumeLater = () => {
-      window.clearTimeout(resumeTimer);
-      resumeTimer = window.setTimeout(() => viewport.classList.remove('is-paused'), 5000);
-    };
-
-    viewport.addEventListener('pointerdown', (event) => {
-      pause();
-      dragStartX = event.clientX;
-      dragStartScroll = viewport.scrollLeft;
-      dragged = false;
-      viewport.setPointerCapture(event.pointerId);
-    });
-
-    viewport.addEventListener('pointermove', (event) => {
-      if (!viewport.hasPointerCapture(event.pointerId)) return;
-      const delta = event.clientX - dragStartX;
-      if (Math.abs(delta) > 4) dragged = true;
-      viewport.scrollLeft = dragStartScroll - delta;
-    });
-
-    viewport.addEventListener('pointerup', (event) => {
-      if (viewport.hasPointerCapture(event.pointerId))
-        viewport.releasePointerCapture(event.pointerId);
-      resumeLater();
-    });
-
-    viewport.addEventListener(
-      'click',
-      (event) => {
-        if (!dragged) return;
-        event.preventDefault();
-        event.stopPropagation();
-        dragged = false;
-      },
-      true
-    );
-
-    viewport.addEventListener(
-      'wheel',
-      () => {
-        pause();
-        resumeLater();
-      },
-      { passive: true }
-    );
-
-    viewport.addEventListener('keydown', (event) => {
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      event.preventDefault();
-      pause();
-      viewport.scrollBy({
-        left:
-          event.key === 'ArrowRight' ? viewport.clientWidth * 0.72 : -viewport.clientWidth * 0.72,
-        behavior: 'smooth'
-      });
-      resumeLater();
-    });
-  }
+  initInfiniteHorizontalRails();
 </script>
