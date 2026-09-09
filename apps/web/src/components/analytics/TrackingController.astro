@@ -13,6 +13,8 @@ const gtmId = env.PUBLIC_GTM_ID;
   trackingEnabled && (
     <>
       <link rel="preconnect" href="https://www.googletagmanager.com" />
+      <link rel="preconnect" href="https://cdn.iubenda.com" />
+      <link rel="preconnect" href="https://cs.iubenda.com" />
       <script is:inline define:vars={{ gtmId }}>
         window.dataLayer = window.dataLayer || [];
         window.gtag =
@@ -33,6 +35,43 @@ const gtmId = env.PUBLIC_GTM_ID;
           event: 'netmarket_consent_default',
           netmarket_environment: 'production'
         });
+        window._iub = window._iub || [];
+        window._iub.csConfiguration = {
+          countryDetection: true,
+          enableLgpd: true,
+          enableUspr: true,
+          floatingPreferencesButtonDisplay: 'anchored-center-left',
+          googleAdsDataRedaction: true,
+          googleConsentMode: true,
+          googleConsentModeUrlPassthrough: true,
+          emitGtmEvents: true,
+          lgpdAppliesGlobally: false,
+          perPurposeConsent: true,
+          purposes: '1,2,3,4,5',
+          siteId: 2837332,
+          cookiePolicyId: 69986431,
+          banner: {
+            acceptButtonCaptionColor: '#0000FF',
+            acceptButtonColor: '#FFFFFF',
+            acceptButtonDisplay: true,
+            backgroundColor: '#0000FF',
+            closeButtonDisplay: false,
+            customizeButtonDisplay: true,
+            explicitWithdrawal: true,
+            listPurposes: true,
+            logo: null,
+            position: 'float-bottom-right',
+            rejectButtonCaptionColor: '#0000FF',
+            rejectButtonColor: '#FFFFFF',
+            rejectButtonDisplay: true
+          }
+        };
+        window._iub.csLangConfiguration = { it: { cookiePolicyId: 69986431 } };
+      </script>
+      <script is:inline src="https://cs.iubenda.com/sync/2837332.js"></script>
+      <script is:inline src="https://cdn.iubenda.com/cs/gpp/stub.js"></script>
+      <script is:inline src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+      <script is:inline define:vars={{ gtmId }}>
         function loadTagManager() {
           if (window.__netmarketGtmLoaded) return;
           window.__netmarketGtmLoaded = true;
@@ -46,19 +85,19 @@ const gtmId = env.PUBLIC_GTM_ID;
             firstScript.parentNode.insertBefore(script, firstScript);
           })(window, document, 'script', 'dataLayer', gtmId);
         }
-        window.addEventListener(
-          'load',
-          function () {
-            window.setTimeout(loadTagManager, 2500);
-          },
-          { once: true }
-        );
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadTagManager, { once: true });
+        } else {
+          loadTagManager();
+        }
       </script>
     </>
   )
 }
 
 <script>
+  import { pushEvent } from '@netmarket/analytics';
+
   const keys = [
     'utm_source',
     'utm_medium',
@@ -93,4 +132,104 @@ const gtmId = env.PUBLIC_GTM_ID;
   if (Object.keys(next).length > 0) {
     sessionStorage.setItem('nm_contact_tracking', JSON.stringify(next));
   }
+
+  const path = window.location.pathname;
+  const segments = path.split('/').filter(Boolean);
+  const contentSlug = segments.at(-1);
+  const pageType = (() => {
+    if (path === '/') return 'home';
+    if (segments[0] === 'servizi' && segments.length === 2) return 'service';
+    if (segments[0] === 'progetti' && segments.length === 2) return 'case_study';
+    if (segments[0] === 'insight' && segments.length === 2) return 'insight';
+    if (['servizi', 'progetti', 'insight'].includes(segments[0] ?? '') && segments.length === 1)
+      return 'archive';
+    return 'standard';
+  })();
+
+  pushEvent({
+    event: 'page_context',
+    page_path: path,
+    page_title: document.title,
+    page_type: pageType,
+    ...(contentSlug ? { content_slug: contentSlug } : {})
+  });
+
+  if (pageType === 'service' && contentSlug) {
+    pushEvent({ event: 'service_view', service_slug: contentSlug });
+  } else if (pageType === 'case_study' && contentSlug) {
+    pushEvent({ event: 'case_study_view', case_study_slug: contentSlug });
+  } else if (pageType === 'insight' && contentSlug) {
+    pushEvent({ event: 'insight_view', insight_slug: contentSlug });
+  }
+
+  const pendingLeadForm = sessionStorage.getItem('nm_generate_lead_pending');
+  if (path === '/grazie/' && pendingLeadForm === 'contact-page') {
+    sessionStorage.removeItem('nm_generate_lead_pending');
+    pushEvent({ event: 'generate_lead', form_id: pendingLeadForm, lead_type: 'contact' });
+  }
+
+  const normalizeLabel = (value: string) => value.replace(/\s+/g, ' ').trim().slice(0, 100);
+  const locationFor = (element: Element) => {
+    if (element.closest('header')) return 'header';
+    if (element.closest('footer')) return 'footer';
+    const section = element.closest<HTMLElement>('section[id]');
+    return section?.id || 'main';
+  };
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const control = event.target.closest<HTMLElement>('a, button');
+    if (!control) return;
+
+    const href = control instanceof HTMLAnchorElement ? control.getAttribute('href') : null;
+    const label = normalizeLabel(
+      control.dataset.trackLabel || control.getAttribute('aria-label') || control.textContent || ''
+    );
+
+    if (
+      control.matches('.nm-button, [data-track-cta]') &&
+      !control.matches('button[type="submit"]')
+    ) {
+      pushEvent({
+        event: 'cta_click',
+        cta_label: label || 'CTA',
+        cta_url: href ? href.split('?')[0] || href : 'button',
+        cta_location: locationFor(control)
+      });
+    }
+
+    if (!href) return;
+    if (href.startsWith('mailto:')) {
+      pushEvent({ event: 'contact_click', contact_method: 'email' });
+      return;
+    }
+    if (href.startsWith('tel:')) {
+      pushEvent({ event: 'contact_click', contact_method: 'phone' });
+      return;
+    }
+
+    let url: URL;
+    try {
+      url = new URL(href, window.location.href);
+    } catch {
+      return;
+    }
+
+    if (/maps\.app\.goo\.gl$|google\.[a-z.]+\/maps/i.test(url.hostname + url.pathname)) {
+      pushEvent({ event: 'contact_click', contact_method: 'maps' });
+    }
+
+    const resourceMatch = url.pathname.match(/\/([^/]+)\.(pdf|docx?|xlsx?|pptx?|zip)$/i);
+    if (resourceMatch?.[1]) {
+      pushEvent({ event: 'resource_download', resource_slug: resourceMatch[1].slice(0, 100) });
+    }
+
+    if (url.origin !== window.location.origin) {
+      pushEvent({
+        event: 'outbound_click',
+        outbound_domain: url.hostname,
+        outbound_path: url.pathname
+      });
+    }
+  });
 </script>

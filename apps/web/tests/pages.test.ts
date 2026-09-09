@@ -33,6 +33,7 @@ describe('agency and contact pages', () => {
     expect(contact).not.toContain('Cosa succede dopo.');
     expect(form).toContain('submitContactForm');
     expect(form).toContain('contact_form_success');
+    expect(form).toContain("sessionStorage.setItem('nm_generate_lead_pending', 'contact-page')");
     expect(form).toContain("window.location.assign('/grazie/')");
     expect(form).toContain('Raccontaci brevemente il progetto');
     expect(form).toContain('marketingConsent: false');

@@ -64,8 +64,9 @@ Il form spinge eventi `dataLayer`:
 - `contact_form_start`;
 - `contact_form_submit`;
 - `contact_form_success`;
+- `generate_lead`, emesso una sola volta su `/grazie/` dopo un successo reale;
 - `contact_form_error`.
 
-Gli ID di tracking non sono configurati nel repository e staging non carica script marketing di default.
-
-La conversione primaria e `contact_form_success`. La thank-you page puo essere usata come pagina di conferma, ma non deve introdurre un secondo evento conversione equivalente senza deduplica.
+Staging e locale non caricano script marketing. La conversione primaria e `generate_lead`: un marker
+temporaneo in `sessionStorage` permette di emetterla sulla pagina di conferma soltanto dopo una
+risposta positiva del backend. Un accesso diretto a `/grazie/` non genera conversioni.

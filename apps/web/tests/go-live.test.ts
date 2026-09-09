@@ -57,7 +57,14 @@ describe('go-live safeguards', () => {
     expect(tracking).toContain("env.PUBLIC_DEPLOY_ENV === 'production'");
     expect(tracking).toContain("window.gtag('consent', 'default'");
     expect(tracking).toContain("analytics_storage: 'denied'");
-    expect(tracking).toContain("window.setTimeout(loadTagManager, 2500)");
+    expect(tracking).toContain('https://cs.iubenda.com/sync/2837332.js');
+    expect(tracking).toContain('googleConsentMode: true');
+    expect(tracking).toContain('emitGtmEvents: true');
+    expect(tracking).toContain("document.addEventListener('DOMContentLoaded', loadTagManager");
+    expect(tracking).toContain("event: 'page_context'");
+    expect(tracking).toContain("event: 'generate_lead'");
+    expect(tracking).toContain("event: 'outbound_click'");
+    expect(tracking).not.toContain('url.search');
   });
 
   it('keeps production deploy isolated behind exact host and path guards', () => {
