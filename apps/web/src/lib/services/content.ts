@@ -1,4 +1,11 @@
-import type { CaseStudy, Insight, RelationSummary, Resource, Service } from '@netmarket/schemas';
+import type {
+  CaseStudy,
+  Insight,
+  MediaAsset,
+  RelationSummary,
+  Resource,
+  Service
+} from '@netmarket/schemas';
 import {
   getCaseStudies,
   getInsights,
@@ -6,7 +13,11 @@ import {
   getService,
   getServices
 } from '@/lib/api/client';
+import { cmsMedia } from '@/data/home';
 import { serviceFallbacks } from '@/data/service-fallbacks';
+import { applyServicePilot } from '@/data/service-pilots';
+import { getInsightArchiveData, toInsightRelation } from '@/lib/insights/content';
+import { getProjectArchiveData, toProjectRelation } from '@/lib/projects/content';
 
 export type ServiceSource = 'cms' | 'fallback';
 
@@ -38,8 +49,130 @@ const relationLimits = {
   services: 4
 };
 
+const fallbackCaseStudyPriority: Record<string, string[]> = {
+  'siti-web': [
+    'sviluppo-sito-web-allestimenti-fieristici-albertini',
+    'sviluppo-sito-web-fotovoltaico-progetto-e',
+    'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda',
+    'casi-studio-strategia-digitale-ecommerce-brb',
+    'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
+  ],
+  ecommerce: [
+    'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+    'casi-studio-strategia-digitale-ecommerce-brb'
+  ],
+  'software-e-integrazioni': [
+    'app-mobile-programma-fedelta-sirene-blu',
+    'sviluppo-crm-custom-venitaly'
+  ],
+  seo: [
+    'sviluppo-sito-web-allestimenti-fieristici-albertini',
+    'casi-studio-strategia-digitale-ecommerce-brb',
+    'sviluppo-sito-web-fotovoltaico-progetto-e'
+  ],
+  advertising: ['casi-studio-strategia-digitale-ecommerce-brb'],
+  'social-media': ['casi-studio-strategia-digitale-ecommerce-brb'],
+  'branding-e-comunicazione': [
+    'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa',
+    'casi-studio-strategia-digitale-ecommerce-brb'
+  ],
+  'content-production': [
+    'sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda'
+  ],
+  'concorsi-a-premi': [
+    'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa'
+  ]
+};
+
+const fallbackInsightPriority: Record<string, string[]> = {
+  'siti-web': [
+    'wordpress-scelta-migliore-per-sito-web-aziendale',
+    'accessibilita-siti-web-obbligatoria-dal-2025',
+    'migliore-web-agency-padova',
+    'sfide-opportunita-vantaggi-sito-web',
+    'importanza-del-mobile-friendly-design'
+  ],
+  ecommerce: [
+    'intelligenza-artificiale-vendite-ecommerce',
+    'statistiche-dati-ecommerce-2024',
+    '10-motivi-avere-e-commerce',
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane'
+  ],
+  'software-e-integrazioni': [
+    'software-gestionale-descrizione-sviluppo-vantaggi',
+    'intelligenza-artificiale-vendite-ecommerce'
+  ],
+  seo: [
+    'scegliere-migliore-agenzia-seo-business-padova',
+    'accessibilita-siti-web-obbligatoria-dal-2025',
+    'wordpress-scelta-migliore-per-sito-web-aziendale',
+    'migliore-web-agency-padova'
+  ],
+  advertising: [
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane',
+    'funnel-marketing-conversioni-coinvolgere-clienti',
+    'ia-marketing-social-commerce-no-cookie'
+  ],
+  'social-media': [
+    'le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai',
+    '2023-12-14-instagram-le-6-novita-per-il-2023',
+    '2023-12-14-2023-06-30-linkedin-novita-2023',
+    'ia-marketing-social-commerce-no-cookie'
+  ],
+  'branding-e-comunicazione': [
+    'migliorare-la-brand-reputation',
+    '2023-12-14-registra-subito-il-tuo-marchio'
+  ],
+  'content-production': [
+    'le-8-novita-di-instagram-per-il-2025-reel-caroselli-e-meta-ai',
+    'funnel-marketing-conversioni-coinvolgere-clienti',
+    'migliorare-la-brand-reputation'
+  ],
+  'concorsi-a-premi': [
+    'organizzare-concorsi-a-premi',
+    'black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane'
+  ]
+};
+
+const serviceVisuals: Record<string, { id: number; url: string; alt: string }> = {
+  'siti-web': {
+    id: 99101,
+    url: cmsMedia.services.websites,
+    alt: 'Visual servizio sviluppo e realizzazione siti web Netmarket'
+  },
+  ecommerce: {
+    id: 99102,
+    url: cmsMedia.services.ecommerce,
+    alt: 'Visual servizio sviluppo ecommerce Netmarket'
+  },
+  seo: {
+    id: 99104,
+    url: cmsMedia.services.marketing,
+    alt: 'Visual servizio SEO e marketing digitale Netmarket'
+  },
+  advertising: {
+    id: 99105,
+    url: cmsMedia.services.advertising,
+    alt: 'Visual servizio advertising e pubblicità Netmarket'
+  },
+  'social-media': {
+    id: 99106,
+    url: cmsMedia.services.social,
+    alt: 'Visual servizio social media management Netmarket'
+  },
+  'branding-e-comunicazione': {
+    id: 99107,
+    url: cmsMedia.services.branding,
+    alt: 'Visual servizio comunicazione grafica e branding Netmarket'
+  },
+  'concorsi-a-premi': {
+    id: 99109,
+    url: cmsMedia.services.contests,
+    alt: 'Visual servizio concorsi a premi Netmarket'
+  }
+};
+
 let archiveDataPromise: Promise<ServiceArchiveData> | undefined;
-let fallbackServiceCache: Service[] | undefined;
 
 function byPriority(a: Service, b: Service): number {
   return a.priority - b.priority || a.title.localeCompare(b.title, 'it');
@@ -67,7 +200,11 @@ function contentTypeFor(content: CaseStudy | Insight | Resource): string {
 
 async function fromCms(): Promise<Service[]> {
   const collection = await getServices({ perPage: 50, sort: 'priority' });
-  return collection.data.filter((service) => service.slug && service.title).sort(byPriority);
+  return collection.data
+    .filter((service) => service.slug && service.title)
+    .map(withServiceVisual)
+    .map(applyServicePilot)
+    .sort(byPriority);
 }
 
 export async function getServiceArchiveData(): Promise<ServiceArchiveData> {
@@ -84,44 +221,36 @@ async function loadServiceArchiveData(): Promise<ServiceArchiveData> {
       `[services] CMS services unavailable, using local build fallback: ${warningMessage(error)}`
     );
   }
-  return { services: [...serviceFallbacks].sort(byPriority), source: 'fallback' };
+  return {
+    services: serviceFallbacks.map(withServiceVisual).map(applyServicePilot).sort(byPriority),
+    source: 'fallback'
+  };
 }
 
 export async function getServiceDetailData(slug: string): Promise<ServiceDetailData | undefined> {
-  const archive = await getServiceArchiveData();
-  if (archive.source === 'cms') {
-    try {
-      const service = await getService(slug);
-      return {
-        service,
-        source: 'cms',
-        related: await resolveRelated(service)
-      };
-    } catch (error) {
-      console.warn(
-        `[services] CMS service "${slug}" unavailable, trying local build fallback: ${warningMessage(error)}`
-      );
-    }
+  try {
+    const service = applyServicePilot(withServiceVisual(await getService(slug)));
+    return {
+      service,
+      source: 'cms',
+      related: await resolveRelated(service)
+    };
+  } catch (error) {
+    console.warn(
+      `[services] CMS service "${slug}" unavailable, trying local build fallback: ${warningMessage(error)}`
+    );
   }
 
-  const fallbackServices = archive.source === 'fallback' ? archive.services : fallbackServicesSorted();
-  const service = fallbackServices.find((item) => item.slug === slug);
+  const service = serviceFallbacks
+    .map(withServiceVisual)
+    .map(applyServicePilot)
+    .find((item) => item.slug === slug);
   if (!service) return undefined;
   return {
     service,
     source: 'fallback',
-    related: {
-      caseStudies: [],
-      insights: [],
-      resources: [],
-      services: service.relatedServices.slice(0, relationLimits.services)
-    }
+    related: await resolveRelated(service)
   };
-}
-
-function fallbackServicesSorted(): Service[] {
-  fallbackServiceCache ??= [...serviceFallbacks].sort(byPriority);
-  return fallbackServiceCache;
 }
 
 export async function resolveRelated(service: Service): Promise<ServiceDetailData['related']> {
@@ -149,13 +278,14 @@ async function resolveCaseStudies(service: Service): Promise<RelationSummary[]> 
       perPage: relationLimits.caseStudies,
       sort: 'priority'
     });
-    return collection.data.slice(0, relationLimits.caseStudies).map(toRelation);
+    const related = collection.data.slice(0, relationLimits.caseStudies).map(toRelation);
+    if (related.length > 0) return related;
   } catch (error) {
     console.warn(
       `[services] Related case studies unavailable for "${service.slug}": ${warningMessage(error)}`
     );
-    return [];
   }
+  return fallbackCaseStudies(service.slug);
 }
 
 async function resolveInsights(slug: string): Promise<RelationSummary[]> {
@@ -165,11 +295,12 @@ async function resolveInsights(slug: string): Promise<RelationSummary[]> {
       perPage: relationLimits.insights,
       sort: 'priority'
     });
-    return collection.data.slice(0, relationLimits.insights).map(toRelation);
+    const related = collection.data.slice(0, relationLimits.insights).map(toRelation);
+    if (related.length > 0) return related;
   } catch (error) {
     console.warn(`[services] Related insights unavailable for "${slug}": ${warningMessage(error)}`);
-    return [];
   }
+  return fallbackInsights(slug);
 }
 
 async function resolveResources(slug: string): Promise<RelationSummary[]> {
@@ -188,6 +319,50 @@ async function resolveResources(slug: string): Promise<RelationSummary[]> {
   }
 }
 
+async function fallbackCaseStudies(slug: string): Promise<RelationSummary[]> {
+  try {
+    const { projects } = await getProjectArchiveData();
+    const priority = fallbackCaseStudyPriority[slug] ?? [];
+    return projects
+      .filter(
+        (project) =>
+          project.services.some((service) => service.slug === slug) || priority.includes(project.slug)
+      )
+      .sort((a, b) => priorityIndex(a.slug, priority) - priorityIndex(b.slug, priority))
+      .slice(0, relationLimits.caseStudies)
+      .map(toProjectRelation);
+  } catch (error) {
+    console.warn(
+      `[services] Fallback case studies unavailable for "${slug}": ${warningMessage(error)}`
+    );
+    return [];
+  }
+}
+
+function priorityIndex(slug: string, priority: string[]): number {
+  const index = priority.indexOf(slug);
+  return index >= 0 ? index : Number.MAX_SAFE_INTEGER;
+}
+
+async function fallbackInsights(slug: string): Promise<RelationSummary[]> {
+  try {
+    const { insights } = await getInsightArchiveData();
+    const priority = fallbackInsightPriority[slug] ?? [];
+    return insights
+      .filter(
+        (insight) =>
+          insight.relatedServices.some((service) => service.slug === slug) ||
+          priority.includes(insight.slug)
+      )
+      .sort((a, b) => priorityIndex(a.slug, priority) - priorityIndex(b.slug, priority))
+      .slice(0, relationLimits.insights)
+      .map(toInsightRelation);
+  } catch (error) {
+    console.warn(`[services] Fallback insights unavailable for "${slug}": ${warningMessage(error)}`);
+    return [];
+  }
+}
+
 export function servicePath(slug: string): string {
   return `/servizi/${slug}/`;
 }
@@ -198,6 +373,36 @@ export function relationPath(relation: RelationSummary): string {
   if (relation.type === 'nm_resource') return `/risorse/${relation.slug}/`;
   if (relation.type === 'nm_service') return servicePath(relation.slug);
   return '#contatti';
+}
+
+function serviceVisualAsset(slug: string): MediaAsset | null {
+  const visual = serviceVisuals[slug];
+  if (!visual) return null;
+  return {
+    id: visual.id,
+    url: visual.url,
+    alt: visual.alt,
+    width: 1400,
+    height: 900,
+    mimeType: 'image/png'
+  };
+}
+
+function withServiceVisual(service: Service): Service {
+  const visual = serviceVisualAsset(service.slug);
+  if (!visual) return service;
+  return {
+    ...service,
+    image: visual,
+    hero: {
+      ...service.hero,
+      image: visual
+    },
+    seo: {
+      ...service.seo,
+      socialImage: service.seo.socialImage ?? visual
+    }
+  };
 }
 
 export function serviceDescription(service: Service): string {

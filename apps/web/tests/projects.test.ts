@@ -19,6 +19,9 @@ describe('project system', () => {
     expect(archive).toContain('getProjectArchiveData');
     expect(detail).toContain('getStaticPaths');
     expect(detail).toContain('caseStudyJsonLd');
+    expect(detail).toContain('CaseStudyResults');
+    expect(detail).toContain('RelatedProjects');
+    expect(detail).not.toContain('Progetto successivo');
     expect(header).toContain('/progetti/');
   });
 
@@ -33,5 +36,21 @@ describe('project system', () => {
     expect(inventory).toHaveLength(8);
     expect(inventory.every((item) => item.legacyUrl.includes('/caso-studio/'))).toBe(true);
     expect(inventory.every((item) => item.migrationStatus)).toBe(true);
+  });
+
+  it('defines a complete editorial presentation for every migrated project', () => {
+    const presentation = readFileSync(
+      new URL('../src/lib/projects/presentation.ts', import.meta.url),
+      'utf8'
+    );
+    const inventory = JSON.parse(
+      readFileSync(
+        new URL('../../../data/migrations/case-studies/case-study-inventory.json', import.meta.url),
+        'utf8'
+      )
+    ) as Array<{ legacySlug: string }>;
+
+    inventory.forEach(({ legacySlug }) => expect(presentation).toContain(`'${legacySlug}'`));
+    expect(presentation).toContain('relatedProjectsFor');
   });
 });

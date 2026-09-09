@@ -8,9 +8,17 @@ import ServiceCTA from '@/components/services/ServiceCTA.astro';
 import ServiceDetailHero from '@/components/services/ServiceDetailHero.astro';
 import ServiceIntro from '@/components/services/ServiceIntro.astro';
 import ServiceProcess from '@/components/services/ServiceProcess.astro';
-import ServiceRelatedContent from '@/components/services/ServiceRelatedContent.astro';
+import ServiceProof from '@/components/services/ServiceProof.astro';
 import ServiceTaxonomyList from '@/components/services/ServiceTaxonomyList.astro';
+import ServiceTechnicalFocus from '@/components/services/ServiceTechnicalFocus.astro';
+import ServiceExperiencePage from '@/components/services/ServiceExperiencePage.astro';
+import WebsitesServicePage from '@/components/services/WebsitesServicePage.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+  isServiceExperienceSlug,
+  serviceExperiences,
+  type ServiceExperienceSlug
+} from '@/data/service-experiences';
 import { getServiceArchiveData, resolveRelated, serviceDescription } from '@/lib/services/content';
 
 interface Props {
@@ -26,20 +34,21 @@ export async function getStaticPaths() {
   }));
 }
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
-const { service, source } = Astro.props;
-const related =
-  source === 'cms'
-    ? await resolveRelated(service)
-    : {
-        caseStudies: [],
-        insights: [],
-        resources: [],
-        services: service.relatedServices.slice(0, 4)
-      };
+const canonicalSiteUrl = 'https://netmarket.it';
+const { service } = Astro.props;
+const related = await resolveRelated(service);
 const path = `/servizi/${service.slug}/`;
-const description = serviceDescription(service);
-const title = service.seo.title || service.title;
+const isWebsitesService = service.slug === 'siti-web';
+const isExperienceService = isServiceExperienceSlug(service.slug);
+const experience = isExperienceService
+  ? serviceExperiences[service.slug as ServiceExperienceSlug]
+  : undefined;
+const description = isWebsitesService
+  ? 'Realizzazione siti web a Padova per aziende: corporate, ecommerce e piattaforme digitali con comunicazione, contenuti, SEO e tecnologia integrate.'
+  : (experience?.description ?? serviceDescription(service));
+const title = isWebsitesService
+  ? 'Realizzazione siti web a Padova'
+  : (experience?.title ?? service.seo.title) || service.title;
 const faqItems = service.faq
   .map((item) => {
     if (!item || typeof item !== 'object') return null;
@@ -57,10 +66,44 @@ const breadcrumb = breadcrumbJsonLd([
 ]);
 const serviceSchema = serviceJsonLd(
   canonicalSiteUrl,
-  service.title,
+  isWebsitesService ? 'Realizzazione siti web a Padova' : (experience?.eyebrow ?? service.title),
   description,
-  absoluteCanonical(canonicalSiteUrl, path)
+  absoluteCanonical(canonicalSiteUrl, path),
+  isWebsitesService ? 'Realizzazione siti web' : service.title,
+  isWebsitesService || isExperienceService
+    ? [
+        { '@type': 'City', name: 'Padova' },
+        { '@type': 'Country', name: 'Italia' }
+      ]
+    : 'Italy'
 );
+const websitesSocialImage = isWebsitesService
+  ? {
+      id: 9101,
+      url: '/media/rigomar.webp',
+      alt: 'Progetto del sito web Rigomar realizzato da Netmarket',
+      width: 1024,
+      height: 576,
+      mimeType: 'image/webp'
+    }
+  : undefined;
+const experienceSocialImage = isExperienceService
+  ? (related.caseStudies.find((item) => item.image)?.image ?? service.image ?? undefined)
+  : undefined;
+const faqSchema =
+  faqItems.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map(([question, answer]) => ({
+          '@type': 'Question',
+          name: question,
+          acceptedAnswer: { '@type': 'Answer', text: answer }
+        }))
+      }
+    : undefined;
+const structuredData = [breadcrumb, serviceSchema, ...(faqSchema ? [faqSchema] : [])];
+const hasProof = service.results.length > 0;
 ---
 
 <BaseLayout
@@ -69,59 +112,80 @@ const serviceSchema = serviceJsonLd(
   path={path}
   noindex={service.seo.noindex}
   canonicalSiteUrl={canonicalSiteUrl}
-  structuredData={[breadcrumb, serviceSchema]}
+  structuredData={structuredData}
+  socialTitle={isWebsitesService
+    ? 'Realizzazione siti web a Padova | Netmarket'
+    : experience?.title}
+  socialDescription={isWebsitesService || isExperienceService ? description : undefined}
+  socialImage={websitesSocialImage ?? experienceSocialImage}
+  motionMode={isWebsitesService || isExperienceService ? 'light' : 'full'}
 >
-  <Container wide>
-    <ServiceDetailHero service={service} />
-  </Container>
-
-  <Section compact labelledby="service-intro-title">
-    <Container>
-      <ServiceIntro service={service} />
-    </Container>
-  </Section>
-
-  <Section labelledby="service-process-title">
-    <Container>
-      <ServiceProcess service={service} />
-    </Container>
-  </Section>
-
-  <Section compact>
-    <Container>
-      <ServiceTaxonomyList service={service} />
-    </Container>
-  </Section>
-
-  <Section>
-    <Container wide>
-      <ServiceRelatedContent
-        caseStudies={related.caseStudies}
-        insights={related.insights}
-        resources={related.resources}
-        services={related.services}
-      />
-    </Container>
-  </Section>
-
   {
-    faqItems.length > 0 && (
-      <Section class="faq-section" labelledby="service-faq-title">
-        <Container>
-          <FAQBlock
-            titleId="service-faq-title"
-            title="FAQ"
-            text={`Risposte essenziali sul servizio ${service.title}.`}
-            items={faqItems}
-          />
+    isWebsitesService ? (
+      <Container wide>
+        <WebsitesServicePage service={service} related={related} faqItems={faqItems} />
+      </Container>
+    ) : isExperienceService ? (
+      <Container wide>
+        <ServiceExperiencePage
+          service={service}
+          related={related}
+          faqItems={faqItems}
+          variant={service.slug as ServiceExperienceSlug}
+        />
+      </Container>
+    ) : (
+      <>
+        <Container wide>
+          <ServiceDetailHero service={service} />
         </Container>
-      </Section>
+
+        <Section compact labelledby="service-intro-title">
+          <Container>
+            <ServiceIntro service={service} />
+          </Container>
+        </Section>
+
+        {hasProof && (
+          <Section labelledby="service-proof-title">
+            <Container>
+              <ServiceProof items={service.results} />
+            </Container>
+          </Section>
+        )}
+
+        <Section labelledby="service-process-title">
+          <Container>
+            <ServiceProcess service={service} />
+          </Container>
+        </Section>
+
+        <Section compact>
+          <Container>
+            <ServiceTechnicalFocus service={service} />
+            <ServiceTaxonomyList service={service} />
+          </Container>
+        </Section>
+
+        {faqItems.length > 0 && (
+          <Section class="faq-section" labelledby="service-faq-title">
+            <Container>
+              <FAQBlock
+                titleId="service-faq-title"
+                title="FAQ"
+                text={`Risposte essenziali sul servizio ${service.title}.`}
+                items={faqItems}
+              />
+            </Container>
+          </Section>
+        )}
+
+        <Section class="inline-cta-section" labelledby="service-cta-title">
+          <Container wide>
+            <ServiceCTA />
+          </Container>
+        </Section>
+      </>
     )
   }
-
-  <Section class="inline-cta-section" labelledby="service-cta-title">
-    <Container wide>
-      <ServiceCTA />
-    </Container>
-  </Section>
 </BaseLayout>

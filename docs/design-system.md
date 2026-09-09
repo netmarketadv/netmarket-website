@@ -1,257 +1,269 @@
 # Netmarket Design System
 
-## 1. Design Principles
+Questa documentazione descrive il linguaggio visivo realmente in uso nel sito Netmarket. Non e una raccolta di direzioni future. Le fonti osservate sono homepage, Agenzia, archivio Progetti, case study, archivio e dettaglio Insight, archivio Servizi e pagina Siti web.
 
-- Comunicare valore prima di decorare.
-- Usare il blu Netmarket come segnale, non come riempitivo.
-- Dare ai progetti piu peso delle promesse.
-- Rendere il 1986 un vantaggio decisionale, non uno stile vintage.
-- Costruire con griglia, gerarchia e spazio bianco.
-- Preferire motion utile a motion scenografica.
-- Proteggere performance, accessibilita e SEO fin dall'impianto.
+## 1. Gerarchia delle fonti
 
-## 2. Visual Personality
+1. `apps/web/src/styles/tokens.css`: valori implementati e alias compatibili.
+2. `docs/design-system.md`: regole, classificazione e criteri di riuso.
+3. `docs/motion-system.md`: motion language e comportamento reduced motion.
+4. `/design-system/`: catalogo visuale interno per il controllo dei pattern canonici.
+5. CSS locale di pagina: eccezioni motivate, non precedenti automatici.
 
-Netmarket e editoriale, digitale, precisa. Il sistema combina superfici bianche, neutri freddi, tipografia ampia e un blu proprietario `#0E51FE`. Deve sembrare un'agenzia capace di gestire progetti complessi, non una startup SaaS ne un portfolio freelance.
+Un pattern diventa canonico quando ricorre in piu contesti, ha una responsabilita chiara e regge almeno mobile, tablet e desktop. Un componente usato una sola volta resta un'eccezione finche il riuso non e dimostrato.
 
-La direzione V3 e "agency marketplace system": contenuto reale, proof immediato, form leggero, rail visuale, card morbide, sezioni grigio chiarissimo, CTA sceniche e FAQ compatte. La pagina deve apparire moderna e molto pulita, ma non fredda; solida, ma non tradizionale. Ogni grande momento visivo deve avere una ragione informativa.
+## 2. Principi
 
-## 3. Grid
+- Minimal, editoriale, premium e modulare.
+- Tipografia e immagini reali guidano la gerarchia.
+- I progetti dimostrano il valore prima delle promesse.
+- Il blu Netmarket segnala accento, focus e azione; non riempie ogni superficie.
+- Pochi componenti forti, nessuna micro-card senza una funzione.
+- Nessun linguaggio da prodotto SaaS, stock, dashboard finta o decorazione gratuita.
+- Il 1986 comunica continuita e competenza, non nostalgia.
+- Accessibilita, performance e contenuto server-rendered fanno parte del design.
 
-- Mobile: 1 colonna, margini 16px.
-- Tablet: 6 colonne logiche, margini fluidi.
-- Desktop: 12 colonne, max-width 1216px.
-- Wide: max-width 1472px per hero, media e sezioni portfolio.
-- Gutter: `clamp(1rem, 1vw, 1.5rem)`.
-- Multi-colonna sempre con fallback esplicito sotto 900px.
+## 3. Design Tokens
 
-## 4. Layout Primitives
+### 3.1 Colore
+
+| Ruolo          | Token                  | Valore    | Uso                                           |
+| -------------- | ---------------------- | --------- | --------------------------------------------- |
+| Brand          | `--nm-color-blue`      | `#0E51FE` | accenti, focus, stati attivi, momenti visuali |
+| Brand profondo | `--nm-color-blue-deep` | `#0735B9` | testo su superfici blu chiare                 |
+| Brand soft     | `--nm-color-blue-soft` | `#EAF1FF` | marker, note e supporto                       |
+| Ink            | `--nm-color-ink`       | `#090A0F` | testo e pannelli scuri                        |
+| Ink secondario | `--nm-color-ink-2`     | `#1D2430` | testo UI ad alto contrasto                    |
+| Muted          | `--nm-color-muted`     | `#5B6472` | body secondario                               |
+| Subtle         | `--nm-color-subtle`    | `#858D9A` | metadata e label                              |
+| Canvas         | `--nm-color-canvas`    | `#F6F7F9` | fondi neutri di sezione                       |
+| Surface        | `--nm-color-surface`   | `#FFFFFF` | pagina e card                                 |
+| Surface 2      | `--nm-color-surface-2` | `#EEF2F7` | frame media e pannelli                        |
+| Border         | `--nm-color-border`    | `#DDE2EA` | hairline strutturali                          |
+| Inverse        | `--nm-color-inverse`   | `#080B16` | sezioni e CTA scure                           |
+
+Rosso, verde e arancio sono riservati a stati semantici. Le tinte specifiche di un cliente possono vivere nei case study tramite variabili `--case-*`, senza entrare nella palette globale.
+
+### 3.2 Griglia e contenimento
+
+- Gutter pagina: `--nm-page-margin`, da 16px a 56px.
+- Contenuto: `--nm-layout-content`, 1200px.
+- Wide: `--nm-layout-wide`, 1328px, per hero, portfolio, team e media.
+- Shell: `--nm-layout-shell`, 1472px, riservato a header e footer.
+- Gutter interno griglia: `--nm-grid-gutter`, 16-24px.
+- Le colonne usano sempre `minmax(0, ...)` per impedire overflow.
+- Il full-width editoriale e intenzionale: rail e marquee possono attraversare il viewport, mentre heading e controlli restano sulla griglia.
+
+### 3.3 Spacing
+
+La scala `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl` governa i gap locali. Il ritmo di sezione usa:
+
+- Standard: `--nm-section-space`, 64-120px.
+- Compatto: `--nm-section-space-compact`, 44-80px.
+- Heading/body: `--nm-heading-gap-xs|sm|md|lg`.
+
+Valori locali sono ammessi per composizioni editoriali o media art-directed. Non devono duplicare un token esistente.
+
+### 3.4 Tipografia
+
+Mona Sans self-hosted, pesi 400, 500 e 600. Fallback: Aptos, Segoe UI e system UI.
+
+| Livello | Token               | Line-height | Uso                 |
+| ------- | ------------------- | ----------- | ------------------- |
+| Display | `--nm-text-display` | `0.90-0.96` | hero eccezionali    |
+| H1      | `--nm-text-h1`      | `0.94-1`    | titolo pagina       |
+| H2      | `--nm-text-h2`      | `0.98-1.04` | apertura sezione    |
+| H3      | `--nm-text-h3`      | `1.04-1.12` | card e sottosezioni |
+| Lead    | `--nm-text-lead`    | `1.42-1.50` | introduzioni        |
+| Body    | `--nm-text-body`    | `1.58`      | contenuto corrente  |
+| Small   | `--nm-text-small`   | `1.45`      | supporto            |
+| Label   | `--nm-text-label`   | `1.35-1.45` | tassonomie e UI     |
+| Meta    | `--nm-text-meta`    | `1.35-1.45` | metadata            |
+
+Il peso standard degli heading e 500. Il body non supera normalmente `--nm-measure-body` (58ch); i blocchi editoriali lunghi usano misure piu strette. Il `letter-spacing` canonico e `0` a ogni livello: la compattezza deriva da font, scala, misura e line-height, non da tracking negativo.
+
+#### La “o” obliqua
+
+Negli heading la lettera `o` o `O` interna a una parola riceve il trattamento `.nm-heading-o`: lieve inclinazione tramite `skewX(-5deg)`, stessa famiglia, peso, colore e baseline. La congiunzione italiana “o” isolata resta roman. Body, label, menu, bottoni e metadata non vengono trasformati. Il parser preserva il testo originale in `aria-label` e non deve spezzare le parole.
+
+#### Accenti nei titoli
+
+- `.nm-heading-accent`: una parola o frase breve in blu.
+- `.nm-heading-muted`: accento secondario grigio, raro.
+- `.nm-heading-marker`: selezione in stile iOS con fondo azzurro, barre laterali e handle.
+- `.nm-heading-marker--strong`: solo per hero o momenti editoriali principali.
+
+Massimo un accento forte per titolo. Gli handle devono restare visibili e il wrapper del reveal deve lasciare spazio ad ascendenti, discendenti e marker.
+
+### 3.5 Radius, bordi e ombre
+
+- `--nm-radius-control` (12px): controlli e piccoli pannelli.
+- `--nm-radius-media` (16px): immagini e card media-first.
+- `--nm-radius-card` (24px): pannelli importanti.
+- `--nm-radius-feature` (36px): hero visual e CTA sceniche.
+- `--nm-radius-pill`: bottoni, badge, filtri e chip.
+- Hairline da 1px come separazione primaria.
+- Ombre solo per overlay, media flottanti o gerarchie che il bordo non risolve.
+
+Il radius indica un oggetto. Le sezioni non diventano card per semplice decorazione e le card non vengono annidate.
+
+## 4. Primitive
+
+### Canoniche
 
 - `Container`: contenimento standard o wide.
-- `Section`: ritmo verticale e landmark semantico.
-- `Grid`: griglia 12 colonne.
-- `Stack`: ritmo verticale locale.
-- `Cluster`: gruppi inline come CTA o tag.
-- `Split`: relazione testo/visual.
-- `Bleed`: media quasi full-width senza uscire dal controllo.
-- `Frame`: contenitore per media o mockup.
-- `StickyRegion`: riservato a narrazioni scroll future.
+- `Section`: landmark e ritmo verticale standard/compact.
+- `Stack`: ritmo verticale locale tramite `gap`.
+- `.nm-cluster`: gruppi inline che possono andare a capo.
 
-Pattern principali homepage:
+### Di supporto
 
-- Hero split: headline ampia, due badge proof, pannello form e CTA.
-- Showcase rail: card orizzontali scroll-snap con servizio, immagini reali e claim blu.
-- Proof strip: quattro prove concise sotto al rail.
-- Plan card: blocco grigio grande con piano di lavoro e step in mini-card.
-- Project rail: un caso dominante e due casi secondari, tutti con asset reali.
-- Bottleneck panel: testo + checklist scura per problemi e interventi.
-- Service bento: griglia 3 colonne con almeno due celle visuali forti.
-- Landscape CTA: immagine generata proprietaria per pausa scenica e conversione.
-- Reviews carousel: recensioni Google statiche, full-width, card compatte, stelle gialle e modal per testi lunghi aperto da icona occhio.
-- Trust metrics: quattro metriche verificabili, senza numeri inventati.
-- Process card: card grande con step ripetibili.
-- Insight cards: tre card editoriali con immagine, titolo e descrizione.
-- FAQ accordion: domande brevi, risposte sintetiche.
+- `Grid`, `Split`, `Bleed`, `Frame`: utility disponibili, da usare quando descrivono davvero la composizione. Non sostituiscono layout editoriali specifici.
+- `SectionHeading`: utile per sezioni semplici; le aperture editoriali complesse mantengono markup locale.
 
-Pattern servizi:
+Queste primitive di supporto non sono obbligatorie e non vanno presentate come componenti dominanti finche il loro riuso resta limitato.
 
-- Service archive hero: messaggio editoriale ampio con CTA verso l'indice.
-- Service index: righe grandi con preview media, indice numerico discreto, descrizione e chip tassonomici solo se esistono dati reali.
-- Service detail hero: breadcrumb, H1, lead, CTA e media opzionale.
-- Service needs: blocco scuro usato solo quando problemi/esigenze hanno contenuto reale.
-- Service process: step data-driven in card leggere, senza label generiche tipo "fase".
-- Service related links: link crawlable verso servizi, progetti, insight e risorse.
+## 5. Componenti Riutilizzabili
 
-## 5. Spacing System
+### Navigazione
 
-Scala fluida: `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`. Usare i token in `apps/web/src/styles/tokens.css`; non introdurre valori ad hoc salvo casi documentati.
+- `SiteHeader`: sticky bianco, logo, navigazione sobria, CTA primaria.
+- Mega menu: `details/summary`, introduzione breve e link con icone Tabler.
+- Menu mobile: pannello dedicato, gerarchia piatta, sottomenu accessibili e CTA contatto.
+- `SiteFooter`: identita, colonne di link, social, trust badge e dati societari. Il watermark e un'eccezione controllata del footer.
 
-## 6. Typography System
+### Azioni e form
 
-Font: `Mona Sans`, self-hosted in `apps/web/public/fonts`, con fallback `Aptos`, `Segoe UI`, system-ui. Usare Regular 400, Medium 500 e SemiBold 600. Evitare pesi oltre 600 nella UI pubblica salvo casi speciali.
+- `Button`: primary nero, secondary bianco con bordo, inverse bianco su scuro.
+- Bottoni pill, label concise, hover massimo 1px e focus visibile.
+- Link testuali: underline animato discreto; link-card senza underline.
+- Form: label sempre visibile, campi dimensionati, messaggi e stati accessibili. La disposizione pill e ammessa solo nei moduli brevi; non e un pattern hero obbligatorio.
 
-- Display: `clamp(3.75rem, 8.25vw, 7.8rem)`, line-height 0.9, weight 500, tracking `var(--nm-tracking-display)` / `-0.025em`.
-- H1: `clamp(3rem, 6vw, 5.85rem)`, line-height 0.95, tracking `var(--nm-tracking-h1)` / `-0.027em`.
-- H2: `clamp(2.1rem, 4.25vw, 4.15rem)`, line-height 0.98, tracking `var(--nm-tracking-h2)` / `-0.028em`.
-- H3: `clamp(1.45rem, 2.65vw, 2.45rem)`, line-height 1.05, tracking `var(--nm-tracking-h3)` / `-0.016em`.
-- H4 e heading piccoli: tracking `var(--nm-tracking-heading-small)` / `-0.01em`.
-- Body large: `clamp(1.05rem, 1.4vw, 1.32rem)`, max 58ch.
-- Body: 1rem, line-height 1.58, tracking `var(--nm-tracking-body)` / `0`.
-- Small: 0.875rem.
-- Label/meta: 0.75-0.78rem, usati con parsimonia.
+### Contenuto e fiducia
 
-### 6.1 Heading Spacing
+- `ClientMarquee`: rail full-width continuo, loghi normalizzati otticamente, pausa/reduced motion e gruppo duplicato `aria-hidden`.
+- `ReviewsSection` + `ReviewCard`: header centrato, badge Google, rail manuale, clamp e fade solo quando il testo e troncato, pulsante occhio e dialog accessibile.
+- `FAQBlock`: split tra introduzione e accordion; trigger button, stato `aria-expanded`, pannello associato e animazione misurata.
+- `TeamSection` + `PersonCard`: ritratti 3:4, dati reali, LinkedIn discreto, griglia desktop e rail mobile.
+- `CTAInlineForm`: CTA conversione con form breve, usata solo dove il contesto richiede raccolta email immediata.
 
-Il rapporto heading verso body usa token semantici, non margini locali casuali.
+### Progetti
 
-- Display / H1 verso lead: `var(--nm-heading-gap-lg)` / `clamp(1.35rem, 2vw, 2.35rem)`.
-- H2 verso paragraph o rich text: `var(--nm-heading-gap-md)` / `clamp(1rem, 1.35vw, 1.55rem)`.
-- H3 verso paragraph: `var(--nm-heading-gap-sm)` / `clamp(0.75rem, 0.9vw, 1.05rem)`.
-- Card heading verso body: `var(--nm-heading-gap-xs)` / `clamp(0.55rem, 0.7vw, 0.85rem)`.
+- `ProjectCard`: card media-first per contesti secondari e related content.
+- `CaseStudyHero`, `CaseStudyStory`, `CaseStudyMedia`, `CaseStudyResults`, `RelatedProjects`, `CaseStudyCTA`: sistema canonico delle pagine case study.
+- Le card progetto mostrano immagine reale, tipologia, cliente e sintesi. Hover: micro-zoom massimo `1.025-1.035` e segnale blu, senza spostamenti di layout.
+- In mobile, rail e sequenze media usano overflow orizzontale nativo e scroll snap; le immagini restano presenti senza dipendere da JS.
 
-Usare `display: grid` e `gap` nelle primitive (`Stack`, `center-heading`, card body, bento, FAQ) quando il titolo e il testo appartengono allo stesso gruppo.
+### Icone
 
-### 6.2 Netmarket Italic O
+Tabler Icons e il set canonico: stroke 1.7-1.8, normalmente 16-20px. `IconBubble` resta adatto a menu e liste tassonomiche. Nelle pagine servizio il pattern canonico e il medaglione circolare neutro: superficie bianca, pittogramma nero, bordo hairline e secondo anello esterno molto leggero. Non usa fondi colorati e non eredita l'accento del servizio. Le icone chiariscono categoria, azione o stato; non riempiono griglie solo per decorazione.
 
-In display and heading typography, occurrences of the letter "o" or "O" inside words are rendered with a subtle oblique treatment. The standalone Italian conjunction "o" remains roman. The rule does not apply to body copy or interface text unless explicitly classified as heading typography.
+### Breadcrumb di servizio
 
-La trasformazione e responsabilita del frontend: testi statici e contenuti CMS passano da Astro, vengono trasformati con un parser HTML durante dev/build, e poi il motion system applica reveal e interazioni sul DOM gia pronto. La pipeline e:
+Tutte le pagine dettaglio servizio riservano la stessa riga iniziale al breadcrumb: altezza, margine inferiore e distanza dall'header sono condivisi. Il nome corrente resta su una riga e viene abbreviato con ellissi soltanto quando non entra nel viewport, senza cambiare la quota della hero.
 
-`CMS/plain text -> Astro HTML -> heading typography transform -> static HTML output -> motion enhancement`.
+## 6. Pattern Editoriali
 
-La trasformazione si applica solo a `h1`, `h2`, `h3`, `h4` e a classi heading dedicate (`nm-heading`, `nm-display-heading`). Non viene applicata a paragrafi, label, eyebrow, bottoni, menu, metadata o rich text non-heading. Gli span generati sono inline e puramente tipografici (`.nm-heading-o` dentro `.nm-heading-o-word`). Sugli heading nativi viene preservato un `aria-label` con il testo originale, cosi screen reader e test di accessibilita non leggono parole spezzate. Il wrapper di parola evita rotture innaturali tra la lettera modificata e il resto della parola.
+### Hero editoriale
 
-Nota font: nel repository sono presenti Mona Sans Regular, Medium e SemiBold roman. La regola usa `font-style: italic`; finche non viene aggiunta una variante Mona Sans Italic ufficiale, il browser puo sintetizzare l'italic mantenendo peso, dimensione, colore e baseline.
+Eyebrow breve, H1 dominante con un accento, lead misurato, una o due CTA e visual reale o composizione proprietaria. Non esiste un hero unico universale: homepage, Agenzia, Servizi, Progetti e Insight condividono gerarchia e griglia, non la stessa scenografia.
 
-## 7. Color System
+### Layout split
 
-- Primary: `#0E51FE`.
-- Foreground: `#090A0F`.
-- Muted: `#5B6472`.
-- Canvas: `#F6F7F9`.
-- Surface: `#FFFFFF`.
-- Border: `#DDE2EA`.
-- Inverse: `#080B16`.
-- Error: `#B42318`.
-- Success: `#027A48`.
-- Warning: `#B54708`.
+Due colonne asimmetriche con copy e prova visiva o operativa. Collassa in una colonna sotto 760-900px; ogni figlio usa `min-width: 0`. In mobile l'ordine segue la comprensione, non la posizione desktop.
 
-Il blu appare in CTA, focus, indicatori e grandi momenti visuali. Evitare palette secondarie sature.
+### Featured content
 
-## 8. Radius
+Un contenuto dominante per volta. Negli archivi Progetti e Insight il featured usa immagine reale, caption breve e percorso chiaro; non e una card generica duplicata in griglia.
 
-Piccoli controlli: 12px. Frame e card importanti: 24-36px. Pill solo per CTA, badge e nav mobile. Non arrotondare ogni sezione: il radius deve indicare oggetto o media.
+### Portfolio e case study
 
-## 9. Borders
+- Archivio Progetti: hero editoriale, progetto in evidenza, filtri accessibili, griglia media-driven e CTA finale.
+- Case study: hero adattiva, metadati, capitoli narrativi, sequenze media, risultati verificati, progetti correlati e CTA.
+- Le sezioni vuote non vengono renderizzate.
+- Colori e crop cliente sono art direction locale; griglia, tipografia, accessibilita e responsive restano sistemici.
 
-Hairline da 1px come struttura primaria. Usare bordi al posto di shadow quando basta separare superfici. Bordi piu forti solo per stati attivi/focus.
+### Sezioni chiare e scure
 
-## 10. Shadows
+Il bianco e la superficie dominante. Il canvas grigio organizza senza separare eccessivamente. I pannelli scuri concentrano metodo, vincoli, risultati o conversione; non sono alternanza decorativa obbligatoria.
 
-Shadow leggere per overlay, pannelli hero e CTA primarie. Niente drop shadow dure. Le shadow blu sono riservate ai momenti ad alta enfasi.
+### Editoriale Insight
 
-## 11. Images
+Cover story ampia su superficie scura, metadata discreti, titolo forte, descrizione breve e stream asimmetrico deterministico. Le immagini sono contenuto, non riempitivo; le card non hanno un box esterno e affidano gerarchia a ratio, scala tipografica e ritmo. Le categorie sono link a pagine statiche reali, non filtri decorativi.
 
-I casi studio devono usare immagini reali appena disponibili dal CMS o asset esportati nel frontend statico. Vietati placeholder che sembrano casi cliente. Media principali: aspect ratio 16:10 o 4:3; portrait solo se il contenuto lo richiede. Il CMS non e host pubblico indicizzabile per media SEO: gli asset SEO devono essere serviti dal frontend pubblico con nomi, alt e contesto corretti.
+Le pagine articolo usano hero a due colonne, cover wide, misura di lettura entro 44rem, indice condizionale e rail contestuale. CTA servizio, progetti e approfondimenti correlati compaiono solo quando pertinenti. Cover story scura e rail restano pattern specifici del magazine, non primitive automatiche per servizi o case study.
 
-Il sistema `/progetti/` usa un archivio editoriale con featured project e righe media-driven, non una griglia portfolio generica. Le detail page supportano hero visuale, metadata progetto, contenuto preservato, risultati dichiarati, gallery e progetto successivo. Le sezioni vuote non vengono renderizzate.
+## 7. Responsive Behaviour
 
-## 12. Iconography
+- Mobile first nel comportamento, non semplice riduzione del desktop.
+- Nessun figlio puo imporre una larghezza superiore al viewport; usare `min-width: 0`, `max-width: 100%` e `minmax(0, 1fr)`.
+- CTA affiancate diventano full-width quando il testo non entra comodamente.
+- Griglie dense diventano una colonna o rail swipe con anteprima della card successiva.
+- I rail devono restare usabili manualmente anche quando hanno autoplay.
+- Media con formato fisso dichiarano `aspect-ratio`, dimensioni e `object-fit`.
+- Evitare `100vh` per hero; `100dvh` e solo un limite quando serve.
+- Validare almeno 390, 430, 768, 1024, 1280, 1440 e 1728px per pattern condivisi.
 
-Icone minime, stroke 1.75-2px, 16-20px. Non introdurre librerie finche non serve un set ampio. Evitare icone decorative ripetute.
+## 8. Motion Language
 
-## 13. Buttons and Links
+Il dettaglio operativo vive in `docs/motion-system.md`.
 
-- Primary: nero morbido, testo bianco, pill, senza glow.
-- Secondary: bianco, bordo, testo ink.
-- Inverse: bianco su superfici scure.
-- Focus sempre visibile.
-- Hover leggero `translateY(-1px)`, active `translateY(1px)`.
-- Label CTA principale: "Parliamone".
-
-## 13.1 Forms
-
-- Label sempre visibile sopra il campo.
-- Input pill solo per form brevi in hero o CTA.
-- Nessun placeholder come unica label.
-- Focus affidato al wrapper o al browser, mai rimosso senza sostituto.
-- Stati previsti: normale, focus, disabled, error future.
-
-## 13.2 Content Blocks
-
-- `hero-showcase`: rail orizzontale per servizi e progetti.
-- `plan-card`: spiegazione del percorso con step interni.
-- `dark-checklist`: pain point o vincoli, solo quando serve contrasto.
-- `service-bento`: competenze con immagine e testo.
-- `landscape-cta`: pausa visiva e conversione.
-- `trust-grid`: metriche reali.
-- `reviews-carousel`: slider orizzontale full-width con contenuti Google reali statici.
-- `client-marquee`: riga loghi clienti full-width, continua e riutilizzabile.
-- `team-section` / `person-card`: sistema persone per team, autori e contributor futuri.
-- `process-card`: metodo operativo.
-- `faq-list`: accordion.
-
-### 13.3 Client Marquee
-
-`ClientMarquee` e il componente ufficiale per mostrare clienti, partner e progetti seguiti. Sostituisce ogni griglia loghi con card.
-
-Regole:
-
-- Full viewport width tramite viewport interno; il contenuto puo stare dentro una sezione contenuta, ma il rail visivo deve attraversare tutto lo schermo.
-- Una sola riga orizzontale, senza wrapping, box, card, bordi o ombre.
-- Movimento automatico continuo, lineare, lento, da destra verso sinistra.
-- Gap ampio e respirato: circa 60-110px desktop, 36-64px mobile.
-- Fade laterale con CSS mask per evitare tagli duri ai bordi viewport.
-- Loghi data-driven con `name`, `logo`, `href?`, `visualScale?`.
-- `visualScale` serve per normalizzare otticamente loghi con formati diversi, senza alterare i file sorgenti.
-- Link solo quando esiste una destinazione reale e coerente, come un caso studio pubblicato. In assenza di URL reale, il logo resta non cliccabile.
-- Il gruppo duplicato per il loop e puramente visivo: `aria-hidden="true"` e immagini con `alt=""`.
-- Reduced motion obbligatorio: niente autoplay, una sola lista semantica, scroll orizzontale manuale.
-
-### 13.4 People / Team
-
-`PersonCard` e `TeamSection` sono il sistema ufficiale per persone Netmarket, autori editoriali e contributor futuri dei case study.
-
-Regole:
-
-- Source of truth iniziale in `apps/web/src/data/team.ts`; niente nomi, ruoli, bio o competenze inventate nei componenti.
-- ID stabili: `enrico-paolo-toso`, `mattia-graziotti`, `greta-negro`, `giacomo-galanti`, `marco-toso`.
-- Immagini sempre `aspect-ratio: var(--nm-aspect-team-portrait)` / `3 / 4`.
-- Foto con `object-fit: cover`, `object-position` definito per persona, dimensioni dichiarate e `sizes` responsive.
-- `imageSrcSet` e predisposto nel modello dati per future varianti WebP/AVIF generate dal CMS o dal build pipeline.
-- Alt text nel formato "Ritratto di Nome Cognome".
-- Nome visivo breve, ruolo editoriale ufficiale sotto. Bio, expertise e certificazioni non appaiono finche non sono dati reali.
-- LinkedIn discreto, esterno, con label accessibile "Profilo LinkedIn di Nome Cognome".
-- Desktop: 5 colonne solo quando le foto restano grandi. Tablet largo: 3+2 centrato intenzionale. Tablet: 2 colonne. Mobile: rail swipe nativo con prossima card parzialmente visibile.
-- Hover desktop: micro scale immagine massimo circa `1.025`, link LinkedIn piu evidente; niente overlay pesanti, rotazioni o testo sopra il volto.
-- Motion: sezione con `line` reveal, persone con stagger leggero. Il contenuto resta server-rendered e visibile senza JS.
-- Structured data: usare utility centrale `personJsonLd`; emettere `Person` solo nelle pagine dove la persona e visibile o semanticamente rilevante.
-- Futura integrazione CMS: valutare CPT `nm_person` o relazione con utenti WordPress per authoring. `Person` resta entita principale; team member, author e contributor sono ruoli/relazioni, non copie della stessa persona.
-- Future pagine persona solo con contenuto reale sufficiente: nome, ruolo, ritratto, bio professionale verificata, competenze, progetti, articoli, LinkedIn.
-
-## 14. Cards
-
-Usare card per progetti, insight, componenti e moduli ripetuti. Evitare card annidate. Le sezioni principali restano layout o bande, non scatole decorative.
-
-## 15. Motion System
-
-Il motion system ufficiale e documentato in `docs/motion-system.md`. Usare i token semantici in `apps/web/src/styles/tokens.css`, non valori casuali nei componenti.
-
-Regole sintetiche:
-
-- Motion as quality, not decoration.
-- GSAP + ScrollTrigger governano entrance, line masking, media reveal e scroll motion quando disponibili.
-- CSS, WAAPI e IntersectionObserver restano fallback e coprono micro-interazioni, menu, accordion, metriche e stati base.
-- Entrance e reveal sono progressivi enhancement: senza JS il contenuto resta visibile.
-- Reduced motion e obbligatorio.
-- Performance e accessibilita hanno priorita rispetto a qualunque effetto.
-
-## 16. Responsive Philosophy
-
-Mobile non e desktop ridotto: cambia ordine, densita, crop e lunghezza riga. Hero senza `h-screen`; usare `100dvh` solo come riferimento massimo. Le CTA restano visibili e leggibili. Le griglie diventano sequenze curate.
-
-## 17. Accessibility
-
-Obiettivo WCAG 2.2 AA: contrasto leggibile, focus visibile, landmark corretti, heading ordinati, touch target minimi, nessun `div` cliccabile. `aria` solo quando serve.
-
-## 18. Performance Constraints
-
-Astro statico, zero hydration non necessaria, GSAP come unica libreria motion, immagini dimensionate e lazy fuori viewport, font system finche non viene deciso un font brand ufficiale.
-
-## 19. Do / Don't
-
-Do:
-
-- Usare progetti e metodo come prova.
-- Mantenere copy breve e concreto.
-- Usare il blu per momenti decisivi.
-- Separare mock/demo da dati reali.
-
-Don't:
-
-- Clonare Arcade, Awesomic o il sito attuale.
-- Indicizzare asset da `cms.netmarket.it`.
-- Usare griglie 3x3 di icone per spiegare tutto.
-- Introdurre numeri o clienti non verificati.
-- Riempire la pagina di card arrotondate.
-- Usare mockup UI finti quando esistono immagini reali dei lavori Netmarket.
+- GSAP e ScrollTrigger sono progressive enhancement, non prerequisiti di lettura.
+- Preset canonici: `fade`, `up`, `down`, `scale`, `media`, `line`.
+- `line` anima gruppi di parole senza tagliare `g`, `p`, `q`, la “o” obliqua o il marker.
+- Hover e magnetic sono desktop-only quando dipendono dal puntatore.
+- Niente pinning o scrub se non migliorano una narrazione reale.
+- Con `prefers-reduced-motion: reduce`, contenuto subito visibile, autoplay fermo e transizioni ridotte.
+
+## 9. Immagini e Mockup
+
+- Priorita ad asset reali di clienti, team e lavori.
+- `width`, `height`, `sizes`, `srcset`, `loading` e `fetchpriority` vanno definiti in base alla posizione.
+- L'immagine LCP e eager e `fetchpriority="high"`; il lazy loading parte fuori dalla prima viewport.
+- Fotografie: `object-fit: cover` quando il crop e editoriale.
+- Mockup e PNG trasparenti: `object-fit: contain`, senza fondi aggiunti che alterano l'asset.
+- Il CMS e source dei media; il frontend deve comunque fornire nomi, alt e contesto SEO corretti.
+- Vietati stock, placeholder che sembrano lavori reali e mockup UI finti quando esiste il progetto.
+
+## 10. Accessibilita
+
+- Obiettivo WCAG 2.2 AA, da verificare anche manualmente.
+- Landmark e heading in ordine, un H1 per pagina.
+- `aria-label` solo su elementi che supportano nome accessibile; nessun ARIA decorativo su `div` generici.
+- Focus visibile, touch target adeguati, controlli nativi e tastiera completa.
+- Icone decorative `aria-hidden`; link esterni con label comprensibile.
+- Carousel e rail non catturano lo scroll verticale e restano navigabili senza autoplay.
+- Testo e immagini restano visibili senza JavaScript e in reduced motion.
+
+## 11. Eccezioni Specifiche Di Pagina
+
+- Homepage social hero: composizione art-directed unica, non componente generico.
+- Homepage case slider: rail full-viewport con larghezze variabili e autoplay leggero; non sostituisce `ProjectCard` altrove.
+- Pagina Siti web: hero browser/device, bento tipologie e blocco AI sono specifici del servizio.
+- Agenzia: montage di progetti reali, timeline storica e diagramma editoriale delle tre aree sono pattern narrativi locali.
+- Lavora con noi: mosaico del team e form di candidatura spontanea sono specifici della pagina; principi, liste editoriali e campi form riusano primitive canoniche.
+- Archivio Progetti: featured editoriale e filtri sono propri dell'archivio.
+- Case study: variabili colore `--case-*`, ordine media e proporzioni possono cambiare per cliente.
+- NOD e pagine di campagna possono avere art direction distinta, ma devono rispettare fondazioni, accessibilita e motion.
+
+## 12. Regole Deprecate
+
+Non sono piu standard:
+
+- La definizione “agency marketplace system”.
+- Hero con form come struttura predefinita.
+- Alternanza obbligatoria di bento, dark checklist, proof strip e landscape CTA.
+- Griglie di icone usate per spiegare ogni contenuto.
+- Un unico `ProjectCard` per archivio, featured e dettaglio progetto.
+- Mockup finti o texture sceniche come prova primaria.
+- Tracking negativo negli heading.
+- Radius grande applicato a ogni sezione.
+
+## 13. Checklist Per Nuove Pagine
+
+1. Parti da contenuto, progetto reale e gerarchia, non da un catalogo di card.
+2. Usa token e primitive canoniche prima di introdurre valori locali.
+3. Scegli un solo accento forte per heading.
+4. Dichiara cosa e componente riusabile e cosa resta eccezione.
+5. Verifica overflow, wrapping, focus, reduced motion e immagini ai breakpoint canonici.
+6. Esegui lint, typecheck, test, build e visual QA mirato.

@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import {
+  collectCriticalConsoleErrors,
+  expectEnvironmentRobots,
+  waitForInteractivePage
+} from './helpers';
 
 test.setTimeout(120_000);
 
@@ -53,26 +58,125 @@ async function scrollToEndProgressively(page: Page) {
 }
 
 test('homepage exposes staging essentials', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
+  const errors = collectCriticalConsoleErrors(page);
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const homeHeading = page.locator('#page-title');
   await expect(homeHeading).toBeVisible();
-  await expect(homeHeading.locator('.nm-heading-o')).toHaveCount(3);
-  await expect(page.locator('.hero-request p .nm-heading-o')).toHaveCount(0);
-  await expect(page).toHaveTitle(/Agenzia web/);
-  await expect(page.getByRole('link', { name: 'Parliamone' }).first()).toBeVisible();
-  await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
+  await expect(homeHeading).toContainText('Agenzia marketing');
+  await expect(page).toHaveTitle(/Agenzia comunicazione/);
+  await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Guarda i progetti' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /Vedi tutti i servizi/ })).toBeVisible();
+  await expect(page.locator('.home-case-slider')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Tutti i casi studio' })).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
   ).toHaveCount(12);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await expectEnvironmentRobots(page);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: /Salta al contenuto/ })).toBeFocused();
-  expect(errors).toEqual([]);
+  expect(errors.filter((error) => !/Failed to load resource/i.test(error))).toEqual([]);
+});
+
+test('homepage FAQ answers commercial intent and publishes matching structured data', async ({
+  page
+}) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  const faqTriggers = page.locator('.faq-list__trigger');
+  await expect(faqTriggers).toHaveCount(9);
+  await expect(
+    page.getByRole('button', {
+      name: 'Quanto costa un progetto di comunicazione, marketing o sviluppo web?'
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', {
+      name: /Potete rifare un sito esistente senza perdere contenuti e visibilit. SEO\?/
+    })
+  ).toBeVisible();
+
+  const faqState = await page.evaluate(() => {
+    const visibleQuestions = Array.from(
+      document.querySelectorAll<HTMLElement>('.faq-list__trigger > span:first-child')
+    ).map((element) => element.textContent?.trim() ?? '');
+    const schemas = Array.from(
+      document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]')
+    ).flatMap((script) => {
+      const parsed = JSON.parse(script.textContent || '[]') as
+        | Record<string, unknown>
+        | Array<Record<string, unknown>>;
+      return Array.isArray(parsed) ? parsed : [parsed];
+    });
+    const faqSchema = schemas.find((schema) => schema['@type'] === 'FAQPage') as
+      | { mainEntity?: Array<{ name?: string; acceptedAnswer?: { text?: string } }> }
+      | undefined;
+
+    return {
+      visibleQuestions,
+      schemaQuestions: faqSchema?.mainEntity?.map((item) => item.name ?? '') ?? [],
+      answersComplete:
+        faqSchema?.mainEntity?.every(
+          (item) => (item.acceptedAnswer?.text?.trim().length ?? 0) > 80
+        ) ?? false
+    };
+  });
+
+  expect(faqState.schemaQuestions).toEqual(faqState.visibleQuestions);
+  expect(faqState.answersComplete).toBe(true);
+});
+
+test('homepage publishes the complete same-origin favicon suite', async ({ page, request }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  await expect(page.locator('link[rel="icon"][sizes="48x48"]')).toHaveAttribute(
+    'href',
+    '/favicon-48x48.png'
+  );
+  await expect(page.locator('link[rel="shortcut icon"]')).toHaveAttribute(
+    'href',
+    '/favicon.ico'
+  );
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+    'href',
+    '/apple-touch-icon.png'
+  );
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute('href', '/site.webmanifest');
+
+  for (const path of [
+    '/favicon.ico',
+    '/favicon-16x16.png',
+    '/favicon-32x32.png',
+    '/favicon-48x48.png',
+    '/apple-touch-icon.png',
+    '/icon-192.png',
+    '/icon-512.png',
+    '/site.webmanifest'
+  ]) {
+    const response = await request.get(path);
+    expect(response.ok(), `${path} should be publicly available`).toBe(true);
+  }
+});
+
+test('homepage phone stays fully visible at desktop widths', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const phoneImage = page.locator('.home-hero__device img');
+  await expect(phoneImage).toBeVisible();
+  await expect(phoneImage).toHaveAttribute('src', '/media/generated/home-hero-social-phone.webp');
+  await expect(phoneImage).toHaveAttribute('srcset', /home-hero-social-phone-388\.webp 388w/);
+
+  for (const width of [1025, 1280, 1440, 1728, 1920]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const clippedTop = await page.evaluate(() => {
+      const visual = document.querySelector<HTMLElement>('.home-hero__visual');
+      const phone = document.querySelector<HTMLImageElement>('.home-hero__device img');
+      if (!visual || !phone) return Number.POSITIVE_INFINITY;
+      return Math.max(0, visual.getBoundingClientRect().top - phone.getBoundingClientRect().top);
+    });
+
+    expect(clippedTop).toBeLessThanOrEqual(0.5);
+  }
 });
 
 test('design system page is internal and noindexed', async ({ page }) => {
@@ -80,7 +184,9 @@ test('design system page is internal and noindexed', async ({ page }) => {
   await expect(
     page.getByRole('heading', { level: 1, name: 'Netmarket design system' })
   ).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Motion.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 2, name: 'Motion con uno scopo.' })
+  ).toBeVisible();
   await page.locator('.client-marquee').scrollIntoViewIfNeeded();
   await expect(
     page.locator('.client-marquee__group:not([aria-hidden]) img[alt]:not([alt=""])')
@@ -93,21 +199,42 @@ test('motion enhancement keeps content visible without javascript', async ({ bro
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Comunicazione e marketing digitale a Padova' })
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Agenzia marketing e siti web a Padova.'
+    })
   ).toBeVisible();
-  await expect(page.getByRole('img', { name: 'Progetto Sirene Blu', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Raccontaci il progetto' }).first()).toBeVisible();
   await context.close();
+});
+
+test('light pages use the homepage line reveal for editorial headings', async ({ page }) => {
+  for (const [path, heading] of [
+    ['/contatti/', '#contact-title'],
+    ['/progetti/', '#projects-title'],
+    ['/nod/', '#nod-title']
+  ] as const) {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap-lines');
+    await expect(page.locator(`${heading} .nm-motion-word__inner`).first()).toBeVisible();
+    expect(await page.locator(`${heading} .nm-motion-word__inner`).count()).toBeGreaterThan(2);
+  }
 });
 
 test('interactive motion controls remain accessible', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
 
-  await page.locator('.mega-menu summary').filter({ hasText: 'Servizi' }).click();
-  await expect(page.locator('.mega-menu').first()).toHaveAttribute('open', '');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('.mega-menu').first()).not.toHaveAttribute('open', '');
+  const servicesSummary = page.locator('.mega-menu summary').filter({ hasText: 'Servizi' });
+  const servicesMenu = page.locator('.mega-menu').first();
+  await servicesSummary.click();
+  await expect(servicesMenu).toHaveAttribute('open', '');
+  await servicesSummary.click();
+  await expect(servicesMenu).not.toHaveAttribute('open', '');
 
-  const faqTrigger = page.getByRole('button', { name: 'Avete già un sito da rifare?' });
+  const faqTrigger = page.getByRole('button', {
+    name: 'Quali servizi offre Netmarket alle aziende di Padova?'
+  });
   await faqTrigger.click();
   await expect(faqTrigger).toHaveAttribute('aria-expanded', 'true');
   await expect(faqTrigger.locator('.faq-list__icon')).toBeVisible();
@@ -129,9 +256,53 @@ test('interactive motion controls remain accessible', async ({ page }) => {
 
   await page.setViewportSize({ width: 390, height: 900 });
   await page.getByLabel('Apri menu').click();
-  await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByLabel('Chiudi menu')).toHaveAttribute('aria-expanded', 'true');
   await page.keyboard.press('Escape');
   await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('faq accordions open and close without shifting their labels', async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await waitForInteractivePage(page);
+
+    const trigger = page.locator('.faq-list__trigger').first();
+    const label = trigger.locator(':scope > span').first();
+    const panelId = await trigger.getAttribute('aria-controls');
+    expect(panelId).toBeTruthy();
+    const panel = page.locator(`#${panelId}`);
+    const measureLabel = () =>
+      label.evaluate((element) => {
+        const labelRect = element.getBoundingClientRect();
+        const triggerRect = element.parentElement?.getBoundingClientRect();
+        return {
+          x: labelRect.x - (triggerRect?.x ?? 0),
+          y: labelRect.y - (triggerRect?.y ?? 0),
+          triggerHeight: triggerRect?.height ?? 0
+        };
+      });
+
+    await trigger.scrollIntoViewIfNeeded();
+    const closedPosition = await measureLabel();
+    await trigger.click();
+    const openingPosition = await measureLabel();
+
+    expect(Math.abs(openingPosition.x - closedPosition.x)).toBeLessThan(1);
+    expect(Math.abs(openingPosition.y - closedPosition.y)).toBeLessThan(1);
+    expect(Math.abs(openingPosition.triggerHeight - closedPosition.triggerHeight)).toBeLessThan(1);
+    await expect(panel).toBeVisible();
+
+    await trigger.click();
+    const closingPosition = await measureLabel();
+    expect(Math.abs(closingPosition.x - closedPosition.x)).toBeLessThan(1);
+    expect(Math.abs(closingPosition.y - closedPosition.y)).toBeLessThan(1);
+    expect(Math.abs(closingPosition.triggerHeight - closedPosition.triggerHeight)).toBeLessThan(1);
+    await expect(panel).toBeHidden({ timeout: 450 });
+  }
 });
 
 test('header matches the clean responsive navigation model', async ({ page }) => {
@@ -139,15 +310,71 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
   await expect(page.locator('.site-header')).toHaveCSS('border-bottom-width', '0px');
   await expect(page.locator('.site-header')).toHaveCSS('box-shadow', 'none');
 
+  const servicesMenu = page.locator('.mega-menu').filter({ hasText: 'Servizi' }).first();
+  await servicesMenu.locator('summary').click();
+  await expect(servicesMenu.locator('.mega-menu__panel--wide')).toBeVisible();
+  await expect(servicesMenu.locator('.mega-menu__scrim')).toHaveCSS('top', '0px');
+  await expect(servicesMenu.getByRole('link', { name: /Concorsi a premi/ })).toBeVisible();
+  await expect(
+    page.locator('.site-header__nav').getByRole('link', { name: /NØD new/ })
+  ).toBeVisible();
+
+  const agencyMenu = page.locator('.mega-menu').filter({ hasText: 'Agenzia' }).first();
+  await agencyMenu.locator('summary').click();
+  await expect(agencyMenu.locator('.mega-menu__panel--compact')).toBeVisible();
+  await expect(agencyMenu.getByRole('link', { name: 'Agenzia' })).toBeVisible();
+  await expect(agencyMenu.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
+
   await page.setViewportSize({ width: 390, height: 900 });
+  const headerLogo = page.locator('.site-header__brand img');
+  const closedLogoBox = await headerLogo.boundingBox();
   await page.getByLabel('Apri menu').click();
   const panel = page.locator('.site-header__mobile-panel');
   await expect(panel).toBeVisible();
   await expect(panel).toHaveCSS('position', 'fixed');
   await expect(panel).toHaveCSS('height', '900px');
+  await expect(page.getByLabel('Chiudi menu')).toHaveCSS('position', 'fixed');
+  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'open');
+  await expect(panel.getByRole('link', { name: /Contattaci/ })).toHaveCount(0);
+  await expect(panel.locator('.site-header__mobile-brand')).toHaveCount(0);
+  expect(await headerLogo.boundingBox()).toEqual(closedLogoBox);
 
-  await panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' }).click();
+  const servicesSummary = panel.locator('.mobile-submenu summary').filter({ hasText: 'Servizi' });
+  await servicesSummary.click();
+  await expect(servicesSummary).toHaveAttribute('aria-expanded', 'true');
   await expect(panel.getByRole('link', { name: /Siti web/ }).first()).toBeVisible();
+  await expect(panel.locator('.mobile-submenu__eyebrow')).toHaveCount(0);
+  await expect(panel.locator('.mobile-submenu--wide .icon-bubble')).toHaveCount(9);
+  const iconAlignment = await panel
+    .locator('.mobile-submenu--wide .icon-bubble')
+    .first()
+    .evaluate((bubble) => {
+      const bubbleBox = bubble.getBoundingClientRect();
+      const iconBox = bubble.querySelector('svg')?.getBoundingClientRect();
+      return {
+        x: Math.abs(
+          bubbleBox.left + bubbleBox.width / 2 - ((iconBox?.left ?? 0) + (iconBox?.width ?? 0) / 2)
+        ),
+        y: Math.abs(
+          bubbleBox.top + bubbleBox.height / 2 - ((iconBox?.top ?? 0) + (iconBox?.height ?? 0) / 2)
+        )
+      };
+    });
+  expect(iconAlignment.x).toBeLessThan(1);
+  expect(iconAlignment.y).toBeLessThan(1);
+  await expect(panel.getByRole('link', { name: /NØD new/ })).toBeVisible();
+  const agencySummary = panel.locator('.mobile-submenu summary').filter({ hasText: 'Agenzia' });
+  await agencySummary.click();
+  await expect(agencySummary).toHaveAttribute('aria-expanded', 'true');
+  await expect(servicesSummary).toHaveAttribute('aria-expanded', 'false');
+  await expect(panel.getByRole('link', { name: 'Lavora con noi' })).toBeVisible();
+
+  await page.getByLabel('Chiudi menu').click();
+  await expect(page.getByLabel('Apri menu')).toHaveAttribute('aria-expanded', 'false', {
+    timeout: 1_000
+  });
+  await expect(panel).toBeHidden();
+  await expect(page.locator('.site-header__mobile')).toHaveAttribute('data-menu-state', 'closed');
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {
@@ -162,10 +389,15 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
   await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
-  await expect(page.getByRole('img', { name: 'iubenda Gold Partner' })).toBeVisible();
-  await page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' })).toBeVisible();
-  await expect(page.getByRole('img', { name: 'WooCommerce ecommerce partner' })).toBeVisible();
+  const iubenda = page.getByRole('img', { name: 'iubenda Gold Partner' });
+  const brevo = page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' });
+  const woocommerce = page.getByRole('img', { name: 'WooCommerce ecommerce partner' });
+  await iubenda.scrollIntoViewIfNeeded();
+  await expect(iubenda).toBeVisible();
+  await brevo.scrollIntoViewIfNeeded();
+  await expect(brevo).toBeVisible();
+  await woocommerce.scrollIntoViewIfNeeded();
+  await expect(woocommerce).toBeVisible();
 });
 
 test('reviews layout stays compact and clean', async ({ page }) => {
@@ -181,10 +413,12 @@ test('reviews layout stays compact and clean', async ({ page }) => {
     const quote = document.querySelector<HTMLElement>('.review-card blockquote');
     const star = document.querySelector<HTMLElement>('.review-card__stars svg');
     const open = document.querySelector<HTMLElement>('[data-review-open]:not([hidden])');
+    const badge = document.querySelector<HTMLElement>('.reviews-section .google-trust');
     if (!card || !quote || !star) return null;
 
     const cardStyle = window.getComputedStyle(card);
     const quoteStyle = window.getComputedStyle(quote);
+    const quoteFade = window.getComputedStyle(quote, '::after');
     const starStyle = window.getComputedStyle(star);
     return {
       cardHeight: card.getBoundingClientRect().height,
@@ -192,21 +426,25 @@ test('reviews layout stays compact and clean', async ({ page }) => {
       transition: cardStyle.transitionDuration,
       transform: cardStyle.transform,
       quoteMaxHeight: Number.parseFloat(quoteStyle.maxHeight),
+      quoteFadeBackground: quoteFade.backgroundImage,
       starColor: starStyle.color,
       hasEyeButton: Boolean(open),
-      openText: open?.textContent?.trim() ?? ''
+      openText: open?.textContent?.trim() ?? '',
+      badgeText: badge?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
     };
   });
 
   expect(reviewState).not.toBeNull();
-  expect(reviewState?.cardHeight).toBeLessThanOrEqual(390);
+  expect(reviewState?.cardHeight).toBeLessThanOrEqual(330);
   expect(reviewState?.backgroundImage).toBe('none');
   expect(reviewState?.transition).toBe('0s');
   expect(reviewState?.transform).toBe('none');
-  expect(reviewState?.quoteMaxHeight).toBeLessThanOrEqual(140);
+  expect(reviewState?.quoteMaxHeight).toBeLessThanOrEqual(116);
+  expect(reviewState?.quoteFadeBackground).toContain('linear-gradient');
   expect(reviewState?.starColor).toBe('rgb(251, 188, 4)');
   expect(reviewState?.hasEyeButton).toBe(true);
   expect(reviewState?.openText).toBe('');
+  expect(reviewState?.badgeText).not.toContain('50 recensioni Google');
 
   await page.locator('[data-review-open]:not([hidden])').first().click();
   await expect(page.locator('[data-review-modal]')).toBeVisible();
@@ -218,7 +456,7 @@ test('team system renders people, portraits, links, and person schema', async ({
   await page.locator('.team-section').scrollIntoViewIfNeeded();
 
   await expect(
-    page.getByRole('heading', { level: 2, name: 'Persone, competenze, valore.' })
+    page.getByRole('heading', { level: 2, name: 'Competenze diverse. Una sola direzione.' })
   ).toBeVisible();
   await expect(page.locator('.person-card')).toHaveCount(5);
   await expect(page.getByRole('img', { name: 'Ritratto di Enrico Paolo Toso' })).toBeVisible();
@@ -241,6 +479,7 @@ test('team system renders people, portraits, links, and person schema', async ({
 
     return {
       cardCount: cards.length,
+      personIds: cards.map((card) => card.dataset.personId),
       figureCount: figures.length,
       linkCount: links.length,
       externalLinks: links.every(
@@ -263,6 +502,13 @@ test('team system renders people, portraits, links, and person schema', async ({
   });
 
   expect(teamState.cardCount).toBe(5);
+  expect(teamState.personIds).toEqual([
+    'mattia-graziotti',
+    'greta-negro',
+    'enrico-paolo-toso',
+    'giacomo-galanti',
+    'marco-toso'
+  ]);
   expect(teamState.figureCount).toBe(5);
   expect(teamState.linkCount).toBe(5);
   expect(teamState.externalLinks).toBe(true);
@@ -395,6 +641,91 @@ test('client marquee is full width, continuous, and accessible', async ({ page }
   expect(marqueeState.mask).not.toBe('none');
 });
 
+test('homepage polish keeps key sections aligned and manually scrollable', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-work-section').scrollIntoViewIfNeeded();
+
+  const polishState = await page.evaluate(() => {
+    const caseSlider = document.querySelector<HTMLElement>('.home-case-slider');
+    const caseTrack = document.querySelector<HTMLElement>('.home-case-slider__track');
+    const caseBody = document.querySelector<HTMLElement>('.home-case-card__body');
+    const methodSection = document.querySelector<HTMLElement>('.home-method-section');
+    const ctaSection = document.querySelector<HTMLElement>('.home-final-cta');
+    const ctaCard = document.querySelector<HTMLElement>('.home-final-cta__inner');
+    const linkedinIcon = document.querySelector<SVGElement>('.person-card__content a svg');
+
+    if (caseSlider) caseSlider.scrollLeft = 260;
+
+    const iconRect = linkedinIcon?.getBoundingClientRect();
+    const linkRect = linkedinIcon?.closest('a')?.getBoundingClientRect();
+
+    return {
+      caseSliderOverflow: caseSlider ? window.getComputedStyle(caseSlider).overflowX : '',
+      caseSliderScrollLeft: caseSlider?.scrollLeft ?? 0,
+      caseTrackAnimation: caseTrack ? window.getComputedStyle(caseTrack).animationName : '',
+      caseTextAlign: caseBody ? window.getComputedStyle(caseBody).textAlign : '',
+      methodBackground: methodSection ? window.getComputedStyle(methodSection).backgroundColor : '',
+      ctaSectionBackground: ctaSection ? window.getComputedStyle(ctaSection).backgroundColor : '',
+      ctaCardBackground: ctaCard ? window.getComputedStyle(ctaCard).backgroundImage : '',
+      ctaCardRadius: ctaCard
+        ? Number.parseFloat(window.getComputedStyle(ctaCard).borderTopLeftRadius)
+        : 0,
+      linkedinCentered:
+        iconRect && linkRect
+          ? Math.abs(iconRect.left + iconRect.width / 2 - (linkRect.left + linkRect.width / 2)) <
+              1 &&
+            Math.abs(iconRect.top + iconRect.height / 2 - (linkRect.top + linkRect.height / 2)) < 1
+          : false
+    };
+  });
+
+  expect(polishState.caseSliderOverflow).toBe('auto');
+  expect(polishState.caseSliderScrollLeft).toBeGreaterThan(0);
+  expect(polishState.caseTrackAnimation).toBe('nm-case-slider');
+  expect(polishState.caseTextAlign).toBe('left');
+  expect(polishState.methodBackground).toBe('rgb(255, 255, 255)');
+  expect(polishState.ctaSectionBackground).toBe('rgb(255, 255, 255)');
+  expect(polishState.ctaCardBackground).toContain('linear-gradient');
+  expect(polishState.ctaCardRadius).toBeGreaterThan(20);
+  expect(polishState.linkedinCentered).toBe(true);
+});
+
+test('case study slider remains stable on mobile touch viewports', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 900 },
+    hasTouch: true,
+    isMobile: true,
+    baseURL: testBaseUrl()
+  });
+  const page = await context.newPage();
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.home-case-slider').scrollIntoViewIfNeeded();
+
+  const state = await page.evaluate(async () => {
+    const slider = document.querySelector<HTMLElement>('.home-case-slider');
+    const track = document.querySelector<HTMLElement>('.home-case-slider__track');
+    const image = document.querySelector<HTMLImageElement>('.home-case-card__media img');
+    if (!slider || !track || !image) return null;
+
+    slider.scrollLeft = 220;
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
+    return {
+      sliderScrollLeft: slider.scrollLeft,
+      animationName: window.getComputedStyle(track).animationName,
+      sliderMask: window.getComputedStyle(slider).maskImage,
+      imageVisible:
+        image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0
+    };
+  });
+
+  expect(state).not.toBeNull();
+  expect(state?.sliderScrollLeft).toBeGreaterThan(0);
+  expect(state?.animationName).toBe('none');
+  expect(state?.sliderMask).toBe('none');
+  expect(state?.imageVisible).toBe(true);
+  await context.close();
+});
+
 test('client marquee respects reduced motion', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce', baseURL: testBaseUrl() });
   const page = await context.newPage();
@@ -419,6 +750,8 @@ test('client marquee respects reduced motion', async ({ browser }) => {
 
 test('header records scrolled state without layout overlap', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
+  await expect(page.locator('.site-header')).toHaveAttribute('data-motion-header', 'ready');
   await expect
     .poll(
       () =>
@@ -458,13 +791,14 @@ test('motion reveal never leaves normal content hidden during scroll states', as
 
 test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(page);
   await page.waitForTimeout(900);
 
   const engine = await page.evaluate(() => document.documentElement.dataset.motionEngine ?? 'css');
   expect(['gsap', 'css']).toContain(engine);
 
-  const visiblePreset = async (variant: string) =>
-    page
+  const visiblePreset = async (variant: string, targetPage = page) =>
+    targetPage
       .locator(`[data-reveal="${variant}"].is-visible`)
       .first()
       .evaluate((element) => {
@@ -480,22 +814,30 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
   await expect.poll(() => visiblePreset('up')).toMatchObject({ state: 'revealed' });
   await expect.poll(() => visiblePreset('scale')).toMatchObject({ state: 'revealed' });
 
-  await page.locator('[data-reveal="media"]').first().scrollIntoViewIfNeeded();
-  await expect.poll(() => visiblePreset('media')).toMatchObject({ state: 'revealed' });
+  const mediaPage = await page.context().newPage();
+  await mediaPage.goto('/agenzia/', { waitUntil: 'domcontentloaded' });
+  await waitForInteractivePage(mediaPage);
+  await mediaPage.locator('[data-reveal="media"]').first().scrollIntoViewIfNeeded();
+  await expect.poll(() => visiblePreset('media', mediaPage)).toMatchObject({ state: 'revealed' });
 
   await page.locator('[data-reveal="line"]').first().scrollIntoViewIfNeeded();
   await expect.poll(() => visiblePreset('line')).toMatchObject({ state: 'revealed' });
 
   if (engine === 'gsap') {
     await expect.poll(() => page.locator('.nm-motion-word__inner').count()).toBeGreaterThan(8);
-    await expect(page.locator('.motion-image-preview')).toHaveCount(1);
+    await expect(page.locator('.home-case-slider__track')).toHaveCSS(
+      'animation-name',
+      'nm-case-slider'
+    );
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'none' });
   } else {
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'nm-reveal-up' });
     await expect
-      .poll(() => visiblePreset('media'))
+      .poll(() => visiblePreset('media', mediaPage))
       .toMatchObject({ animationName: 'nm-reveal-media' });
   }
+
+  await mediaPage.close();
 });
 
 test('motion reveal is robust on mobile and reduced motion', async ({ browser }) => {
@@ -522,6 +864,6 @@ test('motion reveal is robust on mobile and reduced motion', async ({ browser })
 });
 
 test('404 page works', async ({ page }) => {
-  await page.goto('/missing-page');
+  await page.goto('/missing-page', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1, name: 'Pagina non trovata' })).toBeVisible();
 });

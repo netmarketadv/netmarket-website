@@ -99,4 +99,52 @@ window.nmhc = window.nmhc || {};
       preview.innerHTML = '';
     });
   });
+
+  document.querySelectorAll('[data-nmhc-media-gallery]').forEach((container) => {
+    const input = container.querySelector('[data-nmhc-media-gallery-input]');
+    const items = container.querySelector('[data-nmhc-media-gallery-items]');
+    const choose = container.querySelector('[data-nmhc-media-gallery-choose]');
+
+    const sync = () => {
+      input.value = Array.from(items.querySelectorAll('[data-id]'))
+        .map((item) => item.dataset.id)
+        .filter(Boolean)
+        .join(',');
+    };
+    const append = (attachment) => {
+      if (items.querySelector(`[data-id="${attachment.id}"]`)) return;
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'nmhc-media-gallery__item';
+      item.dataset.id = String(attachment.id);
+      item.setAttribute('aria-label', 'Rimuovi immagine');
+      const image = document.createElement('img');
+      image.src = attachment.sizes?.thumbnail?.url || attachment.url;
+      image.alt = '';
+      const remove = document.createElement('span');
+      remove.setAttribute('aria-hidden', 'true');
+      remove.textContent = '×';
+      item.append(image, remove);
+      items.append(item);
+    };
+
+    items.addEventListener('click', (event) => {
+      const item = event.target.closest('[data-id]');
+      if (!item) return;
+      item.remove();
+      sync();
+    });
+    choose.addEventListener('click', () => {
+      const frame = window.wp.media({
+        title: config.chooseMedia || 'Scegli media',
+        button: { text: config.chooseMedia || 'Scegli media' },
+        multiple: true
+      });
+      frame.on('select', () => {
+        frame.state().get('selection').toJSON().forEach(append);
+        sync();
+      });
+      frame.open();
+    });
+  });
 })();

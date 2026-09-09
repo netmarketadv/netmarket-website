@@ -1,8 +1,13 @@
 import { z } from 'zod';
 
+const assetUrlSchema = z
+  .string()
+  .url()
+  .or(z.string().regex(/^\/(?!\/)/));
+
 export const mediaAssetSchema = z.object({
   id: z.number().int().nonnegative(),
-  url: z.string().url(),
+  url: assetUrlSchema,
   alt: z.string(),
   width: z.number().int().positive().nullable().optional(),
   height: z.number().int().positive().nullable().optional(),
@@ -64,6 +69,14 @@ export const metricSchema = z.object({
   label: z.string(),
   value: z.string(),
   context: z.string().optional()
+});
+
+export const caseStudyMediaSchema = z.object({
+  media: mediaAssetSchema,
+  alt: z.string().optional(),
+  caption: z.string().optional(),
+  aspectRatio: z.string().optional(),
+  layoutHint: z.enum(['wide', 'portrait', 'square', 'split', 'device', 'detail']).default('wide')
 });
 
 export const faqItemSchema = z.object({
@@ -138,12 +151,14 @@ export const caseStudySchema = baseContentSchema.extend({
   objectives: z.array(z.unknown()).default([]),
   approach: z.string().optional(),
   solution: z.string().optional(),
+  qualitativeResult: z.string().optional(),
   additionalContent: z.string().optional(),
-  numericResults: z.array(metricSchema).or(z.array(z.unknown())).default([]),
-  gallery: z.array(z.unknown()).default([]),
+  numericResults: z.array(metricSchema).default([]),
+  gallery: z.array(caseStudyMediaSchema).default([]),
   services: z.array(relationSummarySchema).default([]),
   contributors: z.array(relationSummarySchema).default([]),
   relatedInsights: z.array(relationSummarySchema).default([]),
+  relatedCaseStudies: z.array(relationSummarySchema).default([]),
   priority: z.number().int().default(0),
   featured: z.boolean().default(false),
   cta: linkSchema.nullable().optional()
@@ -259,6 +274,7 @@ export type SeoMetadata = z.infer<typeof seoMetadataSchema>;
 export type MediaAsset = z.infer<typeof mediaAssetSchema>;
 export type ImageAsset = z.infer<typeof imageAssetSchema>;
 export type Metric = z.infer<typeof metricSchema>;
+export type CaseStudyMedia = z.infer<typeof caseStudyMediaSchema>;
 export type Pagination = z.infer<typeof paginationSchema>;
 export type ApiError = z.infer<typeof apiErrorSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;

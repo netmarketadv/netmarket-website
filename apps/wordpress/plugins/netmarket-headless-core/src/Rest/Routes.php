@@ -13,6 +13,10 @@ use WP_REST_Response;
 final class Routes
 {
     public const NAMESPACE = 'netmarket/v1';
+    private const CONTACT_TO_EMAIL = 'segreteria@netmarket.it';
+    private const CONTACT_CC_EMAIL = 'enrico@netmarket.it';
+    private const CONTACT_FROM_EMAIL = 'segreteria@netmarket.it';
+    private const CONTACT_FROM_NAME = 'Netmarket';
 
     public function __construct(private readonly TaxonomyRegistry $taxonomies)
     {
@@ -78,8 +82,13 @@ final class Routes
 
     public function contactForm(WP_REST_Request $request): WP_REST_Response
     {
+        $requestId = function_exists('wp_generate_uuid4') ? wp_generate_uuid4() : uniqid('nmhc_', true);
         $payload = $request->get_json_params();
         if (! is_array($payload)) {
+            $payload = $request->get_body_params();
+        }
+        if (! is_array($payload)) {
+            $this->logContactEvent($requestId, 'invalid_payload');
             return new WP_REST_Response(['code' => 'invalid_payload', 'message' => 'Richiesta non valida.'], 400);
         }
 
@@ -90,11 +99,22 @@ final class Routes
         $service = sanitize_text_field((string) ($payload['service'] ?? ''));
         $message = sanitize_textarea_field((string) ($payload['message'] ?? ''));
         $website = sanitize_text_field((string) ($payload['website'] ?? ''));
-        $privacy = (bool) ($payload['privacyConsent'] ?? false);
-        $marketing = (bool) ($payload['marketingConsent'] ?? false);
+        $privacy = filter_var($payload['privacyConsent'] ?? false, FILTER_VALIDATE_BOOL);
+        $marketing = filter_var($payload['marketingConsent'] ?? false, FILTER_VALIDATE_BOOL);
         $sourceUrl = esc_url_raw((string) ($payload['sourceUrl'] ?? ''));
         $referrer = esc_url_raw((string) ($payload['referrer'] ?? ''));
-        $utm = is_array($payload['utm'] ?? null) ? $payload['utm'] : [];
+        $utmValue = $payload['utm'] ?? [];
+        if (is_string($utmValue)) {
+            $decodedUtm = json_decode($utmValue, true);
+            $utmValue = is_array($decodedUtm) ? $decodedUtm : [];
+        }
+        $utm = is_array($utmValue) ? $utmValue : [];
+        $elapsedMs = isset($payload['elapsedMs']) ? (int) $payload['elapsedMs'] : 0;
+        $isCareer = $service === 'lavora-con-noi';
+        $files = $request->get_file_params();
+        $cv = is_array($files['cv'] ?? null) ? $files['cv'] : null;
+        $cvPath = '';
+        $cvName = '';
 
         $errors = [];
         if ($website !== '') {
@@ -106,16 +126,55 @@ final class Routes
         if ($email === '' || ! is_email($email)) {
             $errors['email'] = 'invalid_email';
         }
+        if (mb_strlen($company) > 120) {
+            $errors['company'] = 'invalid_company';
+        }
+        if (mb_strlen($phone) > 40) {
+            $errors['phone'] = 'invalid_phone';
+        }
+        if ($service !== '' && ! preg_match('/^[a-z0-9-]{1,120}$/', $service)) {
+            $errors['service'] = 'invalid_service';
+        }
         if (mb_strlen($message) < 10 || mb_strlen($message) > 3000) {
             $errors['message'] = 'invalid_message';
         }
+        if ($sourceUrl === '' || mb_strlen($sourceUrl) > 500) {
+            $errors['sourceUrl'] = 'invalid_source';
+        }
+        if ($referrer !== '' && mb_strlen($referrer) > 500) {
+            $errors['referrer'] = 'invalid_referrer';
+        }
+        if ($elapsedMs > 0 && $elapsedMs < 1800) {
+            $errors['website'] = 'too_fast';
+        }
         if (! $privacy) {
             $errors['privacyConsent'] = 'privacy_required';
+        }
+        if ($isCareer) {
+            if ($cv === null || (int) ($cv['error'] ?? 1) !== 0) {
+                $errors['cv'] = 'cv_required';
+            } else {
+                $cvPath = (string) ($cv['tmp_name'] ?? '');
+                $cvName = sanitize_file_name((string) ($cv['name'] ?? 'curriculum'));
+                $cvSize = (int) ($cv['size'] ?? 0);
+                $allowedCvTypes = [
+                    'pdf' => 'application/pdf',
+                    'doc' => 'application/msword',
+                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                ];
+                $fileType = wp_check_filetype_and_ext($cvPath, $cvName, $allowedCvTypes);
+                if ($cvSize <= 0 || $cvSize > 5 * 1024 * 1024) {
+                    $errors['cv'] = 'cv_too_large';
+                } elseif ($cvPath === '' || ! is_file($cvPath) || empty($fileType['ext']) || empty($fileType['type'])) {
+                    $errors['cv'] = 'invalid_cv';
+                }
+            }
         }
         if ($this->looksLikeSpam($message . ' ' . $name . ' ' . $company)) {
             $errors['message'] = 'spam_pattern';
         }
         if ($errors !== []) {
+            $this->logContactEvent($requestId, 'validation_failed');
             return new WP_REST_Response(['code' => 'validation_failed', 'message' => 'Controlla i campi evidenziati.', 'fields' => $errors], 422);
         }
 
@@ -123,28 +182,51 @@ final class Routes
         $rateKey = 'nmhc_contact_' . md5($ip . '|' . strtolower($email));
         $attempts = (int) get_transient($rateKey);
         if ($attempts >= 3) {
+            $this->logContactEvent($requestId, 'rate_limited');
             return new WP_REST_Response(['code' => 'rate_limited', 'message' => 'Troppe richieste ravvicinate.'], 429);
         }
         set_transient($rateKey, $attempts + 1, 10 * MINUTE_IN_SECONDS);
 
-        $recipient = get_option('admin_email');
-        $subject = sprintf('Nuova richiesta dal sito Netmarket - %s', $name);
-        $lines = [
-            'Nome: ' . $name,
-            'Email: ' . $email,
-            'Azienda: ' . $company,
-            'Telefono: ' . $phone,
-            'Interesse: ' . $service,
-            'Marketing: ' . ($marketing ? 'si' : 'no'),
-            'Source URL: ' . $sourceUrl,
-            'Referrer: ' . $referrer,
-            'UTM: ' . wp_json_encode($this->sanitizeStringMap($utm)),
-            '',
-            $message,
+        $recipient = $this->contactToEmail();
+        $cc = $this->contactCcEmail();
+        $from = $this->contactFromEmail();
+        $subject = sprintf(
+            $isCareer ? 'Nuova candidatura dal sito Netmarket - %s' : 'Nuova richiesta dal sito Netmarket - %s',
+            $this->sanitizeHeaderValue($name)
+        );
+        $body = $this->contactEmailBody([
+            'Nome' => $name,
+            'Email' => $email,
+            'Azienda' => $company,
+            'Telefono' => $phone,
+            'Servizio' => $service,
+            'Curriculum' => $isCareer ? $cvName : '',
+            'Marketing' => $marketing ? 'si' : 'no',
+            'Pagina di provenienza' => $sourceUrl,
+            'Referrer' => $referrer,
+            'UTM' => $this->sanitizeStringMap($utm),
+            'Data/ora' => gmdate('c'),
+            'Request ID' => $requestId,
+            'Messaggio' => $message,
+        ]);
+        $headers = [
+            'Content-Type: text/plain; charset=UTF-8',
+            'From: ' . self::CONTACT_FROM_NAME . ' <' . $from . '>',
+            'Reply-To: ' . $this->sanitizeHeaderValue($name) . ' <' . $email . '>',
         ];
-        wp_mail($recipient, $subject, implode("\n", $lines), ['Reply-To: ' . $name . ' <' . $email . '>']);
+        if ($cc !== '') {
+            $headers[] = 'Cc: ' . $cc;
+        }
 
-        return $this->json(['ok' => true]);
+        $attachments = $isCareer && $cvPath !== '' ? [$cvPath] : [];
+        $sent = wp_mail($recipient, $subject, $body, $headers, $attachments);
+        if (! $sent) {
+            $this->logContactEvent($requestId, 'mail_failed');
+            return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);
+        }
+
+        $this->logContactEvent($requestId, 'sent');
+        return $this->json(['success' => true]);
     }
 
     public function collection(WP_REST_Request $request, string $postType): WP_REST_Response
@@ -329,12 +411,14 @@ final class Routes
             'objectives' => $this->metaArray($post->ID, 'objectives'),
             'approach' => $this->metaString($post->ID, 'approach'),
             'solution' => $this->metaString($post->ID, 'solution'),
+            'qualitativeResult' => $this->metaString($post->ID, 'qualitative_result'),
             'additionalContent' => $this->metaString($post->ID, 'additional_content'),
             'numericResults' => $this->metaArray($post->ID, 'numeric_results'),
-            'gallery' => $this->metaArray($post->ID, 'gallery'),
+            'gallery' => $this->caseStudyGallery($post->ID),
             'services' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_services'), ['nm_service']),
             'contributors' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_contributors'), ['nm_person']),
             'relatedInsights' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_related_insights'), ['post']),
+            'relatedCaseStudies' => Relations::summaries(Relations::getMany($post->ID, 'nmhc_related_case_studies'), ['nm_case_study']),
             'priority' => $this->metaInt($post->ID, 'priority'),
             'featured' => $this->metaBool($post->ID, 'featured'),
             'cta' => $this->link($post->ID, 'cta_label', 'cta_url'),
@@ -519,6 +603,36 @@ final class Routes
         return is_array($value) ? $value : [];
     }
 
+    /** @return array<int, array<string, mixed>> */
+    private function caseStudyGallery(int $postId): array
+    {
+        $items = $this->metaArray($postId, 'gallery');
+        $gallery = [];
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+            $media = isset($item['media']) && is_array($item['media'])
+                ? $item['media']
+                : Media::asset(absint($item['mediaId'] ?? 0));
+            if (! is_array($media)) {
+                continue;
+            }
+            $layoutHint = sanitize_key((string) ($item['layoutHint'] ?? 'wide'));
+            if (! in_array($layoutHint, ['wide', 'portrait', 'square', 'split', 'device', 'detail'], true)) {
+                $layoutHint = 'wide';
+            }
+            $gallery[] = [
+                'media' => $media,
+                'alt' => sanitize_text_field((string) ($item['alt'] ?? $media['alt'] ?? '')),
+                'caption' => sanitize_text_field((string) ($item['caption'] ?? '')),
+                'aspectRatio' => sanitize_text_field((string) ($item['aspectRatio'] ?? '')),
+                'layoutHint' => $layoutHint,
+            ];
+        }
+        return $gallery;
+    }
+
     private function readingTime(\WP_Post $post): int
     {
         $words = str_word_count(wp_strip_all_tags((string) $post->post_content));
@@ -541,16 +655,81 @@ final class Routes
         return (bool) preg_match('~\[(url|link)=|<a\s|viagra|casino|crypto\s+investment~i', $value);
     }
 
+    private function contactToEmail(): string
+    {
+        $email = sanitize_email((string) apply_filters('nmhc_contact_to_email', self::CONTACT_TO_EMAIL));
+        return $email !== '' ? $email : self::CONTACT_TO_EMAIL;
+    }
+
+    private function contactCcEmail(): string
+    {
+        $email = sanitize_email((string) apply_filters('nmhc_contact_cc_email', self::CONTACT_CC_EMAIL));
+        return $email !== '' ? $email : self::CONTACT_CC_EMAIL;
+    }
+
+    private function contactFromEmail(): string
+    {
+        $from = sanitize_email((string) apply_filters('nmhc_contact_from_email', self::CONTACT_FROM_EMAIL));
+        return $from !== '' ? $from : self::CONTACT_TO_EMAIL;
+    }
+
+    private function sanitizeHeaderValue(string $value): string
+    {
+        return trim(str_replace(["\r", "\n"], ' ', sanitize_text_field($value)));
+    }
+
+    /** @param array<string, mixed> $fields */
+    private function contactEmailBody(array $fields): string
+    {
+        $lines = [];
+        foreach ($fields as $label => $value) {
+            if (is_array($value)) {
+                if ($value === []) {
+                    continue;
+                }
+                $value = wp_json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            $text = trim((string) $value);
+            if ($text === '') {
+                continue;
+            }
+            if ($label === 'Messaggio') {
+                $lines[] = '';
+                $lines[] = 'Messaggio:';
+                $lines[] = $text;
+                continue;
+            }
+            $lines[] = $label . ': ' . $text;
+        }
+        return implode("\n", $lines);
+    }
+
+    private function logContactEvent(string $requestId, string $status): void
+    {
+        error_log(sprintf('[netmarket contact] request_id=%s status=%s', $requestId, $status));
+    }
+
     /** @param array<mixed> $values @return array<string, string> */
     private function sanitizeStringMap(array $values): array
     {
+        $allowedKeys = [
+            'utm_source' => true,
+            'utm_medium' => true,
+            'utm_campaign' => true,
+            'utm_content' => true,
+            'utm_term' => true,
+            'gclid' => true,
+            'fbclid' => true,
+            'ttclid' => true,
+            'oppref' => true,
+        ];
         $sanitized = [];
         foreach ($values as $key => $value) {
             $safeKey = sanitize_key((string) $key);
-            if ($safeKey === '') {
+            if ($safeKey === '' || ! isset($allowedKeys[$safeKey])) {
                 continue;
             }
-            $sanitized[$safeKey] = sanitize_text_field((string) $value);
+            $sanitized[$safeKey] = mb_substr(sanitize_text_field((string) $value), 0, 180);
         }
         return $sanitized;
     }

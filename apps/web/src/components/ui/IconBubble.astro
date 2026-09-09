@@ -17,12 +17,27 @@ import {
 } from '@tabler/icons-astro';
 
 interface Props {
-  name?: 'arrows' | 'bolt' | 'briefcase' | 'chart' | 'check' | 'desktop' | 'google' | 'palette' | 'search' | 'shield' | 'sparkles' | 'star' | 'users' | 'arrow';
+  name?:
+    | 'arrows'
+    | 'bolt'
+    | 'briefcase'
+    | 'chart'
+    | 'check'
+    | 'desktop'
+    | 'google'
+    | 'palette'
+    | 'search'
+    | 'shield'
+    | 'sparkles'
+    | 'star'
+    | 'users'
+    | 'arrow';
   size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'service';
   label?: string;
 }
 
-const { name = 'sparkles', size = 'md', label } = Astro.props;
+const { name = 'sparkles', size = 'md', variant = 'default', label } = Astro.props;
 const icons = {
   arrows: IconArrowsMaximize,
   bolt: IconBolt,
@@ -42,6 +57,14 @@ const icons = {
 const Icon = icons[name];
 ---
 
-<span class:list={['icon-bubble', `icon-bubble--${size}`]} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+<span
+  class:list={[
+    'icon-bubble',
+    `icon-bubble--${size}`,
+    variant === 'service' && 'service-icon-medallion'
+  ]}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
   <Icon stroke={name === 'star' ? 0 : 1.7} />
 </span>

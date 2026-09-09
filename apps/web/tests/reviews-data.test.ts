@@ -3,7 +3,8 @@ import { googleReviews } from '../src/data/reviews';
 
 describe('Google reviews dataset', () => {
   it('contains verified static reviews with the public Google source only', () => {
-    expect(googleReviews).toHaveLength(5);
+    expect(googleReviews).toHaveLength(4);
+    expect(googleReviews.map((review) => review.author)).not.toContain('Emma Toso');
 
     for (const review of googleReviews) {
       expect(review.author.length).toBeGreaterThan(0);

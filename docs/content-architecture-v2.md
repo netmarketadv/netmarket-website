@@ -74,7 +74,7 @@ Campi principali:
 - cover media, year, status, featured, priority;
 - summary, context, challenge, objectives, approach, solution;
 - metrics arbitrarie con label/value/context;
-- gallery/media JSON controllato;
+- gallery ordinata tramite Media Library, con alt e caption degli allegati;
 - CTA;
 - SEO.
 

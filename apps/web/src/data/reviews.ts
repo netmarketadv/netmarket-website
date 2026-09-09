@@ -29,14 +29,6 @@ const rawGoogleReviews = [
     text: "Dopo tanti anni di ricerca di professionisti del settore ho avuto la fortuna di incontrare dei Veri Professionisti. Tutto lo staff Netmarket Web Agency è sempre raggiungibile, disponibile e presente a studiare, consigliare e realizzare tutte le proposte fatte producendo uno strumento fatto a misura delle proprie esigenze. Un gran bel Team in supporto agli imprenditori."
   },
   {
-    author: 'Emma Toso',
-    authorHref: 'https://www.google.com/maps/contrib/104949518088114587516/reviews',
-    avatarUrl: 'https://lh3.googleusercontent.com/a-/ALV-UjUuT7LnJfyhOEP3drm-xEmKE2JgZb11XXn6tLsvfGoZ4uYwjObD4g=s128-c0x00000000-cc-rp-mo',
-    rating: 5,
-    source: 'Google',
-    text: 'mi piacciono! è una bella squadra di creativi...sanno fare bene il loro mestiere e sono disponibili ad ascoltare i cambiamenti del mercato, bravi continuate così!!!\nEmma'
-  },
-  {
     author: 'paola malighetti',
     authorHref: 'https://www.google.com/maps/contrib/102015989217644284293/reviews',
     avatarUrl: 'https://lh3.googleusercontent.com/a/ACg8ocJMM25Qg2zJcbxUK25LGyjYoBPysm_dR0yIJvw_v5tvE8a9hw=s128-c0x00000000-cc-rp-mo',

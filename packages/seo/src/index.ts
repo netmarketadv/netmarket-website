@@ -1,4 +1,5 @@
-export type Robots = 'index, follow' | 'noindex, nofollow' | 'noindex, nofollow, noarchive';
+export type Robots =
+  'index, follow' | 'noindex, follow' | 'noindex, nofollow' | 'noindex, nofollow, noarchive';
 
 export interface PageMeta {
   title: string;
@@ -24,7 +25,15 @@ export interface OrganizationMeta {
   legalName?: string;
   url?: string;
   vatId?: string;
+  logo?: string;
 }
+
+export type AreaServed =
+  | string
+  | {
+      '@type': 'City' | 'Country';
+      name: string;
+    };
 
 export interface ArticleMeta {
   title: string;
@@ -33,10 +42,14 @@ export interface ArticleMeta {
   publishedAt?: string;
   updatedAt?: string;
   author?: PersonMeta;
+  image?: string;
 }
 
 export function buildTitle(title: string, siteName = 'Netmarket'): string {
-  return title === siteName ? siteName : `${title} | ${siteName}`;
+  const normalizedTitle = title.trim();
+  return normalizedTitle === siteName || normalizedTitle.endsWith(`| ${siteName}`)
+    ? normalizedTitle
+    : `${normalizedTitle} | ${siteName}`;
 }
 
 export function absoluteCanonical(siteUrl: string, path = '/'): string {
@@ -52,9 +65,30 @@ export function organizationJsonLd(
     '@type': 'Organization',
     '@id': absoluteCanonical(siteUrl, '/#organization'),
     name: organization.name ?? 'Netmarket',
-    ...(organization.legalName ? { legalName: organization.legalName } : {}),
-    ...(organization.vatId ? { vatID: organization.vatId } : {}),
-    url: organization.url ?? siteUrl
+    legalName: organization.legalName ?? 'Netmarket Srl',
+    vatID: organization.vatId ?? '03618730281',
+    logo: organization.logo ?? absoluteCanonical(siteUrl, '/icon-512.png'),
+    url: organization.url ?? siteUrl,
+    foundingDate: '1986',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Viale della Navigazione Interna, 51/b',
+      postalCode: '35129',
+      addressLocality: 'Padova',
+      addressRegion: 'PD',
+      addressCountry: 'IT'
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'segreteria@netmarket.it',
+      contactType: 'customer service',
+      availableLanguage: 'Italian'
+    },
+    sameAs: [
+      'https://www.linkedin.com/company/netmarket-s.r.l./',
+      'https://www.instagram.com/netmarket.it/',
+      'https://www.facebook.com/Netmarket.adv/'
+    ]
   };
 }
 
@@ -98,7 +132,8 @@ export function serviceJsonLd(
   name: string,
   description: string,
   url: string,
-  serviceType = name
+  serviceType = name,
+  areaServed: AreaServed | AreaServed[] = 'Italy'
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
@@ -109,34 +144,60 @@ export function serviceJsonLd(
     url,
     serviceType,
     provider: { '@id': absoluteCanonical(siteUrl, '/#organization') },
-    areaServed: 'Italy'
+    areaServed
   };
 }
 
 export function articleJsonLd(article: ArticleMeta, siteUrl?: string): Record<string, unknown> {
+  const organizationId = siteUrl ? absoluteCanonical(siteUrl, '/#organization') : undefined;
   return {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': ['Article', 'BlogPosting'],
+    '@id': `${article.url}#article`,
     headline: article.title,
     description: article.description,
     url: article.url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': article.url },
+    inLanguage: 'it-IT',
+    ...(article.image ? { image: article.image } : {}),
     ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
     ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
-    ...(article.author && siteUrl ? { author: personJsonLd(siteUrl, article.author) } : {})
+    ...(article.author && siteUrl
+      ? { author: personJsonLd(siteUrl, article.author) }
+      : organizationId
+        ? { author: { '@id': organizationId } }
+        : {}),
+    ...(organizationId ? { publisher: { '@id': organizationId } } : {})
   };
 }
 
 export function caseStudyJsonLd(
   title: string,
   description: string,
-  url: string
+  url: string,
+  details: {
+    client?: string;
+    year?: number;
+    sector?: string;
+    services?: string[];
+    result?: string;
+    image?: string;
+    providerId?: string;
+  } = {}
 ): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: title,
     description,
-    url
+    url,
+    ...(details.image ? { image: details.image } : {}),
+    ...(details.year ? { dateCreated: String(details.year) } : {}),
+    ...(details.client ? { about: { '@type': 'Organization', name: details.client } } : {}),
+    ...(details.sector ? { genre: details.sector } : {}),
+    ...(details.services?.length ? { keywords: details.services.join(', ') } : {}),
+    ...(details.result ? { abstract: details.result } : {}),
+    ...(details.providerId ? { provider: { '@id': details.providerId } } : {})
   };
 }
 

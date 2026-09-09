@@ -6,13 +6,12 @@ Il sistema Insight pubblica:
 
 - archivio `/insight/`;
 - paginazione statica `/insight/2/`, `/insight/3/`, ecc.;
+- archivi tematici `/insight/categoria/[slug]/` generati dalle categorie assegnate;
 - dettaglio `/insight/[slug]/`;
 - RSS `/rss.xml`;
 - sitemap con archivio, pagine paginated e dettagli articolo.
 
-La fonte primaria e il CMS headless `GET /netmarket/v1/insights`. In staging la build deve usare la cache generata via SSH/WP-CLI da `infrastructure/scripts/pull-cms-cache.mjs`, perché `cms.netmarket.it` può rispondere `401` agli endpoint pubblici non autenticati.
-
-Quando la cache o le credenziali CMS non sono disponibili durante il build, il frontend usa lo snapshot read-only in `data/migrations/insights/insight-transform-dry-run.json`. Questo fallback serve per sviluppo locale e resilienza, non deve essere la fonte attiva di staging.
+La fonte primaria e il CMS headless `GET /netmarket/v1/insights`. Quando le credenziali CMS non sono disponibili durante il build, il frontend usa lo snapshot read-only in `data/migrations/insights/insight-transform-dry-run.json`.
 
 ## Migrazione legacy
 
@@ -28,32 +27,19 @@ Output principali:
 - `docs/migration/insight-url-map.md`;
 - `docs/migration/insight-migration-report.md`.
 
-Sono stati rilevati 26 post pubblici legacy. Al 2 settembre 2026 sono stati importati nel CMS staging/headless 26 articoli reali e il post demo WordPress `Hello world!` è stato messo in bozza.
+Sono stati rilevati 26 post pubblici legacy. Le 20 cover disponibili sono conservate nel frontend come fallback WebP responsive a 800, 1200 e 1600px; i sei articoli privi di featured image usano la superficie editoriale neutra. La migrazione dei media nel nuovo CMS non viene eseguita senza credenziali/autorizzazione di import.
 
-Import CMS:
+## Archivio editoriale
 
-```sh
-pnpm migration:insights:cms --dry-run --skip-media
-pnpm migration:insights:cms
-```
+L'archivio usa una gerarchia stabile: apertura con posizionamento e temi, cover story scelta dal flag `featured`, stream media-first asimmetrico e paginazione HTML numerata con URL persistenti. Le pagine categoria sono statiche, crawlable e presenti in sitemap; non dipendono da JavaScript.
 
-Opzioni:
+La card canonica mostra categoria primaria, data, titolo, abstract breve e tempo di lettura. In assenza di immagine usa una superficie editoriale neutra, senza richieste rotte.
 
-- `--dry-run`: calcola create/update senza scrivere.
-- `--skip-media`: aggiorna post e meta senza importare media.
-- `--force`: riapplica contenuti e meta anche se il checksum coincide.
+## Template articolo
 
-Lo script `infrastructure/migrations/insights/import-to-cms.mjs`:
+La pagina comprende breadcrumb, categoria, H1 adattivo, deck, data, tempo di lettura, publisher/autore reale ed eventuale aggiornamento. La cover e prioritaria; le immagini successive restano lazy.
 
-- legge `data/migrations/insights/insight-transform-dry-run.json`;
-- crea/aggiorna post WordPress `post` per slug;
-- importa o riusa media WordPress tramite sideload;
-- riscrive gli `img src` verso URL `cms.netmarket.it`;
-- assegna categorie legacy;
-- popola metadati `nmhc_*` per SEO, priority, featured e tracciamento migrazione;
-- salva gli slug servizio legacy in `nmhc_migration_related_service_slugs`.
-
-Nota tecnica: quando l'importer genera PHP dentro un template JavaScript, le regex PHP devono usare escape doppi nel template, ad esempio `\\s`. Un escape singolo può alterare il testo importato e corrompere meta description o contenuti.
+`prepareArticleContent()` usa `parse5` per aggiungere anchor deterministiche, evitare ID duplicati, correggere gli articoli legacy composti solo da H3 e generare un indice solo da quattro sezioni in su. Il corpo resta entro 44rem; l'indice e sticky su desktop e nativo/collassabile su mobile.
 
 ## Authorship
 
@@ -73,9 +59,9 @@ Le relazioni supportate dal payload Insight sono:
 - `relatedCaseStudies`;
 - `relatedResources`;
 
-Il fallback legacy collega i servizi in modo conservativo dalle categorie pubbliche. Gli altri insight correlati sono limitati a 3 elementi e restano link crawlable.
+Il fallback legacy collega i servizi in modo conservativo dalle categorie pubbliche. Gli altri insight correlati sono limitati a 3 elementi, restano link crawlable e vengono ordinati per categorie e servizi condivisi. Le relazioni CMS esplicite verso progetti hanno priorita; in loro assenza il fallback usa i servizi comuni e non mostra progetti generici.
 
-Nel CMS attuale le relazioni `relatedServices` degli insight restano differite finché i servizi `nm_service` non sono pubblicati. L'importer tenta la risoluzione per slug e, quando non trova il servizio, mantiene gli slug in `nmhc_migration_related_service_slugs` per una successiva riconciliazione.
+Il primo servizio correlato alimenta una CTA contestuale soft. In assenza di servizio, progetto, autore, related o cover, il relativo modulo non viene renderizzato e il layout resta valido.
 
 ## SEO
 
@@ -85,17 +71,14 @@ Ogni dettaglio emette:
 - meta description da override CMS o fallback normalizzato entro i limiti schema;
 - canonical assoluto verso `https://netmarket.it`;
 - breadcrumb `Home > Insight > Titolo`;
-- JSON-LD `Article`.
+- JSON-LD `Article` + `BlogPosting`, con `mainEntityOfPage`, publisher, lingua, immagine e date;
+- `CollectionPage` + `ItemList` per archivio, pagine paginate e categorie;
+- Open Graph e Twitter/X con override social del CMS e fallback sulla cover.
 
 Staging resta noindex tramite policy ambiente.
 
-## Verifica Operativa
+## Performance e accessibilita
 
-Dopo import o modifica massiva insight:
+Gli stili del magazine sono route-specifici nei componenti Astro e non appesantiscono il CSS globale. Le immagini dichiarano dimensioni, `sizes`, `srcset` quando disponibile, decoding e priorita coerente con la posizione. Nessuna island o libreria client e richiesta.
 
-1. rigenerare cache CMS;
-2. verificare `apps/web/.cms-cache/netmarket/v1/insights%3Fper_page%3D50%26sort%3Ddate.json`;
-3. buildare con `CMS_API_CACHE_DIR="$PWD/apps/web/.cms-cache/netmarket/v1" pnpm build`;
-4. assicurarsi che non compaiano warning di fallback sugli insight;
-5. deployare staging;
-6. controllare una pagina reale, ad esempio `/insight/black-friday-2025-tendenze-e-strategie-vincenti-per-le-pmi-italiane/`.
+Categorie, card, indice e paginazione sono navigabili da tastiera, usano landmark e `aria-current`. Il contenuto essenziale, le CTA e i correlati sono HTML statico e leggibile anche dai sistemi di retrieval.

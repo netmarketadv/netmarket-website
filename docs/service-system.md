@@ -22,6 +22,8 @@ La sorgente ufficiale resta WordPress `nm_service`. Il frontend chiama:
 
 Se il CMS risponde senza contenuti pubblicati o non è raggiungibile durante la build, Astro usa `apps/web/src/data/service-fallbacks.ts`. Il fallback contiene solo i nove servizi iniziali approvati per il progetto e deve essere rimosso o ridotto quando il CMS sarà completo.
 
+Le immagini servizio caricate nel CMS sono normalizzate per slug dal frontend finche l'API non espone in modo definitivo tutti i media principali. Gli asset trasparenti vengono trattati come visual di servizio su fondo grigio, non come cover fotografiche.
+
 ## Initial Services
 
 Ordine preliminare:
@@ -59,13 +61,50 @@ La pagina dettaglio è statica tramite `getStaticPaths`. Ogni sezione è opziona
 
 - `ServiceDetailHero`;
 - `ServiceIntro`;
+- `ServiceProof`;
 - `ServiceProcess`;
 - `ServiceTaxonomyList`;
+- `ServiceTechnicalFocus`;
 - `ServiceRelatedContent`;
 - `FAQBlock`;
 - `ServiceCTA`.
 
 Regola: se un gruppo dati è vuoto, la sezione non viene renderizzata.
+
+### Esperienza canonica servizi
+
+Ecommerce, Software e integrazioni, SEO, Advertising, Social media, Branding e comunicazione, Content production e Concorsi a premi usano `ServiceExperiencePage`. Il componente definisce una struttura comune affidabile, mentre `service-experiences.ts` assegna a ogni servizio una narrazione e contenuti territoriali specifici.
+
+Il pattern canonico comprende:
+
+- hero editoriale tipografica, centrata e proporzionata sul modello validato di `Siti web`, con un solo highlight blu;
+- riga breadcrumb con altezza, margine e posizione iniziale invarianti tra tutte le pagine servizio;
+- H1 descrittivo che unisce servizio, intento principale e riferimento naturale a Padova, senza keyword stuffing;
+- sintesi di valore e problemi espressi dal punto di vista del decisore aziendale;
+- sistema del servizio, evidenze contestualizzate, metodo e perimetro delle competenze;
+- progetti reali con immagini di altezza coerente, nome cliente e descrizione sintetica del lavoro;
+- FAQ e CTA finale coerenti con il contenuto della pagina.
+
+La hero non usa simulazioni UI o mockup generici. In assenza di fotografie, video o case study approvati per l'apertura, la tipografia e il copy restano protagonisti. Il valore del servizio deve essere espresso nell'HTML e dimostrato più avanti attraverso contenuti e progetti reali.
+
+Il solo accento canonico delle pagine servizio è il blu Netmarket. `#F2FF83` è ammesso soltanto per rare evidenziazioni funzionali ad alto contrasto; non identifica singoli servizi. Le icone usano il medaglione circolare neutro del design system: superficie bianca, doppio bordo leggero, pittogramma nero e nessun box colorato. Le pagine condividono griglia, tipografia, bordi, radius, CTA, motion e componenti Netmarket.
+
+La presenza territoriale va espressa con linguaggio naturale: Padova compare nell'eyebrow, nei metadata e in almeno un passaggio utile del corpo pagina. Non sono ammessi elenchi di località o ripetizioni artificiose pensate soltanto per i motori di ricerca.
+
+### Variante editoriale Siti web
+
+`/servizi/siti-web/` usa una pagina editoriale dedicata, non il template generico. La pagina e progettata per imprenditori, responsabili marketing e decisori aziendali: parte dal valore del sito come asset aziendale, mostra progetti reali e traduce tecnologia, SEO e AI-readiness in benefici comprensibili.
+
+Regole della variante:
+
+- non duplicarla automaticamente sulle altre pagine servizio;
+- usare sezioni e visual specifici solo quando il servizio ha contenuto reale sufficiente;
+- mantenere contenuti essenziali nel DOM iniziale, senza dipendere da JavaScript;
+- preferire prove reali e internal link contestuali a liste generiche;
+- non promettere risultati non controllabili su AI Overview, ChatGPT o altri sistemi di risposta.
+- il portfolio full-bleed e il bento delle tipologie sono pattern specifici della variante, non primitive da replicare automaticamente;
+- il portfolio deve restare manualmente scorribile, fermarsi durante l'interazione e diventare statico con reduced motion;
+- le card progetto sono link solo quando esiste un case study pubblico corrispondente.
 
 ## Related Content
 
@@ -82,7 +121,27 @@ Limiti frontend:
 - resource: 3;
 - related service: 4.
 
-I link sono normali `<a>` e restano crawlable.
+Le relazioni restano disponibili al layer dati per metadata, immagini sociali e selezione dei progetti. Le pagine servizio non mostrano un blocco generico “Approfondire” con articoli o servizi collegati: i collegamenti editoriali devono comparire soltanto quando sono inseriti in modo contestuale nel contenuto.
+
+Quando il CMS non espone ancora relazioni complete, il dettaglio servizio puo usare snapshot reali gia validati come fallback per case study e insight, ordinati per pertinenza editoriale del servizio. Questo fallback non deve introdurre contenuti inventati e va sostituito da relazioni CMS appena disponibili.
+
+## Service Content Packs
+
+`/servizi/siti-web/` ha validato il modello pilota. Lo stesso approccio ora copre tutto il set iniziale dei servizi in `apps/web/src/data/service-pilots.ts`: ogni servizio ha copy, proof, FAQ, capability, tecnologie quando pertinenti, related service e priorità editoriali distinte. Il template resta generalizzabile: i componenti leggono solo dati strutturati e non contengono copy hardcoded del servizio.
+
+I content pack devono essere migrati in `nm_service` quando il CMS dispone di una pipeline contenuti sicura o di editing manuale approvato. Finché `GET /services` non espone servizi pubblicati, restano fallback controllati per build e staging.
+
+Schede strategiche:
+
+- `docs/services/siti-web-content-strategy.md`;
+- `docs/services/ecommerce-content-strategy.md`;
+- `docs/services/software-e-integrazioni-content-strategy.md`;
+- `docs/services/seo-content-strategy.md`;
+- `docs/services/advertising-content-strategy.md`;
+- `docs/services/social-media-content-strategy.md`;
+- `docs/services/branding-e-comunicazione-content-strategy.md`;
+- `docs/services/content-production-content-strategy.md`;
+- `docs/services/concorsi-a-premi-content-strategy.md`.
 
 ## SEO
 
@@ -100,7 +159,9 @@ Dettaglio:
 - meta description da SEO override, poi short description, excerpt, subtitle, fallback controllato;
 - canonical assoluto verso `https://www.netmarket.it/servizi/[slug]/`;
 - breadcrumb `Home > Servizi > Nome servizio`;
-- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed: Italy`.
+- JSON-LD `Service` con `@id`, `serviceType`, `provider` verso Organization e `areaServed`; tutte le pagine definitive dichiarano Padova come `City` e Italia come `Country`;
+- JSON-LD `FAQPage` quando le domande sono presenti e visibili nella pagina;
+- social title, description e immagine da un progetto reale collegato, con fallback al media del servizio.
 
 Staging resta `noindex, nofollow, noarchive` tramite robots environment.
 

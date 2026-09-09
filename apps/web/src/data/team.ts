@@ -16,18 +16,6 @@ export type TeamMember = {
 
 export const teamMembers = [
   {
-    id: 'enrico-paolo-toso',
-    fullName: 'Enrico Paolo Toso',
-    givenName: 'Enrico Paolo',
-    familyName: 'Toso',
-    displayName: 'Enrico',
-    role: 'Digital Developer',
-    image: `${cmsUploadsBase}/enrico-toso-digital-developer-netmarket.jpg`,
-    imageAlt: 'Ritratto di Enrico Paolo Toso',
-    imagePosition: '50% 34%',
-    linkedin: 'https://www.linkedin.com/in/enricopaolotoso/'
-  },
-  {
     id: 'mattia-graziotti',
     fullName: 'Mattia Graziotti',
     givenName: 'Mattia',
@@ -50,6 +38,18 @@ export const teamMembers = [
     imageAlt: 'Ritratto di Greta Negro',
     imagePosition: '50% 34%',
     linkedin: 'https://www.linkedin.com/in/greta-negro-/'
+  },
+  {
+    id: 'enrico-paolo-toso',
+    fullName: 'Enrico Paolo Toso',
+    givenName: 'Enrico Paolo',
+    familyName: 'Toso',
+    displayName: 'Enrico',
+    role: 'Digital Developer',
+    image: `${cmsUploadsBase}/enrico-toso-digital-developer-netmarket.jpg`,
+    imageAlt: 'Ritratto di Enrico Paolo Toso',
+    imagePosition: '50% 34%',
+    linkedin: 'https://www.linkedin.com/in/enricopaolotoso/'
   },
   {
     id: 'giacomo-galanti',

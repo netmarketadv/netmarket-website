@@ -1,0 +1,56 @@
+---
+import type { InsightCategory } from '@/lib/insights/content';
+import { categoryPath } from '@/lib/insights/content';
+
+interface Props {
+  categories: InsightCategory[];
+  current?: string | undefined;
+}
+
+const { categories, current = '' } = Astro.props;
+---
+
+<nav class="insight-categories" aria-label="Temi Insights">
+  <a href="/insight/" aria-current={!current ? 'page' : undefined}>Tutti</a>
+  {
+    categories.map((category) => (
+      <a href={categoryPath(category.slug)} aria-current={current === category.slug ? 'page' : undefined}>
+        {category.name} <span>{category.count}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .insight-categories {
+    display: flex;
+    gap: 0.45rem;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-block: 0.2rem 0.65rem;
+    scrollbar-width: thin;
+  }
+  a {
+    flex: none;
+    border: 1px solid var(--nm-color-border);
+    border-radius: var(--nm-radius-pill);
+    padding: 0.62rem 0.88rem;
+    color: var(--nm-color-ink);
+    text-decoration: none;
+    font-size: 0.86rem;
+    line-height: 1;
+  }
+  a[aria-current='page'] {
+    border-color: var(--nm-color-blue);
+    background: var(--nm-color-blue);
+    color: #fff;
+  }
+  span {
+    margin-left: 0.25rem;
+    opacity: 0.65;
+  }
+  a:focus-visible {
+    outline: 2px solid var(--nm-color-blue);
+    outline-offset: 2px;
+  }
+</style>

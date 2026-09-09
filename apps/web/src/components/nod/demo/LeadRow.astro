@@ -1,0 +1,20 @@
+---
+interface Props {
+  initials: string;
+  name: string;
+  email: string;
+  request: string;
+  source: string;
+  state: string;
+  tone: string;
+  value: string;
+  fresh?: boolean;
+}
+const { initials, name, email, request, source, state, tone, value, fresh = false } = Astro.props;
+---
+
+<div class:list={['nod-leads-row', fresh && 'nod-leads-row--new']}>
+  <span><i>{initials}</i><b>{name}<small>{email}</small></b></span><span>{request}</span><span
+    >{source}</span
+  ><span><em class={`is-${tone}`}>{state}</em></span><span>{value}</span>
+</div>

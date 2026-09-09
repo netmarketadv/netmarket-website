@@ -1,0 +1,13 @@
+---
+import { IconCalendar, IconMail, IconSparkles, IconUsers } from '@tabler/icons-astro';
+interface Props {
+  icon: 'users' | 'sparkles' | 'calendar' | 'mail';
+  text: string;
+  complete?: boolean;
+}
+const { icon, text, complete = false } = Astro.props;
+const icons = { users: IconUsers, sparkles: IconSparkles, calendar: IconCalendar, mail: IconMail };
+const Icon = icons[icon];
+---
+
+<span class:list={[complete && 'is-complete']}><Icon /><b>{text}</b></span>

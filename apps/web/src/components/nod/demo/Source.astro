@@ -1,0 +1,10 @@
+---
+interface Props {
+  name: string;
+  value: string;
+  width: string;
+}
+const { name, value, width } = Astro.props;
+---
+
+<div><span>{name}</span><em>{value}</em><i style={`--bar:${width}`}></i></div>

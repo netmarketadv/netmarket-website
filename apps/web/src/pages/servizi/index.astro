@@ -12,7 +12,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { clientLogos, cmsMedia, featureHighlights } from '@/data/home';
 import { getServiceArchiveData } from '@/lib/services/content';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
+const canonicalSiteUrl = 'https://netmarket.it';
 const { services } = await getServiceArchiveData();
 const featuredServices = services.filter((service) => service.featured).slice(0, 3);
 const breadcrumb = breadcrumbJsonLd([
@@ -34,9 +34,9 @@ const breadcrumb = breadcrumbJsonLd([
 
   <Section compact labelledby="services-intro-title">
     <Container>
-      <div class="service-archive-intro" data-reveal="up">
-        <h2 id="services-intro-title">Un’offerta ampia, ma non dispersa.</h2>
-        <p>
+      <div class="service-archive-intro">
+        <h2 id="services-intro-title" data-reveal="line">Un’offerta ampia, ma non dispersa.</h2>
+        <p data-reveal="up">
           Netmarket tiene insieme progettazione web, comunicazione, campagne, contenuti e strumenti
           operativi. Ogni servizio può vivere da solo, ma dà il meglio quando lavora con gli altri.
         </p>
@@ -87,10 +87,10 @@ const breadcrumb = breadcrumbJsonLd([
             servono. Un contenuto ben progettato migliora SEO, vendita e fiducia.
           </p>
         </div>
-        <div class="service-integration__list" aria-label="Ambiti integrati">
+        <div class="service-integration__list" role="list" aria-label="Ambiti integrati">
           {
             featureHighlights.map(([title, text]) => (
-              <article>
+              <article role="listitem">
                 <h3>{title}</h3>
                 <p>{text}</p>
               </article>

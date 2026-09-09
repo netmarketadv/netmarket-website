@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { robotsForEnv, validatePublicEnv } from '../src/index';
+import { robotsForEnv, validatePublicEnv, validateServerEnv } from '../src/index';
 
 describe('environment validation', () => {
   it('allows local defaults', () => {
@@ -29,5 +29,71 @@ describe('environment validation', () => {
   it('returns safe robots directives by environment', () => {
     expect(robotsForEnv('staging')).toContain('noarchive');
     expect(robotsForEnv('production')).toBe('index, follow');
+  });
+
+  it('requires the canonical host and GTM configuration in production', () => {
+    expect(() =>
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://www.netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'true',
+        PUBLIC_GTM_ID: 'GTM-K782CJ46'
+      })
+    ).toThrow(/https:\/\/netmarket.it/);
+
+    expect(() =>
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'false',
+        PUBLIC_GTM_ID: ''
+      })
+    ).toThrow(/ANALYTICS_ENABLED/);
+
+    expect(
+      validatePublicEnv({
+        PUBLIC_SITE_URL: 'https://netmarket.it',
+        PUBLIC_CMS_URL: 'https://cms.netmarket.it',
+        PUBLIC_DEPLOY_ENV: 'production',
+        PUBLIC_ANALYTICS_ENABLED: 'true',
+        PUBLIC_GTM_ID: 'GTM-K782CJ46'
+      })
+    ).toMatchObject({
+      PUBLIC_SITE_URL: 'https://netmarket.it',
+      PUBLIC_ANALYTICS_ENABLED: true,
+      PUBLIC_GTM_ID: 'GTM-K782CJ46'
+    });
+  });
+
+  it('requires the proprietary CMS REST namespace outside local', () => {
+    expect(() =>
+      validateServerEnv(
+        {
+          CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/',
+          CMS_GRAPHQL_URL: '',
+          CMS_BUILD_TOKEN: '',
+          CMS_BASIC_AUTH_USER: '',
+          CMS_BASIC_AUTH_PASSWORD: ''
+        },
+        'staging'
+      )
+    ).toThrow(/wp-json\/netmarket\/v1/);
+
+    expect(
+      validateServerEnv(
+        {
+          CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/netmarket/v1/',
+          CMS_GRAPHQL_URL: '',
+          CMS_BUILD_TOKEN: '',
+          CMS_BASIC_AUTH_USER: '',
+          CMS_BASIC_AUTH_PASSWORD: ''
+        },
+        'staging'
+      )
+    ).toMatchObject({
+      CMS_API_BASE_URL: 'https://cms.netmarket.it/wp-json/netmarket/v1/'
+    });
   });
 });

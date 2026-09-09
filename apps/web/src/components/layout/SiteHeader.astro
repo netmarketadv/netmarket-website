@@ -2,12 +2,23 @@
 import Button from '@/components/ui/Button.astro';
 import IconBubble from '@/components/ui/IconBubble.astro';
 
-type IconName = 'briefcase' | 'chart' | 'desktop' | 'palette' | 'search' | 'sparkles' | 'users';
+type IconName =
+  | 'bolt'
+  | 'briefcase'
+  | 'chart'
+  | 'desktop'
+  | 'palette'
+  | 'search'
+  | 'shield'
+  | 'sparkles'
+  | 'users';
 
 interface NavItem {
   label: string;
   href?: string;
+  badge?: 'new';
   description?: string;
+  menuVariant?: 'compact' | 'wide';
   children?: Array<{
     label: string;
     href: string;
@@ -19,15 +30,11 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: 'Servizi',
+    href: '/servizi/',
+    menuVariant: 'wide',
     description:
       'Web, marketing, contenuti e pubblicità lavorano meglio quando hanno una regia unica.',
     children: [
-      {
-        label: 'Tutti i servizi',
-        description: 'Archivio editoriale completo dei servizi Netmarket.',
-        href: '/servizi/',
-        icon: 'sparkles'
-      },
       {
         label: 'Siti web',
         description: 'Pagine, contenuti e percorsi di conversione.',
@@ -41,54 +48,83 @@ const navItems: NavItem[] = [
         icon: 'briefcase'
       },
       {
-        label: 'SEO e advertising',
-        description: 'Visibilità, campagne, dati e ottimizzazione.',
+        label: 'Software e integrazioni',
+        description: 'Gestionale, automazioni, API e strumenti su misura.',
+        href: '/servizi/software-e-integrazioni/',
+        icon: 'bolt'
+      },
+      {
+        label: 'SEO',
+        description: 'Architettura, contenuti e visibilità organica.',
         href: '/servizi/seo/',
         icon: 'search'
       },
       {
-        label: 'Brand e contenuti',
+        label: 'Advertising',
+        description: 'Campagne, dati, tracciamenti e ottimizzazione.',
+        href: '/servizi/advertising/',
+        icon: 'chart'
+      },
+      {
+        label: 'Social media',
+        description: 'Piani editoriali, contenuti e gestione canali.',
+        href: '/servizi/social-media/',
+        icon: 'users'
+      },
+      {
+        label: 'Branding e comunicazione',
         description: 'Identità, messaggi e materiali coordinati.',
         href: '/servizi/branding-e-comunicazione/',
         icon: 'palette'
+      },
+      {
+        label: 'Content production',
+        description: 'Foto, video, copy e asset per campagne e sito.',
+        href: '/servizi/content-production/',
+        icon: 'sparkles'
+      },
+      {
+        label: 'Concorsi a premi',
+        description: 'Meccaniche, sviluppo, gestione e conformità.',
+        href: '/servizi/concorsi-a-premi/',
+        icon: 'shield'
       }
     ]
   },
   {
     label: 'Agenzia',
-    description: 'Un partner a Padova per costruire comunicazione coerente online e offline.',
+    menuVariant: 'compact',
+    description: 'Persone, storia e metodo dietro i progetti Netmarket.',
     children: [
       {
-        label: 'Metodo',
-        description: 'Come analizziamo, progettiamo e ottimizziamo.',
+        label: 'Agenzia',
+        description: 'La nostra storia, il metodo e le persone.',
         href: '/agenzia/',
-        icon: 'chart'
-      },
-      {
-        label: 'Team',
-        description: 'Persone reali dietro sviluppo, design, marketing e direzione.',
-        href: '/agenzia/#team',
         icon: 'users'
       },
       {
-        label: 'Progetti',
-        description: 'Casi e lavori pubblicati da usare come riferimento.',
-        href: '/progetti/',
-        icon: 'sparkles'
-      },
-      {
-        label: 'Insight',
-        description: 'Guide e contenuti per PMI e aziende.',
-        href: '/insight/',
-        icon: 'users'
+        label: 'Lavora con noi',
+        description: 'Competenze, modo di lavorare e candidatura spontanea.',
+        href: '/lavora-con-noi/',
+        icon: 'briefcase'
       }
     ]
   },
-  { href: '/nod/', label: 'NØD' },
   { href: '/progetti/', label: 'Progetti' },
   { href: '/insight/', label: 'Insight' },
+  { href: '/nod/', label: 'NØD', badge: 'new' },
   { href: '/contatti/', label: 'Contatti' }
 ];
+
+const currentPath = Astro.url.pathname;
+const normalizePath = (href: string) => href.split('#')[0] || '/';
+const isCurrent = (href?: string) => Boolean(href && normalizePath(href) === currentPath);
+const isSectionCurrent = (item: NavItem) =>
+  item.label === 'Agenzia'
+    ? currentPath === '/agenzia/' || currentPath === '/lavora-con-noi/'
+    : item.label === 'Servizi'
+      ? currentPath.startsWith('/servizi/')
+      : isCurrent(item.href);
 ---
 
 <header class="site-header">
@@ -100,22 +136,28 @@ const navItems: NavItem[] = [
       {
         navItems.map((item) =>
           item.children ? (
-            <details class="mega-menu">
+            <details class="mega-menu" data-active={isSectionCurrent(item) ? 'true' : undefined}>
               <summary>{item.label}</summary>
               <div class="mega-menu__scrim" />
               <div
                 class:list={[
                   'mega-menu__panel',
-                  item.children.length <= 3 && 'mega-menu__panel--compact'
+                  item.menuVariant === 'compact' && 'mega-menu__panel--compact',
+                  item.menuVariant === 'wide' && 'mega-menu__panel--wide'
                 ]}
               >
-                <div>
+                <div class="mega-menu__intro">
                   <h2>{item.label === 'Servizi' ? 'Servizi integrati' : 'Netmarket dal 1986'}</h2>
                   <p>{item.description}</p>
+                  {item.href && (
+                    <a class="mega-menu__overview" href={item.href}>
+                      Tutti i servizi
+                    </a>
+                  )}
                 </div>
                 <div class="mega-menu__grid">
                   {item.children.map((child) => (
-                    <a href={child.href}>
+                    <a href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
                       <IconBubble name={child.icon} size="sm" />
                       <span>
                         <strong>{child.label}</strong>
@@ -127,7 +169,10 @@ const navItems: NavItem[] = [
               </div>
             </details>
           ) : (
-            <a href={item.href}>{item.label}</a>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <span>{item.label}</span>
+              {item.badge && <small class="site-header__badge">{item.badge}</small>}
+            </a>
           )
         )
       }
@@ -145,25 +190,38 @@ const navItems: NavItem[] = [
           {
             navItems.map((item) =>
               item.children ? (
-                <details class="mobile-submenu">
+                <details
+                  class:list={[
+                    'mobile-submenu',
+                    item.menuVariant === 'compact' && 'mobile-submenu--compact',
+                    item.menuVariant === 'wide' && 'mobile-submenu--wide'
+                  ]}
+                  data-active={isSectionCurrent(item) ? 'true' : undefined}
+                >
                   <summary>{item.label}</summary>
                   <div class="mobile-submenu__panel">
                     {item.children.map((child) => (
-                      <a href={child.href}>
-                        <span>{child.label}</span>
-                        <small>{child.description}</small>
+                      <a
+                        href={child.href}
+                        aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      >
+                        <IconBubble name={child.icon} size="sm" />
+                        <span>
+                          <strong>{child.label}</strong>
+                          <small>{child.description}</small>
+                        </span>
                       </a>
                     ))}
                   </div>
                 </details>
               ) : (
-                <a href={item.href}>{item.label}</a>
+                <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                  <span>{item.label}</span>
+                  {item.badge && <small class="site-header__badge">{item.badge}</small>}
+                </a>
               )
             )
           }
-        </div>
-        <div class="site-header__mobile-actions">
-          <Button href="/contatti/" variant="primary" magnetic>Parliamone</Button>
         </div>
       </nav>
     </details>

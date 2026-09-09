@@ -35,6 +35,17 @@ class WP_REST_Request implements ArrayAccess
         return [];
     }
 
+    public function get_body_params(): mixed
+    {
+        return [];
+    }
+
+    /** @return array<string, mixed> */
+    public function get_file_params(): array
+    {
+        return [];
+    }
+
     public function offsetExists(mixed $offset): bool
     {
         return true;
@@ -110,6 +121,9 @@ function sanitize_textarea_field(string $text): string { return $text; }
 function sanitize_email(string $text): string { return $text; }
 function sanitize_key(string $text): string { return $text; }
 function sanitize_title(string $text): string { return $text; }
+function sanitize_file_name(string $filename): string { return $filename; }
+/** @return array{ext: string|false, type: string|false, proper_filename: string|false} */
+function wp_check_filetype_and_ext(string $file, string $filename, ?array $mimes = null): array { return ['ext' => 'pdf', 'type' => 'application/pdf', 'proper_filename' => false]; }
 function wp_kses_post(string $text): string { return $text; }
 function wp_unslash(mixed $value): mixed { return $value; }
 function is_email(string $email): string|false { return $email; }

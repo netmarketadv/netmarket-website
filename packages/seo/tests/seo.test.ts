@@ -12,6 +12,9 @@ import {
 describe('seo utilities', () => {
   it('builds titles', () => {
     expect(buildTitle('Ambiente di sviluppo')).toBe('Ambiente di sviluppo | Netmarket');
+    expect(buildTitle('ChatGPT Ads in Italia | Netmarket')).toBe(
+      'ChatGPT Ads in Italia | Netmarket'
+    );
   });
 
   it('creates absolute canonicals', () => {
@@ -22,7 +25,16 @@ describe('seo utilities', () => {
 
   it('creates stable person structured data linked to the organization', () => {
     expect(organizationJsonLd('https://staging.netmarket.it')).toMatchObject({
-      '@id': 'https://staging.netmarket.it/#organization'
+      '@id': 'https://staging.netmarket.it/#organization',
+      logo: 'https://staging.netmarket.it/icon-512.png',
+      legalName: 'Netmarket Srl',
+      vatID: '03618730281',
+      foundingDate: '1986',
+      address: {
+        addressLocality: 'Padova',
+        addressCountry: 'IT'
+      },
+      contactPoint: { email: 'segreteria@netmarket.it' }
     });
     expect(
       personJsonLd('https://staging.netmarket.it', {
@@ -42,6 +54,27 @@ describe('seo utilities', () => {
         '@id': 'https://staging.netmarket.it/#organization'
       },
       sameAs: ['https://www.linkedin.com/in/enricopaolotoso/']
+    });
+  });
+
+  it('supports explicit local and national service areas', () => {
+    expect(
+      serviceJsonLd(
+        'https://www.netmarket.it',
+        'Realizzazione siti web a Padova',
+        'Siti corporate ed ecommerce.',
+        'https://www.netmarket.it/servizi/siti-web/',
+        'Realizzazione siti web',
+        [
+          { '@type': 'City', name: 'Padova' },
+          { '@type': 'Country', name: 'Italia' }
+        ]
+      )
+    ).toMatchObject({
+      areaServed: [
+        { '@type': 'City', name: 'Padova' },
+        { '@type': 'Country', name: 'Italia' }
+      ]
     });
   });
 
@@ -69,13 +102,29 @@ describe('seo utilities', () => {
         description: 'Guida per PMI.',
         url: 'https://staging.netmarket.it/insight/black-friday-2025/'
       })
-    ).toMatchObject({ '@type': 'Article' });
+    ).toMatchObject({
+      '@type': ['Article', 'BlogPosting'],
+      mainEntityOfPage: { '@type': 'WebPage' }
+    });
     expect(
       caseStudyJsonLd(
         'Sirene Blu',
         'App mobile e programma fedelta.',
-        'https://staging.netmarket.it/progetti/sirene-blu/'
+        'https://staging.netmarket.it/progetti/sirene-blu/',
+        {
+          client: 'Sirene Blu',
+          year: 2025,
+          sector: 'Retail',
+          services: ['Software e integrazioni'],
+          result: 'Oltre 100.000 iscritti.',
+          providerId: 'https://staging.netmarket.it/#organization'
+        }
       )
-    ).toMatchObject({ '@type': 'CreativeWork' });
+    ).toMatchObject({
+      '@type': 'CreativeWork',
+      dateCreated: '2025',
+      about: { '@type': 'Organization', name: 'Sirene Blu' },
+      provider: { '@id': 'https://staging.netmarket.it/#organization' }
+    });
   });
 });

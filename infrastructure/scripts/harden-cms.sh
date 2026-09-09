@@ -68,23 +68,17 @@ cat > .htaccess <<'EOF'
   Header always set X-Robots-Tag \"noindex, nofollow, noarchive\"
 </IfModule>
 
-<IfModule mod_setenvif.c>
-  SetEnvIf Request_URI \"^/robots\\.txt$\" NMHC_NO_AUTH=1
-</IfModule>
-
-AuthType Basic
-AuthName \"Netmarket CMS\"
-AuthUserFile $HTPASSWD_PATH
-
-<IfModule mod_authz_core.c>
-  <RequireAny>
-    Require env NMHC_NO_AUTH
+<Files wp-login.php>
+  AuthType Basic
+  AuthName \"Netmarket CMS\"
+  AuthUserFile $HTPASSWD_PATH
+  <IfModule mod_authz_core.c>
     Require valid-user
-  </RequireAny>
-</IfModule>
-<IfModule !mod_authz_core.c>
-  Require valid-user
-</IfModule>
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Require valid-user
+  </IfModule>
+</Files>
 
 # SGS XMLRPC Disable Service
 <Files xmlrpc.php>
@@ -112,9 +106,22 @@ AuthUserFile $HTPASSWD_PATH
 </IfModule>
 # SGO Unset Vary END
 EOF
+mkdir -p wp-admin
+cat > wp-admin/.htaccess <<'EOF'
+# Netmarket CMS admin auth
+AuthType Basic
+AuthName \"Netmarket CMS\"
+AuthUserFile $HTPASSWD_PATH
+<IfModule mod_authz_core.c>
+  Require valid-user
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Require valid-user
+</IfModule>
+EOF
 cat > robots.txt <<'EOF'
 User-agent: *
 Disallow: /
 EOF
-chmod 644 .htaccess robots.txt
+chmod 644 .htaccess wp-admin/.htaccess robots.txt
 (wp sg purge || wp cache flush || true)"

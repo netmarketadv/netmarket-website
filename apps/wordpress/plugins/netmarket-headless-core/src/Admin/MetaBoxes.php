@@ -141,6 +141,28 @@ final class MetaBoxes
             echo '</div>';
             return;
         }
+        if ($type === 'media_gallery') {
+            $items = is_array($value) ? $value : [];
+            $ids = [];
+            foreach ($items as $item) {
+                if (is_array($item)) {
+                    $ids[] = absint($item['mediaId'] ?? $item['media']['id'] ?? 0);
+                }
+            }
+            $ids = array_values(array_filter($ids));
+            echo '<div class="nmhc-media-gallery" data-nmhc-media-gallery>';
+            echo '<input id="' . esc_attr($name) . '" name="' . esc_attr($name) . '" type="hidden" value="' . esc_attr(implode(',', $ids)) . '" data-nmhc-media-gallery-input />';
+            echo '<div class="nmhc-media-gallery__items" data-nmhc-media-gallery-items>';
+            foreach ($ids as $id) {
+                echo '<button type="button" class="nmhc-media-gallery__item" data-id="' . esc_attr((string) $id) . '" aria-label="' . esc_attr__('Rimuovi immagine', 'netmarket-headless-core') . '">';
+                echo wp_kses_post(wp_get_attachment_image($id, 'thumbnail'));
+                echo '<span aria-hidden="true">×</span></button>';
+            }
+            echo '</div>';
+            echo '<button type="button" class="button" data-nmhc-media-gallery-choose>' . esc_html__('Scegli immagini', 'netmarket-headless-core') . '</button>';
+            echo '</div>';
+            return;
+        }
         if ($type === 'relation' || $type === 'relation_list') {
             $ids = $type === 'relation' ? [absint($value)] : array_map('absint', (array) $value);
             $targets = implode(',', $this->relationTargets($options));

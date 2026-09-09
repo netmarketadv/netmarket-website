@@ -1,9 +1,8 @@
-name: Quality
+name: Quality Full
 
 on:
   pull_request:
     branches:
-      - develop
       - main
     paths:
       - 'apps/web/**'
@@ -17,7 +16,6 @@ on:
   push:
     branches:
       - main
-      - develop
     paths:
       - 'apps/web/**'
       - 'apps/wordpress/**'
@@ -32,13 +30,17 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: quality-full-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 env:
   PUBLIC_SITE_URL: https://staging.netmarket.it
   PUBLIC_CMS_URL: https://cms.netmarket.it
   PUBLIC_DEPLOY_ENV: staging
   PUBLIC_BUILD_SHA: ${{ github.sha }}
   PUBLIC_BUILD_TIME: 1970-01-01T00:00:00Z
-  CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+  CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/netmarket/v1/
   CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
   CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
 
@@ -156,6 +158,11 @@ jobs:
           node-version: ${{ vars.NODE_VERSION || '22' }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Install Playwright browser
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e

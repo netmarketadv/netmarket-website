@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   headingItalicOClass,
+  headingItalicOOptOutClass,
   headingItalicOWordClass,
   styleHeadingText,
   transformHeadingItalicOHtml
@@ -63,5 +64,13 @@ describe('heading typography', () => {
     const transformed = transformHeadingItalicOHtml('<h2>Problema o focus</h2>');
     expect(transformed).toContain('</span> o <span');
     expect(transformed).toContain(`<span class="${headingItalicOWordClass}">f<span class="${headingItalicOClass}">o</span>cus</span>`);
+  });
+
+  it('allows functional headings to opt out of the italic o treatment', () => {
+    const transformed = transformHeadingItalicOHtml(
+      `<h3 class="${headingItalicOOptOutClass}">Organizzare</h3>`
+    );
+    expect(transformed).toContain(`<h3 class="${headingItalicOOptOutClass}">Organizzare</h3>`);
+    expect(transformed).not.toContain(`<span class="${headingItalicOClass}">`);
   });
 });

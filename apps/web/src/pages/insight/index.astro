@@ -1,122 +1,22 @@
 ---
-import { breadcrumbJsonLd, webPageJsonLd } from '@netmarket/seo';
+import { absoluteCanonical, breadcrumbJsonLd } from '@netmarket/seo';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/layout/Container.astro';
-import Section from '@/components/layout/Section.astro';
-import {
-  formatDate,
-  getInsightPage,
-  insightDescription,
-  insightPath
-} from '@/lib/insights/content';
+import InsightArchive from '@/components/insights/InsightArchive.astro';
+import { getInsightArchiveData, getInsightPage, insightDescription, insightPath } from '@/lib/insights/content';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
-const { insights, totalPages } = await getInsightPage(1);
-const featured = insights.find((item) => item.featured) ?? insights[0];
-const rest = featured ? insights.filter((item) => item.slug !== featured.slug) : insights;
-const title = 'Insight';
-const description =
-  'Approfondimenti Netmarket su comunicazione, siti web, ecommerce, marketing digitale e tecnologia.';
-const breadcrumb = breadcrumbJsonLd([
-  { name: 'Home', url: `${canonicalSiteUrl}/` },
-  { name: 'Insight', url: `${canonicalSiteUrl}/insight/` }
-]);
-const pageSchema = webPageJsonLd({
-  title,
-  description,
-  canonicalPath: '/insight/',
-  siteUrl: canonicalSiteUrl,
-  robots: 'index, follow'
-});
+const canonicalSiteUrl = 'https://netmarket.it';
+const [{ insights, totalPages }, archive] = await Promise.all([getInsightPage(1), getInsightArchiveData()]);
+const title = 'Insight su web, marketing e tecnologia';
+const description = 'Analisi e guide Netmarket per imprenditori e manager su siti web, ecommerce, SEO, marketing, comunicazione, social media, AI e tecnologia.';
+const canonicalUrl = absoluteCanonical(canonicalSiteUrl, '/insight/');
+const breadcrumb = breadcrumbJsonLd([{ name: 'Home', url: `${canonicalSiteUrl}/` }, { name: 'Insight', url: canonicalUrl }]);
+const collectionSchema = {
+  '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${canonicalUrl}#collection`, name: title, description, url: canonicalUrl,
+  publisher: { '@id': absoluteCanonical(canonicalSiteUrl, '/#organization') },
+  mainEntity: { '@type': 'ItemList', numberOfItems: insights.length, itemListElement: insights.map((insight, index) => ({ '@type': 'ListItem', position: index + 1, url: absoluteCanonical(canonicalSiteUrl, insightPath(insight.slug)), name: insight.title, description: insightDescription(insight) })) }
+};
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  path="/insight/"
-  canonicalSiteUrl={canonicalSiteUrl}
-  structuredData={[breadcrumb, pageSchema]}
->
-  <Section labelledby="insight-title" class="insight-archive-hero">
-    <Container wide>
-      <div class="insight-archive-hero__grid">
-        <div data-reveal="line">
-          <p class="nm-meta">Insight Netmarket</p>
-          <h1 id="insight-title">Appunti utili per decidere meglio.</h1>
-        </div>
-        <p data-reveal="up">
-          Analisi, guide e letture operative su siti, ecommerce, marketing, comunicazione e
-          tecnologia. Un archivio pensato per orientare decisioni concrete.
-        </p>
-      </div>
-    </Container>
-  </Section>
-
-  {
-    featured && (
-      <Section compact labelledby="featured-insight-title">
-        <Container wide>
-          <a class="insight-featured" href={insightPath(featured.slug)} data-reveal="scale">
-            {featured.image && (
-              <figure>
-                <img
-                  src={featured.image.url}
-                  alt={featured.image.alt}
-                  loading="eager"
-                  decoding="async"
-                />
-              </figure>
-            )}
-            <div>
-              <p class="nm-meta">
-                {featured.categories[0]?.name || 'Insight'} · {formatDate(featured.publishedAt)}
-              </p>
-              <h2 id="featured-insight-title">{featured.title}</h2>
-              <p>{insightDescription(featured)}</p>
-              <span>{featured.readingTime} min lettura</span>
-            </div>
-          </a>
-        </Container>
-      </Section>
-    )
-  }
-
-  <Section labelledby="latest-insights-title">
-    <Container wide>
-      <div class="insight-archive-heading" data-reveal="line">
-        <h2 id="latest-insights-title">Ultimi approfondimenti.</h2>
-        <p>{insights.length} articoli in questa pagina.</p>
-      </div>
-      <div class="insight-archive-grid" data-reveal="up" data-reveal-stagger="1">
-        {
-          rest.map((insight) => (
-            <a class="insight-archive-card" href={insightPath(insight.slug)}>
-              {insight.image && (
-                <img
-                  src={insight.image.url}
-                  alt={insight.image.alt}
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-              <span>
-                {insight.categories[0]?.name || 'Insight'} · {formatDate(insight.publishedAt)}
-              </span>
-              <h3>{insight.title}</h3>
-              <p>{insightDescription(insight)}</p>
-              <small>{insight.readingTime} min lettura</small>
-            </a>
-          ))
-        }
-      </div>
-      {
-        totalPages > 1 && (
-          <nav class="pagination" aria-label="Paginazione Insight">
-            <span>Pagina 1 di {totalPages}</span>
-            <a href="/insight/2/">Successivi</a>
-          </nav>
-        )
-      }
-    </Container>
-  </Section>
+<BaseLayout title={title} description={description} path="/insight/" canonicalSiteUrl={canonicalSiteUrl} structuredData={[breadcrumb, collectionSchema]} motionMode="light">
+  <InsightArchive insights={insights} allInsights={archive.insights} totalPages={totalPages} showFeatured />
 </BaseLayout>

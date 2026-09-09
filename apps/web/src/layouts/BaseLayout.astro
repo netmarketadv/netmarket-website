@@ -3,19 +3,27 @@ import Seo from '@/components/seo/Seo.astro';
 import SkipLink from '@/components/global/SkipLink.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
+import TrackingController from '@/components/analytics/TrackingController.astro';
 import MotionController from '@/components/motion/MotionController.astro';
 import '@/styles/tokens.css';
 import '@/styles/reset.css';
 import '@/styles/global.css';
 import '@/styles/utilities.css';
+import type { MediaAsset } from '@netmarket/schemas';
 
 interface Props {
   title: string;
   description: string;
   path?: string;
   noindex?: boolean;
+  noindexFollow?: boolean;
   canonicalSiteUrl?: string | undefined;
   structuredData?: Array<Record<string, unknown>>;
+  motionMode?: 'full' | 'light';
+  socialTitle?: string | undefined;
+  socialDescription?: string | undefined;
+  socialImage?: MediaAsset | null | undefined;
+  socialType?: 'website' | 'article';
 }
 
 const {
@@ -23,8 +31,14 @@ const {
   description,
   path = '/',
   noindex = false,
+  noindexFollow = false,
   canonicalSiteUrl,
-  structuredData = []
+  structuredData = [],
+  motionMode = 'full',
+  socialTitle,
+  socialDescription,
+  socialImage,
+  socialType = 'website'
 } = Astro.props;
 const buildSha = import.meta.env.PUBLIC_BUILD_SHA ?? process.env.GITHUB_SHA ?? 'local';
 const buildTime =
@@ -33,7 +47,12 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
 ---
 
 <!doctype html>
-<html lang="it" data-netmarket-build={buildSha} data-netmarket-environment={buildEnvironment}>
+<html
+  lang="it"
+  data-motion-mode={motionMode}
+  data-netmarket-build={buildSha}
+  data-netmarket-environment={buildEnvironment}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -49,9 +68,15 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
       description={description}
       path={path}
       noindex={noindex}
+      noindexFollow={noindexFollow}
       canonicalSiteUrl={canonicalSiteUrl}
       structuredData={structuredData}
+      socialTitle={socialTitle}
+      socialDescription={socialDescription}
+      socialImage={socialImage}
+      socialType={socialType}
     />
+    <TrackingController />
   </head>
   <body>
     <SkipLink />

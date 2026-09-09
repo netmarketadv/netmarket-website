@@ -1,0 +1,96 @@
+---
+import { getPublicEnv } from '@/lib/env';
+
+const env = getPublicEnv();
+const trackingEnabled =
+  env.PUBLIC_DEPLOY_ENV === 'production' &&
+  env.PUBLIC_ANALYTICS_ENABLED &&
+  /^GTM-[A-Z0-9]+$/.test(env.PUBLIC_GTM_ID);
+const gtmId = env.PUBLIC_GTM_ID;
+---
+
+{
+  trackingEnabled && (
+    <>
+      <link rel="preconnect" href="https://www.googletagmanager.com" />
+      <script is:inline define:vars={{ gtmId }}>
+        window.dataLayer = window.dataLayer || [];
+        window.gtag =
+          window.gtag ||
+          function () {
+            window.dataLayer.push(arguments);
+          };
+        window.gtag('consent', 'default', {
+          ad_storage: 'denied',
+          analytics_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          functionality_storage: 'granted',
+          security_storage: 'granted',
+          wait_for_update: 2000
+        });
+        window.dataLayer.push({
+          event: 'netmarket_consent_default',
+          netmarket_environment: 'production'
+        });
+        function loadTagManager() {
+          if (window.__netmarketGtmLoaded) return;
+          window.__netmarketGtmLoaded = true;
+          (function (w, d, s, l, i) {
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            const firstScript = d.getElementsByTagName(s)[0];
+            const script = d.createElement(s);
+            const layer = l !== 'dataLayer' ? '&l=' + l : '';
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
+            firstScript.parentNode.insertBefore(script, firstScript);
+          })(window, document, 'script', 'dataLayer', gtmId);
+        }
+        window.addEventListener(
+          'load',
+          function () {
+            window.setTimeout(loadTagManager, 2500);
+          },
+          { once: true }
+        );
+      </script>
+    </>
+  )
+}
+
+<script>
+  const keys = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_content',
+    'utm_term',
+    'gclid',
+    'fbclid',
+    'ttclid',
+    'oppref'
+  ];
+  const params = new URLSearchParams(window.location.search);
+  const stored = JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}') as Record<
+    string,
+    string
+  >;
+  const next = { ...stored };
+
+  for (const key of keys) {
+    const value = params.get(key);
+    if (value) next[key] = value;
+  }
+
+  if (!next.referrer && document.referrer) {
+    next.referrer = document.referrer;
+  }
+
+  if (!next.sourceUrl) {
+    next.sourceUrl = window.location.href;
+  }
+
+  if (Object.keys(next).length > 0) {
+    sessionStorage.setItem('nm_contact_tracking', JSON.stringify(next));
+  }
+</script>

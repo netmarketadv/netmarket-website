@@ -21,6 +21,7 @@ const footerColumns = [
       ['Home', '/'],
       ['Servizi', '/servizi/'],
       ['Agenzia', '/agenzia/'],
+      ['Lavora con noi', '/lavora-con-noi/'],
       ['Team', '/agenzia/#team'],
       ['Progetti', '/progetti/'],
       ['Insight', '/insight/'],
@@ -57,7 +58,7 @@ const socialLinks = [
           <img src="/netmarket-logo.svg" alt="" width="150" height="43" />
         </a>
         <p>Comunichiamo valore dal 1986, con progetti web, marketing e comunicazione coordinata.</p>
-        <div class="site-footer__social" aria-label="Social Netmarket">
+        <nav class="site-footer__social" aria-label="Social Netmarket">
           {
             socialLinks.map(([label, href, Icon]) => (
               <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
@@ -65,7 +66,7 @@ const socialLinks = [
               </a>
             ))
           }
-        </div>
+        </nav>
       </div>
 
       {
@@ -119,7 +120,7 @@ const socialLinks = [
       <p>
         <span>Lunedì-venerdì<br />9:00-13:00, 14:00-18:00</span>
       </p>
-      <a href="mailto:info@netmarket.it">info@netmarket.it</a>
+      <a href="mailto:segreteria@netmarket.it">segreteria@netmarket.it</a>
     </section>
 
     <div class="site-footer__watermark" aria-hidden="true">

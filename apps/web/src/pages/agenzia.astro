@@ -1,17 +1,26 @@
 ---
+import {
+  IconArrowRight,
+  IconCode,
+  IconMessageCircle,
+  IconRoute,
+  IconTargetArrow
+} from '@tabler/icons-astro';
 import { breadcrumbJsonLd, organizationJsonLd, personJsonLd, webPageJsonLd } from '@netmarket/seo';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseStudyShowcase from '@/components/blocks/CaseStudyShowcase.astro';
+import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import TeamSection from '@/components/blocks/TeamSection.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
-import TeamSection from '@/components/blocks/TeamSection.astro';
-import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
 import { clientLogos } from '@/data/home';
 import { teamMembers } from '@/data/team';
+import { getProjectArchiveData, projectClient, projectPath } from '@/lib/projects/content';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
-const title = 'Agenzia';
+const canonicalSiteUrl = 'https://netmarket.it';
+const title = 'Agenzia di comunicazione e marketing a Padova dal 1986';
 const description =
-  'Netmarket è un’agenzia di comunicazione, web e marketing a Padova attiva dal 1986.';
+  'Netmarket è un’agenzia di comunicazione, marketing e tecnologia a Padova. Dal 1986 affianca aziende e PMI con strategia, creatività, web e sviluppo.';
 const breadcrumb = breadcrumbJsonLd([
   { name: 'Home', url: `${canonicalSiteUrl}/` },
   { name: 'Agenzia', url: `${canonicalSiteUrl}/agenzia/` }
@@ -23,6 +32,17 @@ const pageSchema = webPageJsonLd({
   siteUrl: canonicalSiteUrl,
   robots: 'index, follow'
 });
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  '@id': `${canonicalSiteUrl}/agenzia/#page`,
+  name: title,
+  description,
+  url: `${canonicalSiteUrl}/agenzia/`,
+  mainEntity: { '@id': `${canonicalSiteUrl}/#organization` },
+  about: { '@id': `${canonicalSiteUrl}/#organization` },
+  inLanguage: 'it-IT'
+};
 const organization = organizationJsonLd(canonicalSiteUrl, {
   name: 'Netmarket',
   legalName: 'Netmarket Srl',
@@ -40,6 +60,44 @@ const people = teamMembers.map((person) =>
     image: person.image
   })
 );
+
+const { projects } = await getProjectArchiveData();
+const publishedProjects = projects
+  .filter((project) => project.projectStatus === 'published' && project.cover)
+  .slice(0, 8);
+const heroProjects = publishedProjects.slice(0, 3);
+
+const history = [
+  {
+    label: '1986',
+    title: 'Nasce Netmarket a Padova.',
+    text: 'La storia comincia nella comunicazione tradizionale, tra identità, campagne e strumenti pensati per rendere riconoscibili le aziende.'
+  },
+  {
+    label: 'La svolta digitale',
+    title: 'La comunicazione entra nel web.',
+    text: 'Ai linguaggi e ai media si aggiungono siti, ecommerce e contenuti digitali. Cambiano gli strumenti, resta centrale la qualità del messaggio.'
+  },
+  {
+    label: 'La regia integrata',
+    title: 'I canali diventano un sistema.',
+    text: 'SEO, campagne, social, analytics e sviluppo iniziano a lavorare insieme, dentro percorsi più misurabili e continui.'
+  },
+  {
+    label: 'Oggi',
+    title: 'Tecnologia e comunicazione evolvono insieme.',
+    text: 'Software, automazioni, dati e sistemi AI ampliano ciò che possiamo costruire, senza sostituire pensiero, responsabilità e relazione.'
+  }
+] as const;
+
+const methodSteps = [
+  ['Capire', 'Ascoltiamo persone, contesto, mercato e vincoli reali.'],
+  ['Ordinare', 'Distinguiamo priorità, rumore e dipendenze del progetto.'],
+  ['Definire', 'Costruiamo una direzione condivisa, leggibile e verificabile.'],
+  ['Costruire', 'Design, contenuti, tecnologia e campagne entrano in produzione.'],
+  ['Misurare', 'Dati e feedback mostrano cosa funziona e cosa va corretto.'],
+  ['Migliorare', 'Il sistema evolve nel tempo, senza perdere coerenza.']
+] as const;
 ---
 
 <BaseLayout
@@ -47,85 +105,230 @@ const people = teamMembers.map((person) =>
   description={description}
   path="/agenzia/"
   canonicalSiteUrl={canonicalSiteUrl}
-  structuredData={[breadcrumb, pageSchema, organization, ...people]}
+  structuredData={[breadcrumb, pageSchema, aboutSchema, organization, ...people]}
+  socialTitle="Netmarket, agenzia a Padova dal 1986"
+  socialDescription={description}
 >
   <Section labelledby="agency-title" class="agency-hero">
     <Container wide>
-      <div class="agency-hero__grid">
-        <div data-reveal="line">
-          <p class="nm-meta">Agenzia Netmarket</p>
-          <h1 id="agency-title">Esperienza che continua a evolvere.</h1>
-        </div>
-        <div class="agency-hero__statement" data-reveal="up">
-          <strong>Dal 1986</strong>
+      <div class="agency-hero__copy" data-reveal="line">
+        <p class="nm-meta">Comunicazione, marketing e tecnologia</p>
+        <h1 id="agency-title">
+          Netmarket, agenzia a Padova. <span class="nm-heading-marker nm-heading-marker--strong"
+            >Dal 1986,</span
+          > sempre in evoluzione.
+        </h1>
+        <div class="agency-hero__intro">
           <p>
-            Progettiamo comunicazione, siti, contenuti e marketing digitale con una regia unica.
+            Aiutiamo aziende e PMI a rendere chiaro il proprio valore, unendo pensiero strategico,
+            creatività, contenuti e sviluppo in una sola direzione.
+          </p>
+          <div class="agency-hero__actions">
+            <a class="nm-button nm-button--primary" href="/contatti/">Parliamone</a>
+            <a class="nm-button nm-button--secondary" href="/progetti/">Guarda i progetti</a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="agency-hero__montage"
+        data-reveal="media"
+        role="group"
+        aria-label="Progetti reali Netmarket"
+      >
+        <div class="agency-hero__year" aria-hidden="true">
+          <span>Padova</span>
+          <strong>1986</strong>
+        </div>
+        {
+          heroProjects.map((project, index) => (
+            <a href={projectPath(project.slug)} data-cursor-label="Guarda">
+              <img
+                src={project.cover?.url}
+                alt={project.cover?.alt}
+                width="900"
+                height="675"
+                loading="eager"
+                decoding="async"
+                fetchpriority={index === 0 ? 'high' : undefined}
+                sizes="(max-width: 767px) 88vw, 30vw"
+              />
+              <span>{projectClient(project)}</span>
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <Section labelledby="agency-identity-title" class="agency-intro">
+    <Container>
+      <div class="agency-intro__grid">
+        <h2 id="agency-identity-title" data-reveal="line">
+          Non un reparto isolato. Una <span class="nm-heading-accent">direzione</span> intorno al progetto.
+        </h2>
+        <div class="agency-intro__text" data-reveal="up">
+          <p>
+            Un sito non vive senza contenuti. Una campagna non funziona senza una promessa chiara.
+            Un’identità non regge se strumenti e comportamenti raccontano cose diverse.
+          </p>
+          <p>
+            Per questo lavoriamo come partner, non come somma di fornitori. Mettiamo nello stesso
+            tavolo comunicazione, marketing e tecnologia, così le decisioni diventano più coerenti
+            per chi guida l’azienda e più comprensibili per chi deve sceglierla.
           </p>
         </div>
       </div>
     </Container>
   </Section>
 
-  <Section labelledby="agency-method-title">
-    <Container>
-      <div class="agency-statement" data-reveal="line">
-        <h2 id="agency-method-title">
-          Non una funzione separata. Una squadra intorno al progetto.
-        </h2>
-        <p>
-          Strategia, creatività, tecnologia e marketing lavorano insieme per rendere più chiaro ciò
-          che un’azienda offre, come viene scelta e come cresce nel tempo.
-        </p>
-      </div>
-      <div class="agency-pillars" data-reveal="up" data-reveal-stagger="1">
-        <article>
-          <span>01</span><h3>Analisi</h3><p>
-            Obiettivi, pubblico, canali e vincoli vengono messi in ordine prima di produrre.
+  <Section labelledby="agency-history-title" class="agency-history">
+    <Container wide>
+      <div class="agency-history__layout" data-agency-timeline>
+        <div class="agency-history__lead">
+          <p class="nm-meta">Evoluzione continua</p>
+          <h2 id="agency-history-title" data-reveal="line">
+            Gli strumenti cambiano. Il <span class="nm-heading-marker">principio resta.</span>
+          </h2>
+          <p>
+            Capire il valore di un’azienda e trasformarlo in una presenza riconoscibile. È il filo
+            che collega ogni fase della nostra storia.
           </p>
-        </article>
-        <article>
-          <span>02</span><h3>Sistema</h3><p>
-            Brand, sito, contenuti e campagne vengono progettati come parti della stessa
-            architettura.
-          </p>
-        </article>
-        <article>
-          <span>03</span><h3>Continuità</h3><p>
-            Il progetto resta aggiornabile: dati, CMS, SEO e materiali restano governabili nel
-            tempo.
-          </p>
-        </article>
+        </div>
+        <ol class="agency-history__chapters">
+          {
+            history.map((chapter, index) => (
+              <li data-agency-timeline-step>
+                <div class="agency-history__marker" aria-hidden="true">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <div>
+                  <p>{chapter.label}</p>
+                  <h3>{chapter.title}</h3>
+                  <p>{chapter.text}</p>
+                </div>
+              </li>
+            ))
+          }
+          <span class="agency-history__progress" data-agency-timeline-progress aria-hidden="true"
+          ></span>
+        </ol>
       </div>
     </Container>
   </Section>
 
-  <Section id="team" labelledby="agency-team-title">
+  <Section labelledby="agency-direction-title" class="agency-direction">
+    <Container wide>
+      <div class="agency-direction__header" data-reveal="line">
+        <p class="nm-meta">Una regia, tre prospettive</p>
+        <h2 id="agency-direction-title">
+          Un progetto diventa forte quando le competenze si <span class="nm-heading-accent"
+            >incontrano.</span
+          >
+        </h2>
+      </div>
+      <div class="agency-direction__stage" data-reveal="scale">
+        <div class="agency-direction__field agency-direction__field--communication">
+          <IconMessageCircle stroke={1.5} aria-hidden="true" />
+          <h3>Comunicazione</h3>
+          <p>Identità, messaggi, contenuti e forme che rendono il valore riconoscibile.</p>
+        </div>
+        <div class="agency-direction__field agency-direction__field--marketing">
+          <IconTargetArrow stroke={1.5} aria-hidden="true" />
+          <h3>Marketing</h3>
+          <p>Canali, domanda, campagne e dati che trasformano attenzione in relazione.</p>
+        </div>
+        <div class="agency-direction__field agency-direction__field--technology">
+          <IconCode stroke={1.5} aria-hidden="true" />
+          <h3>Tecnologia</h3>
+          <p>Siti, ecommerce, software e integrazioni che fanno funzionare il sistema.</p>
+        </div>
+        <div class="agency-direction__center" aria-hidden="true">Netmarket</div>
+      </div>
+      <nav class="agency-direction__links" aria-label="Aree di competenza Netmarket">
+        <a href="/servizi/branding-e-comunicazione/">Branding e comunicazione</a>
+        <a href="/servizi/advertising/">Advertising</a>
+        <a href="/servizi/siti-web/">Siti web</a>
+        <a href="/servizi/software-e-integrazioni/">Software e integrazioni</a>
+        <a href="/servizi/">Tutti i servizi <IconArrowRight stroke={1.7} aria-hidden="true" /></a>
+      </nav>
+    </Container>
+  </Section>
+
+  <Section labelledby="agency-method-title" class="agency-method">
+    <Container>
+      <div class="agency-method__header" data-reveal="line">
+        <p class="nm-meta">Il metodo</p>
+        <h2 id="agency-method-title">
+          Prima mettiamo a fuoco. Poi mettiamo in <span class="nm-heading-marker">moto.</span>
+        </h2>
+      </div>
+      <ol class="agency-method__steps" data-reveal="up" data-reveal-stagger="1">
+        {
+          methodSteps.map(([stepTitle, text], index) => (
+            <li>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3 class="nm-heading-o-none">{stepTitle}</h3>
+              <p>{text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <a class="agency-method__link" href="/servizi/">
+        Scopri le competenze
+        <IconArrowRight stroke={1.7} aria-hidden="true" />
+      </a>
+    </Container>
+  </Section>
+
+  {
+    publishedProjects.length > 0 && (
+      <CaseStudyShowcase
+        projects={publishedProjects}
+        titleId="agency-projects-title"
+        prioritizeImages={false}
+      />
+    )
+  }
+
+  <Section id="team" class="home-team-section" labelledby="agency-team-title">
     <Container wide>
       <TeamSection
-        title="Le persone dietro il lavoro."
         titleId="agency-team-title"
-        text="Un team compatto con competenze operative integrate."
+        title="Competenze diverse. Una sola direzione."
+        text="Sviluppo, design, marketing e direzione lavorano dentro lo stesso processo, con responsabilità chiare."
         people={teamMembers}
       />
     </Container>
   </Section>
 
-  <Section labelledby="agency-clients-title" compact>
+  <Section labelledby="agency-clients-title" compact class="agency-clients">
     <Container wide>
       <ClientMarquee
-        title="Clienti e progetti seguiti da Netmarket."
-        text="Una selezione di marchi e realtà presenti nello storico lavori."
+        titleId="agency-clients-title"
+        title="Aziende che ci hanno affidato una parte del loro percorso."
+        text="Marchi nazionali e realtà del territorio, dentro progetti di natura e scala diverse."
         clients={clientLogos}
+        speed="calm"
       />
     </Container>
   </Section>
 
-  <Section compact>
-    <Container>
-      <a class="agency-cta" href="/contatti/" data-reveal="scale">
-        <span>Hai un progetto da mettere in ordine?</span>
-        <strong>Parliamone.</strong>
-      </a>
+  <Section compact labelledby="agency-cta-title" class="agency-cta-section">
+    <Container wide>
+      <div class="agency-cta" data-reveal="scale">
+        <IconRoute stroke={1.6} aria-hidden="true" />
+        <p class="nm-meta">Un progetto da mettere in ordine</p>
+        <h2 id="agency-cta-title">Costruiamo una direzione che possa durare.</h2>
+        <p>
+          Partiamo da obiettivi, vincoli e strumenti già attivi. Poi decidiamo insieme cosa serve
+          davvero.
+        </p>
+        <a class="nm-button nm-button--primary" href="/contatti/">
+          Parliamone
+          <IconArrowRight stroke={1.7} aria-hidden="true" />
+        </a>
+      </div>
     </Container>
   </Section>
 </BaseLayout>

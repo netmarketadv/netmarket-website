@@ -1,17 +1,24 @@
 ---
+import {
+  IconArrowUpRight,
+  IconBuilding,
+  IconClock,
+  IconMail,
+  IconMapPin
+} from '@tabler/icons-astro';
 import { breadcrumbJsonLd, organizationJsonLd, webPageJsonLd } from '@netmarket/seo';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/layout/Container.astro';
-import Section from '@/components/layout/Section.astro';
 import ContactForm from '@/components/forms/ContactForm.astro';
+import Container from '@/components/layout/Container.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const canonicalSiteUrl = 'https://www.netmarket.it';
-const title = 'Contatti';
+const canonicalSiteUrl = 'https://netmarket.it';
+const title = 'Contatti: agenzia marketing e comunicazione a Padova';
 const description =
-  'Contatta Netmarket per siti web, ecommerce, marketing, comunicazione e progetti digitali.';
-const address = 'Viale della Navigazione Interna, 51/b, 35129 Padova PD';
-const email = 'info@netmarket.it';
-const mapsUrl = 'https://share.google/DPsZDzWohdLvBMwmZ';
+  'Contatta Netmarket, agenzia di comunicazione, marketing e tecnologia a Padova. Raccontaci il progetto: individueremo insieme il prossimo passo.';
+const address = 'Viale della Navigazione Interna, 51/b';
+const city = '35129 Padova (PD)';
+const email = 'segreteria@netmarket.it';
+const mapsUrl = 'https://maps.app.goo.gl/S9Gb82NiJrYWJsZ67';
 const breadcrumb = breadcrumbJsonLd([
   { name: 'Home', url: `${canonicalSiteUrl}/` },
   { name: 'Contatti', url: `${canonicalSiteUrl}/contatti/` }
@@ -24,14 +31,45 @@ const pageSchema = {
     siteUrl: canonicalSiteUrl,
     robots: 'index, follow'
   }),
-  '@type': 'ContactPage'
+  '@type': 'ContactPage',
+  mainEntity: { '@id': `${canonicalSiteUrl}/#organization` }
 };
-const organization = organizationJsonLd(canonicalSiteUrl, {
-  name: 'Netmarket',
-  legalName: 'Netmarket Srl',
-  vatId: '03618730281',
-  url: canonicalSiteUrl
-});
+const organization = {
+  ...organizationJsonLd(canonicalSiteUrl, {
+    name: 'Netmarket',
+    legalName: 'Netmarket Srl',
+    vatId: '03618730281',
+    url: canonicalSiteUrl
+  }),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: address,
+    postalCode: '35129',
+    addressLocality: 'Padova',
+    addressRegion: 'PD',
+    addressCountry: 'IT'
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email,
+    contactType: 'customer service',
+    availableLanguage: 'Italian'
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '13:00'
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '14:00',
+      closes: '18:00'
+    }
+  ]
+};
 ---
 
 <BaseLayout
@@ -40,48 +78,268 @@ const organization = organizationJsonLd(canonicalSiteUrl, {
   path="/contatti/"
   canonicalSiteUrl={canonicalSiteUrl}
   structuredData={[breadcrumb, pageSchema, organization]}
+  motionMode="light"
 >
-  <Section labelledby="contact-title" class="contact-hero">
-    <Container wide>
-      <div class="contact-hero__grid">
-        <div data-reveal="line">
-          <p class="nm-meta">Contatti Netmarket</p>
-          <h1 id="contact-title">Raccontaci cosa devi far funzionare.</h1>
-        </div>
-        <p data-reveal="up">
-          Una richiesta chiara ci permette di capire obiettivi, urgenze e priorità prima di proporti
-          il percorso più sensato.
-        </p>
-      </div>
-    </Container>
-  </Section>
+  <main class="contact-page">
+    <section class="contact-hero" aria-labelledby="contact-title">
+      <Container wide>
+        <div class="contact-hero__grid">
+          <header class="contact-hero__copy">
+            <p class="nm-meta" data-reveal="down">Contatti Netmarket</p>
+            <h1 id="contact-title" data-reveal="line">
+              Raccontaci cosa deve <span class="nm-heading-accent">funzionare.</span>
+            </h1>
+            <p class="contact-hero__lead" data-reveal="up">
+              Parlaci dell’obiettivo, del problema o dell’idea da cui vuoi partire. Metteremo
+              insieme le competenze giuste per capire il prossimo passo.
+            </p>
+          </header>
 
-  <Section compact labelledby="contact-form-title">
-    <Container wide>
-      <div class="contact-layout">
-        <div class="contact-panel" data-reveal="up">
-          <h2 id="contact-form-title">Scrivici.</h2>
-          <ContactForm />
+          <div class="contact-hero__form" data-reveal="up" data-reveal-delay="1">
+            <ContactForm />
+          </div>
         </div>
-        <aside class="contact-info" aria-label="Informazioni di contatto" data-reveal="scale">
-          <h2>Netmarket Srl</h2>
-          <dl>
-            <div>
-              <dt>Email</dt>
-              <dd><a href={`mailto:${email}`}>{email}</a></dd>
-            </div>
-            <div>
-              <dt>Indirizzo</dt>
-              <dd>{address}</dd>
-            </div>
-            <div>
-              <dt>P.IVA</dt>
-              <dd>03618730281</dd>
-            </div>
-          </dl>
-          <a class="button button--secondary" href={mapsUrl}>Apri su Google Maps</a>
-        </aside>
-      </div>
-    </Container>
-  </Section>
+      </Container>
+    </section>
+
+    <section class="contact-details" aria-label="Informazioni di contatto e dati societari">
+      <Container wide>
+        <dl class="contact-details__grid" data-reveal="up" data-reveal-stagger="1">
+          <div>
+            <dt><IconMail aria-hidden="true" stroke={1.7} /> Email</dt>
+            <dd><a href={`mailto:${email}`}>{email}</a></dd>
+          </div>
+          <div>
+            <dt><IconMapPin aria-hidden="true" stroke={1.7} /> Sede</dt>
+            <dd>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+                <span>{address}<br />{city}</span>
+                <IconArrowUpRight aria-hidden="true" stroke={1.8} />
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt><IconClock aria-hidden="true" stroke={1.7} /> Orari</dt>
+            <dd>Lunedì-venerdì<br />9:00-13:00 · 14:00-18:00</dd>
+          </div>
+          <div>
+            <dt><IconBuilding aria-hidden="true" stroke={1.7} /> Netmarket Srl</dt>
+            <dd>P.IVA e C.F.<br />03618730281</dd>
+          </div>
+        </dl>
+      </Container>
+    </section>
+  </main>
 </BaseLayout>
+
+<style>
+  .contact-page,
+  .contact-hero,
+  .contact-details {
+    background: #fff;
+  }
+
+  .contact-page {
+    overflow: clip;
+  }
+
+  .contact-hero {
+    padding: clamp(5.25rem, 7vw, 7.5rem) 0 clamp(4rem, 6.5vw, 6.5rem);
+  }
+
+  .contact-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(32rem, 1.18fr);
+    gap: clamp(3rem, 7vw, 8rem);
+    align-items: start;
+  }
+
+  .contact-hero__copy,
+  .contact-hero__form {
+    min-width: 0;
+  }
+
+  .contact-hero__copy {
+    padding-top: 0.3rem;
+  }
+
+  .contact-hero h1 {
+    box-sizing: content-box;
+    max-width: 9ch;
+    margin: var(--nm-heading-gap-sm) 0 0;
+    padding-block: 0.05em;
+    padding-inline-end: 0.08em;
+    font-size: clamp(3.25rem, 5vw, 5.25rem);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: var(--nm-tracking-display);
+    text-wrap: balance;
+  }
+
+  .contact-hero__lead {
+    max-width: 31rem;
+    margin-top: clamp(1.5rem, 2.5vw, 2.25rem);
+    color: var(--nm-color-muted);
+    font-size: clamp(1rem, 1.15vw, 1.15rem);
+    line-height: 1.55;
+  }
+
+  .contact-hero__form {
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .contact-hero__form :global(.contact-form) {
+    margin-top: 0;
+  }
+
+  .contact-details {
+    padding-bottom: clamp(4rem, 7vw, 7rem);
+  }
+
+  .contact-details__grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1.35fr 1fr 0.9fr;
+    margin: 0;
+    padding: clamp(1.5rem, 2.5vw, 2.25rem) 0 0;
+    border-top: 1px solid var(--nm-color-border-strong);
+  }
+
+  .contact-details__grid > div {
+    min-width: 0;
+    padding: 0 clamp(1rem, 2.5vw, 2.5rem);
+    border-left: 1px solid var(--nm-color-border);
+  }
+
+  .contact-details__grid > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .contact-details__grid > div:last-child {
+    padding-right: 0;
+  }
+
+  .contact-details dt {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-small);
+    font-weight: 500;
+  }
+
+  .contact-details dt svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--nm-color-blue);
+    flex: none;
+  }
+
+  .contact-details dd {
+    margin: 0.75rem 0 0;
+    color: var(--nm-color-ink);
+    line-height: 1.5;
+  }
+
+  .contact-details a {
+    color: inherit;
+    text-decoration-color: var(--nm-color-border-strong);
+    text-underline-offset: 0.2em;
+  }
+
+  .contact-details dd a {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .contact-details dd a svg {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.18rem;
+    flex: none;
+    transition: transform var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
+  }
+
+  .contact-details dd a:hover {
+    color: var(--nm-color-blue);
+  }
+
+  .contact-details dd a:hover svg {
+    transform: translate(0.12rem, -0.12rem);
+  }
+
+  @media (max-width: 1024px) {
+    .contact-hero__grid {
+      grid-template-columns: minmax(0, 0.7fr) minmax(28rem, 1.3fr);
+      gap: 3rem;
+    }
+
+    .contact-details__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 2rem;
+    }
+
+    .contact-details__grid > div:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .contact-hero {
+      padding-top: 5rem;
+    }
+
+    .contact-hero__grid {
+      grid-template-columns: 1fr;
+      gap: clamp(3rem, 9vw, 4.5rem);
+    }
+
+    .contact-hero h1 {
+      max-width: 11ch;
+    }
+
+    .contact-hero__lead {
+      max-width: 38rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .contact-hero {
+      padding-bottom: 3.5rem;
+    }
+
+    .contact-hero h1 {
+      max-width: 9ch;
+      font-size: clamp(2.9rem, 13vw, 3.7rem);
+    }
+
+    .contact-details__grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-top: 0;
+    }
+
+    .contact-details__grid > div,
+    .contact-details__grid > div:first-child,
+    .contact-details__grid > div:nth-child(3),
+    .contact-details__grid > div:last-child {
+      padding: 1.2rem 0;
+      border-top: 1px solid var(--nm-color-border);
+      border-left: 0;
+    }
+
+    .contact-details__grid > div:first-child {
+      border-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-details dd a svg {
+      transition: none;
+    }
+  }
+</style>

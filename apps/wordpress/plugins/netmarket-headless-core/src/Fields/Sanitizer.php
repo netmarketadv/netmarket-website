@@ -15,6 +15,7 @@ final class Sanitizer
             'url' => esc_url_raw((string) $value),
             'email' => sanitize_email((string) $value),
             'integer', 'media', 'relation' => absint($value),
+            'media_gallery' => self::sanitizeMediaGallery($value),
             'decimal' => is_numeric($value) ? (float) $value : 0.0,
             'boolean' => (bool) $value,
             'select' => self::sanitizeChoice((string) $value, $options),
@@ -47,6 +48,15 @@ final class Sanitizer
             }
         }
         return array_values(array_unique($ids));
+    }
+
+    /** @return array<int, array{mediaId:int}> */
+    private static function sanitizeMediaGallery(mixed $value): array
+    {
+        return array_map(
+            static fn (int $id): array => ['mediaId' => $id],
+            self::sanitizeIdList($value)
+        );
     }
 
     /** @return string[] */

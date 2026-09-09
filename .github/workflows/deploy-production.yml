@@ -1,0 +1,137 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Scrivi DEPLOY NETMARKET
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build, Audit, Deploy, Smoke
+    if: ${{ inputs.confirm == 'DEPLOY NETMARKET' }}
+    environment: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    env:
+      PUBLIC_SITE_URL: https://netmarket.it
+      PUBLIC_CMS_URL: https://cms.netmarket.it
+      PUBLIC_DEPLOY_ENV: production
+      PUBLIC_ANALYTICS_ENABLED: 'true'
+      PUBLIC_GTM_ID: GTM-K782CJ46
+      PUBLIC_BUILD_SHA: ${{ github.sha }}
+      CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/netmarket/v1/
+      CMS_API_CACHE_DIR: ${{ github.workspace }}/apps/web/.cms-cache/netmarket/v1
+      CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
+      CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
+      TARGET_HOST: netmarket.it
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard production target
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$TARGET_HOST" = "netmarket.it"
+          test "$PUBLIC_SITE_URL" = "https://netmarket.it"
+          test "$PUBLIC_DEPLOY_ENV" = "production"
+
+      - name: Check production secrets
+        run: |
+          missing=0
+          for name in SG_SSH_HOST SG_SSH_PORT SG_SSH_USER SG_SSH_PRIVATE_KEY SG_SSH_KNOWN_HOSTS SG_PRODUCTION_DEPLOY_PATH SG_CMS_WORDPRESS_PATH CMS_BASIC_AUTH_USER CMS_BASIC_AUTH_PASSWORD; do
+            if [ -z "${!name:-}" ]; then echo "::error::Missing production secret: $name"; missing=1; fi
+          done
+          exit "$missing"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+
+      - name: Pull CMS API cache
+        run: node infrastructure/scripts/pull-cms-cache.mjs
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+
+      - name: Stamp build time
+        run: echo "PUBLIC_BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+      - run: pnpm install --frozen-lockfile
+      - name: Essential quality gates
+        run: pnpm check:fast
+      - name: Production build audit
+        run: pnpm audit:production-build
+
+      - name: Production deploy dry-run
+        run: infrastructure/scripts/deploy-production.sh --dry-run --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}
+
+      - name: Deploy production atomically
+        run: infrastructure/scripts/deploy-production.sh --execute --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH"
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}
+
+      - name: Mark deploy completed
+        run: echo "DEPLOY_COMPLETED=true" >> "$GITHUB_ENV"
+
+      - name: Production smoke
+        run: node infrastructure/scripts/smoke-production.mjs
+        env:
+          EXPECTED_BUILD_SHA: ${{ github.sha }}
+      - name: SEO smoke
+        run: node infrastructure/scripts/seo-smoke-production.mjs
+      - name: Validate every legacy redirect
+        run: node infrastructure/scripts/validate-production-redirects.mjs
+
+      - name: Upload redirect report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-redirect-report-${{ github.sha }}
+          path: artifacts/production-redirect-report.*
+          if-no-files-found: ignore
+
+      - name: Automatic rollback after failed post-deploy validation
+        if: ${{ failure() && env.DEPLOY_COMPLETED == 'true' }}
+        run: infrastructure/scripts/rollback-production.sh --execute --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH" --release latest
+        env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}

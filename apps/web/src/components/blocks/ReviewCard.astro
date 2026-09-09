@@ -7,10 +7,7 @@ interface Props {
   index: number;
 }
 
-const {
-  review,
-  index
-} = Astro.props;
+const { review, index } = Astro.props;
 
 const roundedRating = Math.max(1, Math.min(5, Math.round(review.rating)));
 const reviewId = `google-review-${index}`;
@@ -28,15 +25,26 @@ const reviewId = `google-review-${index}`;
   <div class="review-card__top">
     {
       review.avatarUrl ? (
-        <img class="review-card__avatar" src={review.avatarUrl} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+        <img
+          class="review-card__avatar"
+          src={review.avatarUrl}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        />
       ) : (
-        <span class="review-card__avatar review-card__avatar--fallback" aria-hidden="true">{review.author.slice(0, 1)}</span>
+        <span class="review-card__avatar review-card__avatar--fallback" aria-hidden="true">
+          {review.author.slice(0, 1)}
+        </span>
       )
     }
     <div>
       {
         review.authorHref ? (
-          <a href={review.authorHref} target="_blank" rel="noopener noreferrer">{review.author}</a>
+          <a href={review.authorHref} target="_blank" rel="noopener noreferrer">
+            {review.author}
+          </a>
         ) : (
           <strong>{review.author}</strong>
         )
@@ -44,12 +52,22 @@ const reviewId = `google-review-${index}`;
       <span><IconBrandGoogle stroke={1.8} aria-hidden="true" />{review.source}</span>
     </div>
   </div>
-  <div class="review-card__stars" aria-label={`Valutazione: ${roundedRating} su 5`}>
-    {Array.from({ length: roundedRating }).map(() => <IconStarFilled stroke={0} aria-hidden="true" />)}
+  <div class="review-card__stars" role="img" aria-label={`Valutazione: ${roundedRating} su 5`}>
+    {
+      Array.from({ length: roundedRating }).map(() => (
+        <IconStarFilled stroke={0} aria-hidden="true" />
+      ))
+    }
   </div>
   <div class="review-card__body">
     <blockquote id={reviewId} data-review-text-node>{review.text}</blockquote>
-    <button type="button" data-review-open hidden aria-controls="review-modal-title" aria-label={`Leggi tutta la recensione di ${review.author}`}>
+    <button
+      type="button"
+      data-review-open
+      hidden
+      aria-controls="review-modal-title"
+      aria-label={`Leggi tutta la recensione di ${review.author}`}
+    >
       <IconEye stroke={1.8} aria-hidden="true" />
     </button>
   </div>

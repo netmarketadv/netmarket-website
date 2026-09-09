@@ -13,7 +13,7 @@ const serviceImage = (id: number, url: string, alt: string) => ({
   alt,
   width: 1400,
   height: 900,
-  mimeType: 'image/webp'
+  mimeType: url.endsWith('.png') ? 'image/png' : 'image/webp'
 });
 
 const baseUrl = 'https://www.netmarket.it/#contatti';
@@ -30,14 +30,14 @@ const rawServices = [
       'Progettiamo siti web aziendali con struttura editoriale, performance, SEO tecnica e gestione contenuti ordinata.',
     image: serviceImage(
       9101,
-      cmsMedia.projects.albertini,
-      'Anteprima di un progetto sito web Netmarket'
+      cmsMedia.services.websites,
+      'Visual servizio sviluppo e realizzazione siti web Netmarket'
     ),
     hero: {
       image: serviceImage(
         9102,
-        cmsMedia.projects.albertini,
-        'Interfaccia di sito web aziendale progettata da Netmarket'
+        cmsMedia.services.websites,
+        'Visual principale servizio siti web Netmarket'
       )
     },
     valueProps: [
@@ -130,14 +130,14 @@ const rawServices = [
       'Sviluppiamo ecommerce con attenzione a UX, performance, gestione catalogo, SEO e campagne.',
     image: serviceImage(
       9201,
-      cmsMedia.projects.sireneBlu,
-      'Anteprima progetto ecommerce e programma digitale'
+      cmsMedia.services.ecommerce,
+      'Visual servizio sviluppo ecommerce Netmarket'
     ),
     hero: {
       image: serviceImage(
         9202,
-        cmsMedia.projects.sireneBlu,
-        'Visual di progetto ecommerce Netmarket'
+        cmsMedia.services.ecommerce,
+        'Visual principale servizio ecommerce Netmarket'
       )
     },
     valueProps: [
@@ -281,12 +281,12 @@ const rawServices = [
       'SEO tecnica, contenuti e architettura informativa per migliorare visibilità, qualità e continuità organica.',
     excerpt:
       'La SEO entra nel progetto fin dall’inizio: struttura, contenuti, performance e migrazione lavorano insieme.',
-    image: serviceImage(9401, cmsMedia.projects.albertini, 'Analisi SEO e accessibilità per sito web'),
+    image: serviceImage(9401, cmsMedia.services.marketing, 'Visual servizio marketing digitale Netmarket'),
     hero: {
       image: serviceImage(
         9402,
-        cmsMedia.projects.albertini,
-        'Controllo tecnico SEO e qualità del sito'
+        cmsMedia.services.marketing,
+        'Visual principale servizio SEO e marketing digitale Netmarket'
       )
     },
     valueProps: [
@@ -353,12 +353,12 @@ const rawServices = [
       'Campagne digitali e pianificazione pubblicitaria coordinate con sito, creatività, dati e obiettivi commerciali.',
     excerpt:
       'Gestiamo advertising con attenzione a messaggi, landing, tracciamento e ottimizzazione continua.',
-    image: serviceImage(9501, cmsMedia.projects.sireneBlu, 'Campagne advertising e marketing digitale'),
+    image: serviceImage(9501, cmsMedia.services.advertising, 'Visual servizio advertising e pubblicità Netmarket'),
     hero: {
       image: serviceImage(
         9502,
-        cmsMedia.projects.sireneBlu,
-        'Creatività advertising su canali digitali'
+        cmsMedia.services.advertising,
+        'Visual principale servizio advertising Netmarket'
       )
     },
     valueProps: [
@@ -416,12 +416,12 @@ const rawServices = [
       'Gestione social e contenuti per rendere riconoscibile l’azienda con un piano coerente e sostenibile.',
     excerpt:
       'Costruiamo presenza social con strategia, format, produzione contenuti e lettura dei risultati.',
-    image: serviceImage(9601, cmsMedia.projects.progettoe, 'Produzione contenuti social e digitali'),
+    image: serviceImage(9601, cmsMedia.services.social, 'Visual servizio social media management Netmarket'),
     hero: {
       image: serviceImage(
         9602,
-        cmsMedia.projects.progettoe,
-        'Contenuti social coordinati da Netmarket'
+        cmsMedia.services.social,
+        'Visual principale servizio social media Netmarket'
       )
     },
     valueProps: [
@@ -475,14 +475,14 @@ const rawServices = [
       'Lavoriamo su identità, messaggi, materiali commerciali e coerenza tra canali digitali e tradizionali.',
     image: serviceImage(
       9701,
-      cmsMedia.projects.progettoe,
-      'Progetto di branding e comunicazione Netmarket'
+      cmsMedia.services.branding,
+      'Visual servizio comunicazione grafica e branding Netmarket'
     ),
     hero: {
       image: serviceImage(
         9702,
-        cmsMedia.projects.progettoe,
-        'Identità visiva e comunicazione coordinata'
+        cmsMedia.services.branding,
+        'Visual principale servizio branding e comunicazione Netmarket'
       )
     },
     valueProps: [
@@ -604,14 +604,14 @@ const rawServices = [
       'Seguiamo concorsi a premi collegando meccanica, burocrazia, sito, contenuti e comunicazione.',
     image: serviceImage(
       9901,
-      cmsMedia.projects.sireneBlu,
-      'Concorso a premi e iniziativa promozionale'
+      cmsMedia.services.contests,
+      'Visual servizio concorsi a premi Netmarket'
     ),
     hero: {
       image: serviceImage(
         9902,
-        cmsMedia.projects.sireneBlu,
-        'Progetto promozionale gestito da Netmarket'
+        cmsMedia.services.contests,
+        'Visual principale servizio concorsi a premi Netmarket'
       )
     },
     valueProps: [

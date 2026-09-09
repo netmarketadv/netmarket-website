@@ -16,13 +16,32 @@ type ScrollTrigger = {
   getAll: () => Array<{ refresh: () => void }>;
 };
 
+interface GsapMotionOptions {
+  lineOnly?: boolean;
+}
+
 const revealSelector = '[data-reveal]';
 const lineRevealSelector = '[data-reveal="line"]';
 const mediaRevealSelector = '[data-reveal="media"]';
+const headingAccentClasses = [
+  'nm-heading-accent',
+  'nm-heading-muted',
+  'nm-heading-marker',
+  'nm-heading-marker--strong'
+] as const;
+
+type HeadingAccentClass = (typeof headingAccentClasses)[number];
+type TextRun = {
+  start: number;
+  end: number;
+  classes: HeadingAccentClass[];
+};
 
 function delayFor(target: HTMLElement): number {
   const parsed = Number.parseInt(target.dataset.revealDelay ?? '0', 10);
-  const delayIndex = Number.isNaN(parsed) ? 0 : Math.min(Math.max(parsed, 0), motionConfig.maxDelayIndex);
+  const delayIndex = Number.isNaN(parsed)
+    ? 0
+    : Math.min(Math.max(parsed, 0), motionConfig.maxDelayIndex);
   const step = window.innerWidth < 768 ? motionConfig.mobileDelayStepMs : motionConfig.delayStepMs;
   return (delayIndex * step) / 1000;
 }
@@ -51,11 +70,61 @@ function elementIsNearViewport(target: HTMLElement): boolean {
 }
 
 function headingTargets(root: HTMLElement): HTMLElement[] {
-  if (/^H[1-4]$/.test(root.tagName) || root.classList.contains('nm-heading') || root.classList.contains('nm-display-heading')) {
+  if (
+    /^H[1-4]$/.test(root.tagName) ||
+    root.classList.contains('nm-heading') ||
+    root.classList.contains('nm-display-heading')
+  ) {
     return [root];
   }
 
-  return Array.from(root.querySelectorAll<HTMLElement>('h1, h2, h3, h4, .nm-heading, .nm-display-heading'));
+  return Array.from(
+    root.querySelectorAll<HTMLElement>('h1, h2, h3, h4, .nm-heading, .nm-display-heading')
+  );
+}
+
+function inheritedAccentClasses(element: Element | null): HeadingAccentClass[] {
+  const classes = new Set<HeadingAccentClass>();
+  let current: Element | null = element;
+
+  while (current) {
+    headingAccentClasses.forEach((className) => {
+      if (current?.classList.contains(className)) classes.add(className);
+    });
+    current = current.parentElement;
+  }
+
+  return [...classes];
+}
+
+function collectTextRuns(root: HTMLElement): TextRun[] {
+  const runs: TextRun[] = [];
+  let cursor = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    const value = node.textContent ?? '';
+    const classes = inheritedAccentClasses(node.parentElement);
+    if (classes.length > 0 && value.length > 0) {
+      runs.push({ start: cursor, end: cursor + value.length, classes });
+    }
+    cursor += value.length;
+  }
+
+  return runs;
+}
+
+function classesForRange(runs: TextRun[], start: number, end: number): string {
+  const classes = new Set<HeadingAccentClass>();
+
+  runs.forEach((run) => {
+    if (start < run.end && end > run.start) {
+      run.classes.forEach((className) => classes.add(className));
+    }
+  });
+
+  return [...classes].join(' ');
 }
 
 function splitHeadingWords(heading: HTMLElement): HTMLElement[] {
@@ -63,16 +132,22 @@ function splitHeadingWords(heading: HTMLElement): HTMLElement[] {
     return Array.from(heading.querySelectorAll<HTMLElement>('.nm-motion-word'));
   }
 
-  const text = heading.getAttribute('aria-label') ?? heading.textContent ?? '';
+  const text = heading.textContent ?? heading.getAttribute('aria-label') ?? '';
   if (!text.trim()) return [];
 
+  const runs = collectTextRuns(heading);
+  let cursor = 0;
   heading.dataset.motionLineSplit = 'ready';
   heading.innerHTML = text
     .split(/(\s+)/)
     .map((part) => {
+      const start = cursor;
+      const end = start + part.length;
+      cursor = end;
       if (!part) return '';
       if (/^\s+$/.test(part)) return part;
-      return `<span class="nm-motion-word"><span class="nm-motion-word__inner">${styleHeadingText(part)}</span></span>`;
+      const accentClasses = classesForRange(runs, start, end);
+      return `<span class="nm-motion-word"><span class="nm-motion-word__inner${accentClasses ? ` ${accentClasses}` : ''}">${styleHeadingText(part)}</span></span>`;
     })
     .join('');
 
@@ -100,7 +175,14 @@ function initialVarsFor(target: HTMLElement) {
   const variant = target.dataset.reveal;
   if (variant === 'down') return { opacity: 0, y: -18, filter: 'blur(6px)' };
   if (variant === 'scale') return { opacity: 0, y: 18, scale: 0.965, filter: 'blur(8px)' };
-  if (variant === 'media') return { opacity: 0, y: 36, scale: 0.94, clipPath: 'inset(8% round 1.25rem)', filter: 'brightness(0.92) blur(10px)' };
+  if (variant === 'media')
+    return {
+      opacity: 0,
+      y: 36,
+      scale: 0.94,
+      clipPath: 'inset(8% round 1.25rem)',
+      filter: 'brightness(0.92) blur(10px)'
+    };
   if (variant === 'line') return { opacity: 1 };
   if (variant === 'fade') return { opacity: 0 };
   return { opacity: 0, y: 28, filter: 'blur(8px)' };
@@ -108,13 +190,23 @@ function initialVarsFor(target: HTMLElement) {
 
 function finalVarsFor(target: HTMLElement) {
   const variant = target.dataset.reveal;
-  if (variant === 'media') return { opacity: 1, y: 0, scale: 1, clipPath: 'inset(0% round 0rem)', filter: 'brightness(1) blur(0px)' };
+  if (variant === 'media')
+    return {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      clipPath: 'inset(0% round 0rem)',
+      filter: 'brightness(1) blur(0px)'
+    };
   if (variant === 'line') return { opacity: 1 };
   return { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' };
 }
 
-function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger): void {
-  const targets = collectRevealTargets().filter((target) => target.dataset.motionState !== 'revealed');
+function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = false): void {
+  const candidates = lineOnly
+    ? Array.from(document.querySelectorAll<HTMLElement>(lineRevealSelector))
+    : collectRevealTargets();
+  const targets = candidates.filter((target) => target.dataset.motionState !== 'revealed');
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
     target.dataset.motionReveal = 'ready';
@@ -130,7 +222,8 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger): void {
           opacity: 1,
           duration: 0.82,
           ease: 'expo.out',
-          stagger: (index: number, element: Element) => (lineIndexes.get(element as HTMLElement) ?? index) * 0.075,
+          stagger: (index: number, element: Element) =>
+            (lineIndexes.get(element as HTMLElement) ?? index) * 0.075,
           delay: delayFor(target),
           scrollTrigger: {
             trigger: target,
@@ -178,23 +271,27 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger): void {
 }
 
 function enhanceMediaScroll(gsap: Gsap): void {
-  document.querySelectorAll<HTMLElement>('.project-card__media img, .service-tile img, .landscape-cta__image img, .insight-card img').forEach((image) => {
-    gsap.fromTo(
-      image,
-      { scale: 1.035, filter: 'brightness(0.96)' },
-      {
-        scale: 1,
-        filter: 'brightness(1)',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: image,
-          start: 'top 98%',
-          end: 'bottom 18%',
-          scrub: 0.8
+  document
+    .querySelectorAll<HTMLElement>(
+      '.project-card__media img, .service-tile img, .landscape-cta__image img, .insight-card img'
+    )
+    .forEach((image) => {
+      gsap.fromTo(
+        image,
+        { scale: 1.035, filter: 'brightness(0.96)' },
+        {
+          scale: 1,
+          filter: 'brightness(1)',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: image,
+            start: 'top 98%',
+            end: 'bottom 18%',
+            scrub: 0.8
+          }
         }
-      }
-    );
-  });
+      );
+    });
 }
 
 function enhanceCursorPreview(gsap: Gsap): void {
@@ -227,7 +324,11 @@ function enhanceCursorPreview(gsap: Gsap): void {
     card.addEventListener('pointerenter', () => {
       previewImage.src = image.currentSrc || image.src;
       preview.dataset.visible = 'true';
-      gsap.fromTo(preview, { opacity: 0, scale: 0.92, y: '+=10' }, { opacity: 1, scale: 1, y: 0, duration: 0.24, ease: 'power3.out' });
+      gsap.fromTo(
+        preview,
+        { opacity: 0, scale: 0.92, y: '+=10' },
+        { opacity: 1, scale: 1, y: 0, duration: 0.24, ease: 'power3.out' }
+      );
     });
     card.addEventListener('pointerleave', () => {
       preview.dataset.visible = 'false';
@@ -237,40 +338,90 @@ function enhanceCursorPreview(gsap: Gsap): void {
 }
 
 function enhanceScrollProgress(gsap: Gsap): void {
-  document.querySelectorAll<HTMLElement>('.approval-grid article, .process-tabs article').forEach((card, index) => {
+  document
+    .querySelectorAll<HTMLElement>('.approval-grid article, .process-tabs article')
+    .forEach((card, index) => {
+      gsap.fromTo(
+        card,
+        { y: 36, opacity: 0.55 },
+        {
+          y: 0,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 92%',
+            end: 'top 48%',
+            scrub: 0.7
+          },
+          delay: index * 0.02
+        }
+      );
+    });
+}
+
+function enhanceAgencyTimeline(gsap: Gsap): void {
+  const timeline = document.querySelector<HTMLElement>('[data-agency-timeline]');
+  if (!timeline) return;
+  const progress = timeline.querySelector<HTMLElement>('[data-agency-timeline-progress]');
+  const steps = Array.from(timeline.querySelectorAll<HTMLElement>('[data-agency-timeline-step]'));
+
+  if (progress) {
     gsap.fromTo(
-      card,
-      { y: 36, opacity: 0.55 },
+      progress,
+      { scaleY: 0 },
       {
-        y: 0,
-        opacity: 1,
+        scaleY: 1,
         ease: 'none',
         scrollTrigger: {
-          trigger: card,
-          start: 'top 92%',
-          end: 'top 48%',
+          trigger: timeline,
+          start: 'top 62%',
+          end: 'bottom 72%',
           scrub: 0.7
-        },
-        delay: index * 0.02
+        }
+      }
+    );
+  }
+
+  steps.forEach((step) => {
+    gsap.fromTo(
+      step,
+      { opacity: 0.42, y: 36 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.72,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: step,
+          start: 'top 78%',
+          once: true
+        }
       }
     );
   });
 }
 
-export async function initGsapMotion(): Promise<boolean> {
+export async function initGsapMotion(options: GsapMotionOptions = {}): Promise<boolean> {
   if (prefersReducedMotion()) return false;
 
   try {
-    const [gsapModule, scrollTriggerModule] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')]);
+    const [gsapModule, scrollTriggerModule] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger')
+    ]);
     const gsap = gsapModule.gsap as Gsap;
     const ScrollTrigger = scrollTriggerModule.ScrollTrigger as ScrollTrigger;
     gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add('motion-gsap');
-    document.documentElement.dataset.motionEngine = 'gsap';
-    revealWithGsap(gsap, ScrollTrigger);
-    enhanceMediaScroll(gsap);
-    enhanceScrollProgress(gsap);
-    enhanceCursorPreview(gsap);
+    document.documentElement.classList.add(options.lineOnly ? 'motion-gsap-lines' : 'motion-gsap');
+    document.documentElement.dataset.motionEngine = options.lineOnly ? 'gsap-lines' : 'gsap';
+    revealWithGsap(gsap, ScrollTrigger, options.lineOnly);
+    if (!options.lineOnly) {
+      enhanceMediaScroll(gsap);
+      enhanceScrollProgress(gsap);
+      enhanceAgencyTimeline(gsap);
+      enhanceCursorPreview(gsap);
+    }
     window.setTimeout(() => ScrollTrigger.refresh(), 250);
     document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => undefined);
     return true;

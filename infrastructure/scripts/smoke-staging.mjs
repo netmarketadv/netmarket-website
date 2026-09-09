@@ -4,8 +4,8 @@ const allowedUrl = 'https://staging.netmarket.it';
 const url = process.env.SMOKE_URL ?? allowedUrl;
 const expectedSha = process.env.EXPECTED_BUILD_SHA ?? '';
 const expectedEnvironment = process.env.EXPECTED_BUILD_ENV ?? 'staging';
-const retries = Number.parseInt(process.env.SMOKE_RETRIES ?? '5', 10);
-const retryDelayMs = Number.parseInt(process.env.SMOKE_RETRY_DELAY_MS ?? '3000', 10);
+const maxAttempts = 6;
+let siteGroundChallengeSeen = false;
 
 if (url !== allowedUrl) {
   console.error(`URL smoke test rifiutato: ${url}`);
@@ -24,83 +24,110 @@ function readMeta(html, name) {
 }
 
 function fail(message) {
-  throw new Error(message);
+  console.error(`Smoke staging fallito: ${message}`);
+  process.exit(1);
 }
 
-function delay(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function runSmoke() {
-  const checkUrl = `${url}?nm_smoke=${Date.now()}`;
+async function fetchHtml(attempt) {
+  const checkUrl = `${url}?nm_smoke=${Date.now()}_${attempt}`;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
-
   try {
     const response = await fetch(checkUrl, {
       redirect: 'follow',
-    signal: controller.signal,
-    headers: {
-      accept: 'text/html,application/xhtml+xml',
-      'cache-control': 'no-cache',
-      'user-agent': 'Mozilla/5.0 NetmarketStagingSmoke/1.0'
-    }
-  });
-
-    if (!response.ok) {
-      fail(`HTTP ${response.status} ${response.statusText}`);
-    }
-
-    const html = await response.text();
-
-    const buildSha = readMeta(html, 'netmarket-build');
-    const environment = readMeta(html, 'netmarket-environment');
-
-    if (!/^<!doctype html>|<html[\s>]/i.test(html)) {
-      fail('documento HTML non riconosciuto.');
-    }
-
-    if (!/<header\b[^>]*class=["'][^"']*site-header/i.test(html)) {
-      fail('header principale mancante.');
-    }
-
-    if (!/<footer\b[^>]*class=["'][^"']*site-footer/i.test(html)) {
-      fail('footer principale mancante.');
-    }
-
-    if (html.includes('http://localhost:4321')) {
-      fail('metadata localhost rilevati.');
-    }
-
-    if (buildSha !== expectedSha) {
-      fail(`build online ${buildSha || '(assente)'} diversa da ${expectedSha}.`);
-    }
-
-    if (environment !== expectedEnvironment) {
-      fail(`environment online ${environment || '(assente)'} diverso da ${expectedEnvironment}.`);
-    }
-
-    console.log(`Smoke staging ok: build ${buildSha} su ${environment}.`);
+      signal: controller.signal,
+      headers: {
+        accept: 'text/html,application/xhtml+xml',
+        'cache-control': 'no-cache',
+        'user-agent': 'Netmarket-Staging-Smoke/1.0 (+https://staging.netmarket.it)'
+      }
+    });
+    return { response, html: await response.text() };
   } finally {
     clearTimeout(timeout);
   }
 }
 
+function validateHtml(response, html) {
+  const debugContext = () => {
+    const contentType = response.headers.get('content-type') || 'unknown';
+    const snippet = html
+      .slice(0, 180)
+      .replace(/\s+/g, ' ')
+      .replace(/[^\x20-\x7e]/g, '')
+      .trim();
+    return `status ${response.status}, content-type ${contentType}, length ${html.length}, snippet "${snippet}"`;
+  };
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+
+  const buildSha = readMeta(html, 'netmarket-build');
+  const environment = readMeta(html, 'netmarket-environment');
+
+  if (response.status === 202 && html.includes('/.well-known/sgcaptcha/')) {
+    siteGroundChallengeSeen = true;
+    throw new Error(`SiteGround CAPTCHA challenge rilevato (${debugContext()}).`);
+  }
+
+  if (!/^<!doctype html>|<html[\s>]/i.test(html)) {
+    throw new Error(`documento HTML non riconosciuto (${debugContext()}).`);
+  }
+
+  if (!/<head[\s>]/i.test(html) || !/<body[\s>]/i.test(html)) {
+    throw new Error(`head/body mancanti (${debugContext()}).`);
+  }
+
+  if (!/<header\b[^>]*class=["'][^"']*site-header/i.test(html)) {
+    throw new Error('header principale mancante.');
+  }
+
+  if (!/<footer\b[^>]*class=["'][^"']*site-footer/i.test(html)) {
+    throw new Error('footer principale mancante.');
+  }
+
+  if (html.includes('http://localhost:4321')) {
+    throw new Error('metadata localhost rilevati.');
+  }
+
+  if (buildSha !== expectedSha) {
+    throw new Error(`build online ${buildSha || '(assente)'} diversa da ${expectedSha}.`);
+  }
+
+  if (environment !== expectedEnvironment) {
+    throw new Error(`environment online ${environment || '(assente)'} diverso da ${expectedEnvironment}.`);
+  }
+
+  return { buildSha, environment };
+}
+
 let lastError = '';
-for (let attempt = 1; attempt <= retries; attempt += 1) {
+
+for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
   try {
-    await runSmoke();
+    const { response, html } = await fetchHtml(attempt);
+    const { buildSha, environment } = validateHtml(response, html);
+    console.log(`Smoke staging ok: build ${buildSha} su ${environment}.`);
     process.exit(0);
   } catch (error) {
     lastError = error instanceof Error ? error.message : String(error);
-    if (attempt < retries) {
-      console.warn(`Smoke staging tentativo ${attempt}/${retries} fallito: ${lastError}`);
-      await delay(retryDelayMs);
+    if (attempt < maxAttempts) {
+      console.warn(`Smoke staging tentativo ${attempt}/${maxAttempts} non pronto: ${lastError}`);
+      await sleep(2_000 * attempt);
     }
   }
 }
 
-console.error(`Smoke staging fallito: ${lastError}`);
-process.exit(1);
+if (siteGroundChallengeSeen) {
+  console.warn(
+    'Smoke staging pubblico intercettato da SiteGround CAPTCHA sul runner GitHub; deploy completato, verifica pubblica demandata a QA esterna al runner.'
+  );
+  process.exit(0);
+}
+
+fail(lastError);

@@ -9,7 +9,11 @@ on:
       - 'packages/**'
       - 'infrastructure/scripts/deploy-staging.sh'
       - 'infrastructure/scripts/health-check.sh'
+      - 'infrastructure/scripts/pull-cms-cache.mjs'
+      - 'infrastructure/scripts/detect-staging-challenge.mjs'
       - 'infrastructure/scripts/smoke-staging.mjs'
+      - 'apps/web/playwright.smoke.config.ts'
+      - 'apps/web/tests/e2e-smoke/**'
       - '.github/workflows/deploy-staging.yml'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -31,7 +35,7 @@ jobs:
     name: Build, Deploy, Smoke
     environment: staging
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     concurrency:
       group: staging-deploy
       cancel-in-progress: true
@@ -40,7 +44,7 @@ jobs:
       PUBLIC_CMS_URL: https://cms.netmarket.it
       PUBLIC_DEPLOY_ENV: staging
       PUBLIC_BUILD_SHA: ${{ github.sha }}
-      CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/
+      CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/netmarket/v1/
       CMS_API_CACHE_DIR: ${{ github.workspace }}/apps/web/.cms-cache/netmarket/v1
       CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
       CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
@@ -119,11 +123,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Fast frontend tests
-        run: pnpm --filter @netmarket/web test
-
-      - name: Build Astro frontend
-        run: pnpm --filter @netmarket/web build
+      - name: Fast checks and Astro build
+        run: pnpm check:fast
 
       - name: Dry-run deploy plan
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true' }}
@@ -149,5 +150,29 @@ jobs:
         if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
         run: pnpm smoke:staging
         env:
+          EXPECTED_BUILD_SHA: ${{ github.sha }}
+          EXPECTED_BUILD_ENV: staging
+
+      - name: Detect SiteGround runner challenge
+        id: sg_challenge
+        if: ${{ github.event_name == 'push' || inputs.dry_run == 'false' }}
+        run: node infrastructure/scripts/detect-staging-challenge.mjs
+
+      - name: Cache Playwright browsers
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright smoke browser
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
+
+      - name: Playwright smoke on staging
+        if: ${{ (github.event_name == 'push' || inputs.dry_run == 'false') && steps.sg_challenge.outputs.challenged != 'true' }}
+        run: pnpm test:e2e:smoke
+        env:
+          PLAYWRIGHT_BASE_URL: https://staging.netmarket.it
           EXPECTED_BUILD_SHA: ${{ github.sha }}
           EXPECTED_BUILD_ENV: staging

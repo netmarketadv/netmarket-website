@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { basename, resolve } from 'node:path';
-import type { Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
+import { resolve } from 'node:path';
+import type { CaseStudy, Insight, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { insightSchema } from '@netmarket/schemas';
 import { getInsight, getInsights } from '@/lib/api/client';
-import { getPublicEnv } from '@/lib/env';
+import { getProjectArchiveData } from '@/lib/projects/content';
 
 export type InsightSource = 'cms' | 'migration-snapshot';
 
@@ -17,6 +17,13 @@ export interface InsightDetailData {
   insight: Insight;
   source: InsightSource;
   related: RelationSummary[];
+  relatedProjects: CaseStudy[];
+}
+
+export interface InsightCategory {
+  slug: string;
+  name: string;
+  count: number;
 }
 
 type MigrationInsight = {
@@ -50,7 +57,6 @@ const serviceTitles: Record<string, string> = {
 };
 
 let archivePromise: Promise<InsightArchiveData> | undefined;
-let fallbackInsightCache: Insight[] | undefined;
 
 function warningMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -74,8 +80,14 @@ async function loadArchive(): Promise<InsightArchiveData> {
         const next = await getInsights({ page, perPage, sort: 'date' });
         pages.push(next.data);
       }
+      const fallbackBySlug = new Map(
+        fallbackInsights().map((insight) => [insight.slug, insight])
+      );
       return {
-        insights: pages.flat().sort(byDate),
+        insights: pages
+          .flat()
+          .map((insight) => enrichCmsInsight(insight, fallbackBySlug.get(insight.slug)))
+          .sort(byDate),
         totalPages: Math.max(1, first.pagination.totalPages),
         source: 'cms'
       };
@@ -104,52 +116,104 @@ export async function getInsightPage(page = 1): Promise<InsightArchiveData> {
 }
 
 export async function getInsightDetailData(slug: string): Promise<InsightDetailData | undefined> {
-  const archive = await getInsightArchiveData();
-  if (archive.source === 'cms') {
-    try {
-      const insight = await getInsight(slug);
-      return { insight, source: 'cms', related: await relatedFor(slug) };
-    } catch (error) {
-      console.warn(
-        `[insights] CMS insight "${slug}" unavailable, trying snapshot fallback: ${warningMessage(error)}`
-      );
-    }
+  try {
+    const cmsInsight = await getInsight(slug);
+    const fallback = fallbackInsights().find((item) => item.slug === slug);
+    const insight = enrichCmsInsight(cmsInsight, fallback);
+    return {
+      insight,
+      source: 'cms',
+      related: await relatedFor(insight),
+      relatedProjects: await projectsFor(insight)
+    };
+  } catch (error) {
+    console.warn(
+      `[insights] CMS insight "${slug}" unavailable, trying snapshot fallback: ${warningMessage(error)}`
+    );
   }
-  const insights = archive.source === 'migration-snapshot' ? archive.insights : fallbackInsights().sort(byDate);
+  const insights = fallbackInsights().sort(byDate);
   const insight = insights.find((item) => item.slug === slug);
   if (!insight) return undefined;
   return {
     insight,
     source: 'migration-snapshot',
-    related: insights
-      .filter((item) => item.slug !== slug)
-      .slice(0, 3)
-      .map(toRelation)
+    related: rankRelated(insight, insights).slice(0, 3).map(toInsightRelation),
+    relatedProjects: await projectsFor(insight)
   };
 }
 
-async function relatedFor(slug: string): Promise<RelationSummary[]> {
+function enrichCmsInsight(insight: Insight, fallback?: Insight): Insight {
+  if (!fallback) return insight;
+  const image = insight.image ?? fallback.image;
+  return {
+    ...insight,
+    image,
+    content: insight.content || fallback.content,
+    excerpt: insight.excerpt || fallback.excerpt,
+    categories: insight.categories.length > 0 ? insight.categories : fallback.categories,
+    readingTime: insight.readingTime || fallback.readingTime,
+    relatedServices:
+      insight.relatedServices.length > 0 ? insight.relatedServices : fallback.relatedServices,
+    seo: {
+      ...fallback.seo,
+      ...insight.seo,
+      socialImage: insight.seo.socialImage ?? image ?? fallback.seo.socialImage
+    }
+  };
+}
+
+async function relatedFor(current: Insight): Promise<RelationSummary[]> {
   const { insights } = await getInsightArchiveData();
+  return rankRelated(current, insights).slice(0, 3).map(toInsightRelation);
+}
+
+function rankRelated(current: Insight, insights: Insight[]): Insight[] {
+  const categorySlugs = new Set(current.categories.map((category) => category.slug));
+  const serviceSlugs = new Set(current.relatedServices.map((service) => service.slug));
   return insights
-    .filter((insight) => insight.slug !== slug)
-    .slice(0, 3)
-    .map(toRelation);
+    .filter((candidate) => candidate.slug !== current.slug)
+    .map((candidate) => ({
+      candidate,
+      score:
+        candidate.categories.filter((category) => categorySlugs.has(category.slug)).length * 4 +
+        candidate.relatedServices.filter((service) => serviceSlugs.has(service.slug)).length * 3
+    }))
+    .sort((a, b) => b.score - a.score || byDate(a.candidate, b.candidate))
+    .map(({ candidate }) => candidate);
+}
+
+async function projectsFor(insight: Insight): Promise<CaseStudy[]> {
+  const { projects } = await getProjectArchiveData();
+  if (insight.relatedCaseStudies.length > 0) {
+    const selected = new Set(insight.relatedCaseStudies.map((project) => project.slug));
+    const explicit = projects.filter((project) => selected.has(project.slug)).slice(0, 2);
+    if (explicit.length > 0) return explicit;
+  }
+  const services = new Set(insight.relatedServices.map((service) => service.slug));
+  if (services.size === 0) return [];
+  return projects
+    .map((project) => ({
+      project,
+      score: project.services.filter((service) => services.has(service.slug)).length
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.project.priority - b.project.priority)
+    .slice(0, 2)
+    .map(({ project }) => project);
 }
 
 function fallbackInsights(): Insight[] {
-  if (fallbackInsightCache) return fallbackInsightCache;
   const file = resolve(
     process.cwd(),
     '../../data/migrations/insights/insight-transform-dry-run.json'
   );
   const raw = JSON.parse(readFileSync(file, 'utf8')) as MigrationInsight[];
-  fallbackInsightCache = raw.map(toInsight);
-  return fallbackInsightCache;
+  return raw.map(toInsight);
 }
 
 function toInsight(item: MigrationInsight): Insight {
   const image = item.media.find((media) => media.role === 'featured');
-  const asset = image ? mediaAsset(item.id, image.sourceUrl, image.alt || item.title) : null;
+  const asset = image ? mediaAsset(item.id, image.alt || item.title) : null;
   const description = clampText(item.seo.description || item.excerpt || item.title, 190);
   return insightSchema.parse({
     id: item.id,
@@ -186,20 +250,50 @@ function toInsight(item: MigrationInsight): Insight {
   });
 }
 
-function mediaAsset(id: number, sourceUrl: string, alt: string): MediaAsset | null {
-  const env = getPublicEnv();
-  const filename = `${id}-${basename(new URL(sourceUrl).pathname)}`;
+function mediaAsset(id: number, alt: string): MediaAsset | null {
+  const filename = `${id}-cover.webp`;
   const localPath = resolve(process.cwd(), `public/media/insights/legacy/${filename}`);
   if (!existsSync(localPath)) return null;
+  const dimensions = insightImageDimensions[id];
   return {
     id,
-    url: new URL(`/media/insights/legacy/${filename}`, env.PUBLIC_SITE_URL).toString(),
+    url: `/media/insights/legacy/${filename}`,
+    srcset: [800, 1200, 1600]
+      .map((width) =>
+        width === 1600
+          ? `/media/insights/legacy/${filename} ${width}w`
+          : `/media/insights/legacy/${id}-cover-${width}.webp ${width}w`
+      )
+      .join(', '),
     alt,
-    width: null,
-    height: null,
-    mimeType: mimeType(filename)
+    width: dimensions?.[0] ?? null,
+    height: dimensions?.[1] ?? null,
+    mimeType: 'image/webp'
   };
 }
+
+const insightImageDimensions: Record<number, readonly [number, number]> = {
+  720: [1600, 901],
+  959: [1600, 902],
+  962: [1600, 844],
+  966: [1600, 1067],
+  970: [1600, 1067],
+  974: [1600, 1067],
+  983: [1600, 915],
+  2957: [1600, 1200],
+  2981: [1600, 1060],
+  2999: [1600, 1060],
+  3021: [1600, 1060],
+  3028: [1600, 1060],
+  3034: [1600, 1068],
+  3040: [1600, 1245],
+  3050: [1600, 900],
+  3111: [1600, 1067],
+  3123: [1600, 1245],
+  4401: [1600, 900],
+  5264: [1600, 1067],
+  5297: [1600, 1067]
+};
 
 function removeMissingImages(markup: string): string {
   return markup.replace(
@@ -211,7 +305,7 @@ function removeMissingImages(markup: string): string {
   );
 }
 
-function toRelation(insight: Insight): RelationSummary {
+export function toInsightRelation(insight: Insight): RelationSummary {
   return {
     id: insight.id,
     slug: insight.slug,
@@ -225,14 +319,6 @@ function stableId(value: string): number {
   let hash = 0;
   for (const char of value) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   return hash;
-}
-
-function mimeType(filename: string): string {
-  if (filename.endsWith('.svg')) return 'image/svg+xml';
-  if (filename.endsWith('.png')) return 'image/png';
-  if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) return 'image/jpeg';
-  if (filename.endsWith('.webp')) return 'image/webp';
-  return 'application/octet-stream';
 }
 
 function clampText(value: string, maxLength: number): string {
@@ -251,6 +337,25 @@ export function insightPath(slug: string): string {
 
 export function insightDescription(insight: Insight): string {
   return insight.seo.description || insight.excerpt || 'Approfondimento Netmarket.';
+}
+
+export function insightCategories(insights: Insight[]): InsightCategory[] {
+  const categories = new Map<string, InsightCategory>();
+  for (const insight of insights) {
+    for (const category of insight.categories) {
+      const current = categories.get(category.slug);
+      categories.set(category.slug, {
+        slug: category.slug,
+        name: category.name,
+        count: (current?.count ?? 0) + 1
+      });
+    }
+  }
+  return [...categories.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'it'));
+}
+
+export function categoryPath(slug: string): string {
+  return `/insight/categoria/${slug}/`;
 }
 
 export function formatDate(value?: string): string {

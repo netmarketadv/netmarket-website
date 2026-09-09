@@ -27,6 +27,9 @@ const relation = { id: 1, slug: 'siti-web', title: 'Siti web', type: 'nm_service
 describe('shared schemas', () => {
   it('parses media and SEO metadata', () => {
     expect(mediaAssetSchema.parse(image).id).toBe(10);
+    expect(
+      mediaAssetSchema.parse({ ...image, url: '/media/case-studies/legacy/example.webp' }).url
+    ).toBe('/media/case-studies/legacy/example.webp');
     expect(seoMetadataSchema.parse(seo).noindex).toBe(false);
   });
 
@@ -79,8 +82,9 @@ describe('shared schemas', () => {
         projectStatus: 'published',
         services: [relation],
         numericResults: [{ label: 'Conversioni', value: '+292%' }],
+        gallery: [{ media: image, caption: 'Homepage', layoutHint: 'wide' }],
         seo
-      }).services
+      }).gallery
     ).toHaveLength(1);
     expect(
       insightSchema.parse({

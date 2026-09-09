@@ -1,0 +1,12 @@
+---
+interface Props {
+  title: string;
+  count: string;
+  tone: string;
+}
+const { title, count, tone } = Astro.props;
+---
+
+<section>
+  <header><span><i class={`is-${tone}`}></i>{title}</span><b>{count}</b></header><slot />
+</section>

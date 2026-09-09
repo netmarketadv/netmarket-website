@@ -10,24 +10,6 @@ Generated from public read-only REST snapshots. The content is preserved conserv
 - Public legacy author: NetAdmin
 - Person matches: 0 automatic matches
 
-## CMS Import Status
-
-Status: imported to `cms.netmarket.it` on 2026-09-02.
-
-- Imported posts: 26
-- WordPress demo post `Hello world!`: moved to draft
-- Media: imported or reused in the CMS media library
-- Frontend staging: deployed from CMS cache and smoke-tested
-- Related services: deferred until matching `nm_service` posts exist in the CMS; source slugs are preserved in `nmhc_migration_related_service_slugs`
-
-Operational importer:
-
-```sh
-pnpm migration:insights:cms
-```
-
-Use `--dry-run`, `--skip-media` and `--force` for controlled re-runs.
-
 ## Manual Review
 
 - Cosa fa una Web Agency?: missing_featured_image

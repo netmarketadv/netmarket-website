@@ -1,0 +1,142 @@
+---
+import {
+  IconArrowDown,
+  IconCode,
+  IconMessageCircle,
+  IconPalette,
+  IconTargetArrow
+} from '@tabler/icons-astro';
+import { breadcrumbJsonLd, webPageJsonLd } from '@netmarket/seo';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CareerForm from '@/components/forms/CareerForm.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import { teamMembers } from '@/data/team';
+
+const canonicalSiteUrl = 'https://netmarket.it';
+const title = 'Lavora con noi a Padova';
+const description =
+  'Scopri come si lavora in Netmarket e invia una candidatura spontanea per design, sviluppo, marketing, contenuti e organizzazione.';
+const breadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: `${canonicalSiteUrl}/` },
+  { name: 'Agenzia', url: `${canonicalSiteUrl}/agenzia/` },
+  { name: 'Lavora con noi', url: `${canonicalSiteUrl}/lavora-con-noi/` }
+]);
+const pageSchema = webPageJsonLd({
+  title,
+  description,
+  canonicalPath: '/lavora-con-noi/',
+  siteUrl: canonicalSiteUrl,
+  robots: 'index, follow'
+});
+
+const disciplines = [
+  [IconPalette, 'Design e comunicazione', 'Identità, interfacce, materiali e linguaggi visivi.'],
+  [IconCode, 'Sviluppo', 'Siti, ecommerce, software, integrazioni e automazioni.'],
+  [IconTargetArrow, 'Marketing', 'SEO, advertising, social, contenuti e misurazione.'],
+  [IconMessageCircle, 'Organizzazione', 'Ascolto, priorità, relazione e continuità del progetto.']
+] as const;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path="/lavora-con-noi/"
+  canonicalSiteUrl={canonicalSiteUrl}
+  structuredData={[breadcrumb, pageSchema]}
+  socialTitle="Lavora con Netmarket"
+  socialDescription={description}
+  motionMode="light"
+>
+  <Section labelledby="career-title" class="career-hero">
+    <Container wide>
+      <div class="career-hero__copy" data-reveal="line">
+        <p class="nm-meta">Lavora con Netmarket</p>
+        <h1 id="career-title">
+          Il tuo lavoro conta. Anche come lo <span
+            class="nm-heading-marker nm-heading-marker--strong">costruisci.</span
+          >
+        </h1>
+        <div class="career-hero__intro">
+          <p>
+            A Padova lavoriamo su comunicazione, marketing e tecnologia come parti dello stesso
+            progetto. Cerchiamo persone curiose, precise e disposte a confrontarsi sul lavoro vero.
+          </p>
+          <a class="nm-button nm-button--primary" href="#candidatura">
+            Presentati
+            <IconArrowDown stroke={1.7} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+      <div
+        class="career-hero__people"
+        data-reveal="media"
+        role="group"
+        aria-label="Il team Netmarket"
+      >
+        {
+          teamMembers.map((person) => (
+            <figure>
+              <img
+                src={person.image}
+                alt={person.imageAlt}
+                width="900"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 767px) 42vw, 18vw"
+                style={`object-position: ${person.imagePosition};`}
+              />
+            </figure>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <Section labelledby="career-disciplines-title" class="career-disciplines">
+    <Container wide>
+      <div class="career-disciplines__header" data-reveal="line">
+        <p class="nm-meta">Competenze che si incontrano</p>
+        <h2 id="career-disciplines-title">
+          Cerchiamo punti di vista capaci di lavorare <span class="nm-heading-marker">insieme.</span
+          >
+        </h2>
+      </div>
+      <div class="career-disciplines__list" data-reveal="up" data-reveal-stagger="1">
+        {
+          disciplines.map(([Icon, disciplineTitle, text]) => (
+            <article>
+              <Icon stroke={1.55} aria-hidden="true" />
+              <h3>{disciplineTitle}</h3>
+              <p>{text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <Section id="candidatura" labelledby="career-application-title" class="career-application">
+    <Container wide>
+      <div class="career-application__layout">
+        <div class="career-application__copy" data-reveal="line">
+          <p class="nm-meta">Candidatura spontanea</p>
+          <h2 id="career-application-title">
+            Raccontaci cosa sai fare. E cosa vorresti <span class="nm-heading-accent"
+              >costruire.</span
+            >
+          </h2>
+          <p>
+            In questo momento non pubblichiamo posizioni aperte. Leggiamo però le candidature
+            spontanee quando mostrano competenze, pensiero e un interesse concreto per il nostro
+            modo di lavorare.
+          </p>
+        </div>
+        <div class="career-application__form" data-reveal="up">
+          <CareerForm />
+        </div>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

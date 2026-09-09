@@ -1,0 +1,14 @@
+---
+interface Props {
+  row: string;
+  title: string;
+  detail: string;
+  tone: string;
+  fresh?: boolean;
+}
+const { row, title, detail, tone, fresh = false } = Astro.props;
+---
+
+<article class:list={[`is-${tone}`, fresh && 'nod-calendar__new']} style={`--event-row:${row}`}>
+  <b>{title}</b><small>{detail}</small>
+</article>

@@ -22,29 +22,57 @@ const hasReviews = reviews.length > 0;
         </div>
       </div>
 
-      <div class="reviews-carousel__controls" aria-label="Navigazione recensioni">
-        <button class="reviews-carousel__arrow" type="button" data-reviews-prev aria-label="Recensione precedente">
+      <div class="reviews-carousel__controls" role="group" aria-label="Navigazione recensioni">
+        <button
+          class="reviews-carousel__arrow"
+          type="button"
+          data-reviews-prev
+          aria-label="Recensione precedente"
+        >
           <IconArrowLeft stroke={1.8} aria-hidden="true" />
         </button>
-        <button class="reviews-carousel__arrow" type="button" data-reviews-next aria-label="Recensione successiva">
+        <button
+          class="reviews-carousel__arrow"
+          type="button"
+          data-reviews-next
+          aria-label="Recensione successiva"
+        >
           <IconArrowRight stroke={1.8} aria-hidden="true" />
         </button>
       </div>
 
       <dialog class="review-modal" data-review-modal aria-labelledby="review-modal-title">
         <div class="review-modal__panel">
-          <button class="review-modal__close" type="button" data-review-modal-close aria-label="Chiudi recensione">
+          <button
+            class="review-modal__close"
+            type="button"
+            data-review-modal-close
+            aria-label="Chiudi recensione"
+          >
             <IconX stroke={1.8} aria-hidden="true" />
           </button>
           <div class="review-modal__identity">
-            <img data-review-modal-avatar alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+            <img
+              data-review-modal-avatar
+              alt=""
+              loading="lazy"
+              decoding="async"
+              referrerpolicy="no-referrer"
+            />
             <div>
-              <h3 id="review-modal-title" data-review-modal-author>Recensione</h3>
+              <h3 id="review-modal-title" data-review-modal-author>
+                Recensione
+              </h3>
               <p data-review-modal-source>Google</p>
             </div>
           </div>
-          <div class="review-modal__stars" data-review-modal-stars aria-label="Valutazione: 5 su 5"></div>
-          <blockquote data-review-modal-text></blockquote>
+          <div
+            class="review-modal__stars"
+            data-review-modal-stars
+            role="img"
+            aria-label="Valutazione: 5 su 5"
+          />
+          <blockquote data-review-modal-text />
         </div>
       </dialog>
     </div>

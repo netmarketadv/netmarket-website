@@ -26,7 +26,7 @@ Endpoint pubblici read-only:
 
 Gli endpoint pubblici sono read-only, non espongono utenti, email o metadata amministrativi. Pagination con `page` e `per_page` o `perPage`, massimo 50.
 
-Eccezione operativa: `POST /forms/contact` e pubblico per il form contatti, valida server-side, usa honeypot e rate limit, e invia la richiesta a `admin_email`.
+Eccezione operativa: `POST /forms/contact` e pubblico per il form contatti, valida server-side, usa honeypot e rate limit, e invia la richiesta a `segreteria@netmarket.it` con CC a `enrico@netmarket.it`. Il frontend non invia ne controlla i destinatari.
 
 In staging il dominio CMS puo essere protetto da HTTP Basic Auth. Il build Astro supporta `CMS_BASIC_AUTH_USER` e `CMS_BASIC_AUTH_PASSWORD` come credenziali server-only per leggere gli endpoint durante la generazione statica. Se e disponibile `CMS_BUILD_TOKEN`, il token applicativo ha priorita sull'header Basic.
 
@@ -69,6 +69,8 @@ Le immagini includono `id`, `url`, `alt`, `width`, `height`, `mimeType`, `srcset
 Case Study detail include anche `additionalContent` quando una migrazione legacy deve preservare testo non classificabile con sicurezza nelle sezioni strutturate. I metadata tecnici `migration_*` restano admin-only e non vengono esposti nelle API pubbliche.
 
 Insight detail include `content`, `publishedAt`, `modifiedAt`, `categories`, `authorPerson`, `readingTime`, stato featured/priority e relazioni verso servizi, case study e risorse.
+
+Case study detail include narrativa strutturata, `qualitativeResult`, metriche verificate, gallery normalizzata con asset media e `relatedCaseStudies`. Il frontend usa le relazioni esplicite quando presenti e applica un fallback per affinità solo durante la build.
 
 Endpoint admin autenticato:
 
