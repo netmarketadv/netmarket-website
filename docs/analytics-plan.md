@@ -39,13 +39,14 @@ una seconda conversione. `contact_form_submit` misura il tentativo, non il risul
 ## Configurazione GTM richiesta
 
 1. Iubenda Privacy Controls and Cookie Solution viene inizializzata direttamente nell'`head`,
-   prima di GTM, aggiorna Consent Mode v2 ed emette `iubenda_gtm_consent_event`.
+   prima di GTM, aggiorna Consent Mode v2 ed emette `iubenda_gtm_consent_event`. I callback
+   `onPreferenceExpressed` e `onConsentRead` accodano `netmarket_consent_ready` dopo che la CMP ha
+   consolidato la scelta, anche nelle visite successive.
 2. Il Google tag GA4 usa `G-DHXW4WZ5XP`, tutte le pagine, con i consent check integrati.
 3. Il Google tag Ads usa `AW-16639879288`, tutte le pagine, con i consent check integrati.
 4. Il Conversion Linker usa tutte le pagine e richiede `ad_storage`.
-5. Meta Pixel e ogni Custom HTML non Google devono richiedere `ad_storage`. Possono ascoltare
-   `All Pages` per il consenso gia memorizzato e `iubenda_gtm_consent_event` per una scelta fatta
-   nella visita corrente, con firing limitato a una volta per pagina.
+5. Meta Pixel e ogni Custom HTML non Google devono richiedere `ad_storage`, ascoltare soltanto
+   `netmarket_consent_ready` e avere firing limitato a una volta per pagina.
 6. Gli eventi applicativi, eccetto `generate_lead`, vengono inviati al Google tag dal dispatcher
    tipizzato del frontend. Non creare tag GA4 duplicati per gli stessi eventi.
 7. Marcare `generate_lead` come key event in GA4 e importarlo una sola volta in Google Ads. Non
