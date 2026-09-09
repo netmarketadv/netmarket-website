@@ -663,6 +663,8 @@ test('homepage polish keeps key sections aligned and manually scrollable', async
       caseSliderOverflow: caseSlider ? window.getComputedStyle(caseSlider).overflowX : '',
       caseSliderScrollLeft: caseSlider?.scrollLeft ?? 0,
       caseTrackAnimation: caseTrack ? window.getComputedStyle(caseTrack).animationName : '',
+      caseSliderTouchAction: caseSlider ? window.getComputedStyle(caseSlider).touchAction : '',
+      caseSliderReady: caseSlider?.dataset.infiniteRailReady,
       caseTextAlign: caseBody ? window.getComputedStyle(caseBody).textAlign : '',
       methodBackground: methodSection ? window.getComputedStyle(methodSection).backgroundColor : '',
       ctaSectionBackground: ctaSection ? window.getComputedStyle(ctaSection).backgroundColor : '',
@@ -681,7 +683,9 @@ test('homepage polish keeps key sections aligned and manually scrollable', async
 
   expect(polishState.caseSliderOverflow).toBe('auto');
   expect(polishState.caseSliderScrollLeft).toBeGreaterThan(0);
-  expect(polishState.caseTrackAnimation).toBe('nm-case-slider');
+  expect(polishState.caseTrackAnimation).toBe('none');
+  expect(polishState.caseSliderTouchAction).toMatch(/pan-y|manipulation/);
+  expect(polishState.caseSliderReady).toBe('true');
   expect(polishState.caseTextAlign).toBe('left');
   expect(polishState.methodBackground).toBe('rgb(255, 255, 255)');
   expect(polishState.ctaSectionBackground).toBe('rgb(255, 255, 255)');
@@ -723,7 +727,46 @@ test('case study slider remains stable on mobile touch viewports', async ({ brow
   expect(state?.animationName).toBe('none');
   expect(state?.sliderMask).toBe('none');
   expect(state?.imageVisible).toBe(true);
+  await expect(page.locator('.home-case-slider')).toHaveCSS(
+    'touch-action',
+    /pan-y|manipulation/
+  );
   await context.close();
+});
+
+test('case study slider supports mouse drag and wraps without reaching an end', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const slider = page.locator('.home-case-slider');
+  await slider.scrollIntoViewIfNeeded();
+  await expect(slider).toHaveAttribute('data-infinite-rail-ready', 'true');
+
+  const box = await slider.boundingBox();
+  expect(box).not.toBeNull();
+  if (!box) return;
+
+  const beforeDrag = await slider.evaluate((element) => element.scrollLeft);
+  await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.5);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.5, { steps: 8 });
+  await page.mouse.up();
+  const afterDrag = await slider.evaluate((element) => element.scrollLeft);
+  expect(afterDrag).toBeGreaterThan(beforeDrag + 40);
+
+  const wrapped = await slider.evaluate(async (element) => {
+    const track = element.querySelector<HTMLElement>('[data-infinite-rail-track]');
+    const first = track?.firstElementChild as HTMLElement | null;
+    const clone = track?.querySelector<HTMLElement>('[data-infinite-rail-clone-start]');
+    if (!first || !clone) return null;
+    const loopWidth = clone.offsetLeft - first.offsetLeft;
+    element.scrollLeft = loopWidth + 80;
+    element.dispatchEvent(new Event('scroll'));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return { loopWidth, scrollLeft: element.scrollLeft };
+  });
+
+  expect(wrapped).not.toBeNull();
+  expect(wrapped?.scrollLeft).toBeGreaterThan(20);
+  expect(wrapped?.scrollLeft).toBeLessThan(wrapped?.loopWidth ?? 0);
 });
 
 test('client marquee respects reduced motion', async ({ browser }) => {
@@ -825,9 +868,9 @@ test('motion reveal uses the enhanced animation engine', async ({ page }) => {
 
   if (engine === 'gsap') {
     await expect.poll(() => page.locator('.nm-motion-word__inner').count()).toBeGreaterThan(8);
-    await expect(page.locator('.home-case-slider__track')).toHaveCSS(
-      'animation-name',
-      'nm-case-slider'
+    await expect(page.locator('.home-case-slider')).toHaveAttribute(
+      'data-infinite-rail-ready',
+      'true'
     );
     await expect.poll(() => visiblePreset('up')).toMatchObject({ animationName: 'none' });
   } else {

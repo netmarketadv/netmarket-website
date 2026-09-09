@@ -86,7 +86,7 @@ Attributi supportati:
 - Mobile: niente magnetic e niente cursor label, durata/distanza ridotte.
 - Media scroll: immagini importanti possono avere scale/brightness scrub leggero, senza pinning obbligatorio e senza bloccare la navigazione.
 - Services: l'archivio usa reveal progressivo sulle righe del service index; il dettaglio usa line reveal sull'H1, media reveal sul visual, stagger leggero su processo e related content.
-- Rail e carousel: lo scorrimento manuale nativo resta sempre disponibile; autoplay e animazioni si fermano durante hover, focus o interazione e non sono essenziali al contenuto.
+- Rail e carousel: lo scorrimento manuale nativo resta sempre disponibile, incluso lo scroll verticale quando un gesto touch nasce sul rail. I rail continui supportano drag mouse e normalizzano la posizione senza un bordo finale; autoplay e animazioni si fermano durante hover, focus o interazione e non sono essenziali al contenuto.
 - Case study: media e capitoli entrano con i preset esistenti; nessun effetto deve alterare crop, aspect ratio o ordine narrativo.
 - Timeline Agenzia: una sola linea di progresso con scrub leggero e capitoli in ingresso; niente pinning e niente scroll-jacking.
 

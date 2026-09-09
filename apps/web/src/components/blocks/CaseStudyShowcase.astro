@@ -35,9 +35,11 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
         class="home-case-slider"
         role="region"
         aria-label="Slider case study Netmarket"
+        tabindex="0"
+        data-infinite-rail
         data-reveal="up"
       >
-        <div class="home-case-slider__track">
+        <div class="home-case-slider__track" data-infinite-rail-track>
           {
             [...projects, ...projects].map((project, index) => (
               <a
@@ -48,6 +50,9 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
                   index % 5 === 2 && 'home-case-card--wide'
                 ]}
                 href={projectPath(project.slug)}
+                aria-hidden={index >= projects.length ? 'true' : undefined}
+                tabindex={index >= projects.length ? -1 : undefined}
+                data-infinite-rail-clone-start={index === projects.length ? '' : undefined}
                 data-cursor-label="Guarda"
               >
                 <div class="home-case-card__media">
@@ -74,3 +79,9 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
     </Stack>
   </Container>
 </Section>
+
+<script>
+  import { initInfiniteHorizontalRails } from '@/lib/ui/infinite-horizontal-rail';
+
+  initInfiniteHorizontalRails();
+</script>
