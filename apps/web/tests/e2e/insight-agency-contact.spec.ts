@@ -299,7 +299,56 @@ test.describe('insight, agency and contact', () => {
         await page.evaluate(() => sessionStorage.getItem('nm_test_contact_events') || '[]')
       ) as string[]
     ).toEqual(expect.arrayContaining(['contact_form_submit', 'contact_form_success']));
+    expect(
+      await page.evaluate(
+        () => window.dataLayer?.filter((item) => item.event === 'generate_lead') ?? []
+      )
+    ).toEqual([
+      expect.objectContaining({
+        event: 'generate_lead',
+        form_id: 'contact-page',
+        lead_type: 'contact'
+      })
+    ]);
     expect(errors).toEqual([]);
+  });
+
+  test('publishes privacy-safe page context and delegated interaction events', async ({ page }) => {
+    await page.goto('/servizi/siti-web/', { waitUntil: 'domcontentloaded' });
+
+    expect(
+      await page.evaluate(() => window.dataLayer?.find((item) => item.event === 'page_context'))
+    ).toMatchObject({
+      page_path: '/servizi/siti-web/',
+      page_type: 'service',
+      content_slug: 'siti-web'
+    });
+    expect(
+      await page.evaluate(() => window.dataLayer?.find((item) => item.event === 'service_view'))
+    ).toMatchObject({ service_slug: 'siti-web' });
+
+    await page
+      .locator('main .nm-button')
+      .first()
+      .evaluate((element) => {
+        element.addEventListener('click', (event) => event.preventDefault(), { once: true });
+        (element as HTMLElement).click();
+      });
+    expect(
+      await page.evaluate(() => window.dataLayer?.find((item) => item.event === 'cta_click'))
+    ).toMatchObject({ cta_location: 'main' });
+
+    await page.goto('/contatti/', { waitUntil: 'domcontentloaded' });
+    await page
+      .getByRole('link', { name: 'segreteria@netmarket.it' })
+      .first()
+      .evaluate((element) => {
+        element.addEventListener('click', (event) => event.preventDefault(), { once: true });
+        (element as HTMLElement).click();
+      });
+    expect(
+      await page.evaluate(() => window.dataLayer?.find((item) => item.event === 'contact_click'))
+    ).toMatchObject({ contact_method: 'email' });
   });
 
   test('keeps contact form data visible when backend rejects submission', async ({ page }) => {

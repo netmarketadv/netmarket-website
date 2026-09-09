@@ -340,6 +340,7 @@ const interestOptions = [
         elapsedMs: Date.now() - startedAt
       });
       pushEvent({ event: 'contact_form_success', form_id: 'contact-page' });
+      sessionStorage.setItem('nm_generate_lead_pending', 'contact-page');
       button.dataset.state = 'success';
       buttonLabel.textContent = 'Richiesta inviata';
       status.textContent = 'Richiesta inviata correttamente. Ti portiamo alla conferma.';
