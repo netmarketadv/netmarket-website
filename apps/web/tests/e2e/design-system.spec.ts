@@ -74,6 +74,11 @@ test('real forms and CTA panels share their visual contracts', async ({ page }) 
   ]) {
     await page.goto(route);
     await expect(page.locator('.nm-cta')).toHaveCount(1);
+    const colors = await page.locator('.nm-cta').evaluate((el) => ({
+      panel: getComputedStyle(el).color,
+      heading: getComputedStyle(el.querySelector('h2')!).color
+    }));
+    expect(colors.heading).toBe(colors.panel);
     await expect(page.locator('.nm-cta .nm-button')).toHaveAttribute('href', '/contatti/');
   }
 });

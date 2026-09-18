@@ -142,6 +142,7 @@
   min-width: 0;
 }
 .nm-cta h2 {
+  color: inherit;
   max-width: 20ch;
   font-size: var(--nm-text-h2);
   font-weight: var(--nm-weight-medium);
