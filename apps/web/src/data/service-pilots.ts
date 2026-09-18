@@ -448,7 +448,7 @@ export const servicePilots: Record<string, ServicePilotContent> = {
       },
       {
         label: 'Proof CRM',
-        value: 'VENITALY',
+        value: 'Venitaly',
         context: 'Caso studio CRM custom, manutenzione e supporto applicativo.'
       }
     ],

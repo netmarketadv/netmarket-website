@@ -17,9 +17,9 @@ const { sections } = Astro.props;
           Il progetto
         </h2>
         <div class="case-story__list">
-          {sections.map((section, index) => (
+          {sections.map((section) => (
             <article
-              class:list={['case-story__item', index % 2 === 1 && 'case-story__item--offset']}
+              class="case-story__item"
               data-reveal="up"
             >
               <p>{section.eyebrow}</p>
@@ -48,9 +48,6 @@ const { sections } = Astro.props;
     grid-template-columns: minmax(8rem, 0.42fr) minmax(0, 1fr);
     gap: clamp(2rem, 6vw, 7rem);
     max-width: 62rem;
-  }
-  .case-story__item--offset {
-    margin-left: auto;
   }
   .case-story__item > p {
     margin: 0.3rem 0 0;
@@ -83,9 +80,6 @@ const { sections } = Astro.props;
     .case-story__item {
       grid-template-columns: 1fr;
       gap: 0.85rem;
-    }
-    .case-story__item--offset {
-      margin-left: 0;
     }
     h3 {
       font-size: clamp(2.1rem, 10.5vw, 3.15rem);

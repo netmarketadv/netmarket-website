@@ -129,7 +129,7 @@ function classesForRange(runs: TextRun[], start: number, end: number): string {
 
 function splitHeadingWords(heading: HTMLElement): HTMLElement[] {
   if (heading.dataset.motionLineSplit === 'ready') {
-    return Array.from(heading.querySelectorAll<HTMLElement>('.nm-motion-word'));
+    return Array.from(heading.querySelectorAll<HTMLElement>('.nm-motion-word__inner'));
   }
 
   const text = heading.textContent ?? heading.getAttribute('aria-label') ?? '';
@@ -225,6 +225,12 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
           stagger: (index: number, element: Element) =>
             (lineIndexes.get(element as HTMLElement) ?? index) * 0.075,
           delay: delayFor(target),
+          onComplete: () => {
+            gsap.set(words, { clearProps: 'transform,opacity' });
+            headings.forEach((heading) => {
+              heading.dataset.motionLineComplete = 'true';
+            });
+          },
           scrollTrigger: {
             trigger: target,
             start: 'top 94%',
@@ -255,7 +261,7 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
         target.classList.add('is-visible');
       },
       onComplete: () => {
-        target.style.removeProperty('filter');
+        gsap.set(target, { clearProps: 'clipPath,filter,transform' });
       }
     });
   });
@@ -272,9 +278,7 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
 
 function enhanceMediaScroll(gsap: Gsap): void {
   document
-    .querySelectorAll<HTMLElement>(
-      '.project-card__media img, .service-tile img, .landscape-cta__image img, .insight-card img'
-    )
+    .querySelectorAll<HTMLElement>('.service-tile img, .landscape-cta__image img')
     .forEach((image) => {
       gsap.fromTo(
         image,
@@ -306,12 +310,13 @@ function enhanceCursorPreview(gsap: Gsap): void {
   preview.append(previewImage);
   document.body.append(preview);
 
-  const quickX = gsap.quickTo(preview, 'x', { duration: 0.45, ease: 'power3.out' });
-  const quickY = gsap.quickTo(preview, 'y', { duration: 0.45, ease: 'power3.out' });
+  const quickX = gsap.quickTo(preview, 'x', { duration: 0.19, ease: 'power3.out' });
+  const quickY = gsap.quickTo(preview, 'y', { duration: 0.19, ease: 'power3.out' });
 
   document.addEventListener(
     'pointermove',
     (event) => {
+      if (preview.dataset.visible !== 'true') return;
       quickX(event.clientX + 24);
       quickY(event.clientY + 24);
     },
@@ -321,13 +326,14 @@ function enhanceCursorPreview(gsap: Gsap): void {
   cards.forEach((card) => {
     const image = card.querySelector<HTMLImageElement>('img');
     if (!image) return;
-    card.addEventListener('pointerenter', () => {
+    card.addEventListener('pointerenter', (event) => {
+      gsap.set(preview, { x: event.clientX + 24, y: event.clientY + 24 });
       previewImage.src = image.currentSrc || image.src;
       preview.dataset.visible = 'true';
       gsap.fromTo(
         preview,
-        { opacity: 0, scale: 0.92, y: '+=10' },
-        { opacity: 1, scale: 1, y: 0, duration: 0.24, ease: 'power3.out' }
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 0.19, ease: 'power3.out', overwrite: 'auto' }
       );
     });
     card.addEventListener('pointerleave', () => {

@@ -11,7 +11,7 @@ const cmsUploadsBase = 'https://cms.netmarket.it/wp-content/uploads/2026/09';
 
 export const cmsMedia = {
   projects: {
-    sireneBlu: `${cmsUploadsBase}/sviluppo-app-sirene-blu-netmarket.webp`,
+    sireneBlu: '/media/case-studies/sirene-blu-app/01.webp',
     albertini: `${cmsUploadsBase}/sviluppo-sito-web-aziendale-albertini-allestimenti.webp`,
     progettoe: `${cmsUploadsBase}/sviluppo-sito-web-aziendale-progettoe.webp`
   },

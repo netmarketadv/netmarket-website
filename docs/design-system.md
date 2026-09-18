@@ -238,7 +238,7 @@ Il dettaglio operativo vive in `docs/motion-system.md`.
 ## 11. Eccezioni Specifiche Di Pagina
 
 - Homepage social hero: composizione art-directed unica, non componente generico.
-- Homepage case slider: rail full-viewport con larghezze variabili, loop continuo, touch nativo e drag mouse; l'autoplay leggero e riservato ai puntatori precisi e non sostituisce `ProjectCard` altrove.
+- Homepage case slider: rail full-viewport con card di larghezza uniforme, loop continuo, touch nativo e drag mouse; l'autoplay leggero e riservato ai puntatori precisi e non sostituisce `ProjectCard` altrove.
 - Pagina Siti web: hero browser/device, bento tipologie e blocco AI sono specifici del servizio.
 - Agenzia: montage di progetti reali, timeline storica e diagramma editoriale delle tre aree sono pattern narrativi locali.
 - Lavora con noi: mosaico del team e form di candidatura spontanea sono specifici della pagina; principi, liste editoriali e campi form riusano primitive canoniche.
@@ -267,3 +267,13 @@ Non sono piu standard:
 4. Dichiara cosa e componente riusabile e cosa resta eccezione.
 5. Verifica overflow, wrapping, focus, reduced motion e immagini ai breakpoint canonici.
 6. Esegui lint, typecheck, test, build e visual QA mirato.
+
+## Correzioni audit settembre 2026
+
+Le maschere reveal vengono rimosse a fine ingresso, inclusi i wrapper delle parole: nessun titolo, marker o medaglione resta tagliato. Gli stili delle label e degli accenti sono applicati a classi specifiche, non ai generici span tipografici.
+
+Archivio Servizi: container wide e titoli a sinistra, padding verticale uniforme nelle righe, hover senza traslazione dell'intera riga. Le tre card di prova hanno la stessa larghezza e destinazioni reali. Un solo titolo introduce i loghi. I controlli recensioni seguono l'allineamento centrale del titolo; le CTA portfolio seguono l'allineamento sinistro dei contenuti.
+
+Case study: i capitoli mantengono la stessa colonna. Le metriche e le evidenze dimensionano la tipografia sulla larghezza disponibile della card. Una metrica sola occupa tutta la griglia. Le tipologie web e le discipline del team partono dall'alto.
+
+Il modulo breve accompagna al form Contatti e mantiene l'email nella sola sessione del browser, senza inserirla nell'URL; il form completo consente revisione e consenso prima dell'invio.

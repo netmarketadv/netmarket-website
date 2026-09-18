@@ -32,8 +32,8 @@ const breadcrumb = breadcrumbJsonLd([
     <ServiceArchiveHero />
   </Container>
 
-  <Section compact labelledby="services-intro-title">
-    <Container>
+  <Section labelledby="services-intro-title">
+    <Container wide>
       <div class="service-archive-intro">
         <h2 id="services-intro-title" data-reveal="line">Un’offerta ampia, ma non dispersa.</h2>
         <p data-reveal="up">
@@ -47,7 +47,7 @@ const breadcrumb = breadcrumbJsonLd([
   <Section labelledby="service-index-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading" data-reveal="line">
+        <div class="home-section-heading" data-reveal="line">
           <h2 id="service-index-title">Indice editoriale dei servizi.</h2>
           <p>
             Una lettura rapida per capire dove interveniamo e come le competenze si collegano tra
@@ -61,8 +61,8 @@ const breadcrumb = breadcrumbJsonLd([
 
   {
     featuredServices.length > 0 && (
-      <Section compact labelledby="featured-services-title">
-        <Container>
+      <Section labelledby="featured-services-title">
+        <Container wide>
           <div class="service-featured" data-reveal="up" data-reveal-stagger="1">
             <h2 id="featured-services-title">Da dove partono spesso i progetti.</h2>
             {featuredServices.map((service) => (
@@ -104,21 +104,20 @@ const breadcrumb = breadcrumbJsonLd([
   <Section labelledby="selected-projects-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading" data-reveal="line">
+        <div class="home-section-heading" data-reveal="line">
           <h2 id="selected-projects-title">Progetti come prova del sistema.</h2>
           <p>
-            Alcuni lavori già presenti nel nuovo sito, in attesa del sistema completo Case Study.
+            Siti web, applicazioni e comunicazione: progetti reali in cui le competenze lavorano insieme.
           </p>
         </div>
         <div class="project-rail" data-reveal="up" data-reveal-stagger="1">
           <ProjectCard
             title="Sirene Blu"
-            category="Brand e comunicazione"
-            description="Identità, contenuti e strumenti digitali dentro un progetto riconoscibile."
+            category="App e programma fedeltà"
+            description="App mobile, programma fedeltà e integrazione con il gestionale delle casse."
             image={cmsMedia.projects.sireneBlu}
             alt="Anteprima del progetto Sirene Blu"
-            href="/#progetti"
-            large
+            href="/progetti/app-mobile-programma-fedelta-sirene-blu/"
           />
           <ProjectCard
             title="Albertini Allestimenti"
@@ -126,7 +125,7 @@ const breadcrumb = breadcrumbJsonLd([
             description="Presenza digitale istituzionale per raccontare competenze, servizi e solidità."
             image={cmsMedia.projects.albertini}
             alt="Anteprima del progetto Albertini Allestimenti"
-            href="/#progetti"
+            href="/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/"
           />
           <ProjectCard
             title="Progettoe"
@@ -134,22 +133,16 @@ const breadcrumb = breadcrumbJsonLd([
             description="Un impianto visivo digitale coerente per presentare competenze e casi."
             image={cmsMedia.projects.progettoe}
             alt="Anteprima del progetto Progettoe"
-            href="/#progetti"
+            href="/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/"
           />
         </div>
       </Stack>
     </Container>
   </Section>
 
-  <Section compact labelledby="clients-title">
+  <Section labelledby="clients-title">
     <Container wide>
-      <Stack gap="var(--nm-space-lg)">
-        <div class="center-heading" data-reveal="line">
-          <h2 id="clients-title">Clienti e progetti seguiti.</h2>
-          <p>Una selezione di marchi e realtà presenti nello storico lavori.</p>
-        </div>
-        <ClientMarquee clients={clientLogos} />
-      </Stack>
+      <ClientMarquee titleId="clients-title" clients={clientLogos} />
     </Container>
   </Section>
 

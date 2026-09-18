@@ -9,21 +9,40 @@ interface Props {
   buttonLabel?: string;
 }
 
-const { title, titleId, highlight = '', placeholder = 'nome@azienda.it', buttonLabel = 'Parliamone' } = Astro.props;
+const {
+  title,
+  titleId,
+  highlight = '',
+  placeholder = 'nome@azienda.it',
+  buttonLabel = 'Parliamone'
+} = Astro.props;
 ---
 
 <div class="inline-cta" data-reveal="scale">
   <div>
     <h2 id={titleId}>
       {title}
-      {highlight && <span>{highlight}</span>}
+      {highlight && <span class="inline-cta__highlight">{highlight}</span>}
     </h2>
   </div>
-  <form class="hero-form" action="#contatti" method="get">
+  <form class="hero-form" action="/contatti/" method="get" data-inline-contact>
     <label for="inline-email">Email aziendale</label>
     <div class="hero-form__row">
-      <input id="inline-email" name="email" type="email" autocomplete="email" placeholder={placeholder} />
+      <input id="inline-email" type="email" autocomplete="email" placeholder={placeholder} />
       <Button magnetic>{buttonLabel}</Button>
     </div>
   </form>
 </div>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-inline-contact]').forEach((form) => {
+    form.addEventListener('submit', () => {
+      const email = form.querySelector<HTMLInputElement>('input[type="email"]')?.value ?? '';
+      try {
+        sessionStorage.setItem('nm_contact_email_draft', email);
+      } catch {
+        /* Navigation still works without storage. */
+      }
+    });
+  });
+</script>

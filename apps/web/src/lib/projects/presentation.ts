@@ -51,11 +51,11 @@ const editorialProjects: Record<string, EditorialProject> = {
       { value: '100.000+', label: 'utenti registrati', context: 'nel programma fedeltà Sirene Blu' }
     ],
     media: [
-      { layoutHint: 'portrait', alt: 'Schermata iniziale dell’app mobile Sirene Blu' },
+      { layoutHint: 'portrait', alt: 'La nuova app Sirene Blu con carta fedeltà digitale' },
       { layoutHint: 'portrait', alt: 'Carta fedeltà digitale nell’app Sirene Blu' },
-      { layoutHint: 'portrait', alt: 'Promozioni disponibili nell’app Sirene Blu' },
+      { layoutHint: 'portrait', alt: 'Menu della nuova app Sirene Blu' },
       { layoutHint: 'portrait', alt: 'Ricerca punti vendita nell’app Sirene Blu' },
-      { layoutHint: 'portrait', alt: 'Volantino mensile nell’app Sirene Blu' }
+      { layoutHint: 'portrait', alt: 'Sconti e punti fedeltà nella nuova app Sirene Blu' }
     ],
     topics: ['retail', 'loyalty', 'software', 'integrazioni']
   },

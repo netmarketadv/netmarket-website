@@ -135,6 +135,16 @@ const fallbackInsightPriority: Record<string, string[]> = {
 };
 
 const serviceVisuals: Record<string, { id: number; url: string; alt: string }> = {
+  'software-e-integrazioni': {
+    id: 99103,
+    url: '/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly.webp',
+    alt: 'Software gestionale custom VENITALY'
+  },
+  'content-production': {
+    id: 99108,
+    url: cmsMedia.hero.productPhotography,
+    alt: 'Fotografia di prodotto realizzata da Netmarket'
+  },
   'siti-web': {
     id: 99101,
     url: cmsMedia.services.websites,
