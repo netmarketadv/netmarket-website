@@ -43,12 +43,7 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
           {
             [...projects, ...projects].map((project, index) => (
               <a
-                class:list={[
-                  'home-case-card',
-                  index % 5 === 0 && 'home-case-card--info',
-                  index % 5 === 1 && 'home-case-card--portrait',
-                  index % 5 === 2 && 'home-case-card--wide'
-                ]}
+                class="home-case-card"
                 href={projectPath(project.slug)}
                 aria-hidden={index >= projects.length ? 'true' : undefined}
                 tabindex={index >= projects.length ? -1 : undefined}

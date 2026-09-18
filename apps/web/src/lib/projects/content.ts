@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import type { CaseStudy, MediaAsset, RelationSummary } from '@netmarket/schemas';
 import { caseStudySchema } from '@netmarket/schemas';
 import { getCaseStudies, getCaseStudy } from '@/lib/api/client';
+import { withCurrentProjectMedia } from './sirene-blu-media';
 
 type ProjectSource = 'cms' | 'migration-snapshot';
 
@@ -87,7 +88,10 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
   try {
     const collection = await getCaseStudies({ perPage: 50, sort: 'priority' });
     if (collection.data.length > 0) {
-      return { projects: collection.data.sort(byPriority), source: 'cms' };
+      return {
+        projects: collection.data.map(withCurrentProjectMedia).sort(byPriority),
+        source: 'cms'
+      };
     }
   } catch (error) {
     console.warn(
@@ -100,7 +104,7 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
 
 export async function getProjectDetailData(slug: string): Promise<ProjectDetailData | undefined> {
   try {
-    const project = await getCaseStudy(slug);
+    const project = withCurrentProjectMedia(await getCaseStudy(slug));
     const { projects } = await getProjectArchiveData();
     return { project, source: 'cms', projects };
   } catch (error) {
@@ -126,7 +130,7 @@ function fallbackProjects(): CaseStudy[] {
     '../../data/migrations/case-studies/case-study-transform-dry-run.json'
   );
   const raw = JSON.parse(readFileSync(file, 'utf8')) as MigrationProject[];
-  return raw.map(toCaseStudy);
+  return raw.map(toCaseStudy).map(withCurrentProjectMedia);
 }
 
 function toCaseStudy(item: MigrationProject): CaseStudy {
@@ -295,7 +299,36 @@ export function projectClient(project: CaseStudy): string {
   return project.client?.title || project.publicClientName || 'Cliente';
 }
 
+const projectSummaries: Record<string, { category: string; description: string }> = {
+  'casi-studio-strategia-digitale-ecommerce-brb': {
+    category: 'Ecommerce e marketing',
+    description:
+      'Strategia multicanale, nuovo ecommerce, contenuti e campagne in un ecosistema digitale integrato.'
+  },
+  'concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa': {
+    category: 'Concorsi a premi',
+    description:
+      'Vinci e Viaggia 2: ideazione, piattaforma digitale e gestione del concorso a premi Sirene Blu.'
+  },
+  'sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa': {
+    category: 'Ecommerce',
+    description:
+      'Ecommerce per tavoli e sedie: design, sviluppo e assistenza continua per Pazzo Design.'
+  },
+  'sviluppo-sito-web-fotovoltaico-progetto-e': {
+    category: 'Siti web',
+    description: 'Sito web, SEO, contenuti e landing page per il fotovoltaico aziendale.'
+  },
+  'sviluppo-sito-web-allestimenti-fieristici-albertini': {
+    category: 'Siti web e SEO',
+    description:
+      'Un sito istituzionale con portfolio e catalogo per raccontare allestimenti e progetti su misura.'
+  }
+};
+
 export function projectDescription(project: CaseStudy): string {
+  const summary = projectSummaries[project.slug];
+  if (summary) return summary.description;
   return (
     project.seo.description ||
     project.shortDescription ||
@@ -306,5 +339,5 @@ export function projectDescription(project: CaseStudy): string {
 }
 
 export function projectCategory(project: CaseStudy): string {
-  return project.services[0]?.title || 'Caso studio';
+  return projectSummaries[project.slug]?.category || project.services[0]?.title || 'Progetto';
 }

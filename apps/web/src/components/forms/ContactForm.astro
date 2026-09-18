@@ -156,6 +156,12 @@ const interestOptions = [
   const status = form?.querySelector<HTMLElement>('.contact-form__status');
   const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
   const buttonLabel = button?.querySelector<HTMLElement>('[data-submit-label]');
+  try {
+    const draft = sessionStorage.getItem('nm_contact_email_draft');
+    const email = form?.querySelector<HTMLInputElement>('input[name="email"]');
+    if (draft && email && !email.value) email.value = draft;
+    sessionStorage.removeItem('nm_contact_email_draft');
+  } catch { /* The form remains usable when storage is unavailable. */ }
   const startedAt = Date.now();
   let started = false;
   let submitting = false;

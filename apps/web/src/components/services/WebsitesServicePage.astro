@@ -550,35 +550,43 @@ const displayedFaq = fallbackFaq;
           </p>
         </div>
         <div class="websites-project-showcase" data-reveal="up" data-reveal-stagger="1">
-          {featuredProjects.map((project, index) => (
-            <a
-              class:list={['websites-project-card', index === 0 && 'websites-project-card--large']}
-              href={projectPath(project.slug)}
-            >
-              {project.cover && (
-                <img
-                  src={project.cover.url}
-                  alt={project.cover.alt}
-                  width={project.cover.width ?? undefined}
-                  height={project.cover.height ?? undefined}
-                  srcset={project.cover.srcset ?? undefined}
-                  sizes="(max-width: 900px) 84vw, 50vw"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-              <div>
-                <span>
-                  {projectClient(project)} · {projectCopy[project.slug]?.kind ?? 'Progetto web'}
-                </span>
-                <h3 class="nm-heading-o-none">
-                  {projectCopy[project.slug]?.headline ?? project.title}
-                </h3>
-                <p>{projectCopy[project.slug]?.outcome ?? projectDescription(project)}</p>
-                <strong>Guarda il progetto completo</strong>
-              </div>
-            </a>
-          ))}
+          {featuredProjects.map((project, index) => {
+            const preview = portfolioSlides.find(
+              (slide) => slide.href === projectPath(project.slug)
+            );
+            return (
+              <a
+                class:list={[
+                  'websites-project-card',
+                  index === 0 && 'websites-project-card--large'
+                ]}
+                href={projectPath(project.slug)}
+              >
+                {project.cover && (
+                  <img
+                    src={preview?.image ?? project.cover.url}
+                    alt={preview?.alt ?? project.cover.alt}
+                    width={project.cover.width ?? undefined}
+                    height={project.cover.height ?? undefined}
+                    srcset={preview?.srcset ?? project.cover.srcset ?? undefined}
+                    sizes="(max-width: 900px) 84vw, 50vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div>
+                  <span>
+                    {projectClient(project)} · {projectCopy[project.slug]?.kind ?? 'Progetto web'}
+                  </span>
+                  <h3 class="nm-heading-o-none">
+                    {projectCopy[project.slug]?.headline ?? project.title}
+                  </h3>
+                  <p>{projectCopy[project.slug]?.outcome ?? projectDescription(project)}</p>
+                  <strong>Guarda il progetto completo</strong>
+                </div>
+              </a>
+            );
+          })}
         </div>
         <div class="websites-projects__cta">
           <Button href="/progetti/" variant="secondary">

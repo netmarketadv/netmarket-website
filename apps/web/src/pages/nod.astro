@@ -595,10 +595,13 @@ const pillars = [
     grid-area: 1/1;
   }
   .nod-feature__copy {
+    min-width: 0;
     display: grid;
     align-content: center;
   }
   .nod-feature__copy h2 {
+    overflow-wrap: anywhere;
+    font-size: clamp(2rem, 3.2vw, 3.6rem);
     margin-top: 1rem;
   }
   .nod-feature__copy > p {

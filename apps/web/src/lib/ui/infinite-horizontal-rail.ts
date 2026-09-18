@@ -37,6 +37,9 @@ function initRail(viewport: HTMLElement) {
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   let autoplayPaused = false;
   let previousFrame = 0;
+  let autoplayRemainder = 0;
+  let keyboardFocus = false;
+  let pointerInside = false;
 
   const measure = () => {
     state.loopWidth = cloneStart.offsetLeft - firstItem.offsetLeft;
@@ -61,6 +64,7 @@ function initRail(viewport: HTMLElement) {
   const resumeLater = () => {
     window.clearTimeout(state.resumeTimer);
     state.resumeTimer = window.setTimeout(() => {
+      if (pointerInside || keyboardFocus) return;
       autoplayPaused = false;
       viewport.classList.remove('is-paused');
     }, RESUME_DELAY);
@@ -74,7 +78,9 @@ function initRail(viewport: HTMLElement) {
   };
 
   viewport.addEventListener('mousedown', (event) => {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    keyboardFocus = false;
     pause();
     state.backwardWrapEnabled = true;
     if (viewport.scrollLeft <= 0) viewport.scrollLeft = state.loopWidth;
@@ -129,15 +135,40 @@ function initRail(viewport: HTMLElement) {
     { passive: true }
   );
 
-  viewport.addEventListener('wheel', () => {
-    pause();
-    resumeLater();
-  }, { passive: true });
+  viewport.addEventListener(
+    'wheel',
+    () => {
+      pause();
+      resumeLater();
+    },
+    { passive: true }
+  );
 
-  viewport.addEventListener('mouseenter', pause);
-  viewport.addEventListener('mouseleave', resumeLater);
-  viewport.addEventListener('focusin', pause);
-  viewport.addEventListener('focusout', resumeLater);
+  viewport.addEventListener('mouseenter', () => {
+    pointerInside = true;
+    pause();
+  });
+  viewport.addEventListener('mouseleave', () => {
+    pointerInside = false;
+    resumeLater();
+  });
+  viewport.addEventListener('focusin', () => {
+    keyboardFocus = document.activeElement?.matches(':focus-visible') ?? false;
+    if (keyboardFocus) pause();
+  });
+  viewport.addEventListener('focusout', (event) => {
+    if (event.relatedTarget instanceof Node && viewport.contains(event.relatedTarget)) return;
+    keyboardFocus = false;
+    resumeLater();
+  });
+  const restore = () => {
+    previousFrame = 0;
+    pointerInside = viewport.matches(':hover');
+    if (!document.hidden) resumeLater();
+  };
+  window.addEventListener('focus', restore);
+  window.addEventListener('pageshow', restore);
+  document.addEventListener('visibilitychange', restore);
 
   viewport.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -180,7 +211,11 @@ function initRail(viewport: HTMLElement) {
       !reducedMotion.matches &&
       !document.hidden
     ) {
-      viewport.scrollLeft += (AUTOPLAY_SPEED * elapsed) / 1000;
+      // CSSOM may round subpixel scroll writes. Preserve the fraction between frames.
+      autoplayRemainder += (AUTOPLAY_SPEED * elapsed) / 1000;
+      const pixels = Math.floor(autoplayRemainder);
+      autoplayRemainder -= pixels;
+      viewport.scrollLeft += pixels;
       normalize();
     }
 

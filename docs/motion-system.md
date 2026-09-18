@@ -121,3 +121,11 @@ GSAP e caricato nel bundle motion del frontend e deve restare l'unica libreria d
 ## Eccezioni Locali
 
 La composizione social della homepage, la timeline Agenzia, i rail dell'archivio e le sequenze media dei case study possono definire timing o direzione locali, ma devono riusare easing, durate e criteri reduced motion del sistema. Pinning, scroll-jacking e nuove dipendenze motion non sono pattern canonici.
+
+## Regressioni rail e reveal (settembre 2026)
+
+- Autoplay: accumulare le frazioni di pixel prima di scrivere scrollLeft, per i browser che arrotondano le scritture. Disattivare lo snap sul rail continuo inizializzato, mantenendo scroll manuale e accesso da tastiera.
+- Pausa: hover e focus da tastiera restano rispettati; blur/focus, pageshow e visibilitychange non lasciano la riproduzione bloccata dopo una nuova finestra. Click modificati non avviano il drag.
+- Duplicati: dimensioni identiche agli originali, indipendenti dall'indice nel secondo gruppo.
+- Reveal: nessuna maschera permanente sui blocchi completati; GSAP pulisce transform, filter e clipPath. Nessuna transizione CSS sovrapposta ai tween GSAP.
+- Card progetto: lo zoom hover CSS non compete con uno scrub GSAP sulla stessa immagine. L'anteprima al cursore aggiorna la posizione solo quando visibile, senza un secondo tween concorrente sull'asse y.

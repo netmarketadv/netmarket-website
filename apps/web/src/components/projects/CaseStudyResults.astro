@@ -87,15 +87,21 @@ const visibleMetrics = metrics.slice(0, 4);
   article {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    container-type: inline-size;
     min-height: 12rem;
     padding: clamp(1rem, 2vw, 1.5rem);
     border-right: 1px solid rgb(255 255 255 / 0.18);
     border-bottom: 1px solid rgb(255 255 255 / 0.18);
   }
+  article:only-child {
+    grid-column: 1 / -1;
+  }
   strong {
     margin-top: auto;
     color: #fff;
-    font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+    font-size: clamp(1.5rem, 17cqi, 4rem);
+    overflow-wrap: anywhere;
     font-weight: 500;
     line-height: 0.9;
     letter-spacing: 0;
