@@ -1,7 +1,7 @@
 ---
+import ContactCTA from '@/components/blocks/ContactCTA.astro';
 import { IconArrowRight } from '@tabler/icons-astro';
 import { absoluteCanonical, breadcrumbJsonLd } from '@netmarket/seo';
-import Button from '@/components/ui/Button.astro';
 import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -334,13 +334,7 @@ const collectionSchema = {
 
   <Section compact labelledby="project-cta-title" class="projects-final-cta">
     <Container wide>
-      <div class="projects-final-cta__card">
-        <div>
-          <h2 id="project-cta-title">Ogni progetto parte da un’esigenza diversa.</h2>
-          <p>Parliamo della tua.</p>
-        </div>
-        <Button href="/contatti/" variant="inverse">Raccontaci il progetto</Button>
-      </div>
+      <ContactCTA titleId="project-cta-title" title="Ogni progetto parte da un’esigenza diversa." text="Parliamo della tua." />
     </Container>
   </Section>
 

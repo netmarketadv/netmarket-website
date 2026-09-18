@@ -20,6 +20,6 @@ const { title, text, titleId, people, headingLevel = 'h3' } = Astro.props;
   </div>
 
   <div class="team-section__grid" data-reveal="up" data-reveal-stagger="1">
-    {people.map((person, index) => <PersonCard person={person} headingLevel={headingLevel} priority={index === 0} />)}
+    {people.map((person) => <PersonCard person={person} headingLevel={headingLevel} />)}
   </div>
 </div>

@@ -89,3 +89,7 @@ Nessun secret versionato. Gli script distruttivi devono richiedere parametri esp
 ## Definition Of Done
 
 Codice verificato, documentazione aggiornata, limiti dichiarati, deploy production consentito solo tramite environment protetto, nessun segreto nel repository.
+
+### Governance Componenti
+
+Prima di aggiungere UI, consultare la mappa di `src/data/design-system.ts` (in `apps/web`) e `docs/design-system-registry.json`. Ogni componente Astro deve essere registrato e avere un consumatore reale. Usare Button per azioni, IconButton per controlli con sola icona, SectionHeading per aperture semplici, ProjectCard per prove/correlati e ContactCTA per chiusure di contatto. Non ricreare varianti tramite classi scritte a mano o CSS locale. Campi e stati dei form hanno una sola fonte in `apps/web/src/styles/forms.css`; le primitive condivise in `apps/web/src/styles/components.css`. Una nuova variante richiede responsabilità distinta, documentazione, esempio nel catalogo e test pertinenti. `pnpm test` include i gate di governance e contrasto.

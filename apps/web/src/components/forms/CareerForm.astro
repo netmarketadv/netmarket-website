@@ -1,4 +1,6 @@
 ---
+import Button from '@/components/ui/Button.astro';
+import '@/styles/forms.css';
 import {
   IconArrowRight,
   IconChevronDown,
@@ -159,10 +161,10 @@ const areas = [
   </label>
 
   <div class="contact-form__footer">
-    <button type="submit" class="contact-form__submit" data-motion-magnetic>
+    <Button type="submit" size="large" class="contact-form__submit" magnetic>
       <span data-submit-label>Invia candidatura</span>
       <IconArrowRight aria-hidden="true" stroke={1.9} />
-    </button>
+    </Button>
     <p class="contact-form__security">
       <IconLock aria-hidden="true" stroke={1.8} /> CV e dati vengono usati solo per valutare la candidatura.
     </p>
@@ -354,112 +356,6 @@ const areas = [
 </script>
 
 <style>
-  .contact-form {
-    display: grid;
-    gap: clamp(1.15rem, 2vw, 1.6rem);
-    margin: 0;
-  }
-
-  .contact-form__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.15rem, 2vw, 1.5rem);
-  }
-
-  .contact-form__field {
-    display: grid;
-    gap: 0.55rem;
-    min-width: 0;
-    color: var(--nm-color-ink);
-    font-size: 0.93rem;
-    font-weight: 600;
-  }
-
-  .contact-form__field > span:first-child {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .contact-form__field em {
-    color: var(--nm-color-subtle);
-    font-size: 0.68rem;
-    font-style: normal;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  .contact-form input,
-  .contact-form textarea,
-  .contact-form select {
-    width: 100%;
-    min-width: 0;
-    border: 1px solid var(--nm-color-border-strong);
-    border-radius: var(--nm-radius-control);
-    padding: 0.95rem 1rem;
-    background: var(--nm-color-surface);
-    color: var(--nm-color-ink);
-    font: inherit;
-    font-weight: 400;
-    transition:
-      border-color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover),
-      box-shadow var(--nm-motion-duration-fast) var(--nm-motion-ease-hover),
-      background var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
-  }
-
-  .contact-form input,
-  .contact-form select {
-    min-height: 3.4rem;
-  }
-
-  .contact-form textarea {
-    min-height: 10.5rem;
-    resize: vertical;
-    line-height: 1.55;
-  }
-
-  .contact-form input::placeholder,
-  .contact-form textarea::placeholder {
-    color: #6e7683;
-    opacity: 1;
-  }
-
-  .contact-form input:hover,
-  .contact-form textarea:hover,
-  .contact-form select:hover,
-  .career-file:hover {
-    border-color: #9ba6b5;
-  }
-
-  .contact-form input:focus-visible,
-  .contact-form textarea:focus-visible,
-  .contact-form select:focus-visible {
-    border-color: var(--nm-color-blue);
-    outline: 0;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--nm-color-blue) 17%, transparent);
-  }
-
-  .contact-form__select {
-    position: relative;
-    display: block;
-  }
-
-  .contact-form__select select {
-    appearance: none;
-    padding-right: 3rem;
-  }
-
-  .contact-form__select svg {
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    width: 1.05rem;
-    height: 1.05rem;
-    color: var(--nm-color-muted);
-    pointer-events: none;
-    transform: translateY(-50%);
-  }
-
   .career-file {
     position: relative;
     display: grid;
@@ -521,180 +417,17 @@ const areas = [
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--nm-color-blue) 17%, transparent);
   }
 
-  .contact-form__field--invalid input,
-  .contact-form__field--invalid textarea,
-  .contact-form__field--invalid select,
+  .career-form {
+    margin: 0;
+  }
+  .career-file:hover {
+    border-color: var(--nm-color-field-border);
+  }
   .contact-form__field--invalid .career-file {
     border-color: var(--nm-color-error);
-    background: color-mix(in srgb, var(--nm-color-error) 3%, white);
   }
-
-  .contact-form__hint {
-    color: var(--nm-color-muted);
-    font-size: var(--nm-text-small);
-    font-weight: 400;
-  }
-
-  .contact-form__error {
-    color: var(--nm-color-error);
-    font-size: 0.8rem;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  .contact-form__error:empty {
-    display: none;
-  }
-
-  .contact-form__check {
-    display: grid;
-    grid-template-columns: 1.35rem minmax(0, 1fr);
-    gap: 0.75rem;
-    align-items: start;
-    border-top: 1px solid var(--nm-color-border);
-    padding-top: 1.25rem;
-    color: var(--nm-color-ink-2);
-    font-size: var(--nm-text-small);
-    line-height: 1.55;
-  }
-
-  .contact-form__check input {
-    appearance: none;
-    display: grid;
-    place-content: center;
-    width: 1.35rem;
-    min-height: 1.35rem;
-    height: 1.35rem;
-    margin: 0.08rem 0 0;
-    border: 1px solid var(--nm-color-border-strong);
-    border-radius: var(--nm-radius-xs);
-    padding: 0;
-    cursor: pointer;
-  }
-
-  .contact-form__check input::before {
-    width: 0.68rem;
-    height: 0.38rem;
-    border-bottom: 2px solid #fff;
-    border-left: 2px solid #fff;
-    content: '';
-    opacity: 0;
-    transform: rotate(-45deg) scale(0.7);
-  }
-
-  .contact-form__check input:checked {
-    border-color: var(--nm-color-blue);
-    background: var(--nm-color-blue);
-  }
-
-  .contact-form__check input:checked::before {
-    opacity: 1;
-    transform: rotate(-45deg) scale(1);
-  }
-
-  .contact-form__check a {
-    color: inherit;
-    font-weight: 600;
-    text-underline-offset: 0.18em;
-  }
-
-  .contact-form__check .contact-form__error {
-    grid-column: 2;
-  }
-
-  .contact-form__footer {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-
-  .contact-form__submit {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-    min-width: 14rem;
-    min-height: 3.5rem;
-    border: 1px solid var(--nm-color-blue);
-    border-radius: var(--nm-radius-pill);
-    padding: 0.9rem 1.15rem 0.9rem 1.35rem;
-    background: var(--nm-color-blue);
-    color: #fff;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .contact-form__submit svg {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
-
-  .contact-form__submit:hover:not(:disabled) {
-    background: var(--nm-color-blue-deep);
-    transform: translateY(-2px);
-  }
-
-  .contact-form__submit:focus-visible,
-  .contact-form__check input:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--nm-color-blue) 28%, transparent);
-    outline-offset: 3px;
-  }
-
-  .contact-form__security {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--nm-color-muted);
-    font-size: var(--nm-text-small);
-    line-height: 1.45;
-  }
-
-  .contact-form__security svg {
-    width: 1rem;
-    height: 1rem;
-    flex: none;
-  }
-
-  .contact-form__status {
-    min-height: 1.5rem;
-    color: var(--nm-color-muted);
-  }
-
-  .contact-form__status[data-state='error'] {
-    color: var(--nm-color-error);
-  }
-
-  .contact-form__status[data-state='success'] {
-    color: var(--nm-color-success);
-  }
-
-  .contact-form__field--hidden {
-    position: absolute;
-    left: -100vw;
-  }
-
-  @media (max-width: 680px) {
-    .contact-form__grid {
-      grid-template-columns: 1fr;
-    }
-
-    .contact-form__footer {
-      align-items: stretch;
-      flex-direction: column;
-    }
-
-    .contact-form__submit {
-      width: 100%;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .contact-form input,
-    .contact-form textarea,
-    .contact-form select,
-    .career-file,
-    .contact-form__submit {
+    .career-file {
       transition: none;
     }
   }

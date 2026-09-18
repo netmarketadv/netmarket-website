@@ -1,4 +1,10 @@
 ---
+import { designDecisions } from '@/data/design-system';
+import IconButton from '@/components/ui/IconButton.astro';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-astro';
+import '@/styles/forms.css';
+import ContactCTA from '@/components/blocks/ContactCTA.astro';
+import SectionHeading from '@/components/content/SectionHeading.astro';
 import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
 import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
 import FAQBlock from '@/components/blocks/FAQBlock.astro';
@@ -19,6 +25,9 @@ const swatches = [
   ['Brand blue', 'var(--nm-color-blue)', '#0E51FE'],
   ['Ink', 'var(--nm-color-ink)', '#090A0F'],
   ['Muted', 'var(--nm-color-muted)', '#5B6472'],
+  ['Metadata', 'var(--nm-color-subtle)', '#626C7A'],
+  ['Errore', 'var(--nm-color-error)', '#B42318'],
+  ['Successo', 'var(--nm-color-success)', '#027A48'],
   ['Canvas', 'var(--nm-color-canvas)', '#F6F7F9'],
   ['Surface', 'var(--nm-color-surface)', '#FFFFFF'],
   ['Border', 'var(--nm-color-border)', '#DDE2EA']
@@ -43,11 +52,11 @@ const classifications = [
   ],
   [
     'Primitive',
-    'Container, Section, Stack e Cluster governano contenimento e ritmo senza imporre una scenografia.'
+    'Container, Section e Stack governano contenimento e ritmo senza imporre una scenografia.'
   ],
   [
     'Componenti',
-    'Azioni, navigazione, progetti, team, recensioni, FAQ e form con responsabilita stabili.'
+    'Azioni, navigazione, progetti, team, recensioni, FAQ e form con responsabilità stabili.'
   ],
   [
     'Pattern editoriali',
@@ -78,24 +87,30 @@ const motionExamples = [
       <Badge>Fonte interna</Badge>
       <h1 id="page-title">Netmarket <span class="nm-heading-marker">design system.</span></h1>
       <p class="nm-lead">
-        Il linguaggio reale del sito: editoriale, essenziale, project-led e costruito su contenuti
-        verificabili.
+        Un’unica base per progettare, sviluppare e verificare ogni pagina Netmarket.
       </p>
     </header>
+    <nav class="ds-index" aria-label="Indice design system">
+      <a href="#classification-title">Regole</a><a href="#foundations-title">Fondazioni</a>
+      <a href="#rhythm-title">Layout</a><a href="#controls-title">Azioni</a><a href="#fields-title"
+        >Form</a
+      >
+      <a href="#projects-title">Progetti</a><a href="#motion-title">Motion</a><a
+        href="#shared-title">Pattern</a
+      >
+    </nav>
   </Container>
 
   <Section compact labelledby="classification-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading">
-          <h2 id="classification-title">
+        <SectionHeading
+          id="classification-title"
+          text="Il riuso nasce da responsabilità comprovate. Le eccezioni non diventano standard per somiglianza."
+          ><Fragment slot="title">
             Un sistema con <span class="nm-heading-accent">confini chiari.</span>
-          </h2>
-          <p>
-            Il riuso nasce da responsabilita comprovate. Le eccezioni non diventano standard per
-            somiglianza.
-          </p>
-        </div>
+          </Fragment></SectionHeading
+        >
         <div class="ds-component-grid">
           {
             classifications.map(([title, text]) => (
@@ -110,13 +125,49 @@ const motionExamples = [
     </Container>
   </Section>
 
+  <Section compact labelledby="decisions-title">
+    <Container wide
+      ><Stack gap="var(--nm-space-xl)">
+        <SectionHeading
+          id="decisions-title"
+          title="Una necessità, una scelta chiara."
+          text="Prima di creare un componente, verifica questa mappa. Le composizioni speciali riusano le stesse primitive."
+        />
+        <div class="ds-table-wrap">
+          <table class="ds-decisions">
+            <caption class="visually-hidden">Mappa dei componenti canonici</caption><thead
+              ><tr
+                ><th scope="col">Necessità</th><th scope="col">Componente</th><th scope="col"
+                  >Regola</th
+                ></tr
+              ></thead
+            ><tbody
+              >{
+                designDecisions.map(([need, component, rule]) => (
+                  <tr>
+                    <>
+                      <th scope="row">{need}</th>
+                      <td>{component}</td>
+                      <td>{rule}</td>
+                    </>
+                  </tr>
+                ))
+              }</tbody
+            >
+          </table>
+        </div>
+      </Stack></Container
+    >
+  </Section>
+
   <Section labelledby="foundations-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading">
-          <h2 id="foundations-title">Fondazioni visive.</h2>
-          <p>Mona Sans, neutri freddi, bianco dominante e blu Netmarket usato come segnale.</p>
-        </div>
+        <SectionHeading
+          id="foundations-title"
+          text="Mona Sans, neutri freddi, bianco dominante e blu Netmarket usato come segnale."
+          ><Fragment slot="title">Fondazioni visive.</Fragment></SectionHeading
+        >
         <div class="ds-swatch-grid">
           {
             swatches.map(([name, value, hex]) => (
@@ -159,18 +210,42 @@ const motionExamples = [
   <Section compact labelledby="controls-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading">
-          <h2 id="controls-title">Azioni e segnali.</h2>
-          <p>Poche varianti, gerarchia netta, icone funzionali e focus sempre riconoscibile.</p>
-        </div>
+        <SectionHeading
+          id="controls-title"
+          text="Poche varianti, gerarchia netta, icone funzionali e focus sempre riconoscibile."
+          ><Fragment slot="title">Azioni e segnali.</Fragment></SectionHeading
+        >
         <div class="ds-component-grid">
-          <article class="ds-spec ds-spec--dark nm-stack">
-            <h3>Bottoni</h3>
+          <article class="ds-spec nm-stack">
+            <h3>Azioni su chiaro</h3>
             <div class="nm-cluster">
-              <Button href="/contatti/">Parliamone</Button>
-              <Button href="/progetti/" variant="secondary">Guarda i progetti</Button>
-              <Button href="/servizi/" variant="inverse">Esplora i servizi</Button>
+              <Button href="/contatti/">Parliamone</Button><Button
+                href="/progetti/"
+                variant="secondary">Guarda i progetti</Button
+              >
             </div>
+            <p>Primaria nera per l’azione principale; secondaria per un’alternativa.</p>
+          </article>
+          <article class="ds-spec ds-spec--dark nm-stack">
+            <h3>Azioni su scuro</h3>
+            <div class="nm-cluster">
+              <Button href="/contatti/" variant="inverse">Raccontaci il progetto</Button>
+            </div>
+            <p>
+              Inversa bianca. Il contrasto deve restare leggibile anche al passaggio del cursore.
+            </p>
+          </article>
+          <article class="ds-spec nm-stack">
+            <h3>Stati e dimensioni</h3>
+            <div class="nm-cluster">
+              <Button disabled>Non disponibile</Button><Button busy>Invio in corso</Button><Button
+                size="large"
+                href="/contatti/">Azione estesa</Button
+              >
+            </div>
+            <p>
+              Altezza minima 44 px; 56 px per form e CTA finali. Usa Tab per verificare il focus.
+            </p>
           </article>
           <article class="ds-spec nm-stack">
             <h3>Badge e tassonomie</h3>
@@ -181,7 +256,13 @@ const motionExamples = [
             </div>
           </article>
           <article class="ds-spec nm-stack">
-            <h3>Icone UI</h3>
+            <h3>Icone e controlli</h3><div class="nm-cluster">
+              <IconButton label="Precedente" disabled
+                ><IconArrowLeft aria-hidden="true" /></IconButton
+              ><IconButton label="Successivo" disabled
+                ><IconArrowRight aria-hidden="true" /></IconButton
+              >
+            </div>
             <div class="nm-cluster">
               <IconBubble name="desktop" label="Siti web" />
               <IconBubble name="palette" label="Branding" />
@@ -203,16 +284,140 @@ const motionExamples = [
     </Container>
   </Section>
 
+  <Section labelledby="rhythm-title">
+    <Container wide
+      ><Stack gap="var(--nm-space-xl)">
+        <SectionHeading
+          id="rhythm-title"
+          title="Lo spazio ha una regola."
+          text="Una griglia comune, due ritmi di sezione e quattro raggi. Le variazioni editoriali devono avere uno scopo."
+        />
+        <div class="ds-rules-grid">
+          <article class="ds-spec nm-stack">
+            <h3>Contenimento</h3><dl class="ds-definition">
+              <dt>Standard</dt><dd>1200 px: testo e contenuti</dd><dt>Wide</dt><dd>
+                1328 px: portfolio e visual
+              </dd><dt>Shell</dt><dd>1472 px: header e footer</dd>
+            </dl>
+          </article>
+          <article class="ds-spec nm-stack">
+            <h3>Ritmo verticale</h3><dl class="ds-definition">
+              <dt>Standard</dt><dd>64-120 px tra sezioni</dd><dt>Compatto</dt><dd>
+                44-80 px nei passaggi brevi
+              </dd><dt>Testo</dt><dd>58 caratteri circa per riga</dd>
+            </dl>
+          </article>
+          <article class="ds-spec nm-stack">
+            <h3>Forme</h3><div class="ds-radius-examples">
+              {
+                [
+                  ['Controlli', 'control'],
+                  ['Media', 'media'],
+                  ['Pannelli', 'card'],
+                  ['Visual', 'feature']
+                ].map(([label, token]) => (
+                  <div style={`border-radius:var(--nm-radius-${token})`}>{label}</div>
+                ))
+              }
+            </div>
+          </article>
+        </div>
+        <div class="ds-spacing-scale">
+          {
+            ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'].map((size) => (
+              <div>
+                <>
+                  <span class="nm-meta">{size}</span>
+                  <span class="ds-spacing-scale__bar" style={`width:var(--nm-space-${size})`} />
+                </>
+              </div>
+            ))
+          }
+        </div>
+      </Stack></Container
+    >
+  </Section>
+
+  <Section labelledby="fields-title">
+    <Container wide>
+      <Stack gap="var(--nm-space-xl)">
+        <SectionHeading
+          id="fields-title"
+          title="Form, in ogni stato."
+          text="Contatti e candidature condividono campi, label, aiuti, errori e conferme. Gli esempi non inviano dati."
+        />
+        <div class="contact-form ds-form-demo">
+          <div class="contact-form__grid">
+            <label class="contact-form__field" for="ds-email">
+              <span>Email aziendale</span>
+              <input
+                id="ds-email"
+                type="email"
+                placeholder="nome@azienda.it"
+                aria-describedby="ds-email-hint"
+              />
+              <span class="contact-form__hint" id="ds-email-hint"
+                >La label resta visibile mentre scrivi.</span
+              >
+            </label>
+            <label class="contact-form__field contact-form__field--invalid" for="ds-error">
+              <span>Email con errore</span>
+              <input
+                id="ds-error"
+                type="email"
+                value="indirizzo incompleto"
+                aria-invalid="true"
+                aria-describedby="ds-error-message"
+              />
+              <span class="contact-form__error" id="ds-error-message"
+                >Inserisci un indirizzo email valido.</span
+              >
+            </label>
+            <label class="contact-form__field" for="ds-disabled">
+              <span>Campo non disponibile</span>
+              <input id="ds-disabled" value="Non modificabile" disabled />
+            </label>
+            <label class="contact-form__field" for="ds-service">
+              <span>Servizio</span>
+              <select id="ds-service">
+                {
+                  [
+                    'Scegli un servizio',
+                    'Siti web',
+                    'Branding e comunicazione',
+                    'Software e integrazioni'
+                  ].map((label) => <option>{label}</option>)
+                }
+              </select>
+            </label>
+          </div>
+          <label class="contact-form__field" for="ds-message">
+            <span>Messaggio</span>
+            <textarea id="ds-message" rows="3" placeholder="Raccontaci il contesto del progetto"
+            ></textarea>
+          </label>
+          <label class="contact-form__check">
+            <input type="checkbox" />
+            <span>Esempio di selezione con etichetta visibile.</span>
+          </label>
+          <p class="contact-form__status" data-state="success" role="status">
+            Conferma: richiesta acquisita. Questo è un esempio di stato.
+          </p>
+        </div>
+      </Stack>
+    </Container>
+  </Section>
+
   <Section labelledby="projects-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading">
-          <h2 id="projects-title">Progetti come <span class="nm-heading-accent">prova.</span></h2>
-          <p>
-            Media reali, tipologia, cliente e sintesi. Il featured resta un pattern editoriale
-            distinto.
-          </p>
-        </div>
+        <SectionHeading
+          id="projects-title"
+          text="Media reali, tipologia, cliente e sintesi. Il featured resta un pattern editoriale distinto."
+          ><Fragment slot="title"
+            >Progetti come <span class="nm-heading-accent">prova.</span></Fragment
+          ></SectionHeading
+        >
         <div class="project-rail">
           <ProjectCard
             title="Sirene Blu"
@@ -220,15 +425,15 @@ const motionExamples = [
             description="Card media-first per contesti secondari e contenuti correlati."
             image={cmsMedia.projects.sireneBlu}
             alt="Anteprima progetto Sirene Blu"
-            href="/progetti/"
+            href="/progetti/app-mobile-programma-fedelta-sirene-blu/"
           />
           <ProjectCard
             title="Albertini Allestimenti"
             category="Sito web"
-            description="Immagine reale, categoria nel media e testo breve allineato a sinistra."
+            description="Immagine reale, categoria esterna al media e testo allineato a sinistra."
             image={cmsMedia.projects.albertini}
             alt="Anteprima progetto Albertini Allestimenti"
-            href="/progetti/"
+            href="/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/"
           />
           <ProjectCard
             title="Progetto-e"
@@ -236,7 +441,7 @@ const motionExamples = [
             description="Hover misurato e contenuto leggibile anche senza JavaScript."
             image={cmsMedia.projects.progettoe}
             alt="Anteprima progetto Progetto-e"
-            href="/progetti/"
+            href="/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/"
           />
         </div>
       </Stack>
@@ -246,10 +451,11 @@ const motionExamples = [
   <Section compact labelledby="motion-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="center-heading" data-reveal="line">
-          <h2 id="motion-title">Motion con uno scopo.</h2>
-          <p>Progressive enhancement, distanze brevi e contenuto sempre disponibile.</p>
-        </div>
+        <SectionHeading
+          id="motion-title"
+          text="Progressive enhancement, distanze brevi e contenuto sempre disponibile."
+          ><Fragment slot="title">Motion con uno scopo.</Fragment></SectionHeading
+        >
         <div class="motion-demo-grid">
           {
             motionExamples.map(([title, text, variant], index) => (
@@ -268,10 +474,16 @@ const motionExamples = [
   <Section labelledby="shared-title">
     <Container wide>
       <Stack gap="var(--nm-space-2xl)">
-        <div class="center-heading">
-          <h2 id="shared-title">Componenti canonici.</h2>
-          <p>Pattern condivisi gia verificati nelle pagine principali.</p>
-        </div>
+        <SectionHeading
+          id="shared-title"
+          text="Pattern condivisi già verificati nelle pagine principali."
+          ><Fragment slot="title">Componenti canonici.</Fragment></SectionHeading
+        >
+        <ContactCTA
+          titleId="ds-cta-title"
+          title="Una sola CTA di contatto."
+          text="Il componente comune chiude servizi, progetti e pagine istituzionali."
+        />
         <ClientMarquee clients={clientLogos} />
         <TeamSection
           title="Persone reali, competenze coordinate."

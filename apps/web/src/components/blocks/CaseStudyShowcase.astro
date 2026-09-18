@@ -1,4 +1,5 @@
 ---
+import SectionHeading from '@/components/content/SectionHeading.astro';
 import type { CaseStudy } from '@netmarket/schemas';
 import {
   projectCategory,
@@ -23,14 +24,12 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
 <Section class="home-work-section" labelledby={titleId}>
   <Container wide>
     <Stack gap="var(--nm-space-xl)">
-      <div class="home-section-heading" data-reveal="line">
-        <p class="nm-meta">Progetti</p>
-        <h2 id={titleId}>Case study e progetti reali.</h2>
-        <p>
-          Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne e
-          comunicazione.
-        </p>
-      </div>
+      <SectionHeading
+        id={titleId}
+        eyebrow="Progetti"
+        text="Alcuni lavori pubblicati nel nuovo archivio: siti web, ecommerce, software, campagne e comunicazione."
+        ><Fragment slot="title">Case study e progetti reali.</Fragment></SectionHeading
+      >
       <div
         class="home-case-slider"
         role="region"
@@ -48,7 +47,6 @@ const { projects, titleId, prioritizeImages = true } = Astro.props;
                 aria-hidden={index >= projects.length ? 'true' : undefined}
                 tabindex={index >= projects.length ? -1 : undefined}
                 data-infinite-rail-clone-start={index === projects.length ? '' : undefined}
-                data-cursor-label="Guarda"
               >
                 <div class="home-case-card__media">
                   <img

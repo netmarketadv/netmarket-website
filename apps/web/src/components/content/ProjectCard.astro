@@ -5,20 +5,22 @@ interface Props {
   description: string;
   image: string;
   alt: string;
-  large?: boolean;
+  width?: number | undefined;
+  height?: number | undefined;
+  srcset?: string | undefined;
   loading?: 'eager' | 'lazy';
-  href?: string;
+  href: string;
 }
 
-const { title, category, description, image, alt, large = false, loading = 'lazy', href = '#contatti' } = Astro.props;
+const { title, category, description, image, alt, width = 1200, height = 900, srcset, loading = 'lazy', href } = Astro.props;
 ---
 
-<a class:list={['project-card', large && 'project-card--large']} href={href} data-cursor-label="Guarda" data-reveal="scale">
+<a class="project-card" href={href} data-reveal="up">
   <div class="project-card__media">
-    <img src={image} alt={alt} loading={loading} decoding="async" />
-    <span class="project-card__category">{category}</span>
+    <img src={image} alt={alt} width={width} height={height} srcset={srcset} sizes="(max-width: 760px) 84vw, 30vw" loading={loading} decoding="async" />
   </div>
   <div class="project-card__body">
+    <span class="project-card__category">{category}</span>
     <h3>{title}</h3>
     <p>{description}</p>
   </div>

@@ -80,7 +80,7 @@ const organization = {
   structuredData={[breadcrumb, pageSchema, organization]}
   motionMode="light"
 >
-  <main class="contact-page">
+  <div class="contact-page">
     <section class="contact-hero" aria-labelledby="contact-title">
       <Container wide>
         <div class="contact-hero__grid">
@@ -95,7 +95,7 @@ const organization = {
             </p>
           </header>
 
-          <div class="contact-hero__form" data-reveal="up" data-reveal-delay="1">
+          <div class="contact-hero__form">
             <ContactForm />
           </div>
         </div>
@@ -129,7 +129,7 @@ const organization = {
         </dl>
       </Container>
     </section>
-  </main>
+  </div>
 </BaseLayout>
 
 <style>

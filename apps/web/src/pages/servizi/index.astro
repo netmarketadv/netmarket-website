@@ -1,4 +1,5 @@
 ---
+import SectionHeading from '@/components/content/SectionHeading.astro';
 import { breadcrumbJsonLd } from '@netmarket/seo';
 import CTAInlineForm from '@/components/blocks/CTAInlineForm.astro';
 import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
@@ -47,13 +48,7 @@ const breadcrumb = breadcrumbJsonLd([
   <Section labelledby="service-index-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="home-section-heading" data-reveal="line">
-          <h2 id="service-index-title">Indice editoriale dei servizi.</h2>
-          <p>
-            Una lettura rapida per capire dove interveniamo e come le competenze si collegano tra
-            loro.
-          </p>
-        </div>
+        <SectionHeading id="service-index-title" text="Una lettura rapida per capire dove interveniamo e come le competenze si collegano tra loro."><Fragment slot="title">Indice editoriale dei servizi.</Fragment></SectionHeading>
         <ServiceIndex services={services} />
       </Stack>
     </Container>
@@ -104,12 +99,7 @@ const breadcrumb = breadcrumbJsonLd([
   <Section labelledby="selected-projects-title">
     <Container wide>
       <Stack gap="var(--nm-space-xl)">
-        <div class="home-section-heading" data-reveal="line">
-          <h2 id="selected-projects-title">Progetti come prova del sistema.</h2>
-          <p>
-            Siti web, applicazioni e comunicazione: progetti reali in cui le competenze lavorano insieme.
-          </p>
-        </div>
+        <SectionHeading id="selected-projects-title" text="Siti web, applicazioni e comunicazione: progetti reali in cui le competenze lavorano insieme."><Fragment slot="title">Progetti come prova del sistema.</Fragment></SectionHeading>
         <div class="project-rail" data-reveal="up" data-reveal-stagger="1">
           <ProjectCard
             title="Sirene Blu"
