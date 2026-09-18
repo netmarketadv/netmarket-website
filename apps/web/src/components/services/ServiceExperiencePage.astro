@@ -1,4 +1,6 @@
 ---
+import ContactCTA from '@/components/blocks/ContactCTA.astro';
+import SectionHeading from '@/components/content/SectionHeading.astro';
 import type { RelationSummary, Service } from '@netmarket/schemas';
 import {
   IconArrowRight,
@@ -167,10 +169,13 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   </section>
 
   <section class="service-x-problems" aria-labelledby="service-x-problems-title">
-    <div class="service-x-heading" data-reveal="line">
-      <p class="nm-meta">Cosa risolviamo</p>
-      <h2 id="service-x-problems-title">{experience.problemsTitle}</h2>
-    </div>
+    <SectionHeading
+      id="service-x-problems-title"
+      eyebrow="Cosa risolviamo"
+      title={experience.problemsTitle}
+      tone="inverse"
+      reveal
+    />
     <div data-reveal="up" data-reveal-stagger="1">
       {
         problems.map((item, index) => (
@@ -189,10 +194,12 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   </section>
 
   <section class="service-x-system" aria-labelledby="service-x-system-title">
-    <div class="service-x-heading" data-reveal="line">
-      <p class="nm-meta">Il sistema</p>
-      <h2 id="service-x-system-title">{experience.systemTitle}</h2>
-    </div>
+    <SectionHeading
+      id="service-x-system-title"
+      eyebrow="Il sistema"
+      title={experience.systemTitle}
+      reveal
+    />
     <div class="service-x-system__list" data-reveal="up" data-reveal-stagger="1">
       {
         technicalItems.map(({ title, description, icon: Icon }) => (
@@ -213,13 +220,13 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   {
     results.length > 0 && (
       <section class="service-x-proof" aria-labelledby="service-x-proof-title">
-        <div class="service-x-heading" data-reveal="line">
-          <>
-            <p class="nm-meta">Evidenze</p>
-            <h2 id="service-x-proof-title">{experience.proofTitle}</h2>
-            <p>{experience.proofText}</p>
-          </>
-        </div>
+        <SectionHeading
+          id="service-x-proof-title"
+          eyebrow="Evidenze"
+          title={experience.proofTitle}
+          text={experience.proofText}
+          reveal
+        />
         <div class="service-x-proof__grid" data-reveal="up" data-reveal-stagger="1">
           {results.map((item) => (
             <article>
@@ -234,9 +241,12 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   }
 
   <section class="service-x-process" id="come-lavoriamo" aria-labelledby="service-x-process-title">
-    <div class="service-x-heading" data-reveal="line">
-      <p class="nm-meta">Metodo</p><h2 id="service-x-process-title">{experience.processTitle}</h2>
-    </div>
+    <SectionHeading
+      id="service-x-process-title"
+      eyebrow="Metodo"
+      title={experience.processTitle}
+      reveal
+    />
     <ol data-reveal="up" data-reveal-stagger="1">
       {
         process.map((item, index) => (
@@ -257,13 +267,13 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   {
     projects.length > 0 && (
       <section class="service-x-projects" aria-labelledby="service-x-projects-title">
-        <div class="service-x-heading" data-reveal="line">
-          <>
-            <p class="nm-meta">Progetti</p>
-            <h2 id="service-x-projects-title">{experience.projectsTitle}</h2>
-            <p>{experience.projectsText}</p>
-          </>
-        </div>
+        <SectionHeading
+          id="service-x-projects-title"
+          eyebrow="Progetti"
+          title={experience.projectsTitle}
+          text={experience.projectsText}
+          reveal
+        />
         <div class="service-x-project-grid" data-reveal="up" data-reveal-stagger="1">
           {projects.map((project) => {
             const copy = projectCopy[project.slug];
@@ -286,11 +296,12 @@ const projectCopy: Record<string, { client: string; description: string }> = {
   }
 
   <section class="service-x-scope" aria-labelledby="service-x-scope-title">
-    <div class="service-x-heading">
-      <p class="nm-meta">Competenze</p><h2 id="service-x-scope-title">
-        Il perimetro prende forma sul progetto.
-      </h2>
-    </div>
+    <SectionHeading
+      id="service-x-scope-title"
+      eyebrow="Competenze"
+      title="Il perimetro prende forma sul progetto."
+      reveal
+    />
     <ul>
       {
         capabilities.map((item) => (
@@ -316,14 +327,12 @@ const projectCopy: Record<string, { client: string; description: string }> = {
     )
   }
 
-  <section class="service-x-cta" id="contatti" aria-labelledby="service-x-cta-title">
-    <div>
-      <p class="nm-meta">Parliamone</p><h2 id="service-x-cta-title">{experience.ctaTitle}</h2><p>
-        {experience.ctaText}
-      </p>
-    </div>
-    <Button href="/contatti/" variant="inverse" magnetic
-      >Raccontaci il progetto <IconArrowRight stroke={1.8} aria-hidden="true" /></Button
-    >
+  <section class="service-x-conversion" id="contatti" aria-labelledby="service-x-cta-title">
+    <ContactCTA
+      titleId="service-x-cta-title"
+      eyebrow="Parliamone"
+      title={experience.ctaTitle}
+      text={experience.ctaText}
+    />
   </section>
 </article>

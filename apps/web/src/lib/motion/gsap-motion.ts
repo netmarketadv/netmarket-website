@@ -1,6 +1,6 @@
 import { styleHeadingText } from '@/lib/typography/heading-italic-o';
 import { motionConfig } from './config';
-import { isFinePointer, prefersReducedMotion } from './reduced-motion';
+import { prefersReducedMotion } from './reduced-motion';
 
 type GsapTarget = string | Element | Element[] | HTMLElement[] | NodeListOf<Element>;
 type GsapVars = Record<string, unknown>;
@@ -298,51 +298,6 @@ function enhanceMediaScroll(gsap: Gsap): void {
     });
 }
 
-function enhanceCursorPreview(gsap: Gsap): void {
-  if (!isFinePointer()) return;
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.project-card, .insight-card'));
-  if (cards.length === 0 || document.querySelector('.motion-image-preview')) return;
-
-  const preview = document.createElement('div');
-  preview.className = 'motion-image-preview';
-  preview.setAttribute('aria-hidden', 'true');
-  const previewImage = document.createElement('img');
-  preview.append(previewImage);
-  document.body.append(preview);
-
-  const quickX = gsap.quickTo(preview, 'x', { duration: 0.19, ease: 'power3.out' });
-  const quickY = gsap.quickTo(preview, 'y', { duration: 0.19, ease: 'power3.out' });
-
-  document.addEventListener(
-    'pointermove',
-    (event) => {
-      if (preview.dataset.visible !== 'true') return;
-      quickX(event.clientX + 24);
-      quickY(event.clientY + 24);
-    },
-    { passive: true }
-  );
-
-  cards.forEach((card) => {
-    const image = card.querySelector<HTMLImageElement>('img');
-    if (!image) return;
-    card.addEventListener('pointerenter', (event) => {
-      gsap.set(preview, { x: event.clientX + 24, y: event.clientY + 24 });
-      previewImage.src = image.currentSrc || image.src;
-      preview.dataset.visible = 'true';
-      gsap.fromTo(
-        preview,
-        { opacity: 0, scale: 0.96 },
-        { opacity: 1, scale: 1, duration: 0.19, ease: 'power3.out', overwrite: 'auto' }
-      );
-    });
-    card.addEventListener('pointerleave', () => {
-      preview.dataset.visible = 'false';
-      gsap.to(preview, { opacity: 0, scale: 0.96, duration: 0.18, ease: 'power2.out' });
-    });
-  });
-}
-
 function enhanceScrollProgress(gsap: Gsap): void {
   document
     .querySelectorAll<HTMLElement>('.approval-grid article, .process-tabs article')
@@ -426,7 +381,6 @@ export async function initGsapMotion(options: GsapMotionOptions = {}): Promise<b
       enhanceMediaScroll(gsap);
       enhanceScrollProgress(gsap);
       enhanceAgencyTimeline(gsap);
-      enhanceCursorPreview(gsap);
     }
     window.setTimeout(() => ScrollTrigger.refresh(), 250);
     document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => undefined);

@@ -1,17 +1,25 @@
 ---
 interface Props {
   eyebrow?: string;
-  title: string;
-  text?: string;
-  id?: string;
-  class?: string;
+  title?: string;
+  text?: string | undefined;
+  id: string;
+  align?: 'left' | 'center';
+  reveal?: boolean;
+  tone?: 'default' | 'inverse';
 }
-
-const { eyebrow, title, text, id, class: className = '' } = Astro.props;
+const { eyebrow, title, text, id, align = 'left', reveal = false, tone = 'default' } = Astro.props;
 ---
 
-<header class:list={['nm-stack', className]} style="--stack-gap: var(--nm-heading-gap-md);">
+<header
+  class:list={[
+    'nm-section-heading',
+    align === 'center' && 'nm-section-heading--center',
+    tone === 'inverse' && 'nm-section-heading--inverse'
+  ]}
+  data-reveal={reveal ? 'line' : undefined}
+>
   {eyebrow && <p class="nm-eyebrow">{eyebrow}</p>}
-  <h2 id={id}>{title}</h2>
-  {text && <p class="nm-lead">{text}</p>}
+  <h2 id={id}><slot name="title">{title}</slot></h2>
+  {text && <p>{text}</p>}
 </header>

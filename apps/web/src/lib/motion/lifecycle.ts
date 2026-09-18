@@ -462,60 +462,6 @@ function initCountUp(): void {
   metrics.forEach((metric) => observer.observe(metric));
 }
 
-function initCursorLabel(): void {
-  if (!isFinePointer() || prefersReducedMotion()) return;
-  const targets = Array.from(document.querySelectorAll<HTMLElement>('[data-cursor-label]'));
-  if (targets.length === 0) return;
-  if (document.querySelector('.motion-cursor-label')) return;
-
-  const label = document.createElement('div');
-  label.className = 'motion-cursor-label';
-  label.setAttribute('aria-hidden', 'true');
-  document.body.append(label);
-
-  let frame = 0;
-  let x = 0;
-  let y = 0;
-
-  const move = () => {
-    label.style.transform = `translate3d(${x + 14}px, ${y + 14}px, 0) scale(1)`;
-    frame = 0;
-  };
-
-  document.addEventListener(
-    'pointermove',
-    (event) => {
-      x = event.clientX;
-      y = event.clientY;
-      if (!frame) frame = window.requestAnimationFrame(move);
-    },
-    { passive: true }
-  );
-
-  window.addEventListener(
-    'blur',
-    () => {
-      label.dataset.visible = 'false';
-    },
-    { passive: true }
-  );
-  document.addEventListener('mouseleave', () => {
-    label.dataset.visible = 'false';
-  });
-
-  targets.forEach((target) => {
-    if (target.dataset.motionCursor === 'ready') return;
-    target.dataset.motionCursor = 'ready';
-    target.addEventListener('pointerenter', () => {
-      label.textContent = target.dataset.cursorLabel ?? 'Guarda';
-      label.dataset.visible = 'true';
-    });
-    target.addEventListener('pointerleave', () => {
-      label.dataset.visible = 'false';
-    });
-  });
-}
-
 function initMagnetic(): void {
   if (!isFinePointer() || prefersReducedMotion()) return;
   const targets = Array.from(document.querySelectorAll<HTMLElement>('[data-motion-magnetic]'));
@@ -563,6 +509,5 @@ export function initMotion(options: MotionInitOptions = {}): void {
   initMobileMenu();
   initAccordions();
   initCountUp();
-  initCursorLabel();
   initMagnetic();
 }

@@ -1,0 +1,30 @@
+---
+import Button from '@/components/ui/Button.astro';
+interface Props {
+  title: string;
+  titleId: string;
+  text?: string;
+  eyebrow?: string;
+  label?: string;
+  tone?: 'dark' | 'light';
+}
+const {
+  title,
+  titleId,
+  text,
+  eyebrow,
+  label = 'Raccontaci il progetto',
+  tone = 'dark'
+} = Astro.props;
+---
+
+<div class:list={['nm-cta', tone === 'light' && 'nm-cta--light']} data-reveal="up">
+  <div class="nm-cta__copy">
+    {eyebrow && <p class="nm-eyebrow">{eyebrow}</p>}
+    <h2 id={titleId}>{title}</h2>
+    {text && <p>{text}</p>}
+  </div>
+  <Button href="/contatti/" variant={tone === 'dark' ? 'inverse' : 'primary'} size="large"
+    >{label}</Button
+  >
+</div>

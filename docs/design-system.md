@@ -1,6 +1,6 @@
 # Netmarket Design System
 
-Questa documentazione descrive il linguaggio visivo realmente in uso nel sito Netmarket. Non e una raccolta di direzioni future. Le fonti osservate sono homepage, Agenzia, archivio Progetti, case study, archivio e dettaglio Insight, archivio Servizi e pagina Siti web.
+Contratto operativo del sito Netmarket. Fondazioni, primitive e comportamenti condivisi hanno una sola implementazione. Le composizioni editoriali possono differire quando svolgono compiti diversi. Revisione completa: 18 settembre 2026.
 
 ## 1. Gerarchia delle fonti
 
@@ -35,7 +35,7 @@ Un pattern diventa canonico quando ricorre in piu contesti, ha una responsabilit
 | Ink            | `--nm-color-ink`       | `#090A0F` | testo e pannelli scuri                        |
 | Ink secondario | `--nm-color-ink-2`     | `#1D2430` | testo UI ad alto contrasto                    |
 | Muted          | `--nm-color-muted`     | `#5B6472` | body secondario                               |
-| Subtle         | `--nm-color-subtle`    | `#858D9A` | metadata e label                              |
+| Subtle         | `--nm-color-subtle`    | `#626C7A` | metadata e label                              |
 | Canvas         | `--nm-color-canvas`    | `#F6F7F9` | fondi neutri di sezione                       |
 | Surface        | `--nm-color-surface`   | `#FFFFFF` | pagina e card                                 |
 | Surface 2      | `--nm-color-surface-2` | `#EEF2F7` | frame media e pannelli                        |
@@ -102,7 +102,7 @@ Massimo un accento forte per titolo. Gli handle devono restare visibili e il wra
 - `--nm-radius-card` (24px): pannelli importanti.
 - `--nm-radius-feature` (36px): hero visual e CTA sceniche.
 - `--nm-radius-pill`: bottoni, badge, filtri e chip.
-- Hairline da 1px come separazione primaria.
+- Hairline da 1px come separazione primaria. I bordi dei campi usano `--nm-color-field-border`; i bordi decorativi non sostituiscono quelli dei controlli.
 - Ombre solo per overlay, media flottanti o gerarchie che il bordo non risolve.
 
 Il radius indica un oggetto. Le sezioni non diventano card per semplice decorazione e le card non vengono annidate.
@@ -116,12 +116,11 @@ Il radius indica un oggetto. Le sezioni non diventano card per semplice decorazi
 - `Stack`: ritmo verticale locale tramite `gap`.
 - `.nm-cluster`: gruppi inline che possono andare a capo.
 
-### Di supporto
+### Aperture di sezione
 
-- `Grid`, `Split`, `Bleed`, `Frame`: utility disponibili, da usare quando descrivono davvero la composizione. Non sostituiscono layout editoriali specifici.
-- `SectionHeading`: utile per sezioni semplici; le aperture editoriali complesse mantengono markup locale.
+`SectionHeading` è l’unico componente per un titolo di sezione semplice: `id` obbligatorio, `title` o slot `title`, `eyebrow` e `text` opzionali, `align="left|center"`, `tone="default|inverse"`. Sinistra è il default; centro è una scelta intenzionale per una sezione focalizzata. L’accento tipografico vive nello slot e mantiene la stessa gerarchia.
 
-Queste primitive di supporto non sono obbligatorie e non vanno presentate come componenti dominanti finche il loro riuso resta limitato.
+Le precedenti primitive Grid, Split, Bleed, Frame, StickyRegion e i wrapper motion non avevano consumatori: sono state rimosse. Un layout si esprime con CSS Grid e le tre primitive esistenti finché non emerge una responsabilità riusabile concreta.
 
 ## 5. Componenti Riutilizzabili
 
@@ -135,9 +134,13 @@ Queste primitive di supporto non sono obbligatorie e non vanno presentate come c
 ### Azioni e form
 
 - `Button`: primary nero, secondary bianco con bordo, inverse bianco su scuro.
-- Bottoni pill, label concise, hover massimo 1px e focus visibile.
+- `Button` è obbligatorio per le azioni principali: non scrivere a mano `.nm-button--*`. `type="button"` è il default sicuro; l’invio richiede `type="submit"` esplicito.
+- Due taglie: default minimo 44 px, large minimo 56 px. Label concise, hover massimo 1px, focus blu con separatore bianco.
+- Disabilitato: button nativo `disabled`; link senza href e fuori dal tab order, con `aria-disabled`. Busy: disabilitato e `aria-busy`, label esplicita.
+- `IconButton`: un solo controllo senza testo visibile, label obbligatoria, target 44 px. Usato per frecce e chiusura recensioni.
+- Campi: `styles/forms.css` è l’unica implementazione visuale per ContactForm, CareerForm e catalogo. Label visibile, input a 16 px, errori associati via `aria-describedby`, `aria-invalid`, messaggio di stato. Il caricamento file rimane un sottopattern specifico delle candidature.
 - Link testuali: underline animato discreto; link-card senza underline.
-- Form: label sempre visibile, campi dimensionati, messaggi e stati accessibili. La disposizione pill e ammessa solo nei moduli brevi; non e un pattern hero obbligatorio.
+- Form: label sempre visibile, campi dimensionati, messaggi e stati accessibili. La disposizione pill è ammessa solo nei moduli brevi; non e un pattern hero obbligatorio.
 
 ### Contenuto e fiducia
 
@@ -145,11 +148,12 @@ Queste primitive di supporto non sono obbligatorie e non vanno presentate come c
 - `ReviewsSection` + `ReviewCard`: header centrato, badge Google, rail manuale, clamp e fade solo quando il testo e troncato, pulsante occhio e dialog accessibile.
 - `FAQBlock`: split tra introduzione e accordion; trigger button, stato `aria-expanded`, pannello associato e animazione misurata.
 - `TeamSection` + `PersonCard`: ritratti 3:4, dati reali, LinkedIn discreto, griglia desktop e rail mobile.
-- `CTAInlineForm`: CTA conversione con form breve, usata solo dove il contesto richiede raccolta email immediata.
+- `ContactCTA`: unico pannello di chiusura per Agenzia, archivio Progetti, case study e servizi. Due toni `dark|light`, una sola destinazione Contatti, heading H2 e Button large. I toni non generano nuove implementazioni.
+- `CTAInlineForm`: modulo breve quando il contesto richiede raccolta email immediata; è un compito diverso dalla semplice CTA di navigazione.
 
 ### Progetti
 
-- `ProjectCard`: card media-first per contesti secondari e related content.
+- `ProjectCard`: unica card per prove nelle pagine servizio e progetti correlati. Immagine 4:3 con dimensioni riservate, categoria fuori dalla foto, cliente e sintesi fino a tre righe. Destinazione obbligatoria. Nessuna variante large senza una necessità distinta.
 - `CaseStudyHero`, `CaseStudyStory`, `CaseStudyMedia`, `CaseStudyResults`, `RelatedProjects`, `CaseStudyCTA`: sistema canonico delle pagine case study.
 - Le card progetto mostrano immagine reale, tipologia, cliente e sintesi. Hover: micro-zoom massimo `1.025-1.035` e segnale blu, senza spostamenti di layout.
 - In mobile, rail e sequenze media usano overflow orizzontale nativo e scroll snap; le immagini restano presenti senza dipendere da JS.
@@ -277,3 +281,38 @@ Archivio Servizi: container wide e titoli a sinistra, padding verticale uniforme
 Case study: i capitoli mantengono la stessa colonna. Le metriche e le evidenze dimensionano la tipografia sulla larghezza disponibile della card. Una metrica sola occupa tutta la griglia. Le tipologie web e le discipline del team partono dall'alto.
 
 Il modulo breve accompagna al form Contatti e mantiene l'email nella sola sessione del browser, senza inserirla nell'URL; il form completo consente revisione e consenso prima dell'invio.
+
+## 14. Governance e controllo delle varianti
+
+Prima di aggiungere un componente:
+
+1. Identificare il compito dell’utente, non la differenza estetica.
+2. Consultare la mappa di `/design-system/` e `src/data/design-system.ts`.
+3. Riutilizzare la primitiva; aggiungere una variante tipizzata solo se cambia un comportamento o una gerarchia necessaria in almeno due contesti.
+4. Per un nuovo compito, documentare responsabilità, proprietario, stati, responsive, tastiera e reduced motion.
+5. Registrare il file in `docs/design-system-registry.json`; aggiornare il catalogo e i test prima del merge.
+
+Il registro distingue 15 componenti canonici, infrastruttura e composizioni. I sottocomponenti interni (ad esempio ReviewCard, PersonCard e le parti del demo NOD) non sono alternative da scegliere liberamente per altre pagine. Un componente privo di consumatori non resta nel repository come proposta futura.
+
+`styles/components.css` contiene le implementazioni delle primitive condivise; `styles/forms.css` governa i campi. Il CSS di pagina può definire disposizione e contesto, ma non ridefinire font, colore, radius o stato di un pulsante canonico. I token semantici precedono i valori letterali. Gli alias storici restano compatibilità, non nuovi nomi da usare.
+
+### Criteri verificabili
+
+- Nessun componente fuori registro o inutilizzato.
+- Nessuna azione primaria ricostruita con classi a mano.
+- Coppie testo/sfondo approvate almeno 4,5:1; metadati leggibili anche su canvas e surface-2.
+- Campi e azioni coerenti tra contatti e candidature; stato disabled, loading, error e success presenti nel catalogo.
+- Target azioni almeno 44 px; input a 16 px; focus visibile anche su scuro.
+- Nessun overflow del documento a 390, 430, 768, 1024, 1280, 1440 e 1728 px.
+- Verifica visuale delle pagine rappresentative, navigazione da tastiera, reduced motion e contenuto senza JS.
+- Staging con SHA verificato, Quality Full prima del merge production e smoke pubblico dopo deploy.
+
+Questi criteri sono gate di qualità, non una certificazione WCAG né una classifica rispetto ad altre agenzie. La qualità competitiva richiede anche risultati reali, contenuti aggiornati e misure di performance sul traffico effettivo.
+
+### Eccezioni ammesse
+
+Le hero di home, Agenzia, Siti web e NOD, gli archivi editoriali e il rail continuo hanno composizioni specifiche. Non devono inventare nuovi controlli, form, palette o stati. Gli archivi distinguono featured, filtri e card perché assolvono compiti diversi; le prove semplici e i correlati usano ProjectCard. Il tema chiaro con pannelli scuri intenzionali resta l’identità esistente del brand: non viene introdotto un tema automatico alternativo.
+
+### Livelli di sovrapposizione
+
+Header, scrim, navigazione, pannelli e trigger usano la famiglia `--nm-layer-*`. I livelli 1-3 sono ammessi solo dentro un contesto locale isolato (media, hero). I dialog nativi usano il top layer del browser. Non introdurre z-index globali numerici nelle nuove composizioni.

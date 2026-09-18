@@ -1,23 +1,53 @@
 ---
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+interface Props extends HTMLAttributes<'button'> {
   href?: string;
   variant?: 'primary' | 'secondary' | 'inverse';
   class?: string;
   disabled?: boolean;
   magnetic?: boolean;
+  size?: 'default' | 'large';
+  busy?: boolean;
 }
 
-const { href, variant = 'primary', class: className = '', disabled = false, magnetic = false } = Astro.props;
-const classes = ['nm-button', `nm-button--${variant}`, className];
+const {
+  href,
+  variant = 'primary',
+  size = 'default',
+  class: className = '',
+  disabled = false,
+  magnetic = false,
+  busy = false,
+  type = 'button',
+  ...attributes
+} = Astro.props;
+const unavailable = disabled || busy;
+const classes = ['nm-button', `nm-button--${variant}`, `nm-button--${size}`, className];
 ---
 
 {
   href ? (
-    <a class:list={classes} href={href} aria-disabled={disabled ? 'true' : undefined} data-motion-magnetic={magnetic ? 'true' : undefined}>
+    <a
+      {...attributes}
+      class:list={classes}
+      href={unavailable ? undefined : href}
+      role={unavailable ? 'link' : undefined}
+      tabindex={unavailable ? -1 : attributes.tabindex}
+      aria-disabled={unavailable ? 'true' : undefined}
+      aria-busy={busy ? 'true' : undefined}
+      data-motion-magnetic={magnetic && !unavailable ? 'true' : undefined}
+    >
       <slot />
     </a>
   ) : (
-    <button class:list={classes} disabled={disabled} data-motion-magnetic={magnetic ? 'true' : undefined}>
+    <button
+      {...attributes}
+      type={type}
+      class:list={classes}
+      disabled={unavailable}
+      aria-busy={busy ? 'true' : undefined}
+      data-motion-magnetic={magnetic && !unavailable ? 'true' : undefined}
+    >
       <slot />
     </button>
   )

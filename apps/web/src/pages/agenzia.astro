@@ -1,9 +1,10 @@
 ---
+import ContactCTA from '@/components/blocks/ContactCTA.astro';
+import Button from '@/components/ui/Button.astro';
 import {
   IconArrowRight,
   IconCode,
   IconMessageCircle,
-  IconRoute,
   IconTargetArrow
 } from '@tabler/icons-astro';
 import { breadcrumbJsonLd, organizationJsonLd, personJsonLd, webPageJsonLd } from '@netmarket/seo';
@@ -124,8 +125,8 @@ const methodSteps = [
             creatività, contenuti e sviluppo in una sola direzione.
           </p>
           <div class="agency-hero__actions">
-            <a class="nm-button nm-button--primary" href="/contatti/">Parliamone</a>
-            <a class="nm-button nm-button--secondary" href="/progetti/">Guarda i progetti</a>
+            <Button variant="primary" href="/contatti/">Parliamone</Button>
+            <Button variant="secondary" href="/progetti/">Guarda i progetti</Button>
           </div>
         </div>
       </div>
@@ -142,7 +143,7 @@ const methodSteps = [
         </div>
         {
           heroProjects.map((project, index) => (
-            <a href={projectPath(project.slug)} data-cursor-label="Guarda">
+            <a href={projectPath(project.slug)}>
               <img
                 src={project.cover?.url}
                 alt={project.cover?.alt}
@@ -316,19 +317,7 @@ const methodSteps = [
 
   <Section compact labelledby="agency-cta-title" class="agency-cta-section">
     <Container wide>
-      <div class="agency-cta" data-reveal="scale">
-        <IconRoute stroke={1.6} aria-hidden="true" />
-        <p class="nm-meta">Un progetto da mettere in ordine</p>
-        <h2 id="agency-cta-title">Costruiamo una direzione che possa durare.</h2>
-        <p>
-          Partiamo da obiettivi, vincoli e strumenti già attivi. Poi decidiamo insieme cosa serve
-          davvero.
-        </p>
-        <a class="nm-button nm-button--primary" href="/contatti/">
-          Parliamone
-          <IconArrowRight stroke={1.7} aria-hidden="true" />
-        </a>
-      </div>
+      <ContactCTA tone="light" titleId="agency-cta-title" eyebrow="Un progetto da mettere in ordine" title="Costruiamo una direzione che possa durare." text="Partiamo da obiettivi, vincoli e strumenti già attivi. Poi decidiamo insieme cosa serve davvero." label="Parliamone" />
     </Container>
   </Section>
 </BaseLayout>

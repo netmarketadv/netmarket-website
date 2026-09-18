@@ -1,4 +1,5 @@
 ---
+import IconButton from '@/components/ui/IconButton.astro';
 import { IconArrowLeft, IconArrowRight, IconX } from '@tabler/icons-astro';
 import ReviewCard from '@/components/blocks/ReviewCard.astro';
 import type { GoogleReview } from '@/data/reviews';
@@ -23,34 +24,34 @@ const hasReviews = reviews.length > 0;
       </div>
 
       <div class="reviews-carousel__controls" role="group" aria-label="Navigazione recensioni">
-        <button
+        <IconButton
           class="reviews-carousel__arrow"
           type="button"
           data-reviews-prev
-          aria-label="Recensione precedente"
+          label="Recensione precedente"
         >
           <IconArrowLeft stroke={1.8} aria-hidden="true" />
-        </button>
-        <button
+        </IconButton>
+        <IconButton
           class="reviews-carousel__arrow"
           type="button"
           data-reviews-next
-          aria-label="Recensione successiva"
+          label="Recensione successiva"
         >
           <IconArrowRight stroke={1.8} aria-hidden="true" />
-        </button>
+        </IconButton>
       </div>
 
       <dialog class="review-modal" data-review-modal aria-labelledby="review-modal-title">
         <div class="review-modal__panel">
-          <button
+          <IconButton
             class="review-modal__close"
             type="button"
             data-review-modal-close
-            aria-label="Chiudi recensione"
+            label="Chiudi recensione"
           >
             <IconX stroke={1.8} aria-hidden="true" />
-          </button>
+          </IconButton>
           <div class="review-modal__identity">
             <img
               data-review-modal-avatar

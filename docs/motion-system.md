@@ -41,9 +41,9 @@ Easing:
 Distanze:
 
 - `--nm-motion-distance-xs`: 4px
-- `--nm-motion-distance-sm`: 8px
-- `--nm-motion-distance-md`: 16px
-- `--nm-motion-distance-lg`: 24px
+- `--nm-motion-distance-sm`: 0.7rem
+- `--nm-motion-distance-md`: 1.45rem
+- `--nm-motion-distance-lg`: 2.25rem
 
 ## Presets
 
@@ -69,7 +69,6 @@ Attributi supportati:
 - `data-reveal-stagger`: applica delay breve ai figli diretti.
 - `data-motion-state`: stato interno `ready` -> `revealed`; non va scritto a mano nei componenti.
 - `data-motion-count`: abilita count-up su metriche selezionate.
-- `data-cursor-label`: mostra una label contestuale desktop only.
 - `data-motion-magnetic`: applica magnetic micro-effect solo a CTA importanti.
 - `data-motion-engine`: stato interno su `html`, `gsap` quando GSAP ha preso controllo.
 - `data-agency-timeline`: progressione locale della storia dell'agenzia; anima la linea e rende attivo un capitolo per volta senza nascondere informazioni.
@@ -78,12 +77,12 @@ Attributi supportati:
 
 - Hero: header visibile subito, badge/heading/form/rail con stagger leggero e differenza iniziale percepibile.
 - Section headings: reveal `line` su H1 e titoli editoriali di sezione; applicarlo al titolo, o a un wrapper che contiene il titolo, senza includere intere card o liste.
-- Project cards: hover curato con image scale massimo 1.035, border blu tenue, cursor label e preview immagine desktop.
+- Project cards: hover curato con image scale massimo 1.035, segnale blu sul titolo e cursore nativo. Nessuna immagine duplicata che segue il puntatore.
 - Service cards: hover piu sobrio, image scale massimo 1.025.
 - Buttons: nessun layout jump, translate massimo 1px e background interpolation.
 - FAQ: accordion accessibile con WAAPI su altezza misurata.
 - Mega menu: apertura piu lenta della chiusura, overlay leggero, delayed close su pointer.
-- Mobile: niente magnetic e niente cursor label, durata/distanza ridotte.
+- Mobile: niente magnetic, durata/distanza ridotte.
 - Media scroll: immagini importanti possono avere scale/brightness scrub leggero, senza pinning obbligatorio e senza bloccare la navigazione.
 - Services: l'archivio usa reveal progressivo sulle righe del service index; il dettaglio usa line reveal sull'H1, media reveal sul visual, stagger leggero su processo e related content.
 - Rail e carousel: lo scorrimento manuale nativo resta sempre disponibile, incluso lo scroll verticale quando un gesto touch nasce sul rail. I rail continui supportano drag mouse e normalizzano la posizione senza un bordo finale; autoplay e animazioni si fermano durante hover, focus o interazione e non sono essenziali al contenuto.
@@ -96,7 +95,7 @@ Con `prefers-reduced-motion: reduce`:
 
 - GSAP, reveal e stagger sono disabilitati;
 - count-up mostra subito il valore finale;
-- magnetic e cursor label sono disabilitati;
+- magnetic è disabilitato;
 - accordion cambia stato senza animazioni lunghe;
 - transitions globali sono portate a 1ms.
 - marquee e autoplay dei rail sono fermi, con contenuto comunque esplorabile manualmente.
@@ -128,4 +127,4 @@ La composizione social della homepage, la timeline Agenzia, i rail dell'archivio
 - Pausa: hover e focus da tastiera restano rispettati; blur/focus, pageshow e visibilitychange non lasciano la riproduzione bloccata dopo una nuova finestra. Click modificati non avviano il drag.
 - Duplicati: dimensioni identiche agli originali, indipendenti dall'indice nel secondo gruppo.
 - Reveal: nessuna maschera permanente sui blocchi completati; GSAP pulisce transform, filter e clipPath. Nessuna transizione CSS sovrapposta ai tween GSAP.
-- Card progetto: lo zoom hover CSS non compete con uno scrub GSAP sulla stessa immagine. L'anteprima al cursore aggiorna la posizione solo quando visibile, senza un secondo tween concorrente sull'asse y.
+- Card progetto: lo zoom hover CSS non compete con uno scrub GSAP sulla stessa immagine. Le anteprime flottanti e le label al cursore sono rimosse: duplicavano contenuto visibile e aggiungevano listener senza un compito utile.
