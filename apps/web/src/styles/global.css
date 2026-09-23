@@ -956,6 +956,11 @@ main {
   object-fit: contain;
 }
 
+.site-footer__trust img.site-footer__trust-woocommerce {
+  max-width: min(10.6rem, 37vw);
+  max-height: 3.9rem;
+}
+
 .site-footer__details {
   width: 100%;
   min-width: 0;
@@ -5867,6 +5872,11 @@ main {
   .site-footer__trust img {
     max-width: min(9.6rem, 42vw);
     max-height: 3.8rem;
+  }
+
+  .site-footer__trust img.site-footer__trust-woocommerce {
+    max-width: min(8.2rem, 36vw);
+    max-height: 3.2rem;
   }
 
   .site-footer__details {
