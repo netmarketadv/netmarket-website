@@ -388,7 +388,23 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: /NOD new/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
-  await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
+  await expect(page.locator('.site-footer__trust a')).toHaveCount(1);
+  const googlePartner = page.getByRole('link', { name: 'Google Partner', exact: true });
+  await expect(googlePartner).toHaveAttribute(
+    'href',
+    'https://www.google.com/partners/agency?id=9657120194'
+  );
+  await expect(googlePartner).toHaveAttribute('target', '_blank');
+  expect(
+    await page
+      .locator('.site-footer__trust img')
+      .evaluateAll((images) => images.map((image) => image.getAttribute('alt')))
+  ).toEqual([
+    'iubenda Gold Partner',
+    'Google Partner',
+    'Brevo Partner Pioneer 2025',
+    'WooCommerce ecommerce partner'
+  ]);
   const iubenda = page.getByRole('img', { name: 'iubenda Gold Partner' });
   const brevo = page.getByRole('img', { name: 'Brevo Partner Pioneer 2025' });
   const woocommerce = page.getByRole('img', { name: 'WooCommerce ecommerce partner' });
