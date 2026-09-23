@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import {
@@ -378,6 +379,17 @@ test('header matches the clean responsive navigation model', async ({ page }) =>
 });
 
 test('footer exposes company details and trust banners', async ({ page }) => {
+  // Keep local rendering checks independent from the CMS anti-bot response on CI.
+  // Live deployments continue to use and verify the real CMS image.
+  if (!process.env.PLAYWRIGHT_BASE_URL) {
+    await page.route(
+      'https://cms.netmarket.it/wp-content/uploads/2026/09/Partner-RGB-Clickable.svg',
+      (route) => route.fulfill({
+        contentType: 'image/svg+xml',
+        body: readFileSync(new URL('../fixtures/google-partner.svg', import.meta.url), 'utf8')
+      })
+    );
+  }
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.getByRole('contentinfo').scrollIntoViewIfNeeded();
   await expect(page.getByRole('contentinfo')).toContainText('P.IVA e C.F. 03618730281');
@@ -388,7 +400,14 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: /NOD new/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
-  await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
+  await expect(page.locator('.site-footer__trust a')).toHaveCount(1);
+  const googlePartnerLink = page.getByRole('link', { name: 'Google Partner', exact: true });
+  await expect(googlePartnerLink).toHaveAttribute(
+    'href',
+    'https://www.google.com/partners/agency?id=9657120194'
+  );
+  await expect(googlePartnerLink).toHaveAttribute('target', '_blank');
+  await expect(googlePartnerLink).toHaveAttribute('rel', 'noopener noreferrer');
   const googlePartner = page.getByRole('img', { name: 'Google Partner', exact: true });
   await expect(googlePartner).toHaveAttribute(
     'src',
