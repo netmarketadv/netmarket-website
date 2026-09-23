@@ -31,6 +31,7 @@ export const cmsMedia = {
     ecommerce: `${cmsUploadsBase}/sviluppo-ecommerce_netmarket-1.png`
   },
   badges: {
+    googlePartner: `${cmsUploadsBase}/Partner-RGB-Clickable.svg`,
     brevo: `${cmsUploadsBase}/BrevoPartnerPioneer2025.png`,
     iubendaGold: `${cmsUploadsBase}/Gold.png`,
     woocommerce: `${cmsUploadsBase}/netmarket-woocommerce-ecommerce-partner.webp`

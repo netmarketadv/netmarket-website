@@ -388,13 +388,15 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: /NOD new/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
-  await expect(page.locator('.site-footer__trust a')).toHaveCount(1);
-  const googlePartner = page.getByRole('link', { name: 'Google Partner', exact: true });
+  await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
+  const googlePartner = page.getByRole('img', { name: 'Google Partner', exact: true });
   await expect(googlePartner).toHaveAttribute(
-    'href',
-    'https://www.google.com/partners/agency?id=9657120194'
+    'src',
+    'https://cms.netmarket.it/wp-content/uploads/2026/09/Partner-RGB-Clickable.svg'
   );
-  await expect(googlePartner).toHaveAttribute('target', '_blank');
+  await googlePartner.scrollIntoViewIfNeeded();
+  await expect(googlePartner).toBeVisible();
+  await expect.poll(() => googlePartner.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   expect(
     await page
       .locator('.site-footer__trust img')
