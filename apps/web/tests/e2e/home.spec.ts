@@ -388,7 +388,14 @@ test('footer exposes company details and trust banners', async ({ page }) => {
   await expect(page.getByRole('link', { name: /NOD new/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Cookie' })).toBeVisible();
-  await expect(page.locator('.site-footer__trust a')).toHaveCount(0);
+  await expect(page.locator('.site-footer__trust a')).toHaveCount(1);
+  const googlePartnerLink = page.getByRole('link', { name: 'Google Partner', exact: true });
+  await expect(googlePartnerLink).toHaveAttribute(
+    'href',
+    'https://www.google.com/partners/agency?id=9657120194'
+  );
+  await expect(googlePartnerLink).toHaveAttribute('target', '_blank');
+  await expect(googlePartnerLink).toHaveAttribute('rel', 'noopener noreferrer');
   const googlePartner = page.getByRole('img', { name: 'Google Partner', exact: true });
   await expect(googlePartner).toHaveAttribute(
     'src',

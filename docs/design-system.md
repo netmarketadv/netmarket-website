@@ -129,7 +129,7 @@ Le precedenti primitive Grid, Split, Bleed, Frame, StickyRegion e i wrapper moti
 - `SiteHeader`: sticky bianco, logo, navigazione sobria, CTA primaria.
 - Mega menu: `details/summary`, introduzione breve e link con icone Tabler.
 - Menu mobile: pannello dedicato, gerarchia piatta, sottomenu accessibili e CTA contatto.
-- `SiteFooter`: identita, colonne di link, social, trust badge e dati societari. I badge seguono l'ordine iubenda, Google Partner (immagine SVG dal CMS, come gli altri badge), Brevo, WooCommerce; WooCommerce e ridotto del 15% circa per bilanciare il peso visivo. Il watermark e un'eccezione controllata del footer.
+- `SiteFooter`: identita, colonne di link, social, trust badge e dati societari. I badge seguono l'ordine iubenda, Google Partner (immagine SVG dal CMS con link al profilo in nuova scheda), Brevo, WooCommerce; WooCommerce e ridotto del 15% circa per bilanciare il peso visivo. Il watermark e un'eccezione controllata del footer.
 
 ### Azioni e form
 
