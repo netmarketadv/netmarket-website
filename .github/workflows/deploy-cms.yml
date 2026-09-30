@@ -70,3 +70,10 @@ jobs:
         env:
           CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
           CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
+      - uses: actions/setup-node@v4
+        if: ${{ inputs.dry_run == 'false' }}
+        with:
+          node-version: '22'
+      - name: Verify public contact and CV upload contracts without sending mail
+        if: ${{ inputs.dry_run == 'false' }}
+        run: node infrastructure/scripts/smoke-cms-forms.mjs
