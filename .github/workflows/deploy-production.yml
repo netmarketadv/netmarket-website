@@ -85,6 +85,9 @@ jobs:
       - name: Production build audit
         run: pnpm audit:production-build
 
+      - name: Verify live CMS supports contact and career forms
+        run: node infrastructure/scripts/smoke-cms-forms.mjs
+
       - name: Production deploy dry-run
         run: infrastructure/scripts/deploy-production.sh --dry-run --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH"
         env:

@@ -68,6 +68,8 @@ dopo la pubblicazione. Il controllo verifica JSON, candidatura senza CV,
 candidatura con PDF e CORS dall'origine production. Le richieste usano sia
 nome vuoto sia consenso negato: si verifica la validazione reale del server
 senza inviare email. Il solo health check non rileva un plugin obsoleto.
+Lo stesso gate precede ogni deploy frontend production: se il CMS non supporta
+il contratto dei form, la pubblicazione si ferma prima di modificare il sito.
 
 ## Success
 
