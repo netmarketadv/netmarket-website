@@ -70,6 +70,12 @@ nome vuoto sia consenso negato: si verifica la validazione reale del server
 senza inviare email. Il solo health check non rileva un plugin obsoleto.
 Lo stesso gate precede ogni deploy frontend production: se il CMS non supporta
 il contratto dei form, la pubblicazione si ferma prima di modificare il sito.
+Come per gli smoke production, la sola challenge SiteGround riconosciuta da
+HTTP 202 e `/.well-known/sgcaptcha/` sul runner GitHub differisce il controllo
+pubblico: emette un warning e registra l'obbligo nel riepilogo della run.
+In quel caso eseguire lo stesso comando da una rete esterna prima di dichiarare
+il rilascio verificato. Esecuzioni locali, errori API, CORS errati e risposte 202
+senza la firma della challenge continuano a fallire.
 
 ## Success
 
