@@ -30,7 +30,7 @@ Il payload include:
 
 Il plugin WordPress valida:
 
-- payload JSON;
+- payload JSON per i contatti e multipart/form-data per le candidature;
 - honeypot vuoto;
 - nome 2-120 caratteri;
 - email valida;
@@ -50,6 +50,24 @@ I destinatari sono configurati server-side nel plugin:
 Il frontend non puo scegliere destinatari. Il plugin non salva lead nel database e logga solo request ID, timestamp implicito del server e stato tecnico.
 
 Quando `wp_mail()` fallisce, l'endpoint risponde con errore `mail_failed` e il frontend non effettua redirect.
+
+## Candidature e verifica del CMS
+
+`/lavora-con-noi/` usa lo stesso endpoint con `service=lavora-con-noi` e un CV
+PDF, DOC o DOCX, obbligatorio e di massimo 5 MB. Il CMS valida il file e lo allega
+alla mail senza salvarlo nella libreria media pubblica. Il consenso multipart
+viene interpretato come booleano, quindi la stringa `false` non autorizza l'invio.
+
+Il deploy frontend non aggiorna il plugin: il supporto multipart richiede il
+workflow separato `Deploy CMS Plugin`. Il 30 settembre 2026 il CMS pubblicato
+era ancora al commit `9aae34f`, precedente al supporto CV introdotto in `27da939`:
+le candidature venivano respinte con HTTP 400 `invalid_payload`.
+
+Il workflow CMS esegue ora `node infrastructure/scripts/smoke-cms-forms.mjs`
+dopo la pubblicazione. Il controllo verifica JSON, candidatura senza CV,
+candidatura con PDF e CORS dall'origine production. Le richieste usano sia
+nome vuoto sia consenso negato: si verifica la validazione reale del server
+senza inviare email. Il solo health check non rileva un plugin obsoleto.
 
 ## Success
 
