@@ -73,8 +73,9 @@ Il download richiede sessione amministratore e nonce, forza un allegato e vieta
 la cache. Gli utenti senza permessi non possono consultare né scaricare i CV.
 Se il salvataggio fallisce, il form restituisce `archive_failed` senza inviare mail.
 
-I dati persistono fino alla cancellazione manuale; il cestino conserva il CV,
-ma ne impedisce il download. La cancellazione definitiva elimina anche il
+I dati persistono finché la candidatura resta in archivio. Il cestino impedisce
+il download e conserva il CV fino allo svuotamento, anche automatico secondo
+la configurazione WordPress (normalmente dopo 30 giorni). La cancellazione definitiva elimina anche il
 record del file e il relativo metadato. L'archivio rientra nei backup del database: verificare
 copertura e ripristino dei backup hosting prima di considerarli garantiti.
 Base64 aggiunge circa un terzo alla dimensione dei file nel database.
