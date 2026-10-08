@@ -92,6 +92,15 @@ download con un amministratore e una candidatura di prova autorizzata.
 Il deploy frontend non aggiorna il plugin: usare il workflow separato
 `Deploy CMS Plugin` e verificare il contratto del form dopo la pubblicazione.
 
+### Allegato email
+
+Il CV viene allegato tramite il PHPMailer nativo di WordPress con nome originale
+sanitizzato, codifica base64 e tipo MIME validato (PDF, DOC o DOCX). Il percorso
+temporaneo PHP non viene usato come nome visibile o per dedurre il tipo MIME.
+L'hook `phpmailer_init` è limitato alla singola email e rimosso anche in caso
+di errore; un errore nell'allegato marca la notifica fallita e conserva il CV
+nell'archivio. `composer run test` verifica nome, tipo, byte e isolamento tra email.
+
 ## Success
 
 Dopo una risposta positiva reale dal backend, il frontend invia `contact_form_success` e reindirizza a `/grazie/`. Il redirect non contiene dati personali in query string.

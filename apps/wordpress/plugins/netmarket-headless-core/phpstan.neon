@@ -7,3 +7,4 @@ parameters:
     - src/Support/autoload.php
   bootstrapFiles:
     - tests/phpstan-wordpress-stubs.php
+    - tests/phpstan-mailer-stubs.php

@@ -6,6 +6,7 @@ namespace Netmarket\HeadlessCore\Rest;
 
 use Netmarket\HeadlessCore\Content\Media;
 use Netmarket\HeadlessCore\Admin\CareerArchive;
+use Netmarket\HeadlessCore\Mail\CareerMailer;
 use Netmarket\HeadlessCore\Content\Relations;
 use Netmarket\HeadlessCore\Taxonomies\Registry as TaxonomyRegistry;
 use WP_REST_Request;
@@ -116,6 +117,7 @@ final class Routes
         $cv = is_array($files['cv'] ?? null) ? $files['cv'] : null;
         $cvPath = '';
         $cvName = '';
+        $cvMimeType = '';
 
         $errors = [];
         if ($website !== '') {
@@ -164,6 +166,7 @@ final class Routes
                     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 ];
                 $fileType = wp_check_filetype_and_ext($cvPath, $cvName, $allowedCvTypes);
+                $cvMimeType = (string) $fileType['type'];
                 if ($cvSize <= 0 || $cvSize > 5 * 1024 * 1024) {
                     $errors['cv'] = 'cv_too_large';
                 } elseif ($cvPath === '' || ! is_file($cvPath) || empty($fileType['ext']) || empty($fileType['type'])) {
@@ -226,8 +229,9 @@ final class Routes
             $headers[] = 'Cc: ' . $cc;
         }
 
-        $attachments = $isCareer && $cvPath !== '' ? [$cvPath] : [];
-        $sent = wp_mail($recipient, $subject, $body, $headers, $attachments);
+        $sent = $isCareer
+            ? (new CareerMailer())->send($recipient, $subject, $body, $headers, $cvPath, $cvName, $cvMimeType)
+            : wp_mail($recipient, $subject, $body, $headers);
         if ($applicationId > 0) {
             $archive->notification($applicationId, $sent);
             $this->logContactEvent($requestId, $sent ? 'sent' : 'archived_mail_failed');

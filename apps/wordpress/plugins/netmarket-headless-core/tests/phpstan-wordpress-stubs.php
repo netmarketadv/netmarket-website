@@ -92,6 +92,7 @@ class WP_Query
 }
 
 function add_action(...$args): void {}
+function remove_action(...$args): bool { return true; }
 function add_meta_box(...$args): void {}
 function wp_enqueue_media(...$args): void {}
 function wp_enqueue_style(...$args): void {}

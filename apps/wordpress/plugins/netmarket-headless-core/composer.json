@@ -19,7 +19,7 @@
     }
   },
   "scripts": {
-    "test": "php tests/career-archive.php",
+    "test": "php tests/career-archive.php && php tests/career-mailer.php",
     "phpcs": "phpcs --standard=phpcs.xml.dist",
     "phpstan": "phpstan analyse --memory-limit=512M"
   },
