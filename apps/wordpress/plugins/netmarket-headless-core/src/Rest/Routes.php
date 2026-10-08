@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netmarket\HeadlessCore\Rest;
 
 use Netmarket\HeadlessCore\Content\Media;
+use Netmarket\HeadlessCore\Admin\CareerArchive;
 use Netmarket\HeadlessCore\Content\Relations;
 use Netmarket\HeadlessCore\Taxonomies\Registry as TaxonomyRegistry;
 use WP_REST_Request;
@@ -187,6 +188,13 @@ final class Routes
         }
         set_transient($rateKey, $attempts + 1, 10 * MINUTE_IN_SECONDS);
 
+        $archive = new CareerArchive();
+        $applicationId = $isCareer ? $archive->save($name, $email, $message, $cvPath, $cvName) : 0;
+        if ($isCareer && $applicationId === 0) {
+            $this->logContactEvent($requestId, 'archive_failed');
+            return new WP_REST_Response(['code' => 'archive_failed', 'message' => 'Salvataggio non disponibile. Riprova più tardi.'], 500);
+        }
+
         $recipient = $this->contactToEmail();
         $cc = $this->contactCcEmail();
         $from = $this->contactFromEmail();
@@ -220,6 +228,11 @@ final class Routes
 
         $attachments = $isCareer && $cvPath !== '' ? [$cvPath] : [];
         $sent = wp_mail($recipient, $subject, $body, $headers, $attachments);
+        if ($applicationId > 0) {
+            $archive->notification($applicationId, $sent);
+            $this->logContactEvent($requestId, $sent ? 'sent' : 'archived_mail_failed');
+            return $this->json(['success' => true, 'notificationSent' => $sent]);
+        }
         if (! $sent) {
             $this->logContactEvent($requestId, 'mail_failed');
             return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);

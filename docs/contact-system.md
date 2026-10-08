@@ -30,7 +30,7 @@ Il payload include:
 
 Il plugin WordPress valida:
 
-- payload JSON;
+- payload JSON per i contatti e multipart/form-data per le candidature;
 - honeypot vuoto;
 - nome 2-120 caratteri;
 - email valida;
@@ -47,9 +47,44 @@ I destinatari sono configurati server-side nel plugin:
 - From: `Netmarket <segreteria@netmarket.it>`;
 - Reply-To: nome/email inseriti dall'utente, dopo sanitizzazione.
 
-Il frontend non puo scegliere destinatari. Il plugin non salva lead nel database e logga solo request ID, timestamp implicito del server e stato tecnico.
+Il frontend non puo scegliere destinatari. I contatti ordinari non vengono salvati nel database; le candidature sono archiviate come descritto sotto. I log contengono solo request ID, timestamp implicito del server e stato tecnico.
 
-Quando `wp_mail()` fallisce, l'endpoint risponde con errore `mail_failed` e il frontend non effettua redirect.
+Quando `wp_mail()` fallisce per un contatto ordinario, l'endpoint risponde con errore `mail_failed` e il frontend non effettua redirect. Per le candidature già archiviate restituisce successo con `notificationSent=false`: il CV resta recuperabile e l'utente non è invitato a inviarlo nuovamente.
+
+## Candidature e verifica del CMS
+
+`/lavora-con-noi/` usa lo stesso endpoint con `service=lavora-con-noi` e un CV
+PDF, DOC o DOCX, obbligatorio e di massimo 5 MB. Il CMS valida il file e lo allega
+alla mail senza salvarlo nella libreria media pubblica. Il consenso multipart
+viene interpretato come booleano, quindi la stringa `false` non autorizza l'invio.
+
+### Archivio privato candidature
+
+Il plugin salva nome, email, messaggio (area e portfolio inclusi), data e CV nel
+database WordPress **prima** di inviare la notifica. Il post type `nm_application`
+è privato, escluso dalle API REST e dalle query pubbliche. Il CV è un metadato
+protetto (`_nm_cv`), codificato base64: non viene creato alcun URL pubblico.
+La codifica non è cifratura; chi amministra database e backup può leggere i file.
+
+Gli amministratori (`manage_options`) accedono a **Candidature** nel menu CMS:
+ricerca per nome/email, dettagli, download CV e stato della notifica email.
+Il download richiede sessione amministratore e nonce, forza un allegato e vieta
+la cache. Gli utenti senza permessi non possono consultare né scaricare i CV.
+Se il salvataggio fallisce, il form restituisce `archive_failed` senza inviare mail.
+
+I dati persistono fino alla cancellazione manuale; il cestino conserva il CV,
+ma ne impedisce il download. La cancellazione definitiva elimina anche il
+metadato con il file. L'archivio rientra nei backup del database: verificare
+copertura e ripristino dei backup hosting prima di considerarli garantiti.
+Base64 aggiunge circa un terzo alla dimensione dei file nel database.
+Non vengono importati i CV delle candidature ricevute prima del deploy.
+
+Verifica locale: `php apps/wordpress/plugins/netmarket-headless-core/tests/career-archive.php`,
+PHP lint, PHPCS e PHPStan. Dopo il deploy CMS verificare anche la lista e il
+download con un amministratore e una candidatura di prova autorizzata.
+
+Il deploy frontend non aggiorna il plugin: usare il workflow separato
+`Deploy CMS Plugin` e verificare il contratto del form dopo la pubblicazione.
 
 ## Success
 
