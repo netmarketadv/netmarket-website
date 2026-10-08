@@ -48,6 +48,7 @@ final class Plugin
         add_action('init', [$taxonomies, 'register']);
         $careers = new CareerArchive();
         add_action('init', [$careers, 'register']);
+        add_action('add_meta_boxes', [$careers, 'registerMetaBox']);
         add_filter('manage_' . CareerArchive::POST_TYPE . '_posts_columns', [$careers, 'columns']);
         add_action('manage_' . CareerArchive::POST_TYPE . '_posts_custom_column', [$careers, 'column'], 10, 2);
         add_action('admin_post_nm_download_cv', [$careers, 'download']);

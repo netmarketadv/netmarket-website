@@ -69,6 +69,10 @@ La codifica non è cifratura; chi amministra database e backup può leggere i fi
 
 Gli amministratori (`manage_options`) accedono a **Candidature** nel menu CMS:
 ricerca per nome/email, dettagli, download CV e stato della notifica email.
+Nel dettaglio della candidatura il riquadro **Curriculum allegato** mostra il
+nome del file e **Scarica CV**; per i PDF offre anche **Apri PDF** in una nuova
+scheda. Entrambe le azioni richiedono gli stessi permessi e nonce. L'apertura
+PDF usa `application/pdf` e disposizione inline; DOC e DOCX restano download.
 Il download richiede sessione amministratore e nonce, forza un allegato e vieta
 la cache. Gli utenti senza permessi non possono consultare né scaricare i CV.
 Se il salvataggio fallisce, il form restituisce `archive_failed` senza inviare mail.
