@@ -1,0 +1,109 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Netmarket\HeadlessCore\Admin;
+
+final class CareerArchive
+{
+    public const POST_TYPE = 'nm_application';
+    private const FILE_META = '_nm_cv';
+
+    public function register(): void
+    {
+        register_post_type(self::POST_TYPE, [
+            'labels' => ['name' => 'Candidature', 'singular_name' => 'Candidatura'],
+            'public' => false,
+            'publicly_queryable' => false,
+            'show_ui' => true,
+            'show_in_rest' => false,
+            'rewrite' => false,
+            'supports' => ['title', 'editor'],
+            'map_meta_cap' => false,
+            'capabilities' => [
+                'edit_post' => 'manage_options', 'read_post' => 'manage_options',
+                'delete_post' => 'manage_options', 'edit_posts' => 'manage_options',
+                'edit_others_posts' => 'manage_options', 'publish_posts' => 'do_not_allow',
+                'read_private_posts' => 'manage_options', 'delete_posts' => 'manage_options',
+                'delete_private_posts' => 'manage_options', 'delete_published_posts' => 'manage_options',
+                'delete_others_posts' => 'manage_options', 'edit_private_posts' => 'manage_options',
+                'edit_published_posts' => 'manage_options', 'create_posts' => 'do_not_allow',
+            ],
+            'menu_icon' => 'dashicons-id-alt',
+        ]);
+    }
+
+    public function save(string $name, string $email, string $message, string $path, string $filename): int
+    {
+        $bytes = file_get_contents($path);
+        if ($bytes === false || $bytes === '') {
+            return 0;
+        }
+        $id = wp_insert_post([
+            'post_type' => self::POST_TYPE,
+            'post_status' => 'private',
+            'post_title' => wp_slash($name . ' — ' . $email),
+            'post_content' => wp_slash($message),
+        ], true);
+        if (is_wp_error($id) || ! $id) {
+            return 0;
+        }
+        if (! add_post_meta($id, self::FILE_META, ['name' => $filename, 'data' => base64_encode($bytes)], true)) {
+            wp_delete_post($id, true);
+            return 0;
+        }
+        update_post_meta($id, '_nm_notification', 'pending');
+        return $id;
+    }
+
+    public function notification(int $id, bool $sent): void
+    {
+        update_post_meta($id, '_nm_notification', $sent ? 'sent' : 'failed');
+    }
+
+    /** @param array<string, string> $columns @return array<string, string> */
+    public function columns(array $columns): array
+    {
+        $columns['nm_cv'] = 'Curriculum';
+        $columns['nm_notification'] = 'Notifica email';
+        return $columns;
+    }
+
+    public function column(string $column, int $id): void
+    {
+        if ($column === 'nm_notification') {
+            $status = get_post_meta($id, '_nm_notification', true);
+            echo esc_html($status === 'sent' ? 'Inviata' : ($status === 'failed' ? 'Invio fallito · CV salvato' : 'In attesa'));
+        }
+        if ($column === 'nm_cv' && current_user_can('manage_options')) {
+            $url = wp_nonce_url(admin_url('admin-post.php?action=nm_download_cv&id=' . $id), 'nm_download_cv_' . $id);
+            echo '<a href="' . esc_url($url) . '">Scarica CV</a>';
+        }
+    }
+
+    public function download(): void
+    {
+        if (! current_user_can('manage_options')) {
+            wp_die('Accesso negato.', '', ['response' => 403]);
+        }
+        $id = absint($_GET['id'] ?? 0);
+        check_admin_referer('nm_download_cv_' . $id);
+        $post = get_post($id);
+        if (! $post || $post->post_type !== self::POST_TYPE || $post->post_status !== 'private') {
+            wp_die('Candidatura non disponibile.', '', ['response' => 404]);
+        }
+        $file = get_post_meta($id, self::FILE_META, true);
+        $bytes = is_array($file) && is_string($file['data'] ?? null) ? base64_decode($file['data'], true) : false;
+        if ($bytes === false) {
+            wp_die('Curriculum non disponibile.', '', ['response' => 404]);
+        }
+        $filename = sanitize_file_name((string) ($file['name'] ?? 'curriculum'));
+        nocache_headers();
+        header('Content-Type: application/octet-stream');
+        header('X-Content-Type-Options: nosniff');
+        header("Content-Disposition: attachment; filename=\"curriculum\"; filename*=UTF-8''" . rawurlencode($filename));
+        header('Content-Length: ' . strlen($bytes));
+        echo $bytes;
+        exit;
+    }
+}
