@@ -9,6 +9,8 @@ class WP_Post
     public string $post_type = '';
     public string $post_name = '';
     public string $post_content = '';
+    public string $post_status = '';
+    public int $post_parent = 0;
 }
 
 class WP_Term
@@ -106,7 +108,17 @@ function plugins_url(string $path = '', string $plugin = ''): string { return $p
 function rest_url(string $path = ''): string { return $path; }
 function wp_create_nonce(string $action = ''): string { return 'nonce'; }
 function deactivate_plugins(string $plugin): void {}
-function wp_die(string $message): never { exit($message); }
+function wp_die(string $message, string $title = '', array $args = []): never { exit($message); }
+function add_filter(...$args): void {}
+function wp_slash(string $value): string { return addslashes($value); }
+function wp_insert_post(array $post, bool $wpError = false): int|WP_Error { return 1; }
+function wp_delete_post(int $id, bool $force = false): WP_Post|false|null { return null; }
+function admin_url(string $path = ''): string { return $path; }
+function wp_nonce_url(string $url, string $action = ''): string { return $url; }
+function check_admin_referer(string $action = ''): int|false { return 1; }
+function nocache_headers(): void {}
+function esc_url(string $url): string { return $url; }
+function get_post(int $id): ?WP_Post { return null; }
 function flush_rewrite_rules(): void {}
 function apply_filters(string $hookName, mixed $value, mixed ...$args): mixed { return $value; }
 function esc_html__(string $text, string $domain = ''): string { return $text; }

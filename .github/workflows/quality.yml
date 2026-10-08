@@ -126,6 +126,9 @@ jobs:
         run: composer install --no-interaction --prefer-dist
       - name: PHP lint
         run: find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
+      - name: Career archive tests
+        working-directory: apps/wordpress/plugins/netmarket-headless-core
+        run: composer run test
       - name: PHPCS
         working-directory: apps/wordpress/plugins/netmarket-headless-core
         run: composer run phpcs
