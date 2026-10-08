@@ -7,6 +7,17 @@ require_once __DIR__ . '/../src/Admin/CareerArchive.php';
 
 use Netmarket\HeadlessCore\Admin\CareerArchive;
 
+class WP_Post
+{
+    public int $ID;
+    public int $post_parent;
+    public string $post_type;
+    public string $post_status;
+    public string $post_title = '';
+    public string $post_content;
+    public function __construct(array $fields) { foreach ($fields as $key => $value) { $this->$key = $value; } }
+}
+
 $posts = [];
 $meta = [];
 $allowed = true;
@@ -17,12 +28,18 @@ $registration = [];
 $nextId = 0;
 $failFile = false;
 
+function add_meta_box(string $id, string $title, array $callback, string $type, string $context, string $priority): void { $GLOBALS['boxes'][$id] = ['callback' => $callback, 'type' => $type]; }
+function esc_html(string $text): string { return htmlspecialchars($text, ENT_QUOTES, 'UTF-8'); }
+function esc_url(string $url): string { return htmlspecialchars($url, ENT_QUOTES, 'UTF-8'); }
+function admin_url(string $path): string { return 'https://cms.example.test/wp-admin/' . $path; }
+function wp_nonce_url(string $url, string $action): string { return $url . '&_wpnonce=test-nonce'; }
+function rendered(CareerArchive $archive, WP_Post $post): string { ob_start(); $archive->metaBox($post); return ob_get_clean(); }
 function register_post_type(string $type, array $args): void { $GLOBALS['registration'][$type] = $args; }
 function wp_slash(string $value): string { return addslashes($value); }
 function wp_insert_post(array $post, bool $error): int {
     if ($GLOBALS['failPost'] || ($GLOBALS['failFile'] && $post['post_type'] === 'nm_cv_file')) { return 0; }
     $id = ++$GLOBALS['nextId'];
-    $GLOBALS['posts'][$id] = (object) array_merge(['post_parent' => 0], $post, ['ID' => $id]);
+    $GLOBALS['posts'][$id] = new WP_Post(array_merge(['post_parent' => 0], $post, ['ID' => $id]));
     return $id;
 }
 function is_wp_error(mixed $value): bool { return false; }
@@ -67,7 +84,8 @@ try {
     $archive->notification($id, true);
     expect($meta[1]['_nm_notification'] === 'sent', 'Mail success tracked');
     $_GET['id'] = 1;
-    if (($argv[1] ?? '') === '--download') {
+    if (in_array($argv[1] ?? '', ['--download', '--preview'], true)) {
+        if ($argv[1] === '--preview') { $_GET['view'] = '1'; }
         unlink($path);
         $archive->download();
     }
@@ -78,7 +96,20 @@ try {
     fclose($pipes[1]);
     fclose($pipes[2]);
     expect(proc_close($process) === 0 && $downloadErrors === '' && $download === $bytes, 'Download returns exact binary CV');
+    $archive->registerMetaBox();
+    expect(($GLOBALS['boxes']['nm_application_cv']['type'] ?? '') === CareerArchive::POST_TYPE, 'Detail panel registered');
+    $html = rendered($archive, $posts[1]);
+    expect(str_contains($html, 'cv.pdf') && str_contains($html, 'Scarica CV') && str_contains($html, 'Apri PDF') && str_contains($html, 'view=1') && str_contains($html, '_wpnonce='), 'PDF detail exposes authenticated download and preview');
+    $meta[1]['_nm_cv']['name'] = 'cv.docx';
+    expect(!str_contains(rendered($archive, $posts[1]), 'Apri PDF'), 'Word documents only download');
+    $meta[1]['_nm_cv']['name'] = '<cv>.pdf';
+    expect(str_contains(rendered($archive, $posts[1]), '&lt;cv&gt;.pdf'), 'File labels escaped');
+    $meta[1]['_nm_cv']['name'] = 'cv.pdf';
+    $posts[2]->post_parent = 999;
+    expect(!str_contains(rendered($archive, $posts[1]), 'Scarica CV'), 'Unrelated file cannot be shown');
+    $posts[2]->post_parent = 1;
     $allowed = false;
+    expect(rendered($archive, $posts[1]) === '', 'No detail links without administrator permission');
     denied($archive, '403');
     $allowed = true;
     $nonceValid = false;

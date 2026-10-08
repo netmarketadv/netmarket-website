@@ -78,6 +78,39 @@ final class CareerArchive
         update_post_meta($id, '_nm_notification', $sent ? 'sent' : 'failed');
     }
 
+    public function registerMetaBox(): void
+    {
+        if (current_user_can('manage_options')) {
+            add_meta_box('nm_application_cv', 'Curriculum allegato', [$this, 'metaBox'], self::POST_TYPE, 'normal', 'high');
+        }
+    }
+
+    public function metaBox(\WP_Post $post): void
+    {
+        if (! current_user_can('manage_options') || $post->post_type !== self::POST_TYPE) {
+            return;
+        }
+        $file = get_post_meta($post->ID, self::FILE_META, true);
+        $filePost = is_array($file) ? get_post(absint($file['id'] ?? 0)) : null;
+        if ($post->post_status !== 'private' || ! $filePost || $filePost->post_type !== self::FILE_TYPE || $filePost->post_status !== 'private' || $filePost->post_parent !== $post->ID) {
+            echo '<p>Curriculum non disponibile.</p>';
+            return;
+        }
+        $filename = sanitize_file_name((string) ($file['name'] ?? 'curriculum'));
+        echo '<p><strong>' . esc_html($filename) . '</strong></p>';
+        $url = $this->downloadUrl($post->ID);
+        echo '<p><a class="button button-primary" href="' . esc_url($url) . '">Scarica CV</a>';
+        if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) === 'pdf') {
+            echo ' <a class="button" target="_blank" rel="noopener" href="' . esc_url($this->downloadUrl($post->ID, true)) . '">Apri PDF</a>';
+        }
+        echo '</p><p>File privato, accessibile solo agli amministratori.</p>';
+    }
+
+    private function downloadUrl(int $id, bool $inline = false): string
+    {
+        return wp_nonce_url(admin_url('admin-post.php?action=nm_download_cv&id=' . $id . ($inline ? '&view=1' : '')), 'nm_download_cv_' . $id);
+    }
+
     public function deleteFile(int $id): void
     {
         $post = get_post($id);
@@ -106,7 +139,7 @@ final class CareerArchive
             echo esc_html($status === 'sent' ? 'Inviata' : ($status === 'failed' ? 'Invio fallito · CV salvato' : 'In attesa'));
         }
         if ($column === 'nm_cv' && current_user_can('manage_options')) {
-            $url = wp_nonce_url(admin_url('admin-post.php?action=nm_download_cv&id=' . $id), 'nm_download_cv_' . $id);
+            $url = $this->downloadUrl($id);
             echo '<a href="' . esc_url($url) . '">Scarica CV</a>';
         }
     }
@@ -130,10 +163,11 @@ final class CareerArchive
             wp_die('Curriculum non disponibile.', '', ['response' => 404]);
         }
         $filename = sanitize_file_name((string) ($file['name'] ?? 'curriculum'));
+        $inline = ($_GET['view'] ?? '') === '1' && strtolower(pathinfo($filename, PATHINFO_EXTENSION)) === 'pdf';
         nocache_headers();
-        header('Content-Type: application/octet-stream');
+        header('Content-Type: ' . ($inline ? 'application/pdf' : 'application/octet-stream'));
         header('X-Content-Type-Options: nosniff');
-        header("Content-Disposition: attachment; filename=\"curriculum\"; filename*=UTF-8''" . rawurlencode($filename));
+        header('Content-Disposition: ' . ($inline ? 'inline' : 'attachment') . "; filename=\"curriculum\"; filename*=UTF-8''" . rawurlencode($filename));
         header('Content-Length: ' . strlen($bytes));
         echo $bytes;
         exit;
