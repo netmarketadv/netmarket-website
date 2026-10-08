@@ -62,8 +62,9 @@ viene interpretato come booleano, quindi la stringa `false` non autorizza l'invi
 
 Il plugin salva nome, email, messaggio (area e portfolio inclusi), data e CV nel
 database WordPress **prima** di inviare la notifica. Il post type `nm_application`
-è privato, escluso dalle API REST e dalle query pubbliche. Il CV è un metadato
-protetto (`_nm_cv`), codificato base64: non viene creato alcun URL pubblico.
+è privato, escluso dalle API REST e dalle query pubbliche. Il CV è un record privato separato (`nm_cv_file`), codificato base64 e
+collegato tramite metadato protetto (`_nm_cv`): non viene creato alcun URL pubblico.
+La lista amministrativa carica solo i riferimenti, senza caricare tutti i file.
 La codifica non è cifratura; chi amministra database e backup può leggere i file.
 
 Gli amministratori (`manage_options`) accedono a **Candidature** nel menu CMS:
@@ -74,7 +75,7 @@ Se il salvataggio fallisce, il form restituisce `archive_failed` senza inviare m
 
 I dati persistono fino alla cancellazione manuale; il cestino conserva il CV,
 ma ne impedisce il download. La cancellazione definitiva elimina anche il
-metadato con il file. L'archivio rientra nei backup del database: verificare
+record del file e il relativo metadato. L'archivio rientra nei backup del database: verificare
 copertura e ripristino dei backup hosting prima di considerarli garantiti.
 Base64 aggiunge circa un terzo alla dimensione dei file nel database.
 Non vengono importati i CV delle candidature ricevute prima del deploy.

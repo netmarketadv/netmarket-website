@@ -14,13 +14,16 @@ $failPost = false;
 $failMeta = false;
 $nonceValid = true;
 $registration = [];
+$nextId = 0;
+$failFile = false;
 
-function register_post_type(string $type, array $args): void { $GLOBALS['registration'] = $args; }
+function register_post_type(string $type, array $args): void { $GLOBALS['registration'][$type] = $args; }
 function wp_slash(string $value): string { return addslashes($value); }
 function wp_insert_post(array $post, bool $error): int {
-    if ($GLOBALS['failPost']) { return 0; }
-    $GLOBALS['posts'][1] = (object) array_merge($post, ['ID' => 1]);
-    return 1;
+    if ($GLOBALS['failPost'] || ($GLOBALS['failFile'] && $post['post_type'] === 'nm_cv_file')) { return 0; }
+    $id = ++$GLOBALS['nextId'];
+    $GLOBALS['posts'][$id] = (object) array_merge(['post_parent' => 0], $post, ['ID' => $id]);
+    return $id;
 }
 function is_wp_error(mixed $value): bool { return false; }
 function add_post_meta(int $id, string $key, mixed $value, bool $unique): int|false {
@@ -49,15 +52,15 @@ function denied(CareerArchive $archive, string $expected): void {
 
 $archive = new CareerArchive();
 $archive->register();
-expect(!$registration['public'] && !$registration['show_in_rest'], 'Archive must remain private');
-expect($registration['capabilities']['read_private_posts'] === 'manage_options', 'Admin-only records');
+expect(!$registration[CareerArchive::POST_TYPE]['public'] && !$registration[CareerArchive::POST_TYPE]['show_in_rest'], 'Archive must remain private');
+expect($registration[CareerArchive::POST_TYPE]['capabilities']['read_private_posts'] === 'manage_options', 'Admin-only records');
 $path = tempnam(sys_get_temp_dir(), 'nm_cv_test_');
 $bytes = "%PDF-1.4\n" . chr(0) . chr(255) . "test\n";
 file_put_contents($path, $bytes);
 try {
     $id = $archive->save("D'Angelo", 'test@example.test', 'Area: design', $path, 'cv.pdf');
     expect($id === 1 && $posts[1]->post_status === 'private', 'Private record persisted');
-    expect(base64_decode($meta[1]['_nm_cv']['data'], true) === $bytes, 'Binary CV round trip');
+    expect(base64_decode($posts[$meta[1]['_nm_cv']['id']]->post_content, true) === $bytes, 'Binary CV round trip');
     expect($meta[1]['_nm_cv']['name'] === 'cv.pdf', 'Original filename retained');
     $archive->notification($id, false);
     expect($meta[1]['_nm_notification'] === 'failed' && isset($meta[1]['_nm_cv']), 'Mail failure must retain CV');
@@ -87,14 +90,20 @@ try {
     $posts[1]->post_type = 'post';
     denied($archive, '404');
     $posts[1]->post_type = CareerArchive::POST_TYPE;
-    $meta[1]['_nm_cv']['data'] = '!invalid!';
+    $posts[$meta[1]['_nm_cv']['id']]->post_content = '!invalid!';
     denied($archive, '404');
     $failPost = true;
     expect($archive->save('Test', 'test@example.test', 'Message', $path, 'cv.pdf') === 0, 'Insert failure reported');
     $failPost = false;
+    $archive->deleteFile(1);
+    expect(!isset($posts[2]), 'Permanent deletion removes file');
+    wp_delete_post(1, true);
+    $failFile = true;
+    expect($archive->save('Test', 'test@example.test', 'Message', $path, 'cv.pdf') === 0 && $posts === [], 'File insert failure cleans parent');
+    $failFile = false;
     $failMeta = true;
     expect($archive->save('Test', 'test@example.test', 'Message', $path, 'cv.pdf') === 0, 'File storage failure reported');
-    expect(!isset($posts[1]), 'Incomplete record removed');
+    expect($posts === [], 'Incomplete record and file removed');
     $failMeta = false;
     file_put_contents($path, '');
     expect($archive->save('Test', 'test@example.test', 'Message', $path, 'cv.pdf') === 0, 'Empty file rejected');

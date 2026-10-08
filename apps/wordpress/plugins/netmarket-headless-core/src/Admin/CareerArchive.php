@@ -7,6 +7,7 @@ namespace Netmarket\HeadlessCore\Admin;
 final class CareerArchive
 {
     public const POST_TYPE = 'nm_application';
+    private const FILE_TYPE = 'nm_cv_file';
     private const FILE_META = '_nm_cv';
 
     public function register(): void
@@ -31,6 +32,12 @@ final class CareerArchive
             ],
             'menu_icon' => 'dashicons-id-alt',
         ]);
+        register_post_type(self::FILE_TYPE, [
+            'public' => false, 'publicly_queryable' => false,
+            'show_ui' => false, 'show_in_rest' => false, 'rewrite' => false,
+            'map_meta_cap' => false,
+            'capabilities' => ['read_post' => 'manage_options', 'edit_post' => 'do_not_allow', 'delete_post' => 'do_not_allow'],
+        ]);
     }
 
     public function save(string $name, string $email, string $message, string $path, string $filename): int
@@ -48,7 +55,17 @@ final class CareerArchive
         if (is_wp_error($id) || ! $id) {
             return 0;
         }
-        if (! add_post_meta($id, self::FILE_META, ['name' => $filename, 'data' => base64_encode($bytes)], true)) {
+        // Keep file bodies out of the metadata cache used by the admin list.
+        $fileId = wp_insert_post([
+            'post_type' => self::FILE_TYPE, 'post_status' => 'private',
+            'post_parent' => $id, 'post_content' => base64_encode($bytes),
+        ], true);
+        if (is_wp_error($fileId) || ! $fileId) {
+            wp_delete_post($id, true);
+            return 0;
+        }
+        if (! add_post_meta($id, self::FILE_META, ['name' => $filename, 'id' => $fileId], true)) {
+            wp_delete_post($fileId, true);
             wp_delete_post($id, true);
             return 0;
         }
@@ -59,6 +76,19 @@ final class CareerArchive
     public function notification(int $id, bool $sent): void
     {
         update_post_meta($id, '_nm_notification', $sent ? 'sent' : 'failed');
+    }
+
+    public function deleteFile(int $id): void
+    {
+        $post = get_post($id);
+        if (! $post || $post->post_type !== self::POST_TYPE) {
+            return;
+        }
+        $file = get_post_meta($id, self::FILE_META, true);
+        $filePost = is_array($file) ? get_post(absint($file['id'] ?? 0)) : null;
+        if ($filePost && $filePost->post_type === self::FILE_TYPE && $filePost->post_parent === $id) {
+            wp_delete_post($filePost->ID, true);
+        }
     }
 
     /** @param array<string, string> $columns @return array<string, string> */
@@ -93,7 +123,9 @@ final class CareerArchive
             wp_die('Candidatura non disponibile.', '', ['response' => 404]);
         }
         $file = get_post_meta($id, self::FILE_META, true);
-        $bytes = is_array($file) && is_string($file['data'] ?? null) ? base64_decode($file['data'], true) : false;
+        $filePost = is_array($file) ? get_post(absint($file['id'] ?? 0)) : null;
+        $bytes = $filePost && $filePost->post_type === self::FILE_TYPE && $filePost->post_status === 'private' && $filePost->post_parent === $id
+            ? base64_decode($filePost->post_content, true) : false;
         if ($bytes === false) {
             wp_die('Curriculum non disponibile.', '', ['response' => 404]);
         }

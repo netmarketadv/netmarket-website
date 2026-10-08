@@ -10,6 +10,7 @@ class WP_Post
     public string $post_name = '';
     public string $post_content = '';
     public string $post_status = '';
+    public int $post_parent = 0;
 }
 
 class WP_Term
