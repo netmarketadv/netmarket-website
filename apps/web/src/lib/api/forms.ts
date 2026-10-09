@@ -23,12 +23,9 @@ const CAREER_CV_MAX_BYTES = 5 * 1024 * 1024;
 const CAREER_CV_EXTENSIONS = new Set(['pdf', 'doc', 'docx']);
 
 async function assertSuccessfulResponse(response: Response): Promise<{ ok: true }> {
-  if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as {
-      message?: string;
-      code?: string;
-    } | null;
-    throw new Error(body?.message || body?.code || 'contact_form_failed');
+  const body = (await response.json().catch(() => null)) as { success?: boolean } | null;
+  if (!response.ok || body?.success !== true) {
+    throw new Error('contact_form_failed');
   }
   return { ok: true };
 }

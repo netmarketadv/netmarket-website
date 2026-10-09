@@ -42,4 +42,20 @@ describe('analytics dispatcher', () => {
     expect(dataLayer).toHaveLength(1);
     expect(gtag).not.toHaveBeenCalled();
   });
+  it('waits for CMP consent to be read before emitting a lead exactly once', () => {
+    const bus = new EventTarget();
+    const dataLayer: unknown[] = [];
+    const runtime = {
+      dataLayer,
+      __netmarketConsentReady: false,
+      addEventListener: bus.addEventListener.bind(bus)
+    };
+    vi.stubGlobal('window', runtime);
+    pushEvent({ event: 'generate_lead', form_id: 'advertising-landing', lead_type: 'contact' });
+    expect(dataLayer).toHaveLength(0);
+    runtime.__netmarketConsentReady = true;
+    bus.dispatchEvent(new Event('netmarket:consent-ready'));
+    bus.dispatchEvent(new Event('netmarket:consent-ready'));
+    expect(dataLayer).toHaveLength(1);
+  });
 });

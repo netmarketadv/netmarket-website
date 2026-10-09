@@ -1,0 +1,109 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { IconArrowUpRight } from '@tabler/icons-astro';
+interface Props {
+  href: `#${string}`;
+  label: string;
+  heroId: string;
+  preview?: boolean;
+}
+const { href, label, heroId, preview = false } = Astro.props;
+---
+
+<div
+  class:list={['landing-sticky-cta', preview && 'landing-sticky-cta--preview']}
+  data-sticky-contact={preview ? undefined : ''}
+  data-hero-id={heroId}
+  data-target={href}
+  data-visible={preview ? 'true' : 'false'}
+  inert={!preview}
+>
+  <Button href={href} variant="brand" size="large"
+    >{label}<IconArrowUpRight aria-hidden="true" /></Button
+  >
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sticky-contact]').forEach((bar) => {
+    const hero = document.getElementById(bar.dataset.heroId || '');
+    const target = document.querySelector<HTMLElement>(bar.dataset.target || '#consulenza');
+    if (!hero || !target) return;
+    let passedHero = false;
+    let atForm = false;
+    const update = () => {
+      const visible = passedHero && !atForm && !document.querySelector('[data-landing-menu][open]');
+      bar.dataset.visible = String(visible);
+      bar.inert = !visible;
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.target === hero)
+            passedHero = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
+          if (entry.target === target) atForm = entry.isIntersecting;
+        }
+        update();
+      },
+      { threshold: 0 }
+    );
+    observer.observe(hero);
+    observer.observe(target);
+    document
+      .querySelectorAll('[data-landing-menu]')
+      .forEach((menu) => menu.addEventListener('toggle', update));
+    window.addEventListener('pageshow', update);
+  });
+</script>
+<style>
+  .landing-sticky-cta {
+    display: none;
+  }
+  .landing-sticky-cta--preview {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    padding: var(--nm-space-md);
+    background: var(--nm-color-canvas);
+  }
+  @media (max-width: 760px) {
+    .landing-sticky-cta {
+      display: flex;
+      justify-content: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--nm-layer-header);
+      padding: var(--nm-space-sm) var(--nm-page-margin)
+        calc(var(--nm-space-sm) + env(safe-area-inset-bottom));
+      background: transparent;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(var(--nm-motion-distance-md));
+      transition:
+        opacity var(--nm-motion-duration-base) var(--nm-motion-ease-enter),
+        transform var(--nm-motion-duration-base) var(--nm-motion-ease-enter),
+        visibility var(--nm-motion-duration-base);
+    }
+    .landing-sticky-cta[data-visible='true'] {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    .landing-sticky-cta :global(.nm-button) {
+      width: 100%;
+      pointer-events: auto;
+      box-shadow: var(--nm-shadow-blue);
+    }
+    .landing-sticky-cta--preview {
+      position: relative;
+      z-index: auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .landing-sticky-cta {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

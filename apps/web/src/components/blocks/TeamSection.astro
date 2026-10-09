@@ -3,6 +3,7 @@ import PersonCard from '@/components/blocks/PersonCard.astro';
 import type { TeamMember } from '@/data/team';
 
 interface Props {
+  showProfiles?: boolean;
   title: string;
   text?: string;
   titleId?: string;
@@ -10,7 +11,7 @@ interface Props {
   headingLevel?: 'h2' | 'h3' | 'h4';
 }
 
-const { title, text, titleId, people, headingLevel = 'h3' } = Astro.props;
+const { title, text, titleId, people, showProfiles = true, headingLevel = 'h3' } = Astro.props;
 ---
 
 <div class="team-section">
@@ -20,6 +21,10 @@ const { title, text, titleId, people, headingLevel = 'h3' } = Astro.props;
   </div>
 
   <div class="team-section__grid" data-reveal="up" data-reveal-stagger="1">
-    {people.map((person) => <PersonCard person={person} headingLevel={headingLevel} />)}
+    {
+      people.map((person) => (
+        <PersonCard person={person} headingLevel={headingLevel} showProfile={showProfiles} />
+      ))
+    }
   </div>
 </div>

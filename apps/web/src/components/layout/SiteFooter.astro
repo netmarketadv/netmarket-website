@@ -1,5 +1,6 @@
 ---
 import { IconBrandFacebook, IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-astro';
+import PartnerBadges from '@/components/blocks/PartnerBadges.astro';
 import { cmsMedia } from '@/data/home';
 
 const footerColumns = [
@@ -88,41 +89,7 @@ const socialLinks = [
       }
     </section>
 
-    <section class="site-footer__trust" aria-label="Certificazioni e privacy">
-      <img
-        src={cmsMedia.badges.iubendaGold}
-        alt="iubenda Gold Partner"
-        loading="lazy"
-        decoding="async"
-      />
-      <a
-        href="https://www.google.com/partners/agency?id=9657120194"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src={cmsMedia.badges.googlePartner}
-          alt="Google Partner"
-          width="304"
-          height="291"
-          loading="lazy"
-          decoding="async"
-        />
-      </a>
-      <img
-        src={cmsMedia.badges.brevo}
-        alt="Brevo Partner Pioneer 2025"
-        loading="lazy"
-        decoding="async"
-      />
-      <img
-        class="site-footer__trust-woocommerce"
-        src={cmsMedia.badges.woocommerce}
-        alt="WooCommerce ecommerce partner"
-        loading="lazy"
-        decoding="async"
-      />
-    </section>
+    <PartnerBadges />
 
     <section class="site-footer__details" aria-label="Dati societari">
       <div>

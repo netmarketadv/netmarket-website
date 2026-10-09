@@ -1,0 +1,671 @@
+---
+import {
+  IconArrowUpRight,
+  IconArrowRight,
+  IconArrowLeft,
+  IconCheck,
+  IconStarFilled,
+  IconBrandMeta,
+  IconTargetArrow,
+  IconChartBar,
+  IconBrush,
+  IconDeviceDesktop,
+  IconMapPin,
+  IconWorld,
+  IconBuildingStore,
+  IconSearch,
+  IconPlus
+} from '@tabler/icons-astro';
+import { serviceJsonLd } from '@netmarket/seo';
+import { getPublicEnv } from '@/lib/env';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import SectionHeading from '@/components/content/SectionHeading.astro';
+import ProjectCard from '@/components/content/ProjectCard.astro';
+import Button from '@/components/ui/Button.astro';
+import IconButton from '@/components/ui/IconButton.astro';
+import FAQBlock from '@/components/blocks/FAQBlock.astro';
+import ClientMarquee from '@/components/blocks/ClientMarquee.astro';
+import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
+import TeamSection from '@/components/blocks/TeamSection.astro';
+import StickyContactCTA from '@/components/landing/StickyContactCTA.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+import {
+  advertisingShell,
+  advertisingGoals,
+  advertisingSteps,
+  advertisingFaq
+} from '@/data/advertising-landing';
+import { advertisingMap } from '@/data/advertising-map';
+import { clientLogos, googleTrust } from '@/data/home';
+import { googleReviews } from '@/data/reviews';
+import { teamMembers } from '@/data/team';
+import { getProjectArchiveData } from '@/lib/projects/content';
+import { projectPresentation } from '@/lib/projects/presentation';
+import '@/styles/advertising.css';
+
+const siteUrl = getPublicEnv().PUBLIC_SITE_URL;
+const description =
+  'Google Ads, Meta Ads, creatività e landing in un unico progetto. Scopri il metodo, i progetti e le persone di Netmarket. Parliamo dei tuoi obiettivi.';
+const structuredData = [
+  serviceJsonLd(
+    siteUrl,
+    'Google Ads e Meta Ads',
+    description,
+    new URL('/advertising/', siteUrl).href,
+    'Advertising e performance marketing',
+    [
+      { '@type': 'City', name: 'Padova' },
+      { '@type': 'Country', name: 'Italia' }
+    ]
+  ),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': new URL('/advertising/#domande', siteUrl).href,
+    inLanguage: 'it-IT',
+    mainEntity: advertisingFaq.map(([question, answer]) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer }
+    }))
+  }
+];
+
+const { projects } = await getProjectArchiveData();
+const brb = projects.find(
+  (project) => project.slug === 'casi-studio-strategia-digitale-ecommerce-brb'
+);
+const metrics = brb ? projectPresentation(brb).metrics : [];
+const landingClients = clientLogos.map((client) =>
+  client.name === 'Albertini Allestimenti' ? { ...client, visualScale: 0.58 } : client
+);
+const googleLogo = '/media/advertising/google-g.webp';
+const media = '/media/advertising/';
+const people = [
+  'giacomo-galanti',
+  'greta-negro',
+  'enrico-paolo-toso',
+  'mattia-graziotti',
+  'marco-toso'
+].flatMap((id) => {
+  const person = teamMembers.find((p) => p.id === id);
+  return person ? [{ ...person, image: `${media}${id.split('-')[0]}.webp` }] : [];
+});
+const projectCards = [
+  {
+    title: 'BRB',
+    category: 'Strategia / Ecommerce / Contenuti',
+    description: 'Un ecosistema digitale che collega identità, contenuti e acquisto.',
+    image: `${media}brb-social.webp`,
+    alt: 'Contenuti social BRB realizzati da Netmarket',
+    href: '#caso-brb',
+    tag: 'Un sistema per crescere'
+  },
+  {
+    title: 'Pazzo Design',
+    category: 'Ecommerce / Design / Sviluppo',
+    description: 'Il catalogo di arredamento incontra un percorso di acquisto su misura.',
+    image: `${media}pazzo-store.webp`,
+    alt: 'Ecommerce Pazzo Design realizzato da Netmarket',
+    href: '#caso-pazzo',
+    tag: 'Un percorso per acquistare'
+  },
+  {
+    title: 'Progetto-e',
+    category: 'Sito web / SEO / Contenuti',
+    description: 'Una presenza digitale dedicata al fotovoltaico per le aziende.',
+    image: `${media}progetto-e.webp`,
+    alt: 'Sito Progetto-e realizzato da Netmarket',
+    href: '#caso-progetto-e',
+    tag: 'Un’offerta più chiara'
+  }
+];
+const markets = [
+  {
+    id: 'locale',
+    title: 'Sul territorio',
+    icon: IconBuildingStore,
+    text: 'Raggiungiamo chi cerca la tua offerta vicino a te. Partiamo dal tuo bacino di clienti.'
+  },
+  {
+    id: 'italia',
+    title: 'In Italia',
+    icon: IconMapPin,
+    text: 'Selezioniamo aree, pubblici e messaggi per portare la tua offerta sul mercato nazionale.'
+  },
+  {
+    id: 'estero',
+    title: 'All’estero',
+    icon: IconWorld,
+    text: 'Valutiamo domanda, lingua e capacità di servizio per aprire nuove opportunità all’estero.'
+  }
+];
+---
+
+<BaseLayout
+  title="Google Ads e Meta Ads per la tua azienda"
+  description={description}
+  path="/advertising/"
+  structuredData={structuredData}
+  socialImage={{
+    id: 0,
+    url: '/media/advertising/brb-store.webp',
+    alt: 'Ecommerce BRB progettato da Netmarket',
+    width: 1024,
+    height: 896
+  }}
+  landing={advertisingShell}
+>
+  <div class="adv-page" id="inizio">
+    <section class="adv-hero" aria-labelledby="advertising-title">
+      <Container wide>
+        <div class="adv-hero__grid">
+          <div class="adv-hero__copy">
+            <p class="nm-eyebrow" data-reveal="down">Google Ads · Meta Ads · Performance</p>
+            <h1 id="advertising-title" data-reveal="line">
+              Più valore dalle tue <span class="nm-heading-accent">campagne.</span>
+            </h1>
+            <p class="adv-lead" data-reveal="up">
+              Strategia, creatività e tecnologia per trasformare l’interesse in contatti
+              qualificati, vendite e nuove opportunità.
+            </p>
+            <div class="adv-hero__actions" data-reveal="up">
+              <Button id="hero-contact" href="#consulenza" variant="brand" size="large" magnetic
+                >Parliamo dei tuoi obiettivi<IconArrowUpRight aria-hidden="true" /></Button
+              >
+            </div>
+            <a class="adv-hero__trust" href="#recensioni">
+              <span class="adv-avatar-stack" aria-hidden="true"
+                >{
+                  googleReviews.slice(0, 3).map((r) => (
+                    <span>
+                      <img
+                        src={r.avatarUrl}
+                        alt=""
+                        width="42"
+                        height="42"
+                        referrerpolicy="no-referrer"
+                        loading="lazy"
+                      />
+                    </span>
+                  ))
+                }</span
+              >
+              <span
+                ><span class="adv-stars" aria-label={`${googleTrust.rating} su 5 su Google`}
+                  >{
+                    Array.from({ length: 5 }).map(() => (
+                      <IconStarFilled aria-hidden="true" size={13} />
+                    ))
+                  }<strong>{googleTrust.rating}</strong></span
+                ><span class="adv-trust-caption"
+                  >{googleTrust.reviewCount} recensioni su Google</span
+                ></span
+              >
+            </a>
+          </div>
+          <div class="adv-hero__composition" data-reveal="media">
+            <div class="adv-hero__photo">
+              <img
+                src={`${media}brb-social.webp`}
+                alt="Creatività e contenuti social realizzati per BRB"
+                width="856"
+                height="1100"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+            <figure class="adv-hero__store">
+              <img
+                src={`${media}brb-store.webp`}
+                alt="Ecommerce BRB progettato da Netmarket"
+                width="1024"
+                height="896"
+                loading="eager"
+              /><figcaption>
+                Dal messaggio all’acquisto.<IconArrowUpRight aria-hidden="true" />
+              </figcaption>
+            </figure>
+            {
+              metrics[0] && (
+                <a class="adv-hero__result" href="#caso-brb">
+                  <>
+                    <span>Progetto BRB</span>
+                    <strong data-motion-count={metrics[0].value}>{metrics[0].value}</strong>
+                    <span>Fatturato ecommerce*</span>
+                  </>
+                </a>
+              )
+            }
+            <span class="adv-hero__signature">Strategia. Contenuti. Conversione.</span>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="adv-clients" aria-labelledby="clients-title">
+      <Container wide
+        ><ClientMarquee
+          titleId="clients-title"
+          title="In buona compagnia."
+          text="Alcuni dei brand con cui abbiamo lavorato."
+          clients={landingClients}
+        /></Container
+      >
+    </section>
+
+    <Section id="progetti" labelledby="proof-title" class="adv-projects">
+      <Container wide>
+        <div class="adv-heading-controls">
+          <SectionHeading
+            id="proof-title"
+            reveal
+            title="Il lavoro si vede. E si misura."
+            text="Progetti reali, con esigenze diverse. La stessa cura nel collegare strategia, contenuti e tecnologia."
+          /><div class="adv-slider-controls" role="group" aria-label="Navigazione progetti">
+            <IconButton label="Progetto precedente" data-project-prev
+              ><IconArrowLeft aria-hidden="true" /></IconButton
+            ><IconButton label="Progetto successivo" data-project-next
+              ><IconArrowRight aria-hidden="true" /></IconButton
+            >
+          </div>
+        </div>
+        <div
+          class="adv-project-rail"
+          data-project-rail
+          tabindex="0"
+          aria-label="Progetti Netmarket, scorri per esplorare"
+        >
+          {
+            projectCards.map((project, index) => (
+              <article class="adv-project-slide">
+                <>
+                  <ProjectCard {...project} />
+                  <div
+                    class:list={[
+                      'adv-project-summary',
+                      index === 0 && 'adv-project-summary--metrics'
+                    ]}
+                  >
+                    {index === 0 ? (
+                      metrics.slice(0, 2).map((metric) => (
+                        <div>
+                          <strong data-motion-count={metric.value}>{metric.value}</strong>
+                          <span>{metric.label}*</span>
+                        </div>
+                      ))
+                    ) : (
+                      <>
+                        <IconCheck aria-hidden="true" />
+                        <span>{project.tag}</span>
+                      </>
+                    )}
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+        <div class="adv-case-details">
+          <details id="caso-brb" class="adv-case-detail">
+            <summary
+              ><span>BRB / Il progetto dietro i numeri</span><IconPlus
+                aria-hidden="true"
+              /></summary
+            ><div class="adv-case-detail__body">
+              <p>
+                Analisi, strategia multicanale, identità visiva, contenuti, nuovo ecommerce e SEO.
+                Un ecosistema coordinato per accompagnare il brand alimentare nella crescita
+                digitale.
+              </p><p>
+                *Nei primi tre mesi dal lancio, rispetto allo storico. I risultati si riferiscono
+                all’intero progetto, non alle sole campagne Ads, e non sono una previsione per altri
+                clienti.
+              </p>
+            </div>
+          </details>
+          <details id="caso-pazzo" class="adv-case-detail">
+            <summary
+              ><span>Pazzo Design / Dall’arredamento all’acquisto online</span><IconPlus
+                aria-hidden="true"
+              /></summary
+            ><div class="adv-case-detail__body">
+              <p>
+                Design, sviluppo ecommerce e assistenza continua per un catalogo di tavoli e sedie.
+                Un progetto che mostra come rendere l’offerta più facile da esplorare e acquistare.
+              </p><p>
+                È una prova delle competenze ecommerce Netmarket; non vengono attribuiti risultati
+                pubblicitari non documentati.
+              </p>
+            </div>
+          </details>
+          <details id="caso-progetto-e" class="adv-case-detail">
+            <summary
+              ><span>Progetto-e / Far capire il valore di un’offerta B2B</span><IconPlus
+                aria-hidden="true"
+              /></summary
+            ><div class="adv-case-detail__body">
+              <p>
+                Sito, architettura dei contenuti, SEO e landing per il fotovoltaico aziendale. Un
+                percorso per presentare servizi e soluzioni al pubblico professionale.
+              </p><p>
+                È una prova del lavoro su sito e contenuti; non rappresenta un risultato misurato
+                delle campagne Ads.
+              </p>
+            </div>
+          </details>
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="obiettivi" labelledby="goals-title">
+      <Container wide>
+        <div class="adv-opening">
+          <SectionHeading
+            id="goals-title"
+            eyebrow="Cosa vuoi far crescere?"
+            reveal
+            title="Il tuo obiettivo. Le competenze per raggiungerlo."
+            text="Le campagne funzionano meglio quando messaggi, pagine e dati seguono la stessa direzione. Noi li facciamo lavorare insieme."
+          />
+        </div>
+        <div class="adv-capabilities">
+          <article class="adv-capability adv-capability--feature" data-reveal="up">
+            <img
+              src={`${media}product-photography-netmarket.webp`}
+              alt="Fotografia di prodotto realizzata da Netmarket"
+              width="1254"
+              height="1254"
+              loading="lazy"
+            />
+            <div>
+              <IconBrush aria-hidden="true" stroke={1.7} /><h3>
+                Creatività che parla del tuo valore.
+              </h3><p>
+                Messaggi, immagini e pagine pensati per farti scegliere. Dalla prima impressione
+                alla richiesta.
+              </p>
+            </div>
+          </article>
+          <article class="adv-capability adv-capability--channels" data-reveal="up">
+            <div class="adv-channel-logos" aria-label="Google e Meta">
+              <img
+                class="adv-google-logo"
+                src={googleLogo}
+                alt="Google"
+                width="40"
+                height="40"
+              /><IconBrandMeta aria-hidden="true" stroke={1.8} />
+            </div><h3>I canali giusti.<br />Per le persone giuste.</h3><p>
+              Intercettiamo la domanda su Google e costruiamo interesse su Meta, con una strategia
+              adatta alla tua offerta.
+            </p><span>Google Ads · Meta Ads</span>
+          </article>
+          <article class="adv-capability adv-capability--measurement" data-reveal="up">
+            <IconChartBar aria-hidden="true" stroke={1.7} /><h3>
+              Numeri che aiutano a decidere.
+            </h3><p>
+              Colleghiamo i dati delle campagne alla qualità dei contatti e al valore delle vendite.
+            </p><div class="adv-measure-tags">
+              <span>Contatti</span><span>Vendite</span><span>Margini</span>
+            </div>
+          </article>
+        </div>
+        <div class="adv-goals">
+          {
+            advertisingGoals.map((goal, index) => (
+              <article class="adv-goal" data-reveal="up">
+                <>
+                  <span class="adv-goal__index">
+                    0{index + 1} / {goal.label}
+                  </span>
+                  <h3>{goal.title}</h3>
+                  <p>{goal.text}</p>
+                  <Button href="#consulenza" variant="secondary" data-advertising-goal={goal.label}>
+                    {goal.action}
+                    <IconArrowUpRight aria-hidden="true" />
+                  </Button>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="metodo" labelledby="method-title" class="adv-method">
+      <Container wide>
+        <SectionHeading
+          id="method-title"
+          tone="inverse"
+          reveal
+          eyebrow="Prima delle campagne, le scelte."
+          title="Ogni investimento ha bisogno di una direzione."
+          text="Mettiamo a fuoco cosa deve succedere, prepariamo il percorso e miglioriamo quello che i dati ci insegnano."
+        />
+        <div class="adv-standards">
+          {
+            (
+              [
+                [IconTargetArrow, 'Obiettivi condivisi'],
+                [IconBrush, 'Creatività coerente'],
+                [IconDeviceDesktop, 'Landing dedicate'],
+                [IconChartBar, 'Misurazione'],
+                [IconSearch, 'Test e ottimizzazione']
+              ] as const
+            ).map(([Icon, label]) => (
+              <span>
+                {typeof Icon !== 'string' && <Icon aria-hidden="true" stroke={1.7} />}
+                {typeof label === 'string' && label}
+              </span>
+            ))
+          }
+        </div>
+        <ol class="adv-steps">
+          {
+            advertisingSteps.map(([title, text, output], index) => (
+              <li data-reveal="up">
+                <>
+                  <span class="adv-step-number">0{index + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <span class="adv-step-output">
+                    <IconCheck aria-hidden="true" size={16} />
+                    {output}
+                  </span>
+                </>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="adv-method__close">
+          <p>
+            Hai già campagne attive?<br /><strong>Partiamo da quello che stanno producendo.</strong>
+          </p><Button href="#consulenza" variant="inverse" size="large"
+            >Parliamo delle tue campagne<IconArrowUpRight aria-hidden="true" /></Button
+          >
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="team" labelledby="team-title" class="adv-team">
+      <Container wide>
+        <div class="adv-team__intro">
+          <div class="adv-avatar-stack adv-avatar-stack--team" aria-hidden="true">
+            {
+              people.slice(0, 4).map((person) => (
+                <span>
+                  <img src={person.image} alt="" width="56" height="56" loading="lazy" />
+                </span>
+              ))
+            }
+          </div><p>Persone reali. Competenze che si parlano.</p>
+        </div>
+        <TeamSection
+          titleId="team-title"
+          title="Un team dalla tua parte. In ogni fase."
+          text="Marketing, design e sviluppo allo stesso tavolo. Per dare continuità alle idee e risposte concrete al tuo progetto."
+          people={people}
+          showProfiles={false}
+        />
+        <div class="adv-team__numbers">
+          <div>
+            <strong data-motion-count="1986">1986</strong><span
+              >L’anno da cui affianchiamo le imprese.</span
+            >
+          </div><div>
+            <strong>Una regia.</strong><span>Strategia, creatività e tecnologia coordinate.</span>
+          </div><Button href="#consulenza" size="large"
+            >Conosciamoci<IconArrowUpRight aria-hidden="true" /></Button
+          >
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="mercati" labelledby="markets-title" class="adv-markets">
+      <Container wide>
+        <div class="adv-market-grid">
+          <div class="adv-market-content">
+            <SectionHeading
+              id="markets-title"
+              reveal
+              eyebrow="Da Padova, verso il tuo mercato."
+              title="Dove vuoi far crescere il tuo business?"
+            />
+            <div class="adv-market-options" role="group" aria-label="Scegli il mercato">
+              {
+                markets.map((market, index) => (
+                  <Button
+                    variant="secondary"
+                    data-market-choice={market.id}
+                    aria-pressed={index === 0 ? 'true' : 'false'}
+                  >
+                    <market.icon aria-hidden="true" />
+                    {market.title}
+                  </Button>
+                ))
+              }
+            </div>
+            <div class="adv-market-description" aria-live="polite">
+              {
+                markets.map((market, index) => (
+                  <p data-market-copy={market.id} hidden={index !== 0}>
+                    {market.text}
+                  </p>
+                ))
+              }
+            </div>
+            <Button href="#consulenza" data-market-contact
+              >Parliamo del tuo mercato<IconArrowUpRight aria-hidden="true" /></Button
+            >
+          </div>
+          <figure class="adv-map" data-market-map="locale">
+            <svg viewBox="0 0 650 560" role="img" aria-labelledby="map-title"
+              ><title id="map-title">
+                Netmarket a Padova. Pianificazione per mercati locali, nazionali e internazionali.
+              </title><defs
+                ><radialGradient id="map-glow"
+                  ><stop offset="0" stop-color="#0e51fe" stop-opacity=".18"></stop><stop
+                    offset="1"
+                    stop-color="#0e51fe"
+                    stop-opacity="0"></stop></radialGradient
+                ></defs
+              ><circle cx="319" cy="344" r="220" fill="url(#map-glow)"></circle><g
+                class="adv-map__countries"
+                >{
+                  advertisingMap.map((country) => (
+                    <path
+                      d={country.path}
+                      class:list={[country.id === 'ITA' && 'adv-map__italy']}
+                    />
+                  ))
+                }</g
+              ><g class="adv-map__reach" aria-hidden="true"
+                ><circle cx="319" cy="344" r="42"></circle><circle cx="319" cy="344" r="85"
+                ></circle><circle cx="319" cy="344" r="145"></circle></g
+              ><g class="adv-map__connections" aria-hidden="true"
+                ><path d="M319 344Q245 220 224 296M319 344Q345 240 334 244M319 344Q325 360 325 393"
+                ></path><circle cx="224" cy="296" r="5"></circle><circle cx="334" cy="244" r="5"
+                ></circle><circle cx="325" cy="393" r="5"></circle></g
+              ><circle cx="319" cy="344" r="8" class="adv-map__pin"></circle><text x="335" y="340"
+                >Padova</text
+              ><text class="adv-map__small" x="335" y="359">La nostra sede</text></svg
+            ><figcaption>
+              <IconMapPin aria-hidden="true" size={18} />Vicini al progetto. Ovunque sia il tuo
+              pubblico.
+            </figcaption>
+          </figure>
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="recensioni" labelledby="reviews-title"
+      ><Container wide
+        ><ReviewsSection
+          titleId="reviews-title"
+          title="Il rapporto conta. Lo raccontano i nostri clienti."
+          text="Esperienze pubblicate su Google da chi ha lavorato con Netmarket."
+          rating={googleTrust.rating}
+          reviewCount={googleTrust.reviewCount}
+          googleHref={googleTrust.profileHref}
+        /></Container
+      ></Section
+    >
+
+    <Section id="domande" labelledby="faq-title" class="adv-faq"
+      ><Container wide
+        ><FAQBlock
+          titleId="faq-title"
+          title="Prima di sentirci, facciamo chiarezza."
+          text="Budget, tempi e attività. Le risposte alle domande da cui parte ogni buon progetto."
+          items={advertisingFaq}
+        /></Container
+      ></Section
+    >
+
+    <Section id="consulenza" labelledby="consultation-title" class="adv-consultation">
+      <Container wide
+        ><div class="adv-consultation__grid">
+          <div>
+            <SectionHeading
+              id="consultation-title"
+              reveal
+              eyebrow="Il prossimo passo è una conversazione."
+              text="Partiamo da obiettivi, attività in corso e priorità. Capiremo insieme se e come possiamo aiutarti."
+              ><Fragment slot="title"
+                ><span class="adv-contact-title-line">Raccontaci dove </span><span
+                  class="adv-contact-title-line">vuoi arrivare.</span
+                ></Fragment
+              ></SectionHeading
+            >
+            <ol class="adv-next">
+              <li><span>01</span>Leggiamo la tua richiesta.</li><li>
+                <span>02</span>Ci confrontiamo su obiettivi e priorità.
+              </li><li><span>03</span>Valutiamo il percorso più adatto.</li>
+            </ol>
+          </div><div class="adv-consultation__form">
+            <ContactForm
+              defaultService="advertising"
+              serviceOptions={[
+                { value: 'advertising', label: 'Google Ads e Meta Ads' },
+                { value: 'siti-web', label: 'Landing page per le campagne' },
+                { value: 'content-production', label: 'Creatività e contenuti per gli annunci' },
+                { value: 'progetto-integrato', label: 'Campagne, landing e creatività' }
+              ]}
+              showEmailFallback={false}
+              submitLabel="Richiedi un primo confronto"
+              formId="advertising-landing"
+            />
+          </div>
+        </div></Container
+      >
+    </Section>
+  </div>
+  <StickyContactCTA href="#consulenza" label="Parliamo del tuo progetto" heroId="hero-contact" />
+</BaseLayout>
+<script>
+  import { initAdvertisingLanding } from '@/lib/advertising-landing';
+  initAdvertisingLanding();
+</script>

@@ -1,5 +1,10 @@
 import { getPublicEnv } from '@/lib/env';
-import { categoryPath, getInsightArchiveData, insightCategories, insightPath } from '@/lib/insights/content';
+import {
+  categoryPath,
+  getInsightArchiveData,
+  insightCategories,
+  insightPath
+} from '@/lib/insights/content';
 import { getProjectArchiveData, projectPath } from '@/lib/projects/content';
 import { getServiceArchiveData, servicePath } from '@/lib/services/content';
 
@@ -19,6 +24,7 @@ export async function GET() {
     '/agenzia/',
     '/lavora-con-noi/',
     '/contatti/',
+    '/advertising/',
     '/nod/',
     '/insight/',
     ...insightPages,

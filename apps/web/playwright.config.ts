@@ -4,7 +4,8 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
 const shouldStartWebServer = !process.env.PLAYWRIGHT_BASE_URL;
 
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: './tests',
+  testMatch: ['e2e/**/*.spec.ts', 'e2e-smoke/advertising.spec.ts'],
   timeout: 120_000,
   expect: {
     timeout: 5_000

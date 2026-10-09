@@ -316,3 +316,17 @@ Le hero di home, Agenzia, Siti web e NOD, gli archivi editoriali e il rail conti
 ### Livelli di sovrapposizione
 
 Header, scrim, navigazione, pannelli e trigger usano la famiglia `--nm-layer-*`. I livelli 1-3 sono ammessi solo dentro un contesto locale isolato (media, hero). I dialog nativi usano il top layer del browser. Non introdurre z-index globali numerici nelle nuove composizioni.
+
+## Landing di campagna
+
+`BaseLayout` accetta una configurazione `landing` tipizzata (`LandingShellConfig`). Attiva `LandingHeader` e `LandingFooter` al posto della navigazione istituzionale. Il logo porta all’inizio della pagina; le voci di navigazione ammettono solo ancore. I link di verifica delle fonti, privacy e contatto restano espliciti. Nessuna duplicazione dei badge: `PartnerBadges` è condiviso dai due footer.
+
+`StickyContactCTA` mantiene un solo contatto mobile: appare dopo che la CTA hero ha superato il viewport, scompare quando il modulo è visibile o il menu è aperto. Fuori stato attivo è inert e non entra nel percorso tastiera. Non compare su desktop, senza JS o prima della hero. Padding per safe area iOS, movimento ridotto disabilitato. Esempi nella sezione landing di `/design-system/`.
+
+Button dispone del tono `brand` (blu Netmarket, hover blu profondo), richiesto dalle CTA di campagna nella hero e nella barra mobile. Le selezioni contestuali riusano Button secondary con `aria-pressed`, fondo blue-soft e testo blue-deep. Il contrasto e gli stati restano centralizzati in components.css. TeamSection può omettere i link LinkedIn tramite `showProfiles={false}` per mantenere il percorso nella landing, conservando gli stessi ritratti e ruoli.
+
+Revisione landing del 9 ottobre: `LandingLink.description` opzionale alimenta il menu mobile a righe con numero, titolo, descrizione e freccia. Il menu indica la sezione corrente con `aria-current="location"`; soglia a 1100px per mantenere leggibile la navigazione estesa. `StickyContactCTA` ha contenitore trasparente, pointer-events sul solo pulsante e ombra canonica. Su richiesta esplicita, `/advertising/` usa tracking H1 locale -0.045em; non modifica la regola globale a zero.
+
+ContactForm: `serviceOptions` consente opzioni contestuali conservando valori servizio canonici; `showEmailFallback` controlla il suggerimento email nel noscript (default true). La landing advertising usa opzioni pertinenti e fallback senza email; il form istituzionale conserva i default.
+
+Il menu landing mobile usa ora `LandingLink.icon` opzionale (projects/goals/method/team/markets/reviews), risolto esclusivamente in icone Tabler. Toggle con sola icona, righe a due colonne icona/testo, nessuna numerazione o freccia; evidenza della sezione corrente su fondo soft. Le regole sono namespaced `.landing-header .landing-menu` per assicurare stile e allineamento indipendenti dagli attributi Astro. Desktop invariato.

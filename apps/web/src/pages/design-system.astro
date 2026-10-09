@@ -1,4 +1,8 @@
 ---
+import LandingHeader from '@/components/landing/LandingHeader.astro';
+import LandingFooter from '@/components/landing/LandingFooter.astro';
+import StickyContactCTA from '@/components/landing/StickyContactCTA.astro';
+import { advertisingShell } from '@/data/advertising-landing';
 import { designDecisions } from '@/data/design-system';
 import IconButton from '@/components/ui/IconButton.astro';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-astro';
@@ -220,9 +224,9 @@ const motionExamples = [
             <h3>Azioni su chiaro</h3>
             <div class="nm-cluster">
               <Button href="/contatti/">Parliamone</Button><Button
-                href="/progetti/"
-                variant="secondary">Guarda i progetti</Button
-              >
+                href="#landing-pattern-title"
+                variant="brand">CTA di campagna</Button
+              ><Button href="/progetti/" variant="secondary">Guarda i progetti</Button>
             </div>
             <p>Primaria nera per l’azione principale; secondaria per un’alternativa.</p>
           </article>
@@ -521,6 +525,45 @@ const motionExamples = [
           archivi e colori dei singoli case study restano locali. Riutilizzano fondazioni e motion,
           ma non sono componenti universali.
         </p>
+      </div>
+    </Container>
+  </Section>
+  <Section id="landing-pattern" labelledby="landing-pattern-title">
+    <Container wide>
+      <SectionHeading
+        id="landing-pattern-title"
+        title="Landing orientate al contatto."
+        text="Header e footer ereditano logo, griglia e badge del sito. La configurazione contiene solo ancore alla pagina; la CTA mobile compare dopo la hero e si nasconde quando il form è visibile."
+      />
+      <div class="nm-stack" style="margin-top: var(--nm-space-lg)">
+        <LandingHeader
+          config={{
+            ...advertisingShell,
+            links: [
+              { label: 'Azioni', href: '#controls-title' },
+              { label: 'Form', href: '#fields-title' }
+            ],
+            cta: { label: 'Primo confronto', href: '#fields-title' },
+            topHref: '#landing-pattern'
+          }}
+          preview
+        />
+        <StickyContactCTA
+          href="#fields-title"
+          label="Primo confronto"
+          heroId="landing-pattern-title"
+          preview
+        />
+        <LandingFooter
+          config={{
+            ...advertisingShell,
+            links: [
+              { label: 'Azioni', href: '#controls-title' },
+              { label: 'Form', href: '#fields-title' }
+            ],
+            topHref: '#landing-pattern'
+          }}
+        />
       </div>
     </Container>
   </Section>

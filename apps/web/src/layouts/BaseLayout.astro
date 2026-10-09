@@ -1,4 +1,7 @@
 ---
+import LandingHeader from '@/components/landing/LandingHeader.astro';
+import LandingFooter from '@/components/landing/LandingFooter.astro';
+import type { LandingShellConfig } from '@/types/landing';
 import Seo from '@/components/seo/Seo.astro';
 import SkipLink from '@/components/global/SkipLink.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
@@ -13,6 +16,7 @@ import '@/styles/components.css';
 import type { MediaAsset } from '@netmarket/schemas';
 
 interface Props {
+  landing?: LandingShellConfig;
   title: string;
   description: string;
   path?: string;
@@ -28,6 +32,7 @@ interface Props {
 }
 
 const {
+  landing,
   title,
   description,
   path = '/',
@@ -81,11 +86,11 @@ const buildEnvironment = import.meta.env.PUBLIC_DEPLOY_ENV ?? 'local';
   </head>
   <body>
     <SkipLink />
-    <SiteHeader />
+    {landing ? <LandingHeader config={landing} /> : <SiteHeader />}
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter />
+    {landing ? <LandingFooter config={landing} /> : <SiteFooter />}
     <MotionController />
   </body>
 </html>

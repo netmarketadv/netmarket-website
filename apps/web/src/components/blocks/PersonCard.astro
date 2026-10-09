@@ -3,12 +3,13 @@ import { IconArrowUpRight, IconBrandLinkedin } from '@tabler/icons-astro';
 import type { TeamMember } from '@/data/team';
 
 interface Props {
+  showProfile?: boolean;
   person: TeamMember;
   headingLevel?: 'h2' | 'h3' | 'h4';
   priority?: boolean;
 }
 
-const { person, headingLevel = 'h3', priority = false } = Astro.props;
+const { person, headingLevel = 'h3', priority = false, showProfile = true } = Astro.props;
 const Heading = headingLevel;
 ---
 
@@ -33,10 +34,19 @@ const Heading = headingLevel;
       <Heading>{person.displayName}</Heading>
       <p>{person.role}</p>
     </div>
-    <a href={person.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`Profilo LinkedIn di ${person.fullName}`}>
-      <IconBrandLinkedin stroke={1.8} aria-hidden="true" />
-      <span>LinkedIn</span>
-      <IconArrowUpRight stroke={1.8} aria-hidden="true" />
-    </a>
+    {
+      showProfile && (
+        <a
+          href={person.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Profilo LinkedIn di ${person.fullName}`}
+        >
+          <IconBrandLinkedin stroke={1.8} aria-hidden="true" />
+          <span>LinkedIn</span>
+          <IconArrowUpRight stroke={1.8} aria-hidden="true" />
+        </a>
+      )
+    }
   </div>
 </article>

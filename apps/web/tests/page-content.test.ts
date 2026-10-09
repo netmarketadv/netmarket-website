@@ -47,8 +47,13 @@ describe('homepage source', () => {
     expect(footerSource).toContain('03618730281');
     expect(footerSource).toContain('Viale della Navigazione Interna');
     expect(footerSource).toContain('NOD');
-    expect(footerSource).toContain('Brevo Partner Pioneer 2025');
-    expect(footerSource).toContain('iubenda');
+    expect(footerSource).toContain('<PartnerBadges />');
+    const badgesSource = readFileSync(
+      new URL('../src/components/blocks/PartnerBadges.astro', import.meta.url),
+      'utf8'
+    );
+    expect(badgesSource).toContain('Brevo Partner Pioneer 2025');
+    expect(badgesSource).toContain('iubenda');
   });
 
   it('uses static Google reviews instead of runtime review rendering', () => {
