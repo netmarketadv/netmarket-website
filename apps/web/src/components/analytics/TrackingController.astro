@@ -16,6 +16,7 @@ const gtmId = env.PUBLIC_GTM_ID;
       <link rel="preconnect" href="https://cdn.iubenda.com" />
       <link rel="preconnect" href="https://cs.iubenda.com" />
       <script is:inline define:vars={{ gtmId }}>
+        window.__netmarketConsentReady = false;
         window.dataLayer = window.dataLayer || [];
         window.gtag =
           window.gtag ||
@@ -38,6 +39,8 @@ const gtmId = env.PUBLIC_GTM_ID;
         function signalConsentReady() {
           window.setTimeout(function () {
             window.dataLayer.push({ event: 'netmarket_consent_ready' });
+            window.__netmarketConsentReady = true;
+            window.dispatchEvent(new Event('netmarket:consent-ready'));
           }, 0);
         }
         window._iub = window._iub || [];
@@ -107,45 +110,14 @@ const gtmId = env.PUBLIC_GTM_ID;
 <script>
   import { pushEvent } from '@netmarket/analytics';
 
-  const keys = [
-    'utm_source',
-    'utm_medium',
-    'utm_campaign',
-    'utm_content',
-    'utm_term',
-    'gclid',
-    'fbclid',
-    'ttclid',
-    'oppref'
-  ];
-  const params = new URLSearchParams(window.location.search);
-  const stored = JSON.parse(sessionStorage.getItem('nm_contact_tracking') || '{}') as Record<
-    string,
-    string
-  >;
-  const next = { ...stored };
-
-  for (const key of keys) {
-    const value = params.get(key);
-    if (value) next[key] = value;
-  }
-
-  if (!next.referrer && document.referrer) {
-    next.referrer = document.referrer;
-  }
-
-  if (!next.sourceUrl) {
-    next.sourceUrl = window.location.href;
-  }
-
-  if (Object.keys(next).length > 0) {
-    sessionStorage.setItem('nm_contact_tracking', JSON.stringify(next));
-  }
+  import { persistContactAttribution } from '@/lib/contact-attribution';
+  persistContactAttribution();
 
   const path = window.location.pathname;
   const segments = path.split('/').filter(Boolean);
   const contentSlug = segments.at(-1);
   const pageType = (() => {
+    if (path === '/advertising/') return 'landing';
     if (path === '/') return 'home';
     if (segments[0] === 'servizi' && segments.length === 2) return 'service';
     if (segments[0] === 'progetti' && segments.length === 2) return 'case_study';
@@ -171,11 +143,17 @@ const gtmId = env.PUBLIC_GTM_ID;
     pushEvent({ event: 'insight_view', insight_slug: contentSlug });
   }
 
+  try {
   const pendingLeadForm = sessionStorage.getItem('nm_generate_lead_pending');
-  if (path === '/grazie/' && pendingLeadForm === 'contact-page') {
+  if (
+    path === '/grazie/' &&
+    (pendingLeadForm === 'contact-page' || pendingLeadForm === 'advertising-landing')
+  ) {
     sessionStorage.removeItem('nm_generate_lead_pending');
     pushEvent({ event: 'generate_lead', form_id: pendingLeadForm, lead_type: 'contact' });
   }
+
+  } catch { /* Storage is optional; form success remains usable. */ }
 
   const normalizeLabel = (value: string) => value.replace(/\s+/g, ' ').trim().slice(0, 100);
   const locationFor = (element: Element) => {

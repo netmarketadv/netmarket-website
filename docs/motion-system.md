@@ -128,3 +128,13 @@ La composizione social della homepage, la timeline Agenzia, i rail dell'archivio
 - Duplicati: dimensioni identiche agli originali, indipendenti dall'indice nel secondo gruppo.
 - Reveal: nessuna maschera permanente sui blocchi completati; GSAP pulisce transform, filter e clipPath. Nessuna transizione CSS sovrapposta ai tween GSAP.
 - Card progetto: lo zoom hover CSS non compete con uno scrub GSAP sulla stessa immagine. Le anteprime flottanti e le label al cursore sono rimosse: duplicavano contenuto visibile e aggiungevano listener senza un compito utile.
+
+## Landing advertising
+
+La composizione usa il controller full: line reveal per titoli, up/media per sezioni e foto, count-up per risultati BRB documentati. Il rail clienti è quello canonico; progetti, team e recensioni mantengono scorrimento manuale nativo, senza pinning o scroll-jacking.
+
+La CTA mobile usa IntersectionObserver sulla CTA hero e sulla sezione form. Ingresso/uscita con opacity e translateY(distance-md), duration-base e ease-enter; visibility e inert impediscono focus su controlli invisibili. Il menu aperto nasconde la barra. Nessun ascoltatore scroll su window.
+
+La mappa è una visualizzazione geografica Natural Earth: una selezione esplicita cambia raggio, evidenza Italia e collegamenti. Transizioni duration-slow/ease-layout, nessun autoplay geografico o falsa presenza di sedi. Con reduced motion gli stati cambiano immediatamente. Il mockup reale BRB nella hero passa da -5° a -2° all’hover solo per puntatori precisi, con duration-slow/ease-layout, senza muovere il layout.
+
+Menu landing: ingresso opacity + translateY negativo della distanza sm, durata base/ease-enter; disabilitato in reduced motion. Il rail advertising usa snap inline proximity, overflow-y hidden e nessuna intercettazione wheel/touch; i gesti verticali continuano sulla pagina. La mappa mantiene transizioni solo su selezione, anche nella composizione mobile compatta.

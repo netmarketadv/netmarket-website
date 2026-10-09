@@ -24,6 +24,13 @@
     border-color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover),
     color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
 }
+.nm-button--brand {
+  background: var(--nm-color-blue);
+  color: var(--nm-color-on-inverse);
+}
+.nm-button--brand:not(:disabled):not([aria-disabled='true']):hover {
+  background: var(--nm-color-blue-deep);
+}
 .nm-button--large {
   min-height: var(--nm-control-height-large);
   padding-inline: 1.5rem;
@@ -186,7 +193,8 @@
   }
 }
 .nm-section-heading--inverse > h2,
-.nm-section-heading--inverse > p {
+.nm-section-heading--inverse > p,
+.nm-section-heading--inverse > p:not(.nm-eyebrow) {
   color: var(--nm-color-on-inverse);
 }
 .service-x-problems .nm-section-heading > .nm-eyebrow {
@@ -359,4 +367,10 @@ main :is(h1, h2, h3, section, div)[id] {
   font-size: var(--nm-text-small);
   font-weight: var(--nm-weight-semibold);
   line-height: var(--nm-leading-small);
+}
+
+.nm-button--secondary[aria-pressed='true'] {
+  background: var(--nm-color-blue-soft);
+  color: var(--nm-color-blue-deep);
+  border-color: var(--nm-color-blue);
 }

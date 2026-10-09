@@ -46,5 +46,15 @@ export const designDecisions = [
     'FAQBlock',
     'Un solo accordion condiviso con tastiera e stato esplicito.'
   ],
+  [
+    'Comporre una landing',
+    'LandingHeader / LandingFooter / StickyContactCTA',
+    'Ancore interne configurabili; badge condivisi con il sito; CTA mobile condizionale.'
+  ],
+  [
+    'CTA di campagna',
+    'Button brand',
+    'Blu Netmarket per conversione in hero e barra mobile; secondary aria-pressed per selezioni.'
+  ],
   ['Animare contenuti', 'data-reveal', 'Preset documentati. Nessun wrapper Astro alternativo.']
 ] as const;

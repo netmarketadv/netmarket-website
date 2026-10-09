@@ -16,7 +16,7 @@ for (const width of [390, 430, 768, 1024, 1280, 1440, 1728]) {
         await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
       ).toBeLessThanOrEqual(1);
     }
-    const buttons = page.locator('main .nm-button');
+    const buttons = page.locator('main .nm-button:visible');
     const heights = await buttons.evaluateAll((els) =>
       els.map((el) => el.getBoundingClientRect().height)
     );

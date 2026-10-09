@@ -94,3 +94,10 @@ Il `dataLayer` riceve soltanto URL ripuliti: nessuna query string o frammento. U
   conversione commerciale canonica.
 - La configurazione diventa definitiva solo dopo deploy production, pubblicazione del container
   GTM e collaudo dei tre stati CMP: nessuna scelta, statistiche, marketing.
+
+
+## Landing advertising — 9 ottobre 2026
+
+Form `advertising-landing` con eventi di inizio, invio, successo/errore e `generate_lead` solo dopo risposta JSON `success:true`. Il dispatcher attende la lettura CMP prima del lead per non perdere Meta a causa del consenso default denied sulla pagina Grazie. Trigger della conversione: evento, mai semplice URL. Conferma in pagina quando lo storage è negato; nessun PII nei parametri analytics/errori.
+
+GTM pubblico verificato: GA4 G-DHXW4WZ5XP, Ads AW-16639879288 conversion label rs3VCPShl50cEPjQwf49, Meta 485694213884589. Aggiunto tag `Meta - Lead confermato`, evento standard Lead, attivatore generate_lead, ad_storage obbligatorio, una volta per evento. La configurazione Google Ads effettiva usa un tag nativo: non importare una seconda conversione GA4 come primaria sullo stesso contatto.

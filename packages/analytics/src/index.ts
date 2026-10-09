@@ -3,7 +3,7 @@ export type AnalyticsEvent =
       event: 'page_context';
       page_path: string;
       page_title: string;
-      page_type: 'home' | 'service' | 'case_study' | 'insight' | 'archive' | 'standard';
+      page_type: 'home' | 'service' | 'case_study' | 'insight' | 'archive' | 'standard' | 'landing';
       content_slug?: string;
     }
   | { event: 'cta_click'; cta_label: string; cta_url: string; cta_location: string }
@@ -21,6 +21,7 @@ export type AnalyticsEvent =
 
 declare global {
   interface Window {
+    __netmarketConsentReady?: boolean;
     dataLayer?: AnalyticsEvent[];
     gtag?: (command: 'event', eventName: string, parameters: Record<string, string>) => void;
   }
@@ -28,6 +29,10 @@ declare global {
 
 export function pushEvent(event: AnalyticsEvent): void {
   if (typeof window === 'undefined') return;
+  if (event.event === 'generate_lead' && window.__netmarketConsentReady === false) {
+    window.addEventListener('netmarket:consent-ready', () => pushEvent(event), { once: true });
+    return;
+  }
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(event);
 

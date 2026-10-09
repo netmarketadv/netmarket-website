@@ -1,0 +1,292 @@
+---
+import {
+  IconMenu2,
+  IconX,
+  IconArrowUpRight,
+  IconBriefcase2,
+  IconTargetArrow,
+  IconRoute,
+  IconUsers,
+  IconWorld,
+  IconMessageStar,
+  IconLayoutGrid
+} from '@tabler/icons-astro';
+import Button from '@/components/ui/Button.astro';
+import type { LandingShellConfig } from '@/types/landing';
+interface Props {
+  config: LandingShellConfig;
+  preview?: boolean;
+}
+const { config, preview = false } = Astro.props;
+const menuIcons = {
+  projects: IconBriefcase2,
+  goals: IconTargetArrow,
+  method: IconRoute,
+  team: IconUsers,
+  markets: IconWorld,
+  reviews: IconMessageStar
+};
+---
+
+<header class:list={['landing-header', preview && 'landing-header--preview']} data-landing-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href={config.topHref} aria-label="Netmarket, inizio pagina"
+      ><img src="/netmarket-logo.svg" alt="" width="140" height="40" /></a
+    >
+    <nav class="landing-header__nav" aria-label="Navigazione landing">
+      {config.links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+    <div class="landing-header__action">
+      <Button href={config.cta.href}
+        >{config.cta.label}<IconArrowUpRight aria-hidden="true" /></Button
+      >
+    </div>
+    <details class="landing-menu" data-landing-menu>
+      <summary aria-label="Menu della landing"
+        ><IconMenu2 class="landing-menu__open" aria-hidden="true" size={22} stroke={1.7} /><IconX
+          class="landing-menu__close"
+          aria-hidden="true"
+          size={22}
+          stroke={1.7}
+        /></summary
+      >
+      <nav aria-label="Navigazione landing mobile">
+        <p class="landing-menu__intro">Scopri come lavoriamo</p>
+        {
+          config.links.map((link) => {
+            const Icon = link.icon ? menuIcons[link.icon] : IconLayoutGrid;
+            return (
+              <a class="landing-menu__link" href={link.href}>
+                <span class="landing-menu__icon">
+                  <Icon aria-hidden="true" size={22} stroke={1.7} />
+                </span>
+                <span class="landing-menu__item">
+                  <strong>{link.label}</strong>
+                  {link.description && <small>{link.description}</small>}
+                </span>
+              </a>
+            );
+          })
+        }<Button href={config.cta.href} variant="brand" size="large">{config.cta.label}</Button>
+        <p class="landing-menu__note">Un primo confronto, senza impegno.</p>
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('[data-landing-menu]').forEach((menu) => {
+    const summary = menu.querySelector('summary');
+    menu.addEventListener('toggle', () =>
+      summary?.setAttribute('aria-expanded', String(menu.open))
+    );
+    summary?.setAttribute('aria-expanded', String(menu.open));
+    const header = menu.closest('header');
+    const links = Array.from(header?.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]') || []);
+    const sections = [
+      ...new Set(
+        links
+          .map((link) => document.getElementById(link.hash.slice(1)))
+          .filter((section): section is HTMLElement => Boolean(section))
+      )
+    ];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries.find((entry) => entry.isIntersecting);
+        if (!current) return;
+        links.forEach((link) => {
+          if (link.hash === `#${current.target.id}`) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      },
+      { rootMargin: '-15% 0px -60% 0px' }
+    );
+    sections.forEach((section) => observer.observe(section));
+
+    menu.addEventListener('click', (event) => {
+      if (event.target instanceof Element && event.target.closest('a')) menu.open = false;
+    });
+    menu.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        menu.open = false;
+        summary?.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+    });
+    window.matchMedia('(min-width: 1101px)').addEventListener('change', (event) => {
+      if (event.matches) menu.open = false;
+    });
+  });
+</script>
+<style is:global>
+  .landing-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--nm-layer-header);
+    background: var(--nm-color-surface);
+    border-bottom: var(--nm-border);
+  }
+  .landing-header--preview {
+    position: relative;
+    z-index: auto;
+  }
+  .landing-header__nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--nm-space-lg);
+  }
+  .landing-header__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--nm-color-ink);
+    text-decoration: none;
+    font-size: var(--nm-text-small);
+  }
+  .landing-header__nav a:hover {
+    color: var(--nm-color-blue);
+  }
+  .landing-menu {
+    display: none;
+  }
+  @media (max-width: 1100px) {
+    .landing-header .landing-header__nav,
+    .landing-header .landing-header__action {
+      display: none;
+    }
+    .landing-header .site-header__inner {
+      display: flex;
+      justify-content: space-between;
+    }
+    .landing-header .landing-menu {
+      display: block;
+    }
+    .landing-header .landing-menu summary {
+      list-style: none;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      border: var(--nm-border);
+      border-radius: var(--nm-radius-pill);
+      color: var(--nm-color-ink);
+      background: var(--nm-color-surface);
+    }
+    .landing-header .landing-menu summary::-webkit-details-marker {
+      display: none;
+    }
+    .landing-header .landing-menu .landing-menu__close {
+      display: none;
+    }
+    .landing-header .landing-menu[open] .landing-menu__close {
+      display: block;
+    }
+    .landing-header .landing-menu[open] .landing-menu__open {
+      display: none;
+    }
+    .landing-header .landing-menu nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--nm-color-surface);
+      padding: var(--nm-space-md);
+      border: var(--nm-border);
+      border-radius: var(--nm-radius-card);
+      box-shadow: var(--nm-shadow-soft);
+      display: grid;
+      gap: 4px;
+      max-height: calc(100svh - 100px);
+      overflow-y: auto;
+    }
+    .landing-header .landing-menu .landing-menu__intro {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--nm-color-muted);
+      margin: 0;
+      padding: 4px 10px 12px;
+    }
+    .landing-header .landing-menu a.landing-menu__link {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      min-height: 60px;
+      color: var(--nm-color-ink);
+      text-decoration: none;
+      border: 0;
+      border-radius: var(--nm-radius-control);
+      transition: background-color var(--nm-motion-duration-fast) var(--nm-motion-ease-hover);
+    }
+    .landing-header .landing-menu__link:hover {
+      background: var(--nm-color-canvas);
+    }
+    .landing-header .landing-menu__icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--nm-radius-control);
+      color: var(--nm-color-blue);
+      background: var(--nm-color-blue-soft);
+    }
+    .landing-header .landing-menu__item {
+      display: grid;
+      gap: 3px;
+    }
+    .landing-header .landing-menu__item strong {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .landing-header .landing-menu__item small {
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--nm-color-muted);
+    }
+    .landing-header .landing-menu a.landing-menu__link[aria-current='location'] {
+      background: var(--nm-color-blue-soft);
+      color: var(--nm-color-blue-deep);
+    }
+    .landing-header .landing-menu__link[aria-current='location'] .landing-menu__icon {
+      background: var(--nm-color-surface);
+    }
+    .landing-header .landing-menu nav > .nm-button {
+      margin-top: 12px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .landing-header .landing-menu__note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--nm-color-muted);
+      margin: 6px 0 2px;
+    }
+    .landing-header .landing-menu[open] summary {
+      background: var(--nm-color-blue-soft);
+      color: var(--nm-color-blue);
+      border-color: transparent;
+    }
+    .landing-header .landing-menu[open] nav {
+      animation: landing-menu-enter var(--nm-motion-duration-base) var(--nm-motion-ease-enter);
+    }
+  }
+  @keyframes landing-menu-enter {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--nm-motion-distance-sm)));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .landing-menu[open] nav {
+      animation: none;
+    }
+  }
+</style>

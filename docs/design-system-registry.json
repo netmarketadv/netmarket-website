@@ -1,5 +1,5 @@
 {
-  "description": "Ogni file Astro condiviso ha un ruolo. Nuove necessità devono prima usare le primitive canoniche. Le composizioni riusano queste primitive; i sottocomponenti privati hanno un solo proprietario.",
+  "description": "Ogni file Astro condiviso ha un ruolo. Nuove necessit\u00e0 devono prima usare le primitive canoniche. Le composizioni riusano queste primitive; i sottocomponenti privati hanno un solo proprietario.",
   "canonical": [
     "blocks/CTAInlineForm",
     "blocks/ClientMarquee",
@@ -26,6 +26,7 @@
   "compositions": [
     "blocks/CaseStudyShowcase",
     "blocks/GoogleTrustBadge",
+    "blocks/PartnerBadges",
     "blocks/PersonCard",
     "blocks/ReviewCard",
     "blocks/ReviewsCarousel",
@@ -34,6 +35,9 @@
     "insights/InsightArchive",
     "insights/InsightCard",
     "insights/InsightCategoryNav",
+    "landing/LandingFooter",
+    "landing/LandingHeader",
+    "landing/StickyContactCTA",
     "layout/SiteFooter",
     "layout/SiteHeader",
     "nod/NodProductDemo",

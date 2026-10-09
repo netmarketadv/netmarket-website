@@ -1,0 +1,98 @@
+---
+import PartnerBadges from '@/components/blocks/PartnerBadges.astro';
+import type { LandingShellConfig } from '@/types/landing';
+interface Props {
+  config: LandingShellConfig;
+}
+const { config } = Astro.props;
+---
+
+<footer class="landing-footer">
+  <div class="site-footer__inner">
+    <div class="landing-footer__top">
+      <a class="site-footer__brand" href={config.topHref} aria-label="Netmarket, inizio pagina"
+        ><img src="/netmarket-logo.svg" width="150" height="43" alt="" /></a
+      ><p>Comunicazione, marketing e tecnologia.<br />Al fianco delle imprese dal 1986.</p><nav
+        aria-label="Indice landing"
+      >
+        {config.links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <PartnerBadges />
+    <div class="landing-footer__legal">
+      <p>Netmarket Srl · P.IVA 03618730281<br />Viale della Navigazione Interna, 51/b · Padova</p><p
+      >
+        <a
+          href="https://www.iubenda.com/privacy-policy/69986431"
+          target="_blank"
+          rel="noopener noreferrer">Privacy</a
+        ><a
+          href="https://www.iubenda.com/privacy-policy/69986431/cookie-policy"
+          target="_blank"
+          rel="noopener noreferrer">Cookie</a
+        >
+      </p>
+    </div>
+  </div>
+</footer>
+<style>
+  .landing-footer {
+    padding-block: var(--nm-space-xl) var(--nm-space-lg);
+    background: var(--nm-color-canvas);
+  }
+  .landing-footer__top {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--nm-space-xl);
+    align-items: start;
+  }
+  .landing-footer__top p {
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-small);
+  }
+  .landing-footer__top nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nm-space-md);
+    max-width: 26rem;
+  }
+  .landing-footer a {
+    color: var(--nm-color-ink);
+    text-underline-offset: 0.25em;
+  }
+  .landing-footer__top nav a {
+    font-size: var(--nm-text-small);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .landing-footer__legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--nm-space-lg);
+    padding-top: var(--nm-space-lg);
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-small);
+  }
+  .landing-footer__legal p:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: var(--nm-space-md);
+  }
+  .landing-footer__legal a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  @media (max-width: 760px) {
+    .landing-footer {
+      padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+    }
+    .landing-footer__top {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--nm-space-lg);
+    }
+  }
+</style>
