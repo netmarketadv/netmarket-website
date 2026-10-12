@@ -1,4 +1,4 @@
-export function initAdvertisingLanding(): void {
+export function initAdvertisingLanding({ prefill = true }: { prefill?: boolean } = {}): void {
   const root = document.querySelector<HTMLElement>('.adv-page');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
@@ -9,19 +9,20 @@ export function initAdvertisingLanding(): void {
     'Brand awareness': 'notorieta-brand'
   };
   const message = document.querySelector<HTMLTextAreaElement>('#contact-message');
-  root.querySelectorAll<HTMLAnchorElement>('[data-advertising-goal]').forEach((link) => {
-    link.addEventListener('click', () => {
-      const value = objectiveValues[link.dataset.advertisingGoal || ''];
-      if (objective && !objective.value && value) {
-        objective.value = value;
-        objective.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-      if (message && !message.value.trim()) {
-        message.value = `Il nostro obiettivo: ${link.dataset.advertisingGoal}.\n\n`;
-        message.dispatchEvent(new Event('input', { bubbles: true }));
-      }
+  if (prefill)
+    root.querySelectorAll<HTMLAnchorElement>('[data-advertising-goal]').forEach((link) => {
+      link.addEventListener('click', () => {
+        const value = objectiveValues[link.dataset.advertisingGoal || ''];
+        if (objective && !objective.value && value) {
+          objective.value = value;
+          objective.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (message && !message.value.trim()) {
+          message.value = `Il nostro obiettivo: ${link.dataset.advertisingGoal}.\n\n`;
+          message.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
     });
-  });
   root.querySelectorAll<HTMLAnchorElement>('.adv-project-rail a[href^="#"]').forEach((link) => {
     link.addEventListener('click', () => {
       const detail = document.getElementById(link.hash.slice(1));
@@ -71,10 +72,11 @@ export function initAdvertisingLanding(): void {
       selectedMarket = choice.textContent?.trim() || 'Sul territorio';
     });
   });
-  root.querySelector('[data-market-contact]')?.addEventListener('click', () => {
-    if (message && !message.value.trim()) {
-      message.value = `Vorremmo sviluppare il nostro mercato: ${selectedMarket.toLowerCase()}.\n\n`;
-      message.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  });
+  if (prefill)
+    root.querySelector('[data-market-contact]')?.addEventListener('click', () => {
+      if (message && !message.value.trim()) {
+        message.value = `Vorremmo sviluppare il nostro mercato: ${selectedMarket.toLowerCase()}.\n\n`;
+        message.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
 }

@@ -117,7 +117,7 @@ const gtmId = env.PUBLIC_GTM_ID;
   const segments = path.split('/').filter(Boolean);
   const contentSlug = segments.at(-1);
   const pageType = (() => {
-    if (path === '/advertising/') return 'landing';
+    if (path === '/advertising/' || path === '/advertising-v2/') return 'landing';
     if (path === '/') return 'home';
     if (segments[0] === 'servizi' && segments.length === 2) return 'service';
     if (segments[0] === 'progetti' && segments.length === 2) return 'case_study';
@@ -147,7 +147,7 @@ const gtmId = env.PUBLIC_GTM_ID;
   const pendingLeadForm = sessionStorage.getItem('nm_generate_lead_pending');
   if (
     path === '/grazie/' &&
-    (pendingLeadForm === 'contact-page' || pendingLeadForm === 'advertising-landing')
+    (pendingLeadForm === 'contact-page' || pendingLeadForm === 'advertising-landing' || pendingLeadForm === 'advertising-landing-v2')
   ) {
     sessionStorage.removeItem('nm_generate_lead_pending');
     pushEvent({ event: 'generate_lead', form_id: pendingLeadForm, lead_type: 'contact' });
