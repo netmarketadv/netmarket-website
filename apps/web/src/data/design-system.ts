@@ -18,7 +18,7 @@ export const designDecisions = [
   [
     'Mostrare un progetto correlato',
     'ProjectCard',
-    'Immagine 4:3, categoria esterna, titolo e sintesi.'
+    'Immagine 4:3 o slot media per dati documentati; categoria, titolo e sintesi.'
   ],
   ['Chiudere con un contatto', 'ContactCTA', 'Superficie scura o chiara; una sola azione.'],
   [

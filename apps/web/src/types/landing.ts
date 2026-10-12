@@ -1,6 +1,6 @@
 export interface LandingLink {
   label: string;
-  icon?: 'projects' | 'goals' | 'method' | 'team' | 'markets' | 'reviews';
+  icon?: 'projects' | 'goals' | 'method' | 'team' | 'markets' | 'reviews' | 'pricing';
   description?: string;
   href: `#${string}`;
 }

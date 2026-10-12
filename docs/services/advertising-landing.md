@@ -66,3 +66,37 @@ Hero: altezza minima pari al viewport stabile meno header (4.55rem + bordo), con
 Canonical autonomo `/advertising/`, title e description dedicati, Open Graph/Twitter, Organization/WebSite/WebPage e Service con provider canonico; FAQPage derivata dalle stesse FAQ visibili. Nessun AggregateRating autoreferenziale o promessa di risultati/rich result. HTML statico leggibile senza JavaScript, prove e sede reali supportano ricerca e sistemi AI.
 
 Attribuzione resistente a storage negato o corrotto; una nuova campagna sostituisce la precedente per evitare click ID mescolati. GCLID/FBCLID/UTM nel payload CMS; GBRAID/WBRAID anche nel payload e nell’URL sorgente (l’attuale allowlist CMS non li archivia nel campo UTM). Nessun dato del form nel dataLayer. Solo risposta JSON success:true genera il lead: una challenge HTTP 200 non è un successo. In assenza di sessionStorage, conferma e conversione restano nella pagina senza doppio invio.
+
+## Pubblicazione e verifica finale — 9 ottobre 2026
+
+Landing online: https://netmarket.it/advertising/. PR #38; SHA production `a88da9b695304914ba8e1ed36f70784e809474aa`; workflow ufficiale https://github.com/netmarketadv/netmarket-website/actions/runs/37919657927 concluso con successo. HTTP 200, SHA online, canonical, indicizzabilità production, sitemap e cinque tipi schema verificati sul sito pubblico. Smoke production: 18 route; SEO smoke: 12 pagine e robots/sitemap.
+
+Quality Full superata: 80 unit test e 93 E2E (92 al primo tentativo, un test motion homepage preesistente superato al retry). Verifica visiva desktop/mobile completata. CMS reale: health e risposte di validazione 422/CORS verificate; gli invii positivi sono simulati e non hanno creato contatti o email reali.
+
+GTM `GTM-K782CJ46`, versione 18 pubblicata: aggiunto Meta Lead sul solo generate_lead, una volta per evento e con ad_storage richiesto. Pixel `485694213884589`. Google Ads Netmarket Pubblicità `205-784-1558`: conversione primaria nativa `16639879288 / rs3VCPShl50cEPjQwf49`, conteggio Una; vecchie importazioni GA4 secondarie escluse dagli obiettivi account. Nessuna campagna o budget modificato.
+
+GA4 proprietà `375590061`, stream `G-DHXW4WZ5XP`: generate_lead contrassegnato evento chiave. Regola storica Lead_submit aggiornata da page_view con URL contenente grazie a event_name uguale generate_lead, senza vincolo URL: impedisce falsi lead da visita diretta e supporta la conferma inline se storage indisponibile. Lead_submit resta un evento distinto non chiave, per compatibilità storica; per i report dei lead usare generate_lead, senza sommare i due eventi. Salvataggi riletti nell’interfaccia.
+
+Consenso reale Iubenda verificato con accettazione/rifiuto: Google Consent Mode G111/G100; dispatch Meta Lead zero con consenso negato e uno concesso nei test controllati; ricaricare Grazie non rigenera generate_lead. L’SDK Meta riconosce e blocca il browser automatico (Bot traffic detected and blocked): configurazione e dispatch verificati, ricezione effettiva da controllare in Events Manager al primo contatto reale. Non sono state aggirate le protezioni né inviate conversioni fittizie alle piattaforme. Enhanced Conversions e Conversions API non risultano configurate e non sono dichiarate attive.
+
+Questo verbale finale è aggiunto alla documentazione locale dopo il deploy; il codice pubblicato è quello dello SHA sopra indicato.
+
+## Revisione offerta e casi — 9 ottobre 2026
+
+Fonte editoriale: HTML fornito dall’utente “Google Ads e Meta Ads per acquisire clienti _ Netmarket — Anteprima.html”. Ripresi prezzi, quattro casi anonimi e precisazioni economiche; esclusi form dimostrativo, modale scaletta e script dell’anteprima. Identità clienti non dedotta e nessuna immagine di altri progetti attribuita ai quattro casi. I media BRB restano esplicitamente identificati nella hero.
+
+Hero diretta, gestione da 400 €/mese + IVA per canale, budget Ads escluso; badge Google Partner subito dopo hero con profilo già utilizzato dal sito. Prove numeriche prima dei loghi: Pilates, eventi Milano, pergole e tappeti. Metriche derivate da valori sorgente per evitare incoerenze di arrotondamento. Pilates: CLV netto stimato, non fatturato e non ROAS; gli altri casi riportano fatturato IVA esclusa/spesa Ads. Dettagli inizialmente chiusi, fonti e limiti visibili.
+
+Due offerte Google/Meta con perimetro e costi aggiuntivi espliciti, ancoraggio Costi nella shell. Le CTA dei piani preparano il messaggio senza sovrascrivere quanto scritto. Form reale e tracking invariati. FAQ e schema FAQ condividono i prezzi aggiornati.
+
+Video: configurazione `advertisingVideo` in src/data/advertising-landing.ts. Impostare src del video orizzontale da circa 60 secondi, poster 16:9, captions VTT e transcript finale. Fino ad allora spazio editoriale 16:9 dichiarato “Video in preparazione”, con ritratto reale di Giacomo; nessun play finto o iframe esterno. Una volta configurato: player nativo, controls, playsinline, preload none, nessun autoplay, sottotitoli e trascrizione. Nessun VideoObject pubblicato per un filmato non ancora disponibile.
+
+Validazione revisione offerta: lint, typecheck, 80 unit test e build Astro (68 pagine) superati. 16 smoke E2E dedicati alla landing e 9 controlli del catalogo superati; verifiche responsive 320–1728 px, prezzi, distinzione CLV/ROAS, navigazione, form e attribuzione con invii CMS simulati. Verifica visiva desktop e mobile. Build locale con snapshot/fallback CMS: questa revisione è in anteprima locale, non è stata pubblicata in produzione.
+
+## Revisione 12 ottobre 2026
+
+Selezione recensioni della sola landing: Svetlana Soboleva, Gherardo Gasparin e Pazzo Design, senza Paola Malighetti anche negli avatar hero. Il dato aggregato Google resta invariato. Titolo recensioni esteso alla griglia e composto su due righe responsive. ReviewsSection accetta una selezione tramite prop reviews e uno slot title, con default invariati per il resto del sito.
+
+Chiusura su canvas, riepilogo prezzo e form in un pannello con introduzione. Campo “Cosa vuoi ottenere?” inizialmente vuoto: Contatti e preventivi, Vendite ecommerce, Notorietà del brand, Da definire insieme. Valori slug inviati nel campo service già supportato dal CMS, senza modifiche a API o tracking. Label, placeholder ed errore di ContactForm configurabili; i default istituzionali restano invariati. Le CTA obiettivo preselezionano solo se il campo è vuoto e non sovrascrivono il messaggio.
+
+Verifiche candidato 12 ottobre: check:fast superato (80 unit test, lint, typecheck, build 68 pagine); 21 smoke landing superati, inclusi quattro invii simulati con obiettivo distinto, selezione obbligatoria, recensioni e titolo massimo due righe a 320–1728 px. I quattro slug sono stati accettati dal validatore CMS reale tramite payload deliberatamente invalidi (422 e CORS corretti; nessuna email/lead). Suite completa richiesta dalla PR production prima del merge.

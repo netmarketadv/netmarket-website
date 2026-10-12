@@ -1,10 +1,11 @@
 ---
 import GoogleTrustBadge from '@/components/blocks/GoogleTrustBadge.astro';
 import ReviewsCarousel from '@/components/blocks/ReviewsCarousel.astro';
-import { googleReviews } from '@/data/reviews';
+import { googleReviews, type GoogleReview } from '@/data/reviews';
 
 interface Props {
   title: string;
+  reviews?: GoogleReview[];
   titleId?: string;
   text: string;
   rating: string;
@@ -12,21 +13,34 @@ interface Props {
   googleHref: string;
 }
 
-const { title, titleId, text, rating, reviewCount, googleHref } = Astro.props;
+const {
+  title,
+  titleId,
+  text,
+  rating,
+  reviewCount,
+  googleHref,
+  reviews = googleReviews
+} = Astro.props;
 ---
 
 <div class="reviews-section">
   <div class="reviews-section__header">
     <div>
       <div data-reveal="up">
-        <GoogleTrustBadge rating={rating} reviewCount={reviewCount} href={googleHref} showReviewCount={false} />
+        <GoogleTrustBadge
+          rating={rating}
+          reviewCount={reviewCount}
+          href={googleHref}
+          showReviewCount={false}
+        />
       </div>
-      <h2 id={titleId} data-reveal="line">{title}</h2>
+      <h2 id={titleId} data-reveal="line"><slot name="title">{title}</slot></h2>
       <p data-reveal="up">{text}</p>
     </div>
   </div>
 
-  <ReviewsCarousel reviews={googleReviews} />
+  <ReviewsCarousel reviews={reviews} />
 </div>
 
 <script>

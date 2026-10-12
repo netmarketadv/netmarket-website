@@ -330,3 +330,9 @@ Revisione landing del 9 ottobre: `LandingLink.description` opzionale alimenta il
 ContactForm: `serviceOptions` consente opzioni contestuali conservando valori servizio canonici; `showEmailFallback` controlla il suggerimento email nel noscript (default true). La landing advertising usa opzioni pertinenti e fallback senza email; il form istituzionale conserva i default.
 
 Il menu landing mobile usa ora `LandingLink.icon` opzionale (projects/goals/method/team/markets/reviews), risolto esclusivamente in icone Tabler. Toggle con sola icona, righe a due colonne icona/testo, nessuna numerazione o freccia; evidenza della sezione corrente su fondo soft. Le regole sono namespaced `.landing-header .landing-menu` per assicurare stile e allineamento indipendenti dagli attributi Astro. Desktop invariato.
+
+### ProjectCard: prova numerica nelle landing
+
+Lo slot `media` accoglie evidenze documentate quando non è disponibile un’immagine reale del cliente; le props immagine restano il default. `.project-card__evidence` in components.css governa superficie e numeri responsive, senza dashboard o immagini fittizie. Categoria, titolo, sintesi e link restano quelli della ProjectCard canonica. `/advertising/` usa quattro casi forniti da Netmarket; `/design-system/` mostra Pilates distinguendo CLV e fatturato.
+
+ReviewsSection accetta `reviews` (default googleReviews) e slot `title` per composizioni editoriali locali. ContactForm accetta label, placeholder ed errore del selettore configurabili insieme a serviceOptions; presentazione dei campi e comportamento restano canonici. La landing advertising è il consumatore dei quattro obiettivi e della selezione recensioni dedicata.
