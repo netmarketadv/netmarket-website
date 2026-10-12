@@ -7,6 +7,9 @@ import { getServiceArchiveData } from '@/lib/services/content';
 interface Props {
   defaultService?: string;
   serviceOptions?: { value: string; label: string }[];
+  serviceLabel?: string;
+  servicePlaceholder?: string;
+  serviceErrorMessage?: string;
   showEmailFallback?: boolean;
   submitLabel?: string;
   formId?: string;
@@ -14,6 +17,9 @@ interface Props {
 const {
   defaultService = '',
   serviceOptions,
+  serviceLabel = 'Su cosa vuoi lavorare?',
+  servicePlaceholder = 'Scegli un ambito',
+  serviceErrorMessage = 'Scegli l’ambito su cui vuoi lavorare.',
   showEmailFallback = true,
   submitLabel = 'Invia la richiesta',
   formId = 'contact-page'
@@ -45,6 +51,7 @@ const interestOptions = serviceOptions ?? [
   class="contact-form"
   data-contact-form
   data-form-id={formId}
+  data-service-error={serviceErrorMessage}
   data-submit-label-default={submitLabel}
   aria-describedby="contact-form-status"
   novalidate
@@ -118,10 +125,10 @@ const interestOptions = serviceOptions ?? [
   </div>
 
   <label class="contact-form__field" for="contact-service">
-    <span>Su cosa vuoi lavorare? <em>Obbligatorio</em></span>
+    <span>{serviceLabel} <em>Obbligatorio</em></span>
     <span class="contact-form__select">
       <select id="contact-service" name="service" required aria-describedby="contact-service-error">
-        <option value="">Scegli un ambito</option>
+        <option value="">{servicePlaceholder}</option>
         {
           interestOptions.map((option) => (
             <option value={option.value} selected={option.value === defaultService}>
@@ -230,7 +237,7 @@ const interestOptions = serviceOptions ?? [
       input.validity.typeMismatch
         ? 'Inserisci un indirizzo email valido.'
         : 'Inserisci il tuo indirizzo email.',
-    service: () => 'Scegli l’ambito su cui vuoi lavorare.',
+    service: () => form?.dataset.serviceError || 'Scegli l’ambito su cui vuoi lavorare.',
     message: (input) =>
       input.validity.tooShort
         ? 'Raccontaci il progetto in almeno 10 caratteri.'

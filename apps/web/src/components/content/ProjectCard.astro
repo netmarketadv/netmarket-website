@@ -3,8 +3,8 @@ interface Props {
   title: string;
   category: string;
   description: string;
-  image: string;
-  alt: string;
+  image?: string;
+  alt?: string;
   width?: number | undefined;
   height?: number | undefined;
   srcset?: string | undefined;
@@ -12,12 +12,38 @@ interface Props {
   href: string;
 }
 
-const { title, category, description, image, alt, width = 1200, height = 900, srcset, loading = 'lazy', href } = Astro.props;
+const {
+  title,
+  category,
+  description,
+  image,
+  alt,
+  width = 1200,
+  height = 900,
+  srcset,
+  loading = 'lazy',
+  href
+} = Astro.props;
 ---
 
 <a class="project-card" href={href} data-reveal="up">
   <div class="project-card__media">
-    <img src={image} alt={alt} width={width} height={height} srcset={srcset} sizes="(max-width: 760px) 84vw, 30vw" loading={loading} decoding="async" />
+    <slot name="media"
+      >{
+        image && (
+          <img
+            src={image}
+            alt={alt ?? ''}
+            width={width}
+            height={height}
+            srcset={srcset}
+            sizes="(max-width: 760px) 84vw, 30vw"
+            loading={loading}
+            decoding="async"
+          />
+        )
+      }</slot
+    >
   </div>
   <div class="project-card__body">
     <span class="project-card__category">{category}</span>

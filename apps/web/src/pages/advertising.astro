@@ -35,19 +35,20 @@ import {
   advertisingShell,
   advertisingGoals,
   advertisingSteps,
-  advertisingFaq
+  advertisingFaq,
+  advertisingCases,
+  advertisingPricing,
+  advertisingVideo
 } from '@/data/advertising-landing';
 import { advertisingMap } from '@/data/advertising-map';
-import { clientLogos, googleTrust } from '@/data/home';
+import { clientLogos, googleTrust, cmsMedia } from '@/data/home';
 import { googleReviews } from '@/data/reviews';
 import { teamMembers } from '@/data/team';
-import { getProjectArchiveData } from '@/lib/projects/content';
-import { projectPresentation } from '@/lib/projects/presentation';
 import '@/styles/advertising.css';
 
 const siteUrl = getPublicEnv().PUBLIC_SITE_URL;
 const description =
-  'Google Ads, Meta Ads, creatività e landing in un unico progetto. Scopri il metodo, i progetti e le persone di Netmarket. Parliamo dei tuoi obiettivi.';
+  'Google Ads e Meta Ads da 400 € al mese per canale, IVA e budget Ads esclusi. Quattro casi reali, un team Google Partner. Primo confronto gratuito.';
 const structuredData = [
   serviceJsonLd(
     siteUrl,
@@ -73,13 +74,18 @@ const structuredData = [
   }
 ];
 
-const { projects } = await getProjectArchiveData();
-const brb = projects.find(
-  (project) => project.slug === 'casi-studio-strategia-digitale-ecommerce-brb'
-);
-const metrics = brb ? projectPresentation(brb).metrics : [];
+const formatNumber = (value: number, decimals = 0) =>
+  new Intl.NumberFormat('it-IT', {
+    useGrouping: true,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }).format(value);
+const euro = (value: number, decimals = 0) => `${formatNumber(value, decimals)} €`;
 const landingClients = clientLogos.map((client) =>
   client.name === 'Albertini Allestimenti' ? { ...client, visualScale: 0.58 } : client
+);
+const landingReviews = googleReviews.filter(
+  (review) => review.author.toLowerCase() !== 'paola malighetti'
 );
 const googleLogo = '/media/advertising/google-g.webp';
 const media = '/media/advertising/';
@@ -93,35 +99,6 @@ const people = [
   const person = teamMembers.find((p) => p.id === id);
   return person ? [{ ...person, image: `${media}${id.split('-')[0]}.webp` }] : [];
 });
-const projectCards = [
-  {
-    title: 'BRB',
-    category: 'Strategia / Ecommerce / Contenuti',
-    description: 'Un ecosistema digitale che collega identità, contenuti e acquisto.',
-    image: `${media}brb-social.webp`,
-    alt: 'Contenuti social BRB realizzati da Netmarket',
-    href: '#caso-brb',
-    tag: 'Un sistema per crescere'
-  },
-  {
-    title: 'Pazzo Design',
-    category: 'Ecommerce / Design / Sviluppo',
-    description: 'Il catalogo di arredamento incontra un percorso di acquisto su misura.',
-    image: `${media}pazzo-store.webp`,
-    alt: 'Ecommerce Pazzo Design realizzato da Netmarket',
-    href: '#caso-pazzo',
-    tag: 'Un percorso per acquistare'
-  },
-  {
-    title: 'Progetto-e',
-    category: 'Sito web / SEO / Contenuti',
-    description: 'Una presenza digitale dedicata al fotovoltaico per le aziende.',
-    image: `${media}progetto-e.webp`,
-    alt: 'Sito Progetto-e realizzato da Netmarket',
-    href: '#caso-progetto-e',
-    tag: 'Un’offerta più chiara'
-  }
-];
 const markets = [
   {
     id: 'locale',
@@ -145,7 +122,7 @@ const markets = [
 ---
 
 <BaseLayout
-  title="Google Ads e Meta Ads per la tua azienda"
+  title="Google Ads e Meta Ads per acquisire clienti"
   description={description}
   path="/advertising/"
   structuredData={structuredData}
@@ -163,23 +140,31 @@ const markets = [
       <Container wide>
         <div class="adv-hero__grid">
           <div class="adv-hero__copy">
-            <p class="nm-eyebrow" data-reveal="down">Google Ads · Meta Ads · Performance</p>
+            <p class="nm-eyebrow" data-reveal="down">Google Ads · Meta Ads · Google Partner</p>
             <h1 id="advertising-title" data-reveal="line">
-              Più valore dalle tue <span class="nm-heading-accent">campagne.</span>
+              Google Ads e Meta Ads. <span class="nm-heading-accent"
+                >Più contatti e più vendite.</span
+              >
             </h1>
             <p class="adv-lead" data-reveal="up">
-              Strategia, creatività e tecnologia per trasformare l’interesse in contatti
-              qualificati, vendite e nuove opportunità.
+              Portiamo la tua offerta davanti alle persone giuste. Gestiamo <strong
+                >Google Ads e Meta Ads</strong
+              > per trasformare ricerche e interesse in richieste commerciali e acquisti.
             </p>
             <div class="adv-hero__actions" data-reveal="up">
               <Button id="hero-contact" href="#consulenza" variant="brand" size="large" magnetic
-                >Parliamo dei tuoi obiettivi<IconArrowUpRight aria-hidden="true" /></Button
+                >Richiedi il confronto gratuito<IconArrowUpRight aria-hidden="true" /></Button
               >
             </div>
+            <p class="adv-hero__price">
+              Gestione da <strong>400 €/mese per canale.</strong><br /><span
+                >+ IVA · Budget pubblicitario escluso.</span
+              >
+            </p>
             <a class="adv-hero__trust" href="#recensioni">
               <span class="adv-avatar-stack" aria-hidden="true"
                 >{
-                  googleReviews.slice(0, 3).map((r) => (
+                  landingReviews.slice(0, 3).map((r) => (
                     <span>
                       <img
                         src={r.avatarUrl}
@@ -228,32 +213,44 @@ const markets = [
                 Dal messaggio all’acquisto.<IconArrowUpRight aria-hidden="true" />
               </figcaption>
             </figure>
-            {
-              metrics[0] && (
-                <a class="adv-hero__result" href="#caso-brb">
-                  <>
-                    <span>Progetto BRB</span>
-                    <strong data-motion-count={metrics[0].value}>{metrics[0].value}</strong>
-                    <span>Fatturato ecommerce*</span>
-                  </>
-                </a>
-              )
-            }
-            <span class="adv-hero__signature">Strategia. Contenuti. Conversione.</span>
+            <a class="adv-hero__result" href="#costi">
+              <span>Gestione Google Ads o Meta Ads</span>
+              <strong>da 400 €</strong>
+              <span>/ mese per canale + IVA</span>
+              <span>Budget pubblicitario escluso</span>
+            </a>
+            <span class="adv-hero__signature">Creatività ed ecommerce: progetto BRB.</span>
           </div>
         </div>
       </Container>
     </section>
 
-    <section class="adv-clients" aria-labelledby="clients-title">
-      <Container wide
-        ><ClientMarquee
-          titleId="clients-title"
-          title="In buona compagnia."
-          text="Alcuni dei brand con cui abbiamo lavorato."
-          clients={landingClients}
-        /></Container
-      >
+    <section class="adv-partner" aria-label="Google Partner e competenze Netmarket">
+      <Container wide>
+        <div class="adv-partner__inner">
+          <a
+            href="https://www.google.com/partners/agency?id=9657120194"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Verifica Netmarket nel programma Google Partners (nuova scheda)"
+          >
+            <img
+              src={cmsMedia.badges.googlePartner}
+              alt="Google Partner"
+              width="304"
+              height="291"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+          <div>
+            <strong>Le tue campagne, in mani competenti.</strong><p>
+              Google Partner. Dal 1986, al fianco delle imprese.
+            </p>
+          </div>
+          <p class="adv-partner__team">Strategia, creatività e sviluppo.<br />Nello stesso team.</p>
+        </div>
+      </Container>
     </section>
 
     <Section id="progetti" labelledby="proof-title" class="adv-projects">
@@ -262,12 +259,15 @@ const markets = [
           <SectionHeading
             id="proof-title"
             reveal
-            title="Il lavoro si vede. E si misura."
-            text="Progetti reali, con esigenze diverse. La stessa cura nel collegare strategia, contenuti e tecnologia."
-          /><div class="adv-slider-controls" role="group" aria-label="Navigazione progetti">
+            eyebrow="Quattro casi reali. Risultati commerciali."
+            title="I clic non pagano le fatture. I clienti sì."
+            text="Contatti, clienti acquisiti e valore generato. Ecco cosa hanno prodotto le campagne, con investimenti e periodi dichiarati."
+          />
+          <div class="adv-slider-controls" role="group" aria-label="Navigazione progetti">
             <IconButton label="Progetto precedente" data-project-prev
               ><IconArrowLeft aria-hidden="true" /></IconButton
-            ><IconButton label="Progetto successivo" data-project-next
+            >
+            <IconButton label="Progetto successivo" data-project-next
               ><IconArrowRight aria-hidden="true" /></IconButton
             >
           </div>
@@ -279,86 +279,112 @@ const markets = [
           aria-label="Progetti Netmarket, scorri per esplorare"
         >
           {
-            projectCards.map((project, index) => (
+            advertisingCases.map((project) => (
               <article class="adv-project-slide">
-                <>
-                  <ProjectCard {...project} />
-                  <div
-                    class:list={[
-                      'adv-project-summary',
-                      index === 0 && 'adv-project-summary--metrics'
-                    ]}
-                  >
-                    {index === 0 ? (
-                      metrics.slice(0, 2).map((metric) => (
-                        <div>
-                          <strong data-motion-count={metric.value}>{metric.value}</strong>
-                          <span>{metric.label}*</span>
-                        </div>
-                      ))
-                    ) : (
+                <ProjectCard
+                  title={project.title}
+                  category={`Lead generation / ${project.period}`}
+                  description={project.description}
+                  href={`#caso-${project.id}`}
+                >
+                  <div slot="media" class="project-card__evidence">
+                    <span>{project.valueLabel}</span>
+                    <strong data-motion-count={euro(project.value)}>{euro(project.value)}</strong>
+                    <div>
                       <>
-                        <IconCheck aria-hidden="true" />
-                        <span>{project.tag}</span>
+                        <b>{formatNumber(project.value / project.investment, 2)}×</b>
+                        <span>{project.returnLabel}</span>
                       </>
-                    )}
+                    </div>
                   </div>
-                </>
+                </ProjectCard>
+                <dl class="adv-project-summary adv-project-summary--results">
+                  <div>
+                    <>
+                      <dt>Contatti generati</dt>
+                      <dd>{formatNumber(project.leads)}</dd>
+                    </>
+                  </div>
+                  <div>
+                    <>
+                      <dt>{project.customerLabel}</dt>
+                      <dd>{formatNumber(project.customers)}</dd>
+                    </>
+                  </div>
+                  <div>
+                    <>
+                      <dt>Investimento Ads</dt>
+                      <dd>{euro(project.investment)}</dd>
+                    </>
+                  </div>
+                </dl>
               </article>
             ))
           }
         </div>
         <div class="adv-case-details">
-          <details id="caso-brb" class="adv-case-detail">
-            <summary
-              ><span>BRB / Il progetto dietro i numeri</span><IconPlus
-                aria-hidden="true"
-              /></summary
-            ><div class="adv-case-detail__body">
-              <p>
-                Analisi, strategia multicanale, identità visiva, contenuti, nuovo ecommerce e SEO.
-                Un ecosistema coordinato per accompagnare il brand alimentare nella crescita
-                digitale.
-              </p><p>
-                *Nei primi tre mesi dal lancio, rispetto allo storico. I risultati si riferiscono
-                all’intero progetto, non alle sole campagne Ads, e non sono una previsione per altri
-                clienti.
-              </p>
-            </div>
-          </details>
-          <details id="caso-pazzo" class="adv-case-detail">
-            <summary
-              ><span>Pazzo Design / Dall’arredamento all’acquisto online</span><IconPlus
-                aria-hidden="true"
-              /></summary
-            ><div class="adv-case-detail__body">
-              <p>
-                Design, sviluppo ecommerce e assistenza continua per un catalogo di tavoli e sedie.
-                Un progetto che mostra come rendere l’offerta più facile da esplorare e acquistare.
-              </p><p>
-                È una prova delle competenze ecommerce Netmarket; non vengono attribuiti risultati
-                pubblicitari non documentati.
-              </p>
-            </div>
-          </details>
-          <details id="caso-progetto-e" class="adv-case-detail">
-            <summary
-              ><span>Progetto-e / Far capire il valore di un’offerta B2B</span><IconPlus
-                aria-hidden="true"
-              /></summary
-            ><div class="adv-case-detail__body">
-              <p>
-                Sito, architettura dei contenuti, SEO e landing per il fotovoltaico aziendale. Un
-                percorso per presentare servizi e soluzioni al pubblico professionale.
-              </p><p>
-                È una prova del lavoro su sito e contenuti; non rappresenta un risultato misurato
-                delle campagne Ads.
-              </p>
-            </div>
-          </details>
+          {
+            advertisingCases.map((project) => (
+              <details id={`caso-${project.id}`} class="adv-case-detail">
+                <summary>
+                  <>
+                    <span>
+                      {project.title} / {project.outcome}
+                    </span>
+                    <IconPlus aria-hidden="true" />
+                  </>
+                </summary>
+                <div class="adv-case-detail__body">
+                  <div>
+                    <>
+                      <p>{project.context}</p>
+                      <dl class="adv-case-calculations">
+                        <div>
+                          <>
+                            <dt>Costo per contatto</dt>
+                            <dd>{euro(project.investment / project.leads, 2)}</dd>
+                          </>
+                        </div>
+                        <div>
+                          <>
+                            <dt>Costo Ads per acquisizione</dt>
+                            <dd>{euro(project.investment / project.customers, 2)}</dd>
+                          </>
+                        </div>
+                        <div>
+                          <>
+                            <dt>Da contatto ad acquisizione</dt>
+                            <dd>{formatNumber((project.customers / project.leads) * 100, 2)}%</dd>
+                          </>
+                        </div>
+                      </dl>
+                    </>
+                  </div>
+                  <p>{project.note}</p>
+                </div>
+              </details>
+            ))
+          }
         </div>
+        <p class="adv-results-note">
+          Dati dei progetti forniti da Netmarket. Il ROAS confronta il fatturato attribuito alle
+          campagne, IVA esclusa, con la sola spesa Ads: non misura l’utile e non include il compenso
+          di gestione. Per Pilates è riportato il CLV stimato, distinto dal fatturato. I risultati
+          si riferiscono al progetto e al periodo indicati, non sono una previsione.
+        </p>
       </Container>
     </Section>
+
+    <section class="adv-clients" aria-labelledby="clients-title">
+      <Container wide
+        ><ClientMarquee
+          titleId="clients-title"
+          title="In buona compagnia."
+          text="Alcuni dei brand con cui abbiamo lavorato, tra marketing, comunicazione e tecnologia."
+          clients={landingClients}
+        /></Container
+      >
+    </section>
 
     <Section id="obiettivi" labelledby="goals-title">
       <Container wide>
@@ -442,7 +468,7 @@ const markets = [
           tone="inverse"
           reveal
           eyebrow="Prima delle campagne, le scelte."
-          title="Ogni investimento ha bisogno di una direzione."
+          title="Ogni clic ha un costo. Ogni scelta deve avere un senso."
           text="Mettiamo a fuoco cosa deve succedere, prepariamo il percorso e miglioriamo quello che i dati ci insegnano."
         />
         <div class="adv-standards">
@@ -485,6 +511,160 @@ const markets = [
             Hai già campagne attive?<br /><strong>Partiamo da quello che stanno producendo.</strong>
           </p><Button href="#consulenza" variant="inverse" size="large"
             >Parliamo delle tue campagne<IconArrowUpRight aria-hidden="true" /></Button
+          >
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="video" labelledby="video-title" class="adv-video-section">
+      <Container wide>
+        <div class="adv-video-intro">
+          <SectionHeading
+            id="video-title"
+            eyebrow="Il metodo, in 60 secondi"
+            reveal
+            title="Le campagne hanno bisogno di un team. Tu di un partner."
+            text="Chi segue le tue campagne, come prende le decisioni e perché il lavoro continua anche dopo il clic."
+          />
+        </div>
+        <figure class="adv-video" data-reveal="media">
+          {
+            advertisingVideo.src ? (
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster={advertisingVideo.poster}
+                aria-label="Il metodo Netmarket in 60 secondi"
+              >
+                <source src={advertisingVideo.src} />
+                {advertisingVideo.captions && (
+                  <track
+                    kind="captions"
+                    src={advertisingVideo.captions}
+                    srclang="it"
+                    label="Italiano"
+                    default
+                  />
+                )}
+                Il browser non supporta il video. <a href={advertisingVideo.src}>Apri il video</a>.
+              </video>
+            ) : (
+              <div class="adv-video__placeholder">
+                <div class="adv-video__copy">
+                  <>
+                    <span>NETMARKET / IL NOSTRO APPROCCIO</span>
+                    <strong>
+                      Prima il business.
+                      <br />
+                      Poi le campagne.
+                    </strong>
+                    <span class="adv-video__status">Video in preparazione · 60 secondi</span>
+                  </>
+                </div>
+                <img
+                  src={advertisingVideo.poster}
+                  alt="Giacomo Galanti, Digital Marketing Specialist di Netmarket"
+                  width="600"
+                  height="800"
+                  loading="lazy"
+                />
+              </div>
+            )
+          }
+          <figcaption>Obiettivi chiari. Investimenti misurati. Decisioni condivise.</figcaption>
+        </figure>
+        {
+          advertisingVideo.src && advertisingVideo.transcript && (
+            <details class="adv-case-detail">
+              <>
+                <summary>
+                  Leggi la trascrizione
+                  <IconPlus aria-hidden="true" />
+                </summary>
+                <p>{advertisingVideo.transcript}</p>
+              </>
+            </details>
+          )
+        }
+      </Container>
+    </Section>
+
+    <Section id="costi" labelledby="pricing-title" class="adv-pricing">
+      <Container wide>
+        <SectionHeading
+          id="pricing-title"
+          eyebrow="Il prezzo è chiaro. Anche il punto di partenza."
+          reveal
+          title="Investi per crescere. Sapendo quanto spendi."
+          text="Google, Meta o un piano coordinato. Partiamo dal canale che serve al tuo business, con gestione e budget pubblicitario sempre distinti."
+        />
+        <div class="adv-pricing__grid">
+          {
+            advertisingPricing.map((plan, index) => (
+              <article class="adv-price" data-reveal="up">
+                <div class="adv-price__channel">
+                  {index === 0 ? (
+                    <img src={googleLogo} alt="" width="40" height="40" />
+                  ) : (
+                    <IconBrandMeta aria-hidden="true" size={44} stroke={1.8} />
+                  )}
+                  <div>
+                    <>
+                      <strong>{plan.channel}</strong>
+                      <span>{plan.platforms}</span>
+                    </>
+                  </div>
+                </div>
+                <h3>{plan.title}</h3>
+                <p>{plan.text}</p>
+                <p class="adv-price__amount">
+                  <>
+                    <span>da</span>
+                    <strong>{euro(plan.monthlyFrom)}</strong>
+                    <span>/ mese + IVA</span>
+                  </>
+                </p>
+                <p class="adv-price__budget">Per singolo canale · Budget pubblicitario escluso</p>
+                <ul>
+                  {plan.includes.map((item) => (
+                    <li>
+                      <IconCheck aria-hidden="true" size={18} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  href="#consulenza"
+                  variant="brand"
+                  size="large"
+                  data-advertising-goal={plan.channel}
+                >
+                  Parliamo di {plan.channel}
+                  <IconArrowUpRight aria-hidden="true" />
+                </Button>
+              </article>
+            ))
+          }
+        </div>
+        <div class="adv-pricing__terms">
+          <p>
+            <strong>Il budget da investire su Google e Meta è escluso.</strong> Le tariffe sono di partenza,
+            per singolo canale. Compenso finale, configurazione iniziale, produzione creativa, landing,
+            feed e integrazioni vengono definiti nella proposta, in base alla complessità e alle attività
+            necessarie. Durata e condizioni sono concordate prima dell’avvio.
+          </p>
+        </div>
+        <div class="adv-pricing__custom">
+          <div>
+            <h3>Google e Meta, insieme?</h3><p>
+              Un piano su misura per coordinare canali, mercati e investimenti.
+            </p>
+          </div><Button
+            href="#consulenza"
+            variant="secondary"
+            data-advertising-goal="Google Ads e Meta Ads"
+            >Valutiamo il piano insieme<IconArrowUpRight aria-hidden="true" /></Button
           >
         </div>
       </Container>
@@ -605,6 +785,7 @@ const markets = [
       ><Container wide
         ><ReviewsSection
           titleId="reviews-title"
+          reviews={landingReviews}
           title="Il rapporto conta. Lo raccontano i nostri clienti."
           text="Esperienze pubblicate su Google da chi ha lavorato con Netmarket."
           rating={googleTrust.rating}
@@ -632,27 +813,38 @@ const markets = [
             <SectionHeading
               id="consultation-title"
               reveal
-              eyebrow="Il prossimo passo è una conversazione."
-              text="Partiamo da obiettivi, attività in corso e priorità. Capiremo insieme se e come possiamo aiutarti."
+              eyebrow="Il primo passo, senza impegno."
+              text="Un primo confronto gratuito, senza impegno. Parliamo di obiettivi, campagne e risorse: se ci sono le condizioni, definiamo attività e investimento in una proposta."
               ><Fragment slot="title"
                 ><span class="adv-contact-title-line">Raccontaci dove </span><span
                   class="adv-contact-title-line">vuoi arrivare.</span
                 ></Fragment
               ></SectionHeading
             >
+            <p class="adv-consultation__offer">
+              Gestione da <strong>400 €/mese per canale.</strong><span
+                >+ IVA · Budget pubblicitario escluso.</span>
+            </p>
             <ol class="adv-next">
               <li><span>01</span>Leggiamo la tua richiesta.</li><li>
                 <span>02</span>Ci confrontiamo su obiettivi e priorità.
               </li><li><span>03</span>Valutiamo il percorso più adatto.</li>
             </ol>
           </div><div class="adv-consultation__form">
+            <div class="adv-consultation__form-heading">
+              <h3>Partiamo dal tuo obiettivo.</h3><p>
+                Poche informazioni per capire come aiutarti.
+              </p>
+            </div>
             <ContactForm
-              defaultService="advertising"
+              serviceLabel="Cosa vuoi ottenere?"
+              servicePlaceholder="Seleziona il tuo obiettivo"
+              serviceErrorMessage="Seleziona il tuo obiettivo."
               serviceOptions={[
-                { value: 'advertising', label: 'Google Ads e Meta Ads' },
-                { value: 'siti-web', label: 'Landing page per le campagne' },
-                { value: 'content-production', label: 'Creatività e contenuti per gli annunci' },
-                { value: 'progetto-integrato', label: 'Campagne, landing e creatività' }
+                { value: 'contatti-preventivi', label: 'Contatti e preventivi' },
+                { value: 'vendite-ecommerce', label: 'Vendite ecommerce' },
+                { value: 'notorieta-brand', label: 'Notorietà del brand' },
+                { value: 'da-definire', label: 'Da definire insieme' }
               ]}
               showEmailFallback={false}
               submitLabel="Richiedi un primo confronto"

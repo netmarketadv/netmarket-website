@@ -5,9 +5,11 @@ const endpoint = '**/wp-json/netmarket/v1/forms/contact';
 test('advertising goals, FAQ and responsive layout remain usable', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/advertising/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Più valore');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Google Ads e Meta Ads. Più contatti e più vendite.'
+  );
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
-  await expect(page.locator('#contact-service')).toHaveValue('advertising');
+  await expect(page.locator('#contact-service')).toHaveValue('');
   await expect(page.locator('#metodo')).toHaveCSS('background-color', 'rgb(8, 11, 22)');
   await expect(page.locator('#metodo h3').first()).toHaveCSS('color', 'rgb(255, 255, 255)');
   await expect(page.locator('#metodo .nm-section-heading > p').last()).toHaveCSS(
@@ -16,6 +18,7 @@ test('advertising goals, FAQ and responsive layout remain usable', async ({ page
   );
   await page.getByRole('link', { name: 'Voglio più contatti', exact: true }).click();
   await expect(page.locator('#contact-message')).toHaveValue(/Lead generation/);
+  await expect(page.locator('#contact-service')).toHaveValue('contatti-preventivi');
   await page.locator('#contact-message').fill('Vorrei migliorare la qualità delle richieste.');
   await page.getByRole('link', { name: 'Voglio far crescere le vendite', exact: true }).click();
   await expect(page.locator('#contact-message')).toHaveValue(
@@ -49,7 +52,7 @@ test('advertising form validates, retains attribution and confirms one lead', as
   await page.route(endpoint, async (route) => {
     count += 1;
     const payload = route.request().postDataJSON();
-    expect(payload.service).toBe('advertising');
+    expect(payload.service).toBe('contatti-preventivi');
     expect(payload.sourceUrl).toContain('/advertising/');
     expect(payload.utm).toMatchObject({
       utm_source: 'google',
@@ -67,6 +70,7 @@ test('advertising form validates, retains attribution and confirms one lead', as
   await page.locator('#contact-name').fill('Mario Test');
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
+  await page.locator('#contact-service').selectOption('contatti-preventivi');
   await page.locator('#contact-privacy').check();
   await submit.click();
   await expect(page).toHaveURL(/\/grazie\/$/);
@@ -96,6 +100,7 @@ test('advertising form preserves data and restores CTA after a failed request', 
   await page.locator('#contact-name').fill('Mario Test');
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
+  await page.locator('#contact-service').selectOption('contatti-preventivi');
   await page.locator('#contact-privacy').check();
   await page.getByRole('button', { name: 'Richiedi un primo confronto' }).click();
   await expect(page.locator('#contact-form-status')).toContainText('Non siamo riusciti');
@@ -111,7 +116,7 @@ test('campaign content and native links remain available without JavaScript', as
   await page.goto('/advertising/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.locator('#approfondimenti')).toHaveCount(0);
-  await page.getByRole('link', { name: 'Parliamo dei tuoi obiettivi' }).click();
+  await page.getByRole('link', { name: 'Richiedi il confronto gratuito' }).click();
   await expect(page).toHaveURL(/#consulenza$/);
   await expect(page.locator('#contact-name')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Richiedi un primo confronto' })).toBeDisabled();
@@ -169,9 +174,9 @@ test('project slider and market choices keep the journey on the landing', async 
   await expect
     .poll(() => page.locator('[data-project-rail]').evaluate((rail) => rail.scrollLeft))
     .toBeGreaterThan(0);
-  await page.locator('.adv-project-rail a[href="#caso-pazzo"]').click();
-  await expect(page.locator('#caso-pazzo')).toHaveAttribute('open');
-  await expect(page).toHaveURL(/advertising\/#caso-pazzo$/);
+  await page.locator('.adv-project-rail a[href="#caso-eventi"]').click();
+  await expect(page.locator('#caso-eventi')).toHaveAttribute('open');
+  await expect(page).toHaveURL(/advertising\/#caso-eventi$/);
   await page.locator('[data-market-choice="estero"]').click();
   await expect(page.locator('[data-market-choice="estero"]')).toHaveAttribute(
     'aria-pressed',
@@ -238,11 +243,11 @@ test('landing has a focused form, closed case details and a two-line contact tit
   ).toHaveCount(0);
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   await expect(page.locator('#contact-service option')).toHaveText([
-    'Scegli un ambito',
-    'Google Ads e Meta Ads',
-    'Landing page per le campagne',
-    'Creatività e contenuti per gli annunci',
-    'Campagne, landing e creatività'
+    'Seleziona il tuo obiettivo',
+    'Contatti e preventivi',
+    'Vendite ecommerce',
+    'Notorietà del brand',
+    'Da definire insieme'
   ]);
   for (const width of [375, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
@@ -293,26 +298,75 @@ test('mobile menu presents icon rows and a visible CTA without decorative arrows
   }
 });
 
-test('BRB metrics stay inside the card and share the same baseline', async ({ page }) => {
+test('case numbers remain legible within their cards at all breakpoints', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/advertising/');
+  await expect(page.locator('.adv-project-slide')).toHaveCount(4);
   for (const width of [320, 375, 390, 430, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    const panel = page.locator('.adv-project-summary--metrics');
-    await panel.scrollIntoViewIfNeeded();
-    const numbers = panel.locator('strong');
-    await expect(numbers).toHaveText(['+292%', '+206%']);
-    const bounds = await panel.boundingBox();
-    const first = await numbers.nth(0).boundingBox();
-    const second = await numbers.nth(1).boundingBox();
-    expect(first!.x).toBeGreaterThan(bounds!.x);
-    expect(second!.x + second!.width).toBeLessThan(bounds!.x + bounds!.width);
-    expect(first!.x + first!.width).toBeLessThan(second!.x);
-    expect(Math.abs(first!.y - second!.y)).toBeLessThan(1);
-    for (const number of await numbers.all()) {
-      expect(await number.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+    for (const card of await page.locator('.adv-project-slide').all()) {
+      await card.scrollIntoViewIfNeeded();
+      const value = card.locator('.project-card__evidence > strong');
+      const bounds = await card.boundingBox();
+      const number = await value.boundingBox();
+      expect(number!.x).toBeGreaterThan(bounds!.x);
+      expect(number!.x + number!.width).toBeLessThan(bounds!.x + bounds!.width);
+      expect(await value.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
     }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true
+    );
   }
+});
+
+test('commercial evidence distinguishes CLV, revenue and ad spend', async ({ page }) => {
+  await page.goto('/advertising/');
+  const cards = page.locator('.adv-project-slide');
+  await expect(cards.locator('.project-card__evidence > strong')).toHaveText([
+    '16.400 €',
+    '84.550 €',
+    '88.400 €',
+    '106.400 €'
+  ]);
+  await expect(cards.first()).toContainText('CLV netto stimato');
+  await expect(cards.first()).not.toContainText('ROAS');
+  await expect(cards.locator('.project-card__evidence b')).toHaveText([
+    '5,29×',
+    '15,66×',
+    '20,09×',
+    '14,19×'
+  ]);
+  await expect(cards.nth(3).locator('dd')).toHaveText(['300', '133', '7.500 €']);
+  await page.locator('#caso-pilates summary').click();
+  await expect(page.locator('#caso-pilates')).toContainText('non il fatturato incassato');
+  await expect(page.locator('#caso-pilates dd')).toHaveText(['15,74 €', '75,61 €', '20,81%']);
+  await expect(page.locator('.adv-results-note')).toContainText('non misura l’utile');
+});
+
+test('partner, video preparation and pricing stay on the conversion journey', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/advertising/');
+  const partner = page.locator('.adv-partner');
+  const hero = await page.locator('.adv-hero').boundingBox();
+  const badge = await partner.boundingBox();
+  expect(Math.abs(badge!.y - (hero!.y + hero!.height))).toBeLessThan(2);
+  await expect(partner.getByRole('img', { name: 'Google Partner', exact: true })).toBeVisible();
+  await expect(page.locator('#costi .adv-price__amount strong')).toHaveText(['400 €', '400 €']);
+  await expect(page.locator('#costi .adv-pricing__terms')).toContainText(
+    'budget da investire su Google e Meta è escluso'
+  );
+  await expect(page.locator('#video video, #video iframe, #video button')).toHaveCount(0);
+  await expect(page.locator('#video')).toContainText('Video in preparazione');
+  const frame = await page.locator('.adv-video__placeholder').boundingBox();
+  expect(frame!.width / frame!.height).toBeCloseTo(16 / 9, 1);
+  await page.getByRole('link', { name: 'Parliamo di Meta Ads', exact: true }).click();
+  await expect(page).toHaveURL(/#consulenza$/);
+  await expect(page.locator('#contact-message')).toHaveValue(/Meta Ads/);
+  await page.locator('#contact-message').fill('Messaggio già scritto dal cliente.');
+  await page.getByRole('link', { name: 'Parliamo di Google Ads', exact: true }).click();
+  await expect(page.locator('#contact-message')).toHaveValue('Messaggio già scritto dal cliente.');
+  const faqSchema = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(faqSchema.join('')).toContain('400 € al mese');
 });
 
 for (const storage of ['blocked', 'corrupt']) {
@@ -336,6 +390,7 @@ for (const storage of ['blocked', 'corrupt']) {
     await page.locator('#contact-name').fill('QA Netmarket');
     await page.locator('#contact-email').fill('qa@example.com');
     await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
+    await page.locator('#contact-service').selectOption('contatti-preventivi');
     await page.locator('#contact-privacy').check();
     await page.getByRole('button', { name: 'Richiedi un primo confronto' }).click();
     if (storage === 'blocked')
@@ -364,6 +419,7 @@ test('an HTTP 200 challenge cannot become a lead', async ({ page }) => {
   await page.locator('#contact-name').fill('QA Netmarket');
   await page.locator('#contact-email').fill('qa@example.com');
   await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
+  await page.locator('#contact-service').selectOption('contatti-preventivi');
   await page.locator('#contact-privacy').check();
   await page.getByRole('button', { name: 'Richiedi un primo confronto' }).click();
   await expect(page.locator('#contact-form-status')).toContainText('Non siamo riusciti');
@@ -371,3 +427,53 @@ test('an HTTP 200 challenge cannot become a lead', async ({ page }) => {
     await page.evaluate(() => window.dataLayer?.some((event) => event.event === 'generate_lead'))
   ).toBe(false);
 });
+
+test('landing reviews are curated and the heading fits on two lines', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/advertising/');
+  await expect(page.locator('#recensioni')).not.toContainText(/paola malighetti/i);
+  await expect(page.locator('#recensioni .review-card:not([aria-hidden="true"])')).toHaveCount(3);
+  for (const width of [320, 390, 430, 768, 1024, 1440, 1728]) {
+    await page.setViewportSize({ width, height: 900 });
+    const lines = await page
+      .locator('#reviews-title')
+      .evaluate(
+        (el) => el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)
+      );
+    expect(lines).toBeLessThan(2.15);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true
+    );
+  }
+  await page.getByRole('button', { name: 'Leggi tutta la recensione di Pazzo Design' }).click();
+  await expect(page.locator('[data-review-modal]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-review-modal]')).not.toBeVisible();
+});
+
+for (const objective of [
+  'contatti-preventivi',
+  'vendite-ecommerce',
+  'notorieta-brand',
+  'da-definire'
+]) {
+  test(`landing sends the selected objective: ${objective}`, async ({ page }) => {
+    let payload: Record<string, unknown> | undefined;
+    await page.route(endpoint, async (route) => {
+      payload = route.request().postDataJSON();
+      await route.fulfill({ json: { success: true } });
+    });
+    await page.goto('/advertising/');
+    await page.locator('#contact-name').fill('QA Netmarket');
+    await page.locator('#contact-email').fill('qa@example.com');
+    await page.locator('#contact-message').fill('Vorrei parlare del mio progetto.');
+    await page.locator('#contact-privacy').check();
+    await page.getByRole('button', { name: 'Richiedi un primo confronto' }).click();
+    await expect(page.locator('#contact-service-error')).toHaveText('Seleziona il tuo obiettivo.');
+    expect(payload).toBeUndefined();
+    await page.locator('#contact-service').selectOption(objective);
+    await page.getByRole('button', { name: 'Richiedi un primo confronto' }).click();
+    await expect(page).toHaveURL(/\/grazie\/$/);
+    expect(payload?.service).toBe(objective);
+  });
+}

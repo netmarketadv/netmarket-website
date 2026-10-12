@@ -2,9 +2,20 @@ export function initAdvertisingLanding(): void {
   const root = document.querySelector<HTMLElement>('.adv-page');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
+  const objective = document.querySelector<HTMLSelectElement>('#contact-service');
+  const objectiveValues: Record<string, string> = {
+    'Lead generation': 'contatti-preventivi',
+    Ecommerce: 'vendite-ecommerce',
+    'Brand awareness': 'notorieta-brand'
+  };
   const message = document.querySelector<HTMLTextAreaElement>('#contact-message');
   root.querySelectorAll<HTMLAnchorElement>('[data-advertising-goal]').forEach((link) => {
     link.addEventListener('click', () => {
+      const value = objectiveValues[link.dataset.advertisingGoal || ''];
+      if (objective && !objective.value && value) {
+        objective.value = value;
+        objective.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       if (message && !message.value.trim()) {
         message.value = `Il nostro obiettivo: ${link.dataset.advertisingGoal}.\n\n`;
         message.dispatchEvent(new Event('input', { bubbles: true }));
