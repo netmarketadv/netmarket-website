@@ -6,6 +6,7 @@ import { getServiceArchiveData } from '@/lib/services/content';
 
 interface Props {
   defaultService?: string;
+  channelOptions?: { value: string; label: string }[];
   serviceOptions?: { value: string; label: string }[];
   serviceLabel?: string;
   servicePlaceholder?: string;
@@ -16,6 +17,7 @@ interface Props {
 }
 const {
   defaultService = '',
+  channelOptions,
   serviceOptions,
   serviceLabel = 'Su cosa vuoi lavorare?',
   servicePlaceholder = 'Scegli un ambito',
@@ -142,6 +144,25 @@ const interestOptions = serviceOptions ?? [
     <small id="contact-service-error" class="contact-form__error" data-error-for="service"></small>
   </label>
 
+  {
+    channelOptions && (
+      <label class="contact-form__field" for="contact-channel">
+        <span>
+          Canale di interesse <em>Facoltativo</em>
+        </span>
+        <span class="contact-form__select">
+          <select id="contact-channel" name="channel">
+            <option value="">Da valutare insieme</option>
+            {channelOptions.map((option) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
+          </select>
+          <IconChevronDown aria-hidden="true" stroke={1.8} />
+        </span>
+      </label>
+    )
+  }
+
   <label class="contact-form__field" for="contact-message">
     <span>Raccontaci brevemente il progetto <em>Obbligatorio</em></span>
     <textarea
@@ -151,7 +172,7 @@ const interestOptions = serviceOptions ?? [
       placeholder="Obiettivo, situazione attuale, eventuali scadenze o priorità."
       required
       minlength="10"
-      maxlength="3000"
+      maxlength={channelOptions ? '2900' : '3000'}
       aria-describedby="contact-message-hint contact-message-error"></textarea>
     <span id="contact-message-hint" class="contact-form__hint"
       >Bastano poche righe per iniziare.</span
@@ -200,6 +221,7 @@ const interestOptions = serviceOptions ?? [
 
 <script>
   import { pushEvent } from '@netmarket/analytics';
+  import { composeContactMessage } from '@/lib/contact-context';
   import {
     collectContactAttribution,
     persistContactAttribution,
@@ -239,7 +261,7 @@ const interestOptions = serviceOptions ?? [
         : 'Inserisci il tuo indirizzo email.',
     service: () => form?.dataset.serviceError || 'Scegli l’ambito su cui vuoi lavorare.',
     message: (input) =>
-      input.validity.tooShort
+      input.validity.tooShort || input.validity.customError
         ? 'Raccontaci il progetto in almeno 10 caratteri.'
         : 'Raccontaci brevemente il progetto.',
     privacyConsent: () => 'Per inviare la richiesta devi accettare l’informativa privacy.'
@@ -258,6 +280,11 @@ const interestOptions = serviceOptions ?? [
   ) {
     const field = input.closest<HTMLElement>('.contact-form__field, .contact-form__check');
     const error = form?.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
+    if (input.name === 'message' && form?.querySelector('[name="channel"]')) {
+      input.setCustomValidity(
+        input.value.trim().length < 10 ? 'Raccontaci il progetto in almeno 10 caratteri.' : ''
+      );
+    }
     const invalid = !input.validity.valid;
     field?.classList.toggle('contact-form__field--invalid', invalid && showError);
     input.setAttribute('aria-invalid', invalid && showError ? 'true' : 'false');
@@ -357,7 +384,12 @@ const interestOptions = serviceOptions ?? [
         company: String(data.get('company') || ''),
         phone: String(data.get('phone') || ''),
         service: String(data.get('service') || ''),
-        message: String(data.get('message') || ''),
+        message: form.querySelector('[name="channel"]')
+          ? composeContactMessage(
+              String(data.get('message') || ''),
+              String(data.get('channel') || '')
+            )
+          : String(data.get('message') || ''),
         privacyConsent: true,
         marketingConsent: false,
         website: String(data.get('website') || ''),

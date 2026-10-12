@@ -138,6 +138,7 @@ Le precedenti primitive Grid, Split, Bleed, Frame, StickyRegion e i wrapper moti
 - Due taglie: default minimo 44 px, large minimo 56 px. Label concise, hover massimo 1px, focus blu con separatore bianco.
 - Disabilitato: button nativo `disabled`; link senza href e fuori dal tab order, con `aria-disabled`. Busy: disabilitato e `aria-busy`, label esplicita.
 - `IconButton`: un solo controllo senza testo visibile, label obbligatoria, target 44 px. Usato per frecce e chiusura recensioni.
+- `ContactForm.channelOptions` aggiunge, quando configurato, un canale facoltativo distinto dall’obiettivo; stesso select canonico. La variante advertising usa questa opzione e valida il messaggio utente prima di aggiungere il contesto all’invio.
 - Campi: `styles/forms.css` è l’unica implementazione visuale per ContactForm, CareerForm e catalogo. Label visibile, input a 16 px, errori associati via `aria-describedby`, `aria-invalid`, messaggio di stato. Il caricamento file rimane un sottopattern specifico delle candidature.
 - Link testuali: underline animato discreto; link-card senza underline.
 - Form: label sempre visibile, campi dimensionati, messaggi e stati accessibili. La disposizione pill è ammessa solo nei moduli brevi; non e un pattern hero obbligatorio.
