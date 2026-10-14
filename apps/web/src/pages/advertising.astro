@@ -10,9 +10,6 @@ import {
   IconChartBar,
   IconBrush,
   IconDeviceDesktop,
-  IconMapPin,
-  IconWorld,
-  IconBuildingStore,
   IconSearch,
   IconPlus
 } from '@tabler/icons-astro';
@@ -31,16 +28,9 @@ import ReviewsSection from '@/components/blocks/ReviewsSection.astro';
 import TeamSection from '@/components/blocks/TeamSection.astro';
 import StickyContactCTA from '@/components/landing/StickyContactCTA.astro';
 import ContactForm from '@/components/forms/ContactForm.astro';
-import {
-  advertisingShell,
-  advertisingGoals,
-  advertisingSteps,
-  advertisingFaq,
-  advertisingCases,
-  advertisingPricing,
-  advertisingVideo
-} from '@/data/advertising-landing';
-import { advertisingMap } from '@/data/advertising-map';
+import { advertisingShell, advertisingSteps, advertisingPricing } from '@/data/advertising-landing';
+import { advertisingGoals, advertisingFaq, advertisingCases } from '@/data/advertising-landing';
+import '@/styles/advertising-consolidated.css';
 import { clientLogos, googleTrust, cmsMedia } from '@/data/home';
 import { googleReviews } from '@/data/reviews';
 import { teamMembers } from '@/data/team';
@@ -97,28 +87,19 @@ const people = [
   'marco-toso'
 ].flatMap((id) => {
   const person = teamMembers.find((p) => p.id === id);
-  return person ? [{ ...person, image: `${media}${id.split('-')[0]}.webp` }] : [];
+  return person
+    ? [
+        {
+          ...person,
+          image:
+            id === 'giacomo-galanti'
+              ? 'https://cms.netmarket.it/wp-content/uploads/2026/10/giacomo-galanti-netmarket.jpg'
+              : `${media}${id.split('-')[0]}.webp`,
+          role: id === 'giacomo-galanti' ? 'Digital Advertising Specialist' : person.role
+        }
+      ]
+    : [];
 });
-const markets = [
-  {
-    id: 'locale',
-    title: 'Sul territorio',
-    icon: IconBuildingStore,
-    text: 'Raggiungiamo chi cerca la tua offerta vicino a te. Partiamo dal tuo bacino di clienti.'
-  },
-  {
-    id: 'italia',
-    title: 'In Italia',
-    icon: IconMapPin,
-    text: 'Selezioniamo aree, pubblici e messaggi per portare la tua offerta sul mercato nazionale.'
-  },
-  {
-    id: 'estero',
-    title: 'All’estero',
-    icon: IconWorld,
-    text: 'Valutiamo domanda, lingua e capacità di servizio per aprire nuove opportunità all’estero.'
-  }
-];
 ---
 
 <BaseLayout
@@ -135,7 +116,7 @@ const markets = [
   }}
   landing={advertisingShell}
 >
-  <div class="adv-page" id="inizio">
+  <div class="adv-page adv-page--consolidated" id="inizio">
     <section class="adv-hero" aria-labelledby="advertising-title">
       <Container wide>
         <div class="adv-hero__grid">
@@ -153,7 +134,7 @@ const markets = [
             </p>
             <div class="adv-hero__actions" data-reveal="up">
               <Button id="hero-contact" href="#consulenza" variant="brand" size="large" magnetic
-                >Richiedi il confronto gratuito<IconArrowUpRight aria-hidden="true" /></Button
+                >Richiedi confronto gratuito<IconArrowUpRight aria-hidden="true" /></Button
               >
             </div>
             <p class="adv-hero__price">
@@ -244,11 +225,10 @@ const markets = [
             />
           </a>
           <div>
-            <strong>Le tue campagne, in mani competenti.</strong><p>
-              Google Partner. Dal 1986, al fianco delle imprese.
+            <strong>Netmarket è Google Partner.</strong><p>
+              Dal 1986, marketing e comunicazione per le imprese.
             </p>
           </div>
-          <p class="adv-partner__team">Strategia, creatività e sviluppo.<br />Nello stesso team.</p>
         </div>
       </Container>
     </section>
@@ -259,9 +239,8 @@ const markets = [
           <SectionHeading
             id="proof-title"
             reveal
-            eyebrow="Quattro casi reali. Risultati commerciali."
-            title="I clic non pagano le fatture. I clienti sì."
-            text="Contatti, clienti acquisiti e valore generato. Ecco cosa hanno prodotto le campagne, con investimenti e periodi dichiarati."
+            eyebrow="Quattro casi di acquisizione contatti"
+            title="Dalle richieste ai clienti. I risultati delle campagne."
           />
           <div class="adv-slider-controls" role="group" aria-label="Navigazione progetti">
             <IconButton label="Progetto precedente" data-project-prev
@@ -283,17 +262,35 @@ const markets = [
               <article class="adv-project-slide">
                 <ProjectCard
                   title={project.title}
-                  category={`Lead generation / ${project.period}`}
-                  description={project.description}
+                  category={`${project.period} · ${euro(project.investment)} di spesa Ads`}
+                  description="Esplora il caso e i calcoli."
                   href={`#caso-${project.id}`}
                 >
                   <div slot="media" class="project-card__evidence">
-                    <span>{project.valueLabel}</span>
-                    <strong data-motion-count={euro(project.value)}>{euro(project.value)}</strong>
+                    <span>
+                      {project.id === 'pilates'
+                        ? 'Nuovi iscritti'
+                        : 'Fatturato attribuito · IVA esclusa'}
+                    </span>
+                    <strong
+                      data-motion-count={
+                        project.id === 'pilates'
+                          ? formatNumber(project.customers)
+                          : euro(project.value)
+                      }
+                    >
+                      {project.id === 'pilates'
+                        ? formatNumber(project.customers)
+                        : euro(project.value)}
+                    </strong>
                     <div>
                       <>
-                        <b>{formatNumber(project.value / project.investment, 2)}×</b>
-                        <span>{project.returnLabel}</span>
+                        <b>
+                          {project.id === 'pilates'
+                            ? euro(project.investment / project.customers, 2)
+                            : `${formatNumber(project.value / project.investment, 2)}×`}
+                        </b>
+                        <span>{project.id === 'pilates' ? 'Costo Ads per iscritto' : 'ROAS'}</span>
                       </>
                     </div>
                   </div>
@@ -307,14 +304,14 @@ const markets = [
                   </div>
                   <div>
                     <>
-                      <dt>{project.customerLabel}</dt>
-                      <dd>{formatNumber(project.customers)}</dd>
-                    </>
-                  </div>
-                  <div>
-                    <>
-                      <dt>Investimento Ads</dt>
-                      <dd>{euro(project.investment)}</dd>
+                      <dt>
+                        {project.id === 'pilates' ? 'CLV totale stimato' : project.customerLabel}
+                      </dt>
+                      <dd>
+                        {project.id === 'pilates'
+                          ? euro(project.value)
+                          : formatNumber(project.customers)}
+                      </dd>
                     </>
                   </div>
                 </dl>
@@ -360,17 +357,24 @@ const markets = [
                       </dl>
                     </>
                   </div>
-                  <p>{project.note}</p>
+                  <div>
+                    <p>{project.note}</p>
+                    {project.id === 'pilates' && (
+                      <p>
+                        CLV stimato / spesa Ads:{' '}
+                        {formatNumber(project.value / project.investment, 2)}×. Non è ROAS.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </details>
             ))
           }
         </div>
         <p class="adv-results-note">
-          Dati dei progetti forniti da Netmarket. Il ROAS confronta il fatturato attribuito alle
-          campagne, IVA esclusa, con la sola spesa Ads: non misura l’utile e non include il compenso
-          di gestione. Per Pilates è riportato il CLV stimato, distinto dal fatturato. I risultati
-          si riferiscono al progetto e al periodo indicati, non sono una previsione.
+          Dati forniti da Netmarket. ROAS = fatturato attribuito / sola spesa Ads, compenso di
+          gestione escluso: non misura l’utile. Pilates: CLV stimato, non fatturato. Risultati
+          storici, non garantiti.
         </p>
       </Container>
     </Section>
@@ -393,8 +397,7 @@ const markets = [
             id="goals-title"
             eyebrow="Cosa vuoi far crescere?"
             reveal
-            title="Il tuo obiettivo. Le competenze per raggiungerlo."
-            text="Le campagne funzionano meglio quando messaggi, pagine e dati seguono la stessa direzione. Noi li facciamo lavorare insieme."
+            title="Quale risultato cerchi?"
           />
         </div>
         <div class="adv-capabilities">
@@ -410,8 +413,8 @@ const markets = [
               <IconBrush aria-hidden="true" stroke={1.7} /><h3>
                 Creatività che parla del tuo valore.
               </h3><p>
-                Messaggi, immagini e pagine pensati per farti scegliere. Dalla prima impressione
-                alla richiesta.
+                Foto, messaggi e pagine coerenti con la tua offerta. Produzione e sviluppo sono
+                definiti in proposta.
               </p>
             </div>
           </article>
@@ -425,16 +428,15 @@ const markets = [
                 height="40"
               /><IconBrandMeta aria-hidden="true" stroke={1.8} />
             </div><h3>I canali giusti.<br />Per le persone giuste.</h3><p>
-              Intercettiamo la domanda su Google e costruiamo interesse su Meta, con una strategia
-              adatta alla tua offerta.
+              Google intercetta ricerche. Meta raggiunge pubblici scelti in base alla tua offerta.
             </p><span>Google Ads · Meta Ads</span>
           </article>
           <article class="adv-capability adv-capability--measurement" data-reveal="up">
             <IconChartBar aria-hidden="true" stroke={1.7} /><h3>
               Numeri che aiutano a decidere.
-            </h3><p>
-              Colleghiamo i dati delle campagne alla qualità dei contatti e al valore delle vendite.
-            </p><div class="adv-measure-tags">
+            </h3><p>Contatti pertinenti e valore degli acquisti, oltre ai clic.</p><div
+              class="adv-measure-tags"
+            >
               <span>Contatti</span><span>Vendite</span><span>Margini</span>
             </div>
           </article>
@@ -449,7 +451,11 @@ const markets = [
                   </span>
                   <h3>{goal.title}</h3>
                   <p>{goal.text}</p>
-                  <Button href="#consulenza" variant="secondary" data-advertising-goal={goal.label}>
+                  <Button
+                    href="#consulenza"
+                    variant="secondary"
+                    data-advertising-objective={goal.value}
+                  >
                     {goal.action}
                     <IconArrowUpRight aria-hidden="true" />
                   </Button>
@@ -516,80 +522,6 @@ const markets = [
       </Container>
     </Section>
 
-    <Section id="video" labelledby="video-title" class="adv-video-section">
-      <Container wide>
-        <div class="adv-video-intro">
-          <SectionHeading
-            id="video-title"
-            eyebrow="Il metodo, in 60 secondi"
-            reveal
-            title="Le campagne hanno bisogno di un team. Tu di un partner."
-            text="Chi segue le tue campagne, come prende le decisioni e perché il lavoro continua anche dopo il clic."
-          />
-        </div>
-        <figure class="adv-video" data-reveal="media">
-          {
-            advertisingVideo.src ? (
-              <video
-                controls
-                playsinline
-                preload="none"
-                poster={advertisingVideo.poster}
-                aria-label="Il metodo Netmarket in 60 secondi"
-              >
-                <source src={advertisingVideo.src} />
-                {advertisingVideo.captions && (
-                  <track
-                    kind="captions"
-                    src={advertisingVideo.captions}
-                    srclang="it"
-                    label="Italiano"
-                    default
-                  />
-                )}
-                Il browser non supporta il video. <a href={advertisingVideo.src}>Apri il video</a>.
-              </video>
-            ) : (
-              <div class="adv-video__placeholder">
-                <div class="adv-video__copy">
-                  <>
-                    <span>NETMARKET / IL NOSTRO APPROCCIO</span>
-                    <strong>
-                      Prima il business.
-                      <br />
-                      Poi le campagne.
-                    </strong>
-                    <span class="adv-video__status">Video in preparazione · 60 secondi</span>
-                  </>
-                </div>
-                <img
-                  src={advertisingVideo.poster}
-                  alt="Giacomo Galanti, Digital Marketing Specialist di Netmarket"
-                  width="600"
-                  height="800"
-                  loading="lazy"
-                />
-              </div>
-            )
-          }
-          <figcaption>Obiettivi chiari. Investimenti misurati. Decisioni condivise.</figcaption>
-        </figure>
-        {
-          advertisingVideo.src && advertisingVideo.transcript && (
-            <details class="adv-case-detail">
-              <>
-                <summary>
-                  Leggi la trascrizione
-                  <IconPlus aria-hidden="true" />
-                </summary>
-                <p>{advertisingVideo.transcript}</p>
-              </>
-            </details>
-          )
-        }
-      </Container>
-    </Section>
-
     <Section id="costi" labelledby="pricing-title" class="adv-pricing">
       <Container wide>
         <SectionHeading
@@ -638,7 +570,7 @@ const markets = [
                   href="#consulenza"
                   variant="brand"
                   size="large"
-                  data-advertising-goal={plan.channel}
+                  data-advertising-channel={plan.channel}
                 >
                   Parliamo di {plan.channel}
                   <IconArrowUpRight aria-hidden="true" />
@@ -663,7 +595,7 @@ const markets = [
           </div><Button
             href="#consulenza"
             variant="secondary"
-            data-advertising-goal="Google Ads e Meta Ads"
+            data-advertising-channel="Google Ads e Meta Ads"
             >Valutiamo il piano insieme<IconArrowUpRight aria-hidden="true" /></Button
           >
         </div>
@@ -704,83 +636,6 @@ const markets = [
       </Container>
     </Section>
 
-    <Section id="mercati" labelledby="markets-title" class="adv-markets">
-      <Container wide>
-        <div class="adv-market-grid">
-          <div class="adv-market-content">
-            <SectionHeading
-              id="markets-title"
-              reveal
-              eyebrow="Da Padova, verso il tuo mercato."
-              title="Dove vuoi far crescere il tuo business?"
-            />
-            <div class="adv-market-options" role="group" aria-label="Scegli il mercato">
-              {
-                markets.map((market, index) => (
-                  <Button
-                    variant="secondary"
-                    data-market-choice={market.id}
-                    aria-pressed={index === 0 ? 'true' : 'false'}
-                  >
-                    <market.icon aria-hidden="true" />
-                    {market.title}
-                  </Button>
-                ))
-              }
-            </div>
-            <div class="adv-market-description" aria-live="polite">
-              {
-                markets.map((market, index) => (
-                  <p data-market-copy={market.id} hidden={index !== 0}>
-                    {market.text}
-                  </p>
-                ))
-              }
-            </div>
-            <Button href="#consulenza" data-market-contact
-              >Parliamo del tuo mercato<IconArrowUpRight aria-hidden="true" /></Button
-            >
-          </div>
-          <figure class="adv-map" data-market-map="locale">
-            <svg viewBox="0 0 650 560" role="img" aria-labelledby="map-title"
-              ><title id="map-title">
-                Netmarket a Padova. Pianificazione per mercati locali, nazionali e internazionali.
-              </title><defs
-                ><radialGradient id="map-glow"
-                  ><stop offset="0" stop-color="#0e51fe" stop-opacity=".18"></stop><stop
-                    offset="1"
-                    stop-color="#0e51fe"
-                    stop-opacity="0"></stop></radialGradient
-                ></defs
-              ><circle cx="319" cy="344" r="220" fill="url(#map-glow)"></circle><g
-                class="adv-map__countries"
-                >{
-                  advertisingMap.map((country) => (
-                    <path
-                      d={country.path}
-                      class:list={[country.id === 'ITA' && 'adv-map__italy']}
-                    />
-                  ))
-                }</g
-              ><g class="adv-map__reach" aria-hidden="true"
-                ><circle cx="319" cy="344" r="42"></circle><circle cx="319" cy="344" r="85"
-                ></circle><circle cx="319" cy="344" r="145"></circle></g
-              ><g class="adv-map__connections" aria-hidden="true"
-                ><path d="M319 344Q245 220 224 296M319 344Q345 240 334 244M319 344Q325 360 325 393"
-                ></path><circle cx="224" cy="296" r="5"></circle><circle cx="334" cy="244" r="5"
-                ></circle><circle cx="325" cy="393" r="5"></circle></g
-              ><circle cx="319" cy="344" r="8" class="adv-map__pin"></circle><text x="335" y="340"
-                >Padova</text
-              ><text class="adv-map__small" x="335" y="359">La nostra sede</text></svg
-            ><figcaption>
-              <IconMapPin aria-hidden="true" size={18} />Vicini al progetto. Ovunque sia il tuo
-              pubblico.
-            </figcaption>
-          </figure>
-        </div>
-      </Container>
-    </Section>
-
     <Section id="recensioni" labelledby="reviews-title"
       ><Container wide
         ><ReviewsSection
@@ -813,8 +668,7 @@ const markets = [
             <SectionHeading
               id="consultation-title"
               reveal
-              eyebrow="Il primo passo, senza impegno."
-              text="Un primo confronto gratuito, senza impegno. Parliamo di obiettivi, campagne e risorse: se ci sono le condizioni, definiamo attività e investimento in una proposta."
+              eyebrow="Primo confronto gratuito, senza impegno."
               ><Fragment slot="title"
                 ><span class="adv-contact-title-line">Raccontaci dove </span><span
                   class="adv-contact-title-line">vuoi arrivare.</span
@@ -823,7 +677,8 @@ const markets = [
             >
             <p class="adv-consultation__offer">
               Gestione da <strong>400 €/mese per canale.</strong><span
-                >+ IVA · Budget pubblicitario escluso.</span>
+                >+ IVA · Budget pubblicitario escluso.</span
+              >
             </p>
             <ol class="adv-next">
               <li><span>01</span>Leggiamo la tua richiesta.</li><li>
@@ -832,9 +687,7 @@ const markets = [
             </ol>
           </div><div class="adv-consultation__form">
             <div class="adv-consultation__form-heading">
-              <h3>Partiamo dal tuo obiettivo.</h3><p>
-                Poche informazioni per capire come aiutarti.
-              </p>
+              <h3>Partiamo dal tuo obiettivo.</h3>
             </div>
             <ContactForm
               serviceLabel="Cosa vuoi ottenere?"
@@ -847,17 +700,24 @@ const markets = [
                 { value: 'da-definire', label: 'Da definire insieme' }
               ]}
               showEmailFallback={false}
-              submitLabel="Richiedi un primo confronto"
+              submitLabel="Richiedi confronto gratuito"
               formId="advertising-landing"
+              channelOptions={[
+                { value: 'Google Ads', label: 'Google Ads' },
+                { value: 'Meta Ads', label: 'Meta Ads' },
+                { value: 'Google Ads e Meta Ads', label: 'Google Ads e Meta Ads' }
+              ]}
             />
           </div>
         </div></Container
       >
     </Section>
   </div>
-  <StickyContactCTA href="#consulenza" label="Parliamo del tuo progetto" heroId="hero-contact" />
+  <StickyContactCTA href="#consulenza" label="Richiedi confronto gratuito" heroId="hero-contact" />
 </BaseLayout>
 <script>
   import { initAdvertisingLanding } from '@/lib/advertising-landing';
-  initAdvertisingLanding();
+  import { initAdvertisingPrefill } from '@/lib/advertising-prefill';
+  initAdvertisingLanding({ prefill: false });
+  initAdvertisingPrefill();
 </script>

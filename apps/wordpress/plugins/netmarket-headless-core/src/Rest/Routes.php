@@ -225,6 +225,29 @@ final class Routes
             return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);
         }
 
+        if (\Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::isAdvertising($sourceUrl)) {
+            $channel = '';
+            if (preg_match('/^Canale di interesse: (Google Ads e Meta Ads|Google Ads|Meta Ads)\\n\\n/', $message, $match)) {
+                $channel = $match[1];
+            }
+            \Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::deliver([
+                'request_id' => $requestId,
+                'name' => $name,
+                'email' => $email,
+                'company' => $company,
+                'phone' => $phone,
+                'objective' => $service,
+                'channel' => $channel,
+                'message' => $message,
+                'sourceUrl' => $sourceUrl,
+                'referrer' => $referrer,
+                'utm' => $this->sanitizeStringMap($utm),
+                'privacyConsent' => $privacy,
+                'marketingConsent' => $marketing,
+                'submitted_at' => gmdate('c'),
+            ]);
+        }
+
         $this->logContactEvent($requestId, 'sent');
         return $this->json(['success' => true]);
     }

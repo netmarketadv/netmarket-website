@@ -11,12 +11,12 @@ export function nextAutomaticChoice(state: ChoiceState, next: string): ChoiceSta
 }
 
 export function initAdvertisingPrefill(): void {
-  const root = document.querySelector<HTMLElement>('.adv-page--comparison');
+  const root = document.querySelector<HTMLElement>('.adv-page--consolidated');
   if (!root || root.dataset.prefillInitialized) return;
   root.dataset.prefillInitialized = 'true';
   const form = root.querySelector<HTMLFormElement>('[data-contact-form]');
   root.querySelector('[data-project-rail]')?.addEventListener('focusin', (event) => {
-    if (event.target instanceof HTMLAnchorElement) {
+    if (event.target instanceof HTMLAnchorElement && event.target.matches(':focus-visible')) {
       event.target.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'instant' });
     }
   });

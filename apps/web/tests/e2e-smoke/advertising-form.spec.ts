@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const endpoint = '**/wp-json/netmarket/v1/forms/contact';
-const url = '/advertising-v2/';
-const submit = (page: Page) => page.getByRole('button', { name: 'Richiedi un primo confronto' });
+const url = '/advertising/';
+const submit = (page: Page) => page.getByRole('button', { name: 'Richiedi confronto gratuito' });
 
 async function fillVisitor(page: Page) {
   await page.locator('#contact-name').fill('QA Netmarket');
@@ -87,7 +87,7 @@ test('confirmed success sends the channel separately from the objective and gene
     expect(body.message).toBe(
       'Canale di interesse: Meta Ads\n\nVendiamo prodotti artigianali e cerchiamo nuovi clienti.'
     );
-    expect(body.sourceUrl).toContain('/advertising-v2/');
+    expect(body.sourceUrl).toContain('/advertising/');
     expect(body.utm).toMatchObject({ utm_source: 'meta', fbclid: 'comparison-test' });
     await responseGate;
     await route.fulfill({ json: { success: true } });
@@ -113,7 +113,7 @@ test('confirmed success sends the channel separately from the objective and gene
     .poll(() =>
       page.evaluate(() => window.dataLayer?.filter((event) => event.event === 'generate_lead'))
     )
-    .toEqual([{ event: 'generate_lead', form_id: 'advertising-landing-v2', lead_type: 'contact' }]);
+    .toEqual([{ event: 'generate_lead', form_id: 'advertising-landing', lead_type: 'contact' }]);
   const events = await page.evaluate(() => JSON.stringify(window.dataLayer));
   expect(events).not.toMatch(/qa@example|QA Netmarket|prodotti artigianali/);
   await page.reload();
@@ -227,47 +227,6 @@ test('case hierarchy distinguishes estimated CLV from attributed revenue and sch
   }
 });
 
-test('comparison reduces rendered text without hiding it in disclosures', async ({
-  page
-}, testInfo) => {
-  const counts: Record<string, { visible: number; all: number }> = {};
-  for (const path of ['/advertising/', url]) {
-    await page.goto(path);
-    await page.locator('.adv-page[data-initialized="true"]').waitFor();
-    counts[path] = await page.locator('main').evaluate((main) => {
-      const words = (all: boolean) => {
-        const read = (node: Node): string => {
-          if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
-          if (!(node instanceof Element)) return '';
-          if (node.matches('script, style, noscript, [aria-hidden="true"], dialog, svg, select'))
-            return '';
-          if (!all) {
-            const style = getComputedStyle(node);
-            if (style.display === 'none' || style.visibility === 'hidden') return '';
-            if (node.parentElement?.matches('details:not([open])') && !node.matches('summary'))
-              return '';
-          }
-          const text = Array.from(node.childNodes).map(read).join('');
-          const block =
-            /^(P|H[1-6]|DIV|LI|DT|DD|ARTICLE|SECTION|SUMMARY|BUTTON|FIGCAPTION|BR)$/.test(
-              node.tagName
-            ) || getComputedStyle(node).display === 'block';
-          return block ? ` ${text} ` : text;
-        };
-        return read(main).match(/[\p{L}\p{N}]+(?:[’'.,][\p{L}\p{N}]+)*/gu)?.length || 0;
-      };
-      return { visible: words(false), all: words(true) };
-    });
-  }
-  expect(counts[url]!.visible).toBeLessThan(counts['/advertising/']!.visible);
-  expect(counts[url]!.all).toBeLessThan(counts['/advertising/']!.all);
-  await testInfo.attach('rendered-word-count.json', {
-    body: JSON.stringify(counts, null, 2),
-    contentType: 'application/json'
-  });
-  console.log('Rendered word counts:', JSON.stringify(counts));
-});
-
 test('storage-denied success waits for consent readiness and cannot submit twice', async ({
   page
 }) => {
@@ -298,7 +257,7 @@ test('storage-denied success waits for consent readiness and cannot submit twice
   });
   expect(
     await page.evaluate(() => window.dataLayer?.filter((event) => event.event === 'generate_lead'))
-  ).toEqual([{ event: 'generate_lead', form_id: 'advertising-landing-v2', lead_type: 'contact' }]);
+  ).toEqual([{ event: 'generate_lead', form_id: 'advertising-landing', lead_type: 'contact' }]);
   await page
     .locator('[data-contact-form]')
     .evaluate((form: HTMLFormElement) => form.requestSubmit());

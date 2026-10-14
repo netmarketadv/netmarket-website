@@ -1,29 +1,29 @@
-/* Page-local comparison composition. Shared landing tokens and components stay canonical. */
-.adv-page--comparison .adv-project-summary--results {
+/* Page-local consolidated composition. Shared landing tokens and components stay canonical. */
+.adv-page--consolidated .adv-project-summary--results {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-.adv-page--comparison .adv-results-note {
+.adv-page--consolidated .adv-results-note {
   max-width: 80ch;
   font-size: var(--nm-text-small);
   line-height: 1.5;
   color: var(--nm-color-muted);
 }
-.adv-page--comparison .adv-hero__signature {
+.adv-page--consolidated .adv-hero__signature {
   max-width: 100%;
   font-size: var(--nm-text-small);
 }
-.adv-page--comparison .adv-steps {
+.adv-page--consolidated .adv-steps {
   margin-top: var(--nm-space-xl);
 }
-.adv-page--comparison .adv-case-detail__body p + p {
+.adv-page--consolidated .adv-case-detail__body p + p {
   margin-top: var(--nm-space-md);
 }
-.adv-page--comparison .adv-price__budget,
-.adv-page--comparison .adv-pricing__terms {
+.adv-page--consolidated .adv-price__budget,
+.adv-page--consolidated .adv-pricing__terms {
   font-size: var(--nm-text-small);
   line-height: 1.5;
 }
-.adv-page--comparison .adv-project-summary--results > div:last-child {
+.adv-page--consolidated .adv-project-summary--results > div:last-child {
   grid-column: auto;
   flex-direction: column-reverse;
   justify-content: normal;
@@ -31,14 +31,14 @@
   border-top: 0;
   padding-top: 0;
 }
-.adv-page--comparison .adv-project-summary--results > div:last-child dd {
+.adv-page--consolidated .adv-project-summary--results > div:last-child dd {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
 }
 @media (max-width: 1100px) {
-  .adv-page--comparison .adv-hero__composition {
+  .adv-page--consolidated .adv-hero__composition {
     margin-bottom: var(--nm-space-xl);
   }
-  .adv-page--comparison .adv-hero__signature {
+  .adv-page--consolidated .adv-hero__signature {
     display: block;
     top: calc(100% + var(--nm-space-sm));
     bottom: auto;

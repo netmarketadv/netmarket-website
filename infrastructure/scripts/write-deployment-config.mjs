@@ -52,6 +52,8 @@ async function productionConfig() {
   return `${common}
 RewriteEngine On
 
+RewriteRule ^advertising-v2/?$ https://netmarket.it/advertising/ [R=301,L,NE]
+
 # URL legacy: risoluzione diretta verso la destinazione canonica, prima del dominio.
 ${redirects.join('\n')}
 

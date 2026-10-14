@@ -1,4 +1,6 @@
-# Variante advertising — confronto editoriale
+# Variante advertising — confronto editoriale (archivio)
+
+La variante è stata consolidata in `/advertising/` il 14 ottobre 2026. `/advertising-v2/` viene reindirizzata con 301. Le sezioni trasferite e il webhook sono descritti in `advertising-landing.md`. Le note seguenti documentano il confronto precedente, non lo stato corrente.
 
 ## Destinazione e isolamento
 

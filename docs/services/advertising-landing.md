@@ -100,3 +100,20 @@ Selezione recensioni della sola landing: Svetlana Soboleva, Gherardo Gasparin e 
 Chiusura su canvas, riepilogo prezzo e form in un pannello con introduzione. Campo “Cosa vuoi ottenere?” inizialmente vuoto: Contatti e preventivi, Vendite ecommerce, Notorietà del brand, Da definire insieme. Valori slug inviati nel campo service già supportato dal CMS, senza modifiche a API o tracking. Label, placeholder ed errore di ContactForm configurabili; i default istituzionali restano invariati. Le CTA obiettivo preselezionano solo se il campo è vuoto e non sovrascrivono il messaggio.
 
 Verifiche candidato 12 ottobre: check:fast superato (80 unit test, lint, typecheck, build 68 pagine); 21 smoke landing superati, inclusi quattro invii simulati con obiettivo distinto, selezione obbligatoria, recensioni e titolo massimo due righe a 320–1728 px. I quattro slug sono stati accettati dal validatore CMS reale tramite payload deliberatamente invalidi (422 e CORS corretti; nessuna email/lead). Suite completa richiesta dalla PR production prima del merge.
+
+
+## Consolidamento del 14 ottobre 2026
+
+Su richiesta dell’utente, `/advertising/` adotta casi, obiettivi, FAQ e form della variante. Mantiene hero, metodo, prezzi e impianto team originali. CTA principale: “Richiedi confronto gratuito”. Nuovo ritratto e ruolo Digital Advertising Specialist per Giacomo, limitati alla landing. Rimossi video incompleto e mercati; la variante non viene più generata e il server la reindirizza con 301 alla pagina principale.
+
+Il form mantiene obiettivo e canale distinti, protegge le scelte manuali e non genera il messaggio. Il tracking lead resta successivo alla conferma del CMS. Nessuna modifica al container GTM.
+
+### Integrazione NØD
+
+Solo richieste validate provenienti dal percorso esatto `/advertising/` su netmarket.it o staging.netmarket.it vengono inoltrate, dopo la consegna email. L’endpoint risiede nell’opzione CMS non autoload `nmhc_advertising_webhook_url`, configurata via stdin dalla pipeline CMS attraverso il secret environment `ADVERTISING_WEBHOOK_URL`. Nessuna credenziale nel frontend, repository, argomenti remoti o log. Destinazione HTTPS vincolata a nod.netmarket.it/functions/inboundWebhook, redirect disabilitati.
+
+Payload JSON: request_id, name, email, company, phone, objective, channel, message, sourceUrl, referrer, utm, privacyConsent, marketingConsent, submitted_at. `request_id` resta uguale nei retry; l’eventuale deduplicazione del destinatario deve usare questo campo. `utm` usa la sanitizzazione del backend esistente. La fonte NØD deve essere attiva e la mappatura usare questi nomi.
+
+Errori HTTP/applicativi o configurazione mancante attivano fino a cinque retry WP-Cron con intervalli crescenti. I log riportano solo request_id e stato; nessun dato del lead o risposta remota. Se l’email è già stata accettata, un problema del webhook non induce il visitatore a ripetere l’invio. I retry dipendono dall’esecuzione WP-Cron; un timeout dopo accettazione remota può richiedere deduplicazione del destinatario. Non è promessa consegna esattamente una volta.
+
+Verifiche automatiche senza lead reali: test PHP destinazione/isolamento/payload/retry, test frontend per validazione, scelte successive, fallimento, doppio invio, consenso, layout e tastiera. Un solo invio reale di collaudo è autorizzato esplicitamente dall’utente dopo la pubblicazione; esito da registrare nel riepilogo release.

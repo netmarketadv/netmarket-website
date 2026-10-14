@@ -78,3 +78,9 @@ if [[ "$DRY_RUN" == true ]]; then
 fi
 
 ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp core is-installed && wp option update blog_public 0 && wp rewrite structure '/%postname%/' --hard && wp plugin activate '$PLUGIN_SLUG' && wp rewrite flush --hard"
+
+# Configure the server-only integration through stdin, never through command arguments.
+if [[ -n "${ADVERTISING_WEBHOOK_URL:-}" ]]; then
+  printf '%s' "$ADVERTISING_WEBHOOK_URL" | ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp option update nmhc_advertising_webhook_url --autoload=off" >/dev/null
+  echo "Advertising webhook configuration updated."
+fi
