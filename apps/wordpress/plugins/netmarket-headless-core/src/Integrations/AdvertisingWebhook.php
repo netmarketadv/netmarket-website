@@ -41,7 +41,7 @@ final class AdvertisingWebhook
             $code = is_wp_error($response) ? 0 : wp_remote_retrieve_response_code($response);
             $body = is_wp_error($response) ? null : json_decode(wp_remote_retrieve_body($response), true);
             $accepted = $code >= 200 && $code < 300 && is_array($body)
-                && ! (is_array($body) && (isset($body['error']) || ($body['success'] ?? true) === false));
+                && ! isset($body['error']) && ($body['success'] ?? true) !== false;
             $status = $accepted ? 'delivered' : 'delivery_failed';
             if ($accepted) {
                 self::log($lead, $status);
