@@ -2,7 +2,7 @@ import type { LandingShellConfig } from '@/types/landing';
 
 export const advertisingShell: LandingShellConfig = {
   topHref: '#inizio',
-  cta: { label: 'Parliamo del tuo progetto', href: '#consulenza' },
+  cta: { label: 'Richiedi confronto gratuito', href: '#consulenza' },
   links: [
     {
       label: 'Risultati',
@@ -35,25 +35,25 @@ export const advertisingShell: LandingShellConfig = {
 
 export const advertisingGoals = [
   {
-    label: 'Lead generation',
-    title: 'Contatti che diventano opportunità.',
-    text: 'Raggiungiamo chi cerca una soluzione come la tua. Annunci e landing lavorano insieme per raccogliere richieste pertinenti, da qualificare con il tuo team commerciale.',
-    measure: 'Qualità dei contatti · Costo per opportunità',
-    action: 'Voglio più contatti'
+    label: 'Contatti e preventivi',
+    value: 'contatti-preventivi',
+    title: 'Richieste da qualificare.',
+    text: 'Raccogliamo richieste pertinenti da valutare con il tuo team commerciale.',
+    action: 'Parliamo dei contatti'
   },
   {
-    label: 'Ecommerce',
-    title: 'Vendite con una prospettiva di crescita.',
-    text: 'Colleghiamo campagne, catalogo e percorso di acquisto. Leggiamo il ritorno pubblicitario insieme a margini e valore degli ordini, per decidere dove investire.',
-    measure: 'Vendite · Costo di acquisizione · Marginalità',
-    action: 'Voglio far crescere le vendite'
+    label: 'Vendite ecommerce',
+    value: 'vendite-ecommerce',
+    title: 'Acquisti da misurare.',
+    text: 'Valutiamo vendite, costo di acquisizione e margini per orientare l’investimento.',
+    action: 'Parliamo delle vendite'
   },
   {
-    label: 'Brand awareness',
-    title: 'Fatti conoscere dalle persone giuste.',
-    text: 'Diamo al tuo brand un messaggio riconoscibile e una presenza coerente. Pianifichiamo pubblico, creatività e frequenza per costruire familiarità prima della scelta.',
-    measure: 'Copertura in target · Frequenza · Interesse',
-    action: 'Voglio far conoscere il brand'
+    label: 'Notorietà del brand',
+    value: 'notorieta-brand',
+    title: 'Una presenza riconoscibile.',
+    text: 'Pianifichiamo pubblico, messaggi e frequenza per far conoscere la tua offerta.',
+    action: 'Parliamo del brand'
   }
 ];
 
@@ -83,36 +83,34 @@ export const advertisingSteps = [
 export const advertisingFaq: [string, string][] = [
   [
     'Va bene anche per una piccola attività?',
-    'Sì. Seguiamo attività locali, professionisti, PMI, ecommerce e aziende strutturate. Adattiamo il progetto al tuo punto di partenza. Nel primo confronto valutiamo se obiettivi, offerta e risorse permettono di impostare un investimento sensato.'
+    'Seguiamo attività locali, professionisti, PMI ed ecommerce. Nel primo confronto valutiamo se offerta, obiettivi e risorse consentono un investimento sensato.'
   ],
   [
     'Quanto budget serve per iniziare?',
-    'Dipende dal mercato, dal valore di un cliente, dall’obiettivo e dai canali. Nel primo confronto mettiamo a fuoco questi elementi. La gestione parte da 400 € al mese + IVA per canale. Il budget pubblicitario è escluso e viene investito sulle piattaforme. Configurazione iniziale, creatività, landing, feed e integrazioni sono definiti separatamente nella proposta, in base alle attività necessarie.'
+    'La gestione parte da 400 € al mese + IVA per singolo canale. Il budget Ads è escluso: lo definiamo in base a mercato, obiettivo e valore del cliente. Non esiste un importo adatto a tutti.'
   ],
   [
     'Potete migliorare campagne già attive?',
-    'Sì. Partiamo da obiettivi, struttura delle campagne, misurazione e pagine di destinazione. Consideriamo anche la qualità dei contatti o delle vendite. Da questa analisi definiamo cosa mantenere e quali interventi hanno la priorità.'
+    'Valutiamo struttura, misurazione, pagine e qualità delle richieste o delle vendite per individuare gli interventi prioritari.'
   ],
   [
-    'Gestite Google Ads e Meta Ads?',
-    'Sì, e possiamo partire da un solo canale. La scelta dipende da domanda, offerta, obiettivi e budget: Google intercetta ricerche e intenzioni di acquisto; Meta sviluppa interesse presso i pubblici scelti. Un piano coordinato viene proposto quando ha una funzione concreta nel percorso di acquisizione.'
+    'Meglio Google Ads o Meta Ads?',
+    'Google intercetta ricerche e intenzioni di acquisto; Meta raggiunge i pubblici scelti. Possiamo partire da un solo canale o coordinarli, secondo domanda, offerta e budget.'
   ],
   [
-    'Vi occupate anche di landing e creatività?',
-    'Sì. Netmarket integra strategia, contenuti, design e sviluppo. Valutiamo ciò che esiste già e inseriamo in proposta le attività necessarie, con un perimetro chiaro prima di iniziare.'
+    'Landing e creatività sono incluse nei 400 €?',
+    'Non automaticamente. Configurazione iniziale, produzione creativa, landing, feed e integrazioni sono definiti separatamente in proposta, in base alle necessità.'
   ],
   [
     'In quanto tempo si vedono i risultati?',
-    'Le campagne possono produrre segnali fin dall’avvio, ma risultati stabili richiedono test, dati e un periodo di valutazione coerente con il ciclo di vendita. Condividiamo tempi e indicatori sul tuo caso, senza garantire un numero di clienti o un ritorno fisso.'
+    'Dipende da test, dati e ciclo di vendita. Concordiamo tempi e indicatori sul tuo caso, senza garantire un numero di clienti o un ritorno fisso.'
   ],
   [
-    'Cosa succede dopo la richiesta?',
-    'Ti ricontattiamo per un primo confronto gratuito, senza impegno, su obiettivi e situazione attuale. Un audit approfondito degli account o un piano operativo completo vengono eventualmente concordati in seguito. L’invio del modulo non attiva un servizio né un abbonamento.'
+    'Cosa comprende il primo confronto?',
+    'Un confronto gratuito e senza impegno su obiettivi e situazione attuale. Un audit approfondito o un piano operativo completo sono eventualmente concordati in seguito. L’invio non attiva servizi o abbonamenti.'
   ]
 ];
 
-// Dati forniti da Netmarket nell’anteprima HTML del 9 ottobre 2026.
-// ROAS = fatturato attribuito IVA esclusa / sola spesa Ads; Pilates usa CLV, non fatturato.
 export const advertisingCases = [
   {
     id: 'pilates',

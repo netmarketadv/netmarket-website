@@ -49,6 +49,7 @@ final class Plugin
         add_action('add_meta_boxes', [$metaBoxes, 'register']);
         add_action('save_post', [$metaBoxes, 'save'], 10, 2);
         add_action('admin_enqueue_scripts', [$metaBoxes, 'enqueue']);
+        add_action(\Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::HOOK, [\Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::class, 'deliver'], 10, 2);
         add_action('rest_api_init', [new Routes($taxonomies), 'register']);
     }
 }

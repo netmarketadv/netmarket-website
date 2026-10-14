@@ -126,6 +126,8 @@ jobs:
         run: composer install --no-interaction --prefer-dist
       - name: PHP lint
         run: find apps/wordpress/plugins/netmarket-headless-core -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
+      - name: Advertising webhook tests
+        run: php apps/wordpress/plugins/netmarket-headless-core/tests/advertising-webhook.php
       - name: PHPCS
         working-directory: apps/wordpress/plugins/netmarket-headless-core
         run: composer run phpcs

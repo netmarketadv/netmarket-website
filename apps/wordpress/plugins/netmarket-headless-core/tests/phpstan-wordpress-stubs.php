@@ -165,3 +165,8 @@ function get_the_category(int $postId = 0): array { return []; }
 function wp_strip_all_tags(string $text, bool $removeBreaks = false): string { return $text; }
 function get_current_screen(): WP_Screen|null { return null; }
 function post_type_supports(string $postType, string $feature): bool { return true; }
+
+function wp_remote_post(string $url, array $args = []): mixed { return []; }
+function wp_remote_retrieve_response_code(mixed $response): int { return 200; }
+function wp_remote_retrieve_body(mixed $response): string { return ''; }
+function wp_schedule_single_event(int $timestamp, string $hook, array $args = [], bool $wpError = false): mixed { return true; }

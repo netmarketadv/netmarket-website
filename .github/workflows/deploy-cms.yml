@@ -53,6 +53,7 @@ jobs:
           SG_SSH_USER: ${{ env.CMS_SSH_USER }}
           SG_SSH_PRIVATE_KEY: ${{ env.CMS_SSH_PRIVATE_KEY }}
           SG_SSH_KNOWN_HOSTS: ${{ env.CMS_SSH_KNOWN_HOSTS }}
+          ADVERTISING_WEBHOOK_URL: ${{ secrets.ADVERTISING_WEBHOOK_URL }}
       - name: Harden CMS access and indexing
         if: ${{ inputs.dry_run == 'false' }}
         run: infrastructure/scripts/harden-cms.sh --domain cms.netmarket.it --path "${{ secrets.SG_CMS_WORDPRESS_PATH }}"
