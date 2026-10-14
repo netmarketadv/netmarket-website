@@ -166,60 +166,6 @@ h4 {
   color: var(--nm-color-subtle);
 }
 
-.nm-heading-marker {
-  --nm-marker-bg: rgb(14 81 254 / 0.17);
-  --nm-marker-line: rgb(14 81 254 / 0.94);
-  --nm-marker-line-width: max(2px, 0.025em);
-  --nm-marker-handle-size: max(0.44rem, 0.12em);
-  position: relative;
-  display: inline;
-  border-radius: 0;
-  background:
-    linear-gradient(var(--nm-marker-line), var(--nm-marker-line)) left center /
-      var(--nm-marker-line-width) calc(100% + 0.08em) no-repeat,
-    linear-gradient(var(--nm-marker-line), var(--nm-marker-line)) right center /
-      var(--nm-marker-line-width) calc(100% + 0.08em) no-repeat,
-    linear-gradient(var(--nm-marker-bg), var(--nm-marker-bg));
-  box-shadow: none;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  color: var(--nm-color-ink);
-  padding-inline: 0.075em;
-  padding-block: 0.015em;
-}
-
-.nm-heading-marker--strong {
-  --nm-marker-bg: rgb(14 81 254 / 0.22);
-  --nm-marker-line: var(--nm-color-blue);
-}
-
-.nm-heading-marker::before,
-.nm-heading-marker::after {
-  content: '';
-  position: absolute;
-  z-index: 2;
-  width: var(--nm-marker-handle-size);
-  aspect-ratio: 1;
-  border-radius: 999px;
-  background: var(--nm-marker-line);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.72);
-  pointer-events: none;
-}
-
-.nm-heading-marker::before {
-  top: -0.08em;
-  left: calc((var(--nm-marker-handle-size) / -2) + (var(--nm-marker-line-width) / 2));
-}
-
-.nm-heading-marker::after {
-  right: calc((var(--nm-marker-handle-size) / -2) + (var(--nm-marker-line-width) / 2));
-  bottom: -0.08em;
-}
-
-.nm-motion-word__inner.nm-heading-marker {
-  display: inline-block;
-}
-
 .nm-eyebrow {
   width: fit-content;
   display: inline-flex;
@@ -3172,12 +3118,6 @@ main {
   overflow: visible;
 }
 
-.websites-hero .nm-heading-marker {
-  display: inline-block;
-  line-height: 0.94;
-  margin-block: 0.03em;
-}
-
 .websites-hero__copy > p:not(.websites-kicker) {
   max-width: 52rem;
   color: var(--nm-color-muted);
@@ -5712,10 +5652,6 @@ main {
     line-height: 1;
   }
 
-  .websites-hero .nm-heading-marker {
-    line-height: 1.02;
-  }
-
   .websites-hero__copy > p:not(.websites-kicker),
   .websites-section-heading p,
   .websites-asset p,
@@ -7941,7 +7877,7 @@ main {
   }
 }
 
-/* Completed reveals must not clip typography, markers, icons or focus rings. */
+/* Completed reveals must not clip typography, icons or focus rings. */
 [data-motion-line-complete='true'] .nm-motion-word {
   overflow: visible;
 }

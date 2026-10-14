@@ -52,7 +52,7 @@ Distanze:
 - `down`: fade + translateY negativo, solo per piccoli elementi sopra heading.
 - `scale`: scale morbido + fade + blur minimo, per card e moduli.
 - `media`: clip reveal + scale + brightness/fade, per immagini importanti.
-- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve e padding di sicurezza per ascendenti, discendenti, “o” obliqua e marker. Usa lo stesso motore GSAP anche nelle pagine `light`; in quel caso GSAP gestisce soltanto i titoli e non attiva gli enhancement della pagina completa.
+- `line`: text masking proprietario per parole raggruppate per riga visiva, con stagger breve e padding di sicurezza per ascendenti, discendenti, “o” obliqua. Usa lo stesso motore GSAP anche nelle pagine `light`; in quel caso GSAP gestisce soltanto i titoli e non attiva gli enhancement della pagina completa.
 
 ## Data Attribute API
 

@@ -13,7 +13,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
       name: 'Realizzazione siti web a Padova, progettati per lavorare.'
     })
   ).toBeVisible();
-  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorare');
+  await expect(page.locator('#page-title .nm-heading-accent')).toContainText('lavorare');
   await expect(page).toHaveTitle(/Realizzazione siti web a Padova/);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',

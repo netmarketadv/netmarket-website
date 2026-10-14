@@ -347,9 +347,6 @@ main :is(h1, h2, h3, section, div)[id] {
 .ds-hero h1 {
   padding-bottom: 0.15em;
 }
-.nm-section-heading > h2:has(.nm-heading-marker) {
-  padding-block: 0.12em;
-}
 .ds-component-grid .ds-spec {
   min-height: 0;
   align-content: start;
