@@ -31,7 +31,7 @@ Un pattern diventa canonico quando ricorre in piu contesti, ha una responsabilit
 | -------------- | ---------------------- | --------- | --------------------------------------------- |
 | Brand          | `--nm-color-blue`      | `#0E51FE` | accenti, focus, stati attivi, momenti visuali |
 | Brand profondo | `--nm-color-blue-deep` | `#0735B9` | testo su superfici blu chiare                 |
-| Brand soft     | `--nm-color-blue-soft` | `#EAF1FF` | marker, note e supporto                       |
+| Brand soft     | `--nm-color-blue-soft` | `#EAF1FF` | note e supporto                       |
 | Ink            | `--nm-color-ink`       | `#090A0F` | testo e pannelli scuri                        |
 | Ink secondario | `--nm-color-ink-2`     | `#1D2430` | testo UI ad alto contrasto                    |
 | Muted          | `--nm-color-muted`     | `#5B6472` | body secondario                               |
@@ -90,10 +90,8 @@ Negli heading la lettera `o` o `O` interna a una parola riceve il trattamento `.
 
 - `.nm-heading-accent`: una parola o frase breve in blu.
 - `.nm-heading-muted`: accento secondario grigio, raro.
-- `.nm-heading-marker`: selezione in stile iOS con fondo azzurro, barre laterali e handle.
-- `.nm-heading-marker--strong`: solo per hero o momenti editoriali principali.
 
-Massimo un accento forte per titolo. Gli handle devono restare visibili e il wrapper del reveal deve lasciare spazio ad ascendenti, discendenti e marker.
+Massimo un accento forte per titolo, sempre come semplice testo blu senza fondo, barre o handle. Il wrapper del reveal deve lasciare spazio ad ascendenti e discendenti.
 
 ### 3.5 Radius, bordi e ombre
 
@@ -214,7 +212,7 @@ Il dettaglio operativo vive in `docs/motion-system.md`.
 
 - GSAP e ScrollTrigger sono progressive enhancement, non prerequisiti di lettura.
 - Preset canonici: `fade`, `up`, `down`, `scale`, `media`, `line`.
-- `line` anima gruppi di parole senza tagliare `g`, `p`, `q`, la “o” obliqua o il marker.
+- `line` anima gruppi di parole senza tagliare `g`, `p`, `q`, la “o” obliqua.
 - Hover e magnetic sono desktop-only quando dipendono dal puntatore.
 - Niente pinning o scrub se non migliorano una narrazione reale.
 - Con `prefers-reduced-motion: reduce`, contenuto subito visibile, autoplay fermo e transizioni ridotte.
@@ -274,7 +272,7 @@ Non sono piu standard:
 
 ## Correzioni audit settembre 2026
 
-Le maschere reveal vengono rimosse a fine ingresso, inclusi i wrapper delle parole: nessun titolo, marker o medaglione resta tagliato. Gli stili delle label e degli accenti sono applicati a classi specifiche, non ai generici span tipografici.
+Le maschere reveal vengono rimosse a fine ingresso, inclusi i wrapper delle parole: nessun titolo o medaglione resta tagliato. Gli stili delle label e degli accenti sono applicati a classi specifiche, non ai generici span tipografici.
 
 Archivio Servizi: container wide e titoli a sinistra, padding verticale uniforme nelle righe, hover senza traslazione dell'intera riga. Le tre card di prova hanno la stessa larghezza e destinazioni reali. Un solo titolo introduce i loghi. I controlli recensioni seguono l'allineamento centrale del titolo; le CTA portfolio seguono l'allineamento sinistro dei contenuti.
 

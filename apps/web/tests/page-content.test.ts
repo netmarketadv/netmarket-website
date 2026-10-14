@@ -13,7 +13,7 @@ describe('homepage source', () => {
     expect(source).toContain('Agenzia marketing e siti web a');
     expect(source).toContain('Netmarket, Padova dal 1986');
     expect(source).toContain('Agenzia comunicazione, marketing e tecnologia a Padova');
-    expect(source).toContain('nm-heading-marker');
+    expect(source).toContain('nm-heading-accent');
     expect(source).toContain('Servizi integrati, non attività scollegate.');
     expect(source).toContain('servicePath(service.slug)');
     expect(source).toContain('CaseStudyShowcase');

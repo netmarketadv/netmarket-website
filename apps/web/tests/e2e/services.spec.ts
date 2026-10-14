@@ -30,7 +30,7 @@ test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
       name: 'Realizzazione siti web a Padova, progettati per lavorare.'
     })
   ).toBeVisible();
-  await expect(page.locator('#page-title .nm-heading-marker')).toContainText('lavorare');
+  await expect(page.locator('#page-title .nm-heading-accent')).toContainText('lavorare');
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Servizi');
   const jsonLd = await page
     .locator('script[type="application/ld+json"]')

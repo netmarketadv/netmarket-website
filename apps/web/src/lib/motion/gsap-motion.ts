@@ -23,12 +23,7 @@ interface GsapMotionOptions {
 const revealSelector = '[data-reveal]';
 const lineRevealSelector = '[data-reveal="line"]';
 const mediaRevealSelector = '[data-reveal="media"]';
-const headingAccentClasses = [
-  'nm-heading-accent',
-  'nm-heading-muted',
-  'nm-heading-marker',
-  'nm-heading-marker--strong'
-] as const;
+const headingAccentClasses = ['nm-heading-accent', 'nm-heading-muted'] as const;
 
 type HeadingAccentClass = (typeof headingAccentClasses)[number];
 type TextRun = {
