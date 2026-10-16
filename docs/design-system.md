@@ -335,3 +335,9 @@ Il menu landing mobile usa ora `LandingLink.icon` opzionale (projects/goals/meth
 Lo slot `media` accoglie evidenze documentate quando non è disponibile un’immagine reale del cliente; le props immagine restano il default. `.project-card__evidence` in components.css governa superficie e numeri responsive, senza dashboard o immagini fittizie. Categoria, titolo, sintesi e link restano quelli della ProjectCard canonica. `/advertising/` usa quattro casi forniti da Netmarket; `/design-system/` mostra Pilates distinguendo CLV e fatturato.
 
 ReviewsSection accetta `reviews` (default googleReviews) e slot `title` per composizioni editoriali locali. ContactForm accetta label, placeholder ed errore del selettore configurabili insieme a serviceOptions; presentazione dei campi e comportamento restano canonici. La landing advertising è il consumatore dei quattro obiettivi e della selezione recensioni dedicata.
+
+### ContactForm: istanze e requisiti di pagina
+
+`idPrefix` rende univoci i riferimenti accessibili quando il modulo compare più volte; ogni istanza mantiene stato e tracking indipendenti tramite `formId`. `phoneRequired` richiede un telefono composto da cifre e abilita tastiera numerica; `messagePlaceholder` personalizza il suggerimento. I default istituzionali restano invariati. La landing advertising usa queste opzioni per hero desktop e chiusura, con gli stessi campi e stili canonici.
+
+La densità `compact` è riservata ai form inseriti in una hero desktop: riduce i gap, affianca obiettivo e canale e usa tre righe iniziali per il messaggio. Mantiene altezze dei controlli, font, errori e focus standard. Il catalogo campi mostra questa densità; la chiusura della landing mantiene quella standard.

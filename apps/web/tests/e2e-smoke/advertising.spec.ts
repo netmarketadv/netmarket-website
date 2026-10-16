@@ -36,6 +36,7 @@ test('advertising goals, FAQ and responsive layout remain usable', async ({ page
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
     ).toBe(true);
   }
+  await page.setViewportSize({ width: 390, height: 844 });
   const images = page.locator('img[src^="/media/advertising/"]');
   for (const img of await images.all()) {
     await img.scrollIntoViewIfNeeded();
@@ -63,11 +64,14 @@ test('advertising form validates, retains attribution and confirms one lead', as
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
   });
   await page.goto('/advertising/?utm_source=google&utm_campaign=advertising-test&gclid=test-click');
-  const submit = page.getByRole('button', { name: 'Richiedi confronto gratuito' });
+  const submit = page
+    .locator('#consulenza')
+    .getByRole('button', { name: 'Richiedi confronto gratuito' });
   await submit.click();
   await expect(page.locator('#contact-name')).toHaveAttribute('aria-invalid', 'true');
   expect(count).toBe(0);
   await page.locator('#contact-name').fill('Mario Test');
+  await page.locator('#contact-phone').fill('3290000000');
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
@@ -98,13 +102,20 @@ test('advertising form preserves data and restores CTA after a failed request', 
   );
   await page.goto('/advertising/');
   await page.locator('#contact-name').fill('Mario Test');
+  await page.locator('#contact-phone').fill('3290000000');
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
   await page.locator('#contact-privacy').check();
-  await page.getByRole('button', { name: 'Richiedi confronto gratuito' }).first().click();
+  await page
+    .locator('#consulenza')
+    .getByRole('button', { name: 'Richiedi confronto gratuito' })
+    .first()
+    .click();
   await expect(page.locator('#contact-form-status')).toContainText('Non siamo riusciti');
-  await expect(page.getByRole('button', { name: 'Richiedi confronto gratuito' })).toBeEnabled();
+  await expect(
+    page.locator('#consulenza').getByRole('button', { name: 'Richiedi confronto gratuito' })
+  ).toBeEnabled();
   await expect(page.locator('#contact-email')).toHaveValue('mario@example.com');
 });
 
@@ -119,7 +130,9 @@ test('campaign content and native links remain available without JavaScript', as
   await page.getByRole('link', { name: 'Richiedi confronto gratuito' }).first().click();
   await expect(page).toHaveURL(/#consulenza$/);
   await expect(page.locator('#contact-name')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Richiedi confronto gratuito' })).toBeDisabled();
+  await expect(
+    page.locator('#consulenza').getByRole('button', { name: 'Richiedi confronto gratuito' })
+  ).toBeDisabled();
   await expect(
     page.getByRole('region', { name: 'Quanto budget serve per iniziare?' })
   ).toBeVisible();
@@ -327,11 +340,16 @@ for (const storage of ['blocked', 'corrupt']) {
     });
     await page.goto('/advertising/?utm_source=meta&fbclid=meta-test');
     await page.locator('#contact-name').fill('QA Netmarket');
+    await page.locator('#contact-phone').fill('3290000000');
     await page.locator('#contact-email').fill('qa@example.com');
     await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
     await page.locator('#contact-service').selectOption('contatti-preventivi');
     await page.locator('#contact-privacy').check();
-    await page.getByRole('button', { name: 'Richiedi confronto gratuito' }).first().click();
+    await page
+      .locator('#consulenza')
+      .getByRole('button', { name: 'Richiedi confronto gratuito' })
+      .first()
+      .click();
     if (storage === 'blocked')
       await expect(page.locator('#contact-form-status')).toContainText('Richiesta ricevuta');
     else await expect(page).toHaveURL(/\/grazie\/$/);
@@ -356,11 +374,16 @@ test('an HTTP 200 challenge cannot become a lead', async ({ page }) => {
   );
   await page.goto('/advertising/');
   await page.locator('#contact-name').fill('QA Netmarket');
+  await page.locator('#contact-phone').fill('3290000000');
   await page.locator('#contact-email').fill('qa@example.com');
   await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
   await page.locator('#contact-privacy').check();
-  await page.getByRole('button', { name: 'Richiedi confronto gratuito' }).first().click();
+  await page
+    .locator('#consulenza')
+    .getByRole('button', { name: 'Richiedi confronto gratuito' })
+    .first()
+    .click();
   await expect(page.locator('#contact-form-status')).toContainText('Non siamo riusciti');
   expect(
     await page.evaluate(() => window.dataLayer?.some((event) => event.event === 'generate_lead'))
@@ -404,14 +427,23 @@ for (const objective of [
     });
     await page.goto('/advertising/');
     await page.locator('#contact-name').fill('QA Netmarket');
+    await page.locator('#contact-phone').fill('3290000000');
     await page.locator('#contact-email').fill('qa@example.com');
     await page.locator('#contact-message').fill('Vorrei parlare del mio progetto.');
     await page.locator('#contact-privacy').check();
-    await page.getByRole('button', { name: 'Richiedi confronto gratuito' }).first().click();
+    await page
+      .locator('#consulenza')
+      .getByRole('button', { name: 'Richiedi confronto gratuito' })
+      .first()
+      .click();
     await expect(page.locator('#contact-service-error')).toHaveText('Seleziona il tuo obiettivo.');
     expect(payload).toBeUndefined();
     await page.locator('#contact-service').selectOption(objective);
-    await page.getByRole('button', { name: 'Richiedi confronto gratuito' }).first().click();
+    await page
+      .locator('#consulenza')
+      .getByRole('button', { name: 'Richiedi confronto gratuito' })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/grazie\/$/);
     expect(payload?.service).toBe(objective);
   });

@@ -11,7 +11,8 @@ import {
   IconBrush,
   IconDeviceDesktop,
   IconSearch,
-  IconPlus
+  IconPlus,
+  IconBrandWhatsapp
 } from '@tabler/icons-astro';
 import { serviceJsonLd } from '@netmarket/seo';
 import { getPublicEnv } from '@/lib/env';
@@ -171,6 +172,41 @@ const people = [
                 ></span
               >
             </a>
+            <a class="adv-hero__result adv-hero__desktop-price" href="#costi">
+              <span>Gestione Google Ads o Meta Ads</span>
+              <strong>da 400 €</strong>
+              <span>/ mese per canale + IVA</span>
+              <span>Budget pubblicitario escluso</span>
+            </a>
+          </div>
+          <div class="adv-hero__form adv-consultation__form" aria-labelledby="hero-form-title">
+            <div class="adv-consultation__form-heading">
+              <h2 id="hero-form-title">Parliamo dei tuoi obiettivi.</h2>
+              <p>Primo confronto gratuito, senza impegno.</p>
+            </div>
+            <ContactForm
+              phoneRequired
+              messagePlaceholder="Obiettivo, situazione attuale, eventuali scadenze o priorità e budget pubblicitario che vuoi investire mensilmente."
+              serviceLabel="Cosa vuoi ottenere?"
+              servicePlaceholder="Seleziona il tuo obiettivo"
+              serviceErrorMessage="Seleziona il tuo obiettivo."
+              serviceOptions={[
+                { value: 'contatti-preventivi', label: 'Contatti e preventivi' },
+                { value: 'vendite-ecommerce', label: 'Vendite ecommerce' },
+                { value: 'notorieta-brand', label: 'Notorietà del brand' },
+                { value: 'da-definire', label: 'Da definire insieme' }
+              ]}
+              showEmailFallback={false}
+              submitLabel="Richiedi confronto gratuito"
+              formId="advertising-hero"
+              density="compact"
+              idPrefix="hero-contact"
+              channelOptions={[
+                { value: 'Google Ads', label: 'Google Ads' },
+                { value: 'Meta Ads', label: 'Meta Ads' },
+                { value: 'Google Ads e Meta Ads', label: 'Google Ads e Meta Ads' }
+              ]}
+            />
           </div>
           <div class="adv-hero__composition" data-reveal="media">
             <div class="adv-hero__photo">
@@ -685,11 +721,28 @@ const people = [
                 <span>02</span>Ci confrontiamo su obiettivi e priorità.
               </li><li><span>03</span>Valutiamo il percorso più adatto.</li>
             </ol>
+            <div class="adv-consultation__direct">
+              <Button
+                href="https://wa.me/393297576496?text=Ho%20visto%20l%27annuncio%20su%20Google%20Ads%20e%20vorrei%20maggiori%20informazioni%20per%20pubblicizzare%20la%20mia%20azienda."
+                variant="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IconBrandWhatsapp aria-hidden="true" />Scrivici su WhatsApp
+              </Button>
+              <p>
+                Preferisci parlarne direttamente con noi?<br /><a href="tel:+393297576496"
+                  >329 7576496</a
+                >
+              </p>
+            </div>
           </div><div class="adv-consultation__form">
             <div class="adv-consultation__form-heading">
               <h3>Partiamo dal tuo obiettivo.</h3>
             </div>
             <ContactForm
+              phoneRequired
+              messagePlaceholder="Obiettivo, situazione attuale, eventuali scadenze o priorità e budget pubblicitario che vuoi investire mensilmente."
               serviceLabel="Cosa vuoi ottenere?"
               servicePlaceholder="Seleziona il tuo obiettivo"
               serviceErrorMessage="Seleziona il tuo obiettivo."

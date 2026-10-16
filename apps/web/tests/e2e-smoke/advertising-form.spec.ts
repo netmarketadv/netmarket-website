@@ -2,10 +2,12 @@ import { expect, test, type Page } from '@playwright/test';
 
 const endpoint = '**/wp-json/netmarket/v1/forms/contact';
 const url = '/advertising/';
-const submit = (page: Page) => page.getByRole('button', { name: 'Richiedi confronto gratuito' });
+const submit = (page: Page) =>
+  page.locator('#consulenza').getByRole('button', { name: 'Richiedi confronto gratuito' });
 
 async function fillVisitor(page: Page) {
   await page.locator('#contact-name').fill('QA Netmarket');
+  await page.locator('#contact-phone').fill('3290000000');
   await page.locator('#contact-email').fill('qa@example.com');
   await page
     .locator('#contact-message')
@@ -104,7 +106,7 @@ test('confirmed success sends the channel separately from the objective and gene
   await submit(page).click();
   await expect(page.getByRole('button', { name: 'Invio in corso' })).toBeDisabled();
   await page
-    .locator('[data-contact-form]')
+    .locator('#consulenza [data-contact-form]')
     .evaluate((form: HTMLFormElement) => form.requestSubmit());
   expect(requests).toBe(1);
   release?.();
@@ -269,7 +271,82 @@ test('storage-denied success waits for consent readiness and cannot submit twice
     await page.evaluate(() => window.dataLayer?.filter((event) => event.event === 'generate_lead'))
   ).toEqual([{ event: 'generate_lead', form_id: 'advertising-landing', lead_type: 'contact' }]);
   await page
-    .locator('[data-contact-form]')
+    .locator('#consulenza [data-contact-form]')
     .evaluate((form: HTMLFormElement) => form.requestSubmit());
   expect(requests).toBe(1);
+});
+
+test('desktop hero form is independent, numeric phone is required and direct links are correct', async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(url);
+  const hero = page.locator('.adv-hero__form');
+  const final = page.locator('#consulenza');
+  await expect(hero).toBeVisible();
+  await expect(page.locator('.adv-hero__composition')).toBeHidden();
+  const duplicateIds = await page.locator('[id]').evaluateAll((elements) => {
+    const ids = elements.map((element) => element.id);
+    return ids.filter((id, index) => ids.indexOf(id) !== index);
+  });
+  expect(duplicateIds).toEqual([]);
+  const price = page.locator('.adv-hero__desktop-price');
+  await price.hover();
+  await expect(price).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(price).toContainText('Budget pubblicitario escluso');
+  await hero.getByLabel('Nome', { exact: false }).fill('QA Netmarket');
+  await hero.locator('[name="email"]').fill('qa@example.invalid');
+  await hero.locator('[name="service"]').selectOption('contatti-preventivi');
+  await hero
+    .locator('[name="message"]')
+    .fill('Vorrei acquisire nuovi contatti per la mia azienda.');
+  await hero.locator('[name="privacyConsent"]').check();
+  await hero.getByRole('button', { name: 'Richiedi confronto gratuito' }).click();
+  await expect(hero.locator('[data-error-for="phone"]')).toContainText('Inserisci il tuo numero');
+  await hero.locator('[name="phone"]').fill('+39 329abc0000000');
+  await expect(hero.locator('[name="phone"]')).toHaveValue('393290000000');
+  await expect(final.locator('[name="phone"]')).toHaveValue('');
+  await expect(final.locator('[name="phone"]')).toHaveAttribute('required', '');
+  await expect(hero.locator('[name="message"]')).toHaveAttribute(
+    'placeholder',
+    /e budget pubblicitario che vuoi investire mensilmente/
+  );
+  let requests = 0;
+  await page.route(endpoint, async (route) => {
+    requests++;
+    expect(route.request().postDataJSON().phone).toBe('393290000000');
+    await route.fulfill({ status: 503, json: { success: false } });
+  });
+  await hero.getByRole('button', { name: 'Richiedi confronto gratuito' }).click();
+  await expect(hero.locator('[role="status"]')).toContainText('Non siamo riusciti');
+  expect(requests).toBe(1);
+  await expect(final.locator('[role="status"]')).toBeEmpty();
+  await page.route(endpoint, (route) => route.fulfill({ json: { success: true } }));
+  await hero.getByRole('button', { name: 'Richiedi confronto gratuito' }).click();
+  await expect(page).toHaveURL(/\/grazie\/$/);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          window.dataLayer?.filter(
+            (event) => event.event === 'generate_lead' && event.form_id === 'advertising-hero'
+          ).length
+      )
+    )
+    .toBe(1);
+  await page.goto(url);
+  const whatsapp = final.getByRole('link', { name: 'Scrivici su WhatsApp' });
+  const whatsappUrl = new URL((await whatsapp.getAttribute('href'))!);
+  expect(whatsappUrl.pathname).toBe('/393297576496');
+  expect(whatsappUrl.searchParams.get('text')).toBe(
+    "Ho visto l'annuncio su Google Ads e vorrei maggiori informazioni per pubblicizzare la mia azienda."
+  );
+  await expect(final.getByRole('link', { name: '329 7576496' })).toHaveAttribute(
+    'href',
+    'tel:+393297576496'
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(hero).toBeHidden();
+  await expect(page.locator('.adv-hero__composition')).toBeVisible();
+  await expect(page.locator('.adv-hero__desktop-price')).toBeHidden();
 });

@@ -2,6 +2,8 @@
 import type { HTMLAttributes } from 'astro/types';
 interface Props extends HTMLAttributes<'button'> {
   href?: string;
+  target?: HTMLAttributes<'a'>['target'];
+  rel?: HTMLAttributes<'a'>['rel'];
   variant?: 'primary' | 'secondary' | 'inverse' | 'brand';
   class?: string;
   disabled?: boolean;

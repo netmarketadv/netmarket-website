@@ -266,3 +266,39 @@
     transition: none;
   }
 }
+
+/* Compact density for forms embedded in a desktop hero; identical field states. */
+.contact-form__interests {
+  display: contents;
+}
+.contact-form--compact {
+  gap: var(--nm-space-sm);
+  margin-top: var(--nm-space-md);
+}
+.contact-form--compact .contact-form__grid,
+.contact-form--compact .contact-form__interests {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nm-space-sm);
+}
+.contact-form--compact .contact-form__field {
+  gap: 0.35rem;
+}
+.contact-form--compact textarea {
+  min-height: 6rem;
+}
+@media (max-width: 600px) {
+  .contact-form--compact .contact-form__grid,
+  .contact-form--compact .contact-form__interests {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.contact-form--compact .contact-form__footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--nm-space-xs);
+}
+.contact-form--compact .contact-form__security {
+  justify-content: center;
+}

@@ -14,6 +14,10 @@ interface Props {
   showEmailFallback?: boolean;
   submitLabel?: string;
   formId?: string;
+  idPrefix?: string;
+  density?: 'default' | 'compact';
+  phoneRequired?: boolean;
+  messagePlaceholder?: string;
 }
 const {
   defaultService = '',
@@ -24,7 +28,11 @@ const {
   serviceErrorMessage = 'Scegli l’ambito su cui vuoi lavorare.',
   showEmailFallback = true,
   submitLabel = 'Invia la richiesta',
-  formId = 'contact-page'
+  formId = 'contact-page',
+  idPrefix = 'contact',
+  density = 'default',
+  phoneRequired = false,
+  messagePlaceholder = 'Obiettivo, situazione attuale, eventuali scadenze o priorità.'
 } = Astro.props;
 const { services } = await getServiceArchiveData();
 const interestOptions = serviceOptions ?? [
@@ -50,24 +58,24 @@ const interestOptions = serviceOptions ?? [
 </noscript>
 
 <form
-  class="contact-form"
+  class:list={['contact-form', density === 'compact' && 'contact-form--compact']}
   data-contact-form
   data-form-id={formId}
   data-service-error={serviceErrorMessage}
   data-submit-label-default={submitLabel}
-  aria-describedby="contact-form-status"
+  aria-describedby={`${idPrefix}-form-status`}
   novalidate
 >
   <div class="contact-form__field contact-form__field--hidden" aria-hidden="true">
-    <label for="contact-website">Sito web</label>
-    <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    <label for={`${idPrefix}-website`}>Sito web</label>
+    <input id={`${idPrefix}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
   <div class="contact-form__grid">
-    <label class="contact-form__field" for="contact-name">
+    <label class="contact-form__field" for={`${idPrefix}-name`}>
       <span>Nome <em>Obbligatorio</em></span>
       <input
-        id="contact-name"
+        id={`${idPrefix}-name`}
         name="name"
         type="text"
         autocomplete="name"
@@ -75,118 +83,132 @@ const interestOptions = serviceOptions ?? [
         required
         minlength="2"
         maxlength="120"
-        aria-describedby="contact-name-error"
+        aria-describedby={`${idPrefix}-name-error`}
       />
-      <small id="contact-name-error" class="contact-form__error" data-error-for="name"></small>
+      <small id={`${idPrefix}-name-error`} class="contact-form__error" data-error-for="name"
+      ></small>
     </label>
 
-    <label class="contact-form__field" for="contact-email">
+    <label class="contact-form__field" for={`${idPrefix}-email`}>
       <span>Email <em>Obbligatorio</em></span>
       <input
-        id="contact-email"
+        id={`${idPrefix}-email`}
         name="email"
         type="email"
         autocomplete="email"
         inputmode="email"
         placeholder="nome@azienda.it"
         required
-        aria-describedby="contact-email-error"
+        aria-describedby={`${idPrefix}-email-error`}
       />
-      <small id="contact-email-error" class="contact-form__error" data-error-for="email"></small>
+      <small id={`${idPrefix}-email-error`} class="contact-form__error" data-error-for="email"
+      ></small>
     </label>
 
-    <label class="contact-form__field" for="contact-company">
+    <label class="contact-form__field" for={`${idPrefix}-company`}>
       <span>Azienda <em>Facoltativo</em></span>
       <input
-        id="contact-company"
+        id={`${idPrefix}-company`}
         name="company"
         type="text"
         autocomplete="organization"
         placeholder="Nome dell’azienda"
         maxlength="120"
-        aria-describedby="contact-company-error"
+        aria-describedby={`${idPrefix}-company-error`}
       />
-      <small id="contact-company-error" class="contact-form__error" data-error-for="company"
+      <small id={`${idPrefix}-company-error`} class="contact-form__error" data-error-for="company"
       ></small>
     </label>
 
-    <label class="contact-form__field" for="contact-phone">
-      <span>Telefono <em>Facoltativo</em></span>
+    <label class="contact-form__field" for={`${idPrefix}-phone`}>
+      <span>Telefono <em>{phoneRequired ? 'Obbligatorio' : 'Facoltativo'}</em></span>
       <input
-        id="contact-phone"
+        id={`${idPrefix}-phone`}
         name="phone"
         type="tel"
         autocomplete="tel"
-        inputmode="tel"
-        placeholder="+39"
+        inputmode={phoneRequired ? 'numeric' : 'tel'}
+        pattern={phoneRequired ? '[0-9]+' : undefined}
+        required={phoneRequired}
+        data-digits-only={phoneRequired || undefined}
+        placeholder={phoneRequired ? 'Il tuo numero di telefono' : '+39'}
         maxlength="40"
-        aria-describedby="contact-phone-error"
+        aria-describedby={`${idPrefix}-phone-error`}
       />
-      <small id="contact-phone-error" class="contact-form__error" data-error-for="phone"></small>
+      <small id={`${idPrefix}-phone-error`} class="contact-form__error" data-error-for="phone"
+      ></small>
     </label>
   </div>
 
-  <label class="contact-form__field" for="contact-service">
-    <span>{serviceLabel} <em>Obbligatorio</em></span>
-    <span class="contact-form__select">
-      <select id="contact-service" name="service" required aria-describedby="contact-service-error">
-        <option value="">{servicePlaceholder}</option>
-        {
-          interestOptions.map((option) => (
-            <option value={option.value} selected={option.value === defaultService}>
-              {option.label}
-            </option>
-          ))
-        }
-      </select>
-      <IconChevronDown aria-hidden="true" stroke={1.8} />
-    </span>
-    <small id="contact-service-error" class="contact-form__error" data-error-for="service"></small>
-  </label>
+  <div class="contact-form__interests">
+    <label class="contact-form__field" for={`${idPrefix}-service`}>
+      <span>{serviceLabel} <em>Obbligatorio</em></span>
+      <span class="contact-form__select">
+        <select
+          id={`${idPrefix}-service`}
+          name="service"
+          required
+          aria-describedby={`${idPrefix}-service-error`}
+        >
+          <option value="">{servicePlaceholder}</option>
+          {
+            interestOptions.map((option) => (
+              <option value={option.value} selected={option.value === defaultService}>
+                {option.label}
+              </option>
+            ))
+          }
+        </select>
+        <IconChevronDown aria-hidden="true" stroke={1.8} />
+      </span>
+      <small id={`${idPrefix}-service-error`} class="contact-form__error" data-error-for="service"
+      ></small>
+    </label>
 
-  {
-    channelOptions && (
-      <label class="contact-form__field" for="contact-channel">
-        <span>
-          Canale di interesse <em>Facoltativo</em>
-        </span>
-        <span class="contact-form__select">
-          <select id="contact-channel" name="channel">
-            <option value="">Da valutare insieme</option>
-            {channelOptions.map((option) => (
-              <option value={option.value}>{option.label}</option>
-            ))}
-          </select>
-          <IconChevronDown aria-hidden="true" stroke={1.8} />
-        </span>
-      </label>
-    )
-  }
-
-  <label class="contact-form__field" for="contact-message">
+    {
+      channelOptions && (
+        <label class="contact-form__field" for={`${idPrefix}-channel`}>
+          <span>
+            Canale di interesse <em>Facoltativo</em>
+          </span>
+          <span class="contact-form__select">
+            <select id={`${idPrefix}-channel`} name="channel">
+              <option value="">Da valutare insieme</option>
+              {channelOptions.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <IconChevronDown aria-hidden="true" stroke={1.8} />
+          </span>
+        </label>
+      )
+    }
+  </div>
+  <label class="contact-form__field" for={`${idPrefix}-message`}>
     <span>Raccontaci brevemente il progetto <em>Obbligatorio</em></span>
     <textarea
-      id="contact-message"
+      id={`${idPrefix}-message`}
       name="message"
-      rows="6"
-      placeholder="Obiettivo, situazione attuale, eventuali scadenze o priorità."
+      rows={density === 'compact' ? 3 : 6}
+      placeholder={messagePlaceholder}
       required
       minlength="10"
       maxlength={channelOptions ? '2900' : '3000'}
-      aria-describedby="contact-message-hint contact-message-error"></textarea>
-    <span id="contact-message-hint" class="contact-form__hint"
+      aria-describedby={`${idPrefix}-message-hint` + ' ' + `${idPrefix}-message-error`}></textarea>
+    <span id={`${idPrefix}-message-hint`} class="contact-form__hint"
       >Bastano poche righe per iniziare.</span
     >
-    <small id="contact-message-error" class="contact-form__error" data-error-for="message"></small>
+    <small id={`${idPrefix}-message-error`} class="contact-form__error" data-error-for="message"
+    ></small>
   </label>
 
-  <label class="contact-form__check" for="contact-privacy">
+  <label class="contact-form__check" for={`${idPrefix}-privacy`}>
     <input
-      id="contact-privacy"
+      id={`${idPrefix}-privacy`}
       name="privacyConsent"
       type="checkbox"
       required
-      aria-describedby="contact-privacy-error"
+      aria-describedby={`${idPrefix}-privacy-error`}
     />
     <span>
       Ho letto l’<a
@@ -195,8 +217,10 @@ const interestOptions = serviceOptions ?? [
         rel="noopener noreferrer">informativa privacy</a
       > e autorizzo il trattamento dei dati per essere ricontattato.
     </span>
-    <small id="contact-privacy-error" class="contact-form__error" data-error-for="privacyConsent"
-    ></small>
+    <small
+      id={`${idPrefix}-privacy-error`}
+      class="contact-form__error"
+      data-error-for="privacyConsent"></small>
   </label>
 
   <div class="contact-form__footer">
@@ -210,7 +234,7 @@ const interestOptions = serviceOptions ?? [
   </div>
 
   <p
-    id="contact-form-status"
+    id={`${idPrefix}-form-status`}
     class="contact-form__status"
     role="status"
     aria-live="polite"
@@ -229,206 +253,216 @@ const interestOptions = serviceOptions ?? [
   } from '@/lib/contact-attribution';
   import { submitContactForm } from '@/lib/api/forms';
 
-  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
-  const status = form?.querySelector<HTMLElement>('.contact-form__status');
-  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
-  const buttonLabel = button?.querySelector<HTMLElement>('[data-submit-label]');
-  try {
-    const draft = sessionStorage.getItem('nm_contact_email_draft');
-    const email = form?.querySelector<HTMLInputElement>('input[name="email"]');
-    if (draft && email && !email.value) email.value = draft;
-    sessionStorage.removeItem('nm_contact_email_draft');
-  } catch {
-    /* The form remains usable when storage is unavailable. */
-  }
-  const formId = form?.dataset.formId || 'contact-page';
-  const submitLabel = form?.dataset.submitLabelDefault || 'Invia la richiesta';
-  const startedAt = Date.now();
-  let started = false;
-  let submitting = false;
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-contact-form]')) {
+    const status = form?.querySelector<HTMLElement>('.contact-form__status');
+    const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const buttonLabel = button?.querySelector<HTMLElement>('[data-submit-label]');
+    try {
+      const draft = sessionStorage.getItem('nm_contact_email_draft');
+      const email = form?.querySelector<HTMLInputElement>('input[name="email"]');
+      if (form.getClientRects().length > 0) {
+        if (draft && email && !email.value) email.value = draft;
+        sessionStorage.removeItem('nm_contact_email_draft');
+      }
+    } catch {
+      /* The form remains usable when storage is unavailable. */
+    }
+    const formId = form?.dataset.formId || 'contact-page';
+    const submitLabel = form?.dataset.submitLabelDefault || 'Invia la richiesta';
+    const startedAt = Date.now();
+    let started = false;
+    let submitting = false;
 
-  const errorMessages: Record<
-    string,
-    (input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => string
-  > = {
-    name: (input) =>
-      input.validity.tooShort
-        ? 'Inserisci almeno nome e cognome, oppure il tuo nome completo.'
-        : 'Inserisci il tuo nome.',
-    email: (input) =>
-      input.validity.typeMismatch
-        ? 'Inserisci un indirizzo email valido.'
-        : 'Inserisci il tuo indirizzo email.',
-    service: () => form?.dataset.serviceError || 'Scegli l’ambito su cui vuoi lavorare.',
-    message: (input) =>
-      input.validity.tooShort || input.validity.customError
-        ? 'Raccontaci il progetto in almeno 10 caratteri.'
-        : 'Raccontaci brevemente il progetto.',
-    privacyConsent: () => 'Per inviare la richiesta devi accettare l’informativa privacy.'
-  };
+    const errorMessages: Record<
+      string,
+      (input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => string
+    > = {
+      name: (input) =>
+        input.validity.tooShort
+          ? 'Inserisci almeno nome e cognome, oppure il tuo nome completo.'
+          : 'Inserisci il tuo nome.',
+      email: (input) =>
+        input.validity.typeMismatch
+          ? 'Inserisci un indirizzo email valido.'
+          : 'Inserisci il tuo indirizzo email.',
+      phone: (input) =>
+        input.validity.valueMissing
+          ? 'Inserisci il tuo numero di telefono.'
+          : 'Usa solo numeri per il telefono.',
+      service: () => form?.dataset.serviceError || 'Scegli l’ambito su cui vuoi lavorare.',
+      message: (input) =>
+        input.validity.tooShort || input.validity.customError
+          ? 'Raccontaci il progetto in almeno 10 caratteri.'
+          : 'Raccontaci brevemente il progetto.',
+      privacyConsent: () => 'Per inviare la richiesta devi accettare l’informativa privacy.'
+    };
 
-  function collectTracking() {
-    const attribution = collectContactAttribution();
-    return Object.fromEntries(
-      trackingKeys.filter((key) => attribution[key]).map((key) => [key, attribution[key] || ''])
-    );
-  }
-
-  function setFieldState(
-    input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
-    showError = true
-  ) {
-    const field = input.closest<HTMLElement>('.contact-form__field, .contact-form__check');
-    const error = form?.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
-    if (input.name === 'message' && form?.querySelector('[name="channel"]')) {
-      input.setCustomValidity(
-        input.value.trim().length < 10 ? 'Raccontaci il progetto in almeno 10 caratteri.' : ''
+    function collectTracking() {
+      const attribution = collectContactAttribution();
+      return Object.fromEntries(
+        trackingKeys.filter((key) => attribution[key]).map((key) => [key, attribution[key] || ''])
       );
     }
-    const invalid = !input.validity.valid;
-    field?.classList.toggle('contact-form__field--invalid', invalid && showError);
-    input.setAttribute('aria-invalid', invalid && showError ? 'true' : 'false');
-    if (error) {
-      error.textContent =
-        invalid && showError
-          ? (errorMessages[input.name]?.(input) ?? 'Controlla questo campo.')
-          : '';
-    }
-    return invalid;
-  }
 
-  function firstInvalidControl() {
-    return form?.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
-      'input:invalid, textarea:invalid, select:invalid'
-    );
-  }
-
-  persistContactAttribution();
-
-  form?.addEventListener('input', (event) => {
-    if (!started) {
-      started = true;
-      pushEvent({ event: 'contact_form_start', form_id: formId });
-    }
-    const target = event.target;
-    if (
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement
+    function setFieldState(
+      input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
+      showError = true
     ) {
-      setFieldState(target, false);
-    }
-  });
-
-  form?.addEventListener('change', (event) => {
-    const target = event.target;
-    if (
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement
-    ) {
-      setFieldState(target);
-    }
-  });
-
-  form?.addEventListener('focusout', (event) => {
-    const target = event.target;
-    if (
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement
-    ) {
-      setFieldState(target);
-    }
-  });
-
-  form?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (!form || !status || !button || !buttonLabel || submitting) return;
-
-    const controls = [
-      ...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
-        'input:not([name="website"]), textarea, select'
-      )
-    ];
-    controls.forEach((control) => setFieldState(control));
-    if (!form.checkValidity()) {
-      status.textContent = 'Ci sono alcuni campi da controllare.';
-      status.dataset.state = 'error';
-      firstInvalidControl()?.focus();
-      return;
+      const field = input.closest<HTMLElement>('.contact-form__field, .contact-form__check');
+      const error = form?.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
+      if (input.name === 'message' && form?.querySelector('[name="channel"]')) {
+        input.setCustomValidity(
+          input.value.trim().length < 10 ? 'Raccontaci il progetto in almeno 10 caratteri.' : ''
+        );
+      }
+      const invalid = !input.validity.valid;
+      field?.classList.toggle('contact-form__field--invalid', invalid && showError);
+      input.setAttribute('aria-invalid', invalid && showError ? 'true' : 'false');
+      if (error) {
+        error.textContent =
+          invalid && showError
+            ? (errorMessages[input.name]?.(input) ?? 'Controlla questo campo.')
+            : '';
+      }
+      return invalid;
     }
 
-    const data = new FormData(form);
-    const hasPrivacyConsent = data.get('privacyConsent') === 'on';
-    if (!hasPrivacyConsent) {
-      status.textContent = 'Per inviare la richiesta devi accettare l’informativa privacy.';
-      status.dataset.state = 'error';
-      form.querySelector<HTMLInputElement>('input[name="privacyConsent"]')?.focus();
-      return;
+    function firstInvalidControl() {
+      return form?.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+        'input:invalid, textarea:invalid, select:invalid'
+      );
     }
 
-    status.textContent = '';
-    status.dataset.state = '';
-    pushEvent({ event: 'contact_form_submit', form_id: formId });
-    submitting = true;
-    button.disabled = true;
-    button.setAttribute('aria-busy', 'true');
-    button.dataset.state = 'loading';
-    buttonLabel.textContent = 'Invio in corso';
+    persistContactAttribution();
 
-    try {
-      await submitContactForm({
-        name: String(data.get('name') || ''),
-        email: String(data.get('email') || ''),
-        company: String(data.get('company') || ''),
-        phone: String(data.get('phone') || ''),
-        service: String(data.get('service') || ''),
-        message: form.querySelector('[name="channel"]')
-          ? composeContactMessage(
-              String(data.get('message') || ''),
-              String(data.get('channel') || '')
-            )
-          : String(data.get('message') || ''),
-        privacyConsent: true,
-        marketingConsent: false,
-        website: String(data.get('website') || ''),
-        utm: collectTracking(),
-        sourceUrl: window.location.href,
-        referrer: document.referrer || collectContactAttribution().referrer || undefined,
-        elapsedMs: Date.now() - startedAt
-      });
-      pushEvent({ event: 'contact_form_success', form_id: formId });
-      let canRedirect = false;
+    form?.addEventListener('input', (event) => {
+      if (!started) {
+        started = true;
+        pushEvent({ event: 'contact_form_start', form_id: formId });
+      }
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        if (target instanceof HTMLInputElement && target.hasAttribute('data-digits-only')) {
+          target.value = target.value.replace(/[^0-9]/g, '');
+        }
+        setFieldState(target, false);
+      }
+    });
+
+    form?.addEventListener('change', (event) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        setFieldState(target);
+      }
+    });
+
+    form?.addEventListener('focusout', (event) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        setFieldState(target);
+      }
+    });
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form || !status || !button || !buttonLabel || submitting) return;
+
+      const controls = [
+        ...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+          'input:not([name="website"]), textarea, select'
+        )
+      ];
+      controls.forEach((control) => setFieldState(control));
+      if (!form.checkValidity()) {
+        status.textContent = 'Ci sono alcuni campi da controllare.';
+        status.dataset.state = 'error';
+        firstInvalidControl()?.focus();
+        return;
+      }
+
+      const data = new FormData(form);
+      const hasPrivacyConsent = data.get('privacyConsent') === 'on';
+      if (!hasPrivacyConsent) {
+        status.textContent = 'Per inviare la richiesta devi accettare l’informativa privacy.';
+        status.dataset.state = 'error';
+        form.querySelector<HTMLInputElement>('input[name="privacyConsent"]')?.focus();
+        return;
+      }
+
+      status.textContent = '';
+      status.dataset.state = '';
+      pushEvent({ event: 'contact_form_submit', form_id: formId });
+      submitting = true;
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      button.dataset.state = 'loading';
+      buttonLabel.textContent = 'Invio in corso';
+
       try {
-        sessionStorage.setItem('nm_generate_lead_pending', formId);
-        canRedirect = true;
-      } catch {
-        pushEvent({ event: 'generate_lead', form_id: formId, lead_type: 'contact' });
-      }
-      button.dataset.state = 'success';
-      buttonLabel.textContent = 'Richiesta inviata';
-      status.textContent = 'Richiesta inviata correttamente. Ti portiamo alla conferma.';
-      status.dataset.state = 'success';
-      if (canRedirect) window.location.assign('/grazie/');
-      else {
-        status.textContent = 'Richiesta ricevuta. Il team Netmarket ti ricontatterà.';
-        button.removeAttribute('aria-busy');
+        await submitContactForm({
+          name: String(data.get('name') || ''),
+          email: String(data.get('email') || ''),
+          company: String(data.get('company') || ''),
+          phone: String(data.get('phone') || ''),
+          service: String(data.get('service') || ''),
+          message: form.querySelector('[name="channel"]')
+            ? composeContactMessage(
+                String(data.get('message') || ''),
+                String(data.get('channel') || '')
+              )
+            : String(data.get('message') || ''),
+          privacyConsent: true,
+          marketingConsent: false,
+          website: String(data.get('website') || ''),
+          utm: collectTracking(),
+          sourceUrl: window.location.href,
+          referrer: document.referrer || collectContactAttribution().referrer || undefined,
+          elapsedMs: Date.now() - startedAt
+        });
+        pushEvent({ event: 'contact_form_success', form_id: formId });
+        let canRedirect = false;
+        try {
+          sessionStorage.setItem('nm_generate_lead_pending', formId);
+          canRedirect = true;
+        } catch {
+          pushEvent({ event: 'generate_lead', form_id: formId, lead_type: 'contact' });
+        }
+        button.dataset.state = 'success';
+        buttonLabel.textContent = 'Richiesta inviata';
+        status.textContent = 'Richiesta inviata correttamente. Ti portiamo alla conferma.';
+        status.dataset.state = 'success';
+        if (canRedirect) window.location.assign('/grazie/');
+        else {
+          status.textContent = 'Richiesta ricevuta. Il team Netmarket ti ricontatterà.';
+          button.removeAttribute('aria-busy');
+          status.focus();
+        }
+      } catch (error) {
+        const message = error instanceof TypeError ? 'network_error' : 'contact_form_failed';
+        status.textContent =
+          'Non siamo riusciti a inviare il messaggio. Riprova tra poco: i dati inseriti sono ancora qui.';
+        status.dataset.state = 'error';
         status.focus();
+        pushEvent({ event: 'contact_form_error', form_id: formId, error_code: message });
+        submitting = false;
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        button.dataset.state = '';
+        buttonLabel.textContent = submitLabel;
       }
-    } catch (error) {
-      const message = error instanceof TypeError ? 'network_error' : 'contact_form_failed';
-      status.textContent =
-        'Non siamo riusciti a inviare il messaggio. Riprova tra poco: i dati inseriti sono ancora qui.';
-      status.dataset.state = 'error';
-      status.focus();
-      pushEvent({ event: 'contact_form_error', form_id: formId, error_code: message });
-      submitting = false;
-      button.disabled = false;
-      button.removeAttribute('aria-busy');
-      button.dataset.state = '';
-      buttonLabel.textContent = submitLabel;
-    }
-  });
-  if (button) button.disabled = false;
+    });
+    if (button) button.disabled = false;
+  }
 </script>

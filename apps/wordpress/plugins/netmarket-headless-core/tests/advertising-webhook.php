@@ -47,3 +47,38 @@ $endpoint = '';
 AdvertisingWebhook::deliver($lead);
 check(count($calls) === 5 && count($scheduled) === 4, 'Missing config must not send elsewhere');
 echo "Advertising webhook tests passed.\n";
+
+// Exercise the real contact validator. Privacy remains false so no test can send mail.
+require __DIR__ . '/../src/Taxonomies/Registry.php';
+require __DIR__ . '/../src/Rest/Routes.php';
+function sanitize_text_field(string $value): string { return trim(strip_tags($value)); }
+function sanitize_textarea_field(string $value): string { return trim(strip_tags($value)); }
+function sanitize_email(string $value): string { return $value; }
+function esc_url_raw(string $value): string { return $value; }
+function is_email(string $value): bool { return (bool) filter_var($value, FILTER_VALIDATE_EMAIL); }
+class WP_REST_Request {
+    public function __construct(private array $payload) {}
+    public function get_json_params(): array { return $this->payload; }
+    public function get_file_params(): array { return []; }
+}
+class WP_REST_Response {
+    public function __construct(public array $data, public int $status) {}
+}
+$routes = new \Netmarket\HeadlessCore\Rest\Routes(new \Netmarket\HeadlessCore\Taxonomies\Registry());
+foreach ([
+    ['https://netmarket.it/advertising/', '', true],
+    ['https://netmarket.it/advertising/?utm_source=google', '+39 3291234567', true],
+    ['https://staging.netmarket.it/advertising/', '329abc', true],
+    ['https://netmarket.it/advertising/', '3291234567', false],
+    ['https://netmarket.it/contatti/', '', false],
+    ['https://netmarket.it/contatti/', '+39 3291234567', false],
+] as [$source, $phone, $invalid]) {
+    $response = $routes->contactForm(new WP_REST_Request([
+        'name' => 'QA Netmarket', 'email' => 'qa@example.invalid', 'phone' => $phone,
+        'message' => 'Richiesta tecnica senza invio reale.', 'sourceUrl' => $source,
+        'privacyConsent' => false,
+    ]));
+    check($response->status === 422 && isset($response->data['fields']['privacyConsent']), 'Tests must never deliver leads');
+    check(isset($response->data['fields']['phone']) === $invalid, 'Phone validation must match landing policy');
+}
+echo "Advertising phone validation tests passed.\n";

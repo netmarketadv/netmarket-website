@@ -101,3 +101,7 @@ Il `dataLayer` riceve soltanto URL ripuliti: nessuna query string o frammento. U
 Form `advertising-landing` con eventi di inizio, invio, successo/errore e `generate_lead` solo dopo risposta JSON `success:true`. Il dispatcher attende la lettura CMP prima del lead per non perdere Meta a causa del consenso default denied sulla pagina Grazie. Trigger della conversione: evento, mai semplice URL. Conferma in pagina quando lo storage è negato; nessun PII nei parametri analytics/errori.
 
 GTM pubblico verificato: GA4 G-DHXW4WZ5XP, Ads AW-16639879288 conversion label rs3VCPShl50cEPjQwf49, Meta 485694213884589. Aggiunto tag `Meta - Lead confermato`, evento standard Lead, attivatore generate_lead, ad_storage obbligatorio, una volta per evento. La configurazione Google Ads effettiva usa un tag nativo: non importare una seconda conversione GA4 come primaria sullo stesso contatto.
+
+### Advertising: form nella hero desktop
+
+Il form aggiuntivo usa `form_id: advertising-hero`; quello finale mantiene `advertising-landing`. Entrambi generano `generate_lead` solo dopo successo confermato, via pagina grazie o fallback storage non disponibile. Click WhatsApp e telefono restano eventi di interazione, non lead confermati. Non vengono inseriti numeri telefonici o dati del visitatore negli eventi form.
