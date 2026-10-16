@@ -167,18 +167,18 @@ export const advertisingCases = [
     id: 'tappeti',
     title: 'Tappeti di pregio',
     period: '3 mesi',
-    description: 'Lavaggio e restauro: 300 contatti diventati 133 clienti acquisiti.',
-    leads: 300,
-    customers: 133,
+    description: 'Lavaggio e restauro: 271 contatti diventati 93 clienti acquisiti.',
+    leads: 271,
+    customers: 93,
     customerLabel: 'clienti acquisiti',
     investment: 7500,
-    value: 106400,
+    value: 65100,
     valueLabel: 'fatturato · IVA esclusa',
     returnLabel: 'ROAS',
-    outcome: '133 clienti acquisiti.',
+    outcome: '93 clienti acquisiti.',
     context:
       'Campagne per intercettare la domanda di lavaggio e restauro specialistico, valorizzando la cura di tappeti antichi e di pregio.',
-    note: 'Scontrino medio: 800 € IVA esclusa. Il fatturato è attribuito ai contatti acquisiti dalle campagne.'
+    note: 'Scontrino medio: 700 € IVA esclusa. Il fatturato è attribuito ai contatti acquisiti dalle campagne.'
   }
 ] as const;
 
