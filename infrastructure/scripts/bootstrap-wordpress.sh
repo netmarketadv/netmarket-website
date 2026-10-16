@@ -80,7 +80,8 @@ fi
 ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp core is-installed && wp option update blog_public 0 && wp rewrite structure '/%postname%/' --hard && wp plugin activate '$PLUGIN_SLUG' && wp rewrite flush --hard"
 
 # Configure the server-only integration through stdin, never through command arguments.
+# WP-CLI update with --autoload fails on an unchanged value; set autoload separately.
 if [[ -n "${ADVERTISING_WEBHOOK_URL:-}" ]]; then
-  printf '%s' "$ADVERTISING_WEBHOOK_URL" | ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp option update nmhc_advertising_webhook_url --autoload=off" >/dev/null
+  printf '%s' "$ADVERTISING_WEBHOOK_URL" | ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && if wp option get-autoload nmhc_advertising_webhook_url >/dev/null 2>&1; then wp option update nmhc_advertising_webhook_url && wp option set-autoload nmhc_advertising_webhook_url off; else wp option add nmhc_advertising_webhook_url --autoload=off; fi" >/dev/null
   echo "Advertising webhook configuration updated."
 fi

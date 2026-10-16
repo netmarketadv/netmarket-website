@@ -118,3 +118,7 @@ Ordine operativo:
 6. Eseguire `deploy-staging.yml` in dry-run.
 7. Eseguire `deploy-staging.yml` con `dry_run=false`, oppure fare push su `develop`.
 8. Verificare health check staging e CMS.
+
+### Webhook CMS: deploy ripetibili
+
+La configurazione distingue creazione e aggiornamento dell’opzione server-only. Su un valore esistente, `wp option update` senza `--autoload` accetta anche il caso invariato; `wp option set-autoload ... off` mantiene separatamente l’esclusione dall’autoload. Un’opzione nuova viene creata direttamente con autoload disabilitato. Il valore continua a passare solo da stdin, senza output o argomenti di processo. Questo evita il falso errore WP-CLI nei deploy successivi alla prima configurazione.
