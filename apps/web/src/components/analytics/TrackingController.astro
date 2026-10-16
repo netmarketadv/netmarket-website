@@ -147,7 +147,7 @@ const gtmId = env.PUBLIC_GTM_ID;
   const pendingLeadForm = sessionStorage.getItem('nm_generate_lead_pending');
   if (
     path === '/grazie/' &&
-    (pendingLeadForm === 'contact-page' || pendingLeadForm === 'advertising-landing' || pendingLeadForm === 'advertising-landing-v2')
+    (pendingLeadForm === 'contact-page' || pendingLeadForm === 'advertising-hero' || pendingLeadForm === 'advertising-landing' || pendingLeadForm === 'advertising-landing-v2')
   ) {
     sessionStorage.removeItem('nm_generate_lead_pending');
     pushEvent({ event: 'generate_lead', form_id: pendingLeadForm, lead_type: 'contact' });

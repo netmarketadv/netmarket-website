@@ -1337,3 +1337,69 @@ html:not(.js) [data-market-copy][hidden] {
     padding: var(--nm-space-md);
   }
 }
+
+/* The desktop hero reuses the canonical contact form; mobile retains its media. */
+.adv-hero__form,
+.adv-hero__desktop-price {
+  display: none;
+}
+.adv-page .adv-hero__result:hover,
+.adv-page .adv-hero__result:focus-visible {
+  color: var(--nm-color-on-inverse);
+}
+.adv-consultation__direct {
+  display: grid;
+  justify-items: start;
+  gap: var(--nm-space-md);
+  margin-top: var(--nm-space-lg);
+}
+.adv-consultation__direct p {
+  color: var(--nm-color-muted);
+}
+.adv-consultation__direct p a {
+  display: inline-block;
+  padding-block: var(--nm-space-xs);
+  font-size: var(--nm-text-lead);
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .adv-hero h1 {
+    font-size: clamp(3rem, 4.8vw, 4.5rem);
+    max-width: 14ch;
+  }
+  .adv-hero__grid {
+    align-items: start;
+  }
+  .adv-hero__composition,
+  .adv-hero__price {
+    display: none;
+  }
+  .adv-hero__form {
+    display: block;
+    min-width: 0;
+  }
+  .adv-hero__form h2 {
+    font-size: var(--nm-text-h3);
+    line-height: 1.15;
+    text-wrap: pretty;
+  }
+  .adv-hero__form .adv-consultation__form-heading p {
+    margin-top: var(--nm-space-xs);
+    color: var(--nm-color-muted);
+  }
+  .adv-hero__desktop-price {
+    position: static;
+    display: grid;
+    margin-top: var(--nm-space-xl);
+    max-width: 30rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .adv-hero__form .adv-consultation__form-heading {
+    margin-bottom: var(--nm-space-md);
+  }
+  .adv-hero__form h2 {
+    font-size: var(--nm-text-h4);
+  }
+}

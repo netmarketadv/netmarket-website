@@ -121,3 +121,9 @@ Verifiche automatiche senza lead reali: test PHP destinazione/isolamento/payload
 ## Aggiornamento Tappeti di pregio — 16 ottobre 2026
 
 Dati aggiornati su indicazione del cliente: spesa Ads 7.500 €, fatturato IVA esclusa 65.100 €, 271 contatti e 93 clienti acquisiti. Scontrino medio IVA esclusa 700 €. Metriche derivate: ROAS 8,68×, conversione 34,32%, costo per contatto 27,68 € e costo Ads per cliente 80,65 €. Il periodo esistente resta invariato. Il test della gerarchia dei casi verifica anche questi valori e i dettagli.
+
+## Form in hero e contatti diretti — 16 ottobre 2026
+
+Da 1024 px la hero ospita una seconda istanza del ContactForm canonico al posto dei media BRB. La card prezzo resta sotto al testo, con colore bianco anche in hover e focus. Sotto 1024 px resta la composizione media. Le istanze hanno ID, validazione, stato invio e form_id analytics distinti; le CTA obiettivo/canale continuano a preparare solo il form finale. Telefono obbligatorio numerico e placeholder budget sono configurati solo per advertising. La sezione finale include WhatsApp con messaggio precompilato e collegamento telefonico. I test non inviano lead reali.
+
+Verifiche candidato: check:fast, 28 smoke test landing con API simulate, test PHP webhook/validazione telefono, PHPCS e PHPStan. Controllo visivo desktop 1440 px e mobile 390 px. La validazione telefono lato CMS è limitata alle richieste advertising; gli altri moduli mantengono il comportamento precedente.

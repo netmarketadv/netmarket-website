@@ -129,7 +129,8 @@ final class Routes
         if (mb_strlen($company) > 120) {
             $errors['company'] = 'invalid_company';
         }
-        if (mb_strlen($phone) > 40) {
+        $requiresPhone = \Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::isAdvertising($sourceUrl);
+        if (mb_strlen($phone) > 40 || ($requiresPhone && ! preg_match('/^[0-9]+$/D', $phone))) {
             $errors['phone'] = 'invalid_phone';
         }
         if ($service !== '' && ! preg_match('/^[a-z0-9-]{1,120}$/', $service)) {
