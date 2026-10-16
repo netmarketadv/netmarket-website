@@ -117,3 +117,7 @@ Payload JSON: request_id, name, email, company, phone, objective, channel, messa
 Errori HTTP/applicativi o configurazione mancante attivano fino a cinque retry WP-Cron con intervalli crescenti. I log riportano solo request_id e stato; nessun dato del lead o risposta remota. Se l’email è già stata accettata, un problema del webhook non induce il visitatore a ripetere l’invio. I retry dipendono dall’esecuzione WP-Cron; un timeout dopo accettazione remota può richiedere deduplicazione del destinatario. Non è promessa consegna esattamente una volta.
 
 Verifiche automatiche senza lead reali: test PHP destinazione/isolamento/payload/retry, test frontend per validazione, scelte successive, fallimento, doppio invio, consenso, layout e tastiera. Un solo invio reale di collaudo è autorizzato esplicitamente dall’utente dopo la pubblicazione; esito da registrare nel riepilogo release.
+
+## Aggiornamento Tappeti di pregio — 16 ottobre 2026
+
+Dati aggiornati su indicazione del cliente: spesa Ads 7.500 €, fatturato IVA esclusa 65.100 €, 271 contatti e 93 clienti acquisiti. Scontrino medio IVA esclusa 700 €. Metriche derivate: ROAS 8,68×, conversione 34,32%, costo per contatto 27,68 € e costo Ads per cliente 80,65 €. Il periodo esistente resta invariato. Il test della gerarchia dei casi verifica anche questi valori e i dettagli.

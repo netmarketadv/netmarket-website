@@ -205,14 +205,24 @@ test('case hierarchy distinguishes estimated CLV from attributed revenue and sch
     '41',
     '84.550 €',
     '88.400 €',
-    '106.400 €'
+    '65.100 €'
   ]);
   await expect(cases.locator('.project-card__evidence b')).toHaveText([
     '75,61 €',
     '15,66×',
     '20,09×',
-    '14,19×'
+    '8,68×'
   ]);
+  const tappeti = cases.last();
+  await expect(tappeti).toContainText('7.500 € di spesa Ads');
+  await expect(tappeti).toContainText('271');
+  await expect(tappeti).toContainText('93');
+  const tappetiDetails = page.locator('#caso-tappeti');
+  await tappetiDetails.locator('summary').click();
+  await expect(tappetiDetails).toContainText('34,32%');
+  await expect(tappetiDetails).toContainText('27,68 €');
+  await expect(tappetiDetails).toContainText('80,65 €');
+  await expect(tappetiDetails).toContainText('Scontrino medio: 700 € IVA esclusa');
   await expect(cases.first()).toContainText('CLV totale stimato');
   await expect(cases.first()).not.toContainText('ROAS');
   await expect(page.locator('.adv-results-note')).toContainText('compenso di gestione escluso');
