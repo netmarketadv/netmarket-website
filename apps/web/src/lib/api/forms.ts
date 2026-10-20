@@ -1,21 +1,48 @@
 import { z } from 'zod';
 
-export const contactFormSchema = z.object({
-  name: z.string().trim().min(2).max(120),
-  company: z.string().max(120).optional(),
-  email: z.string().trim().email(),
-  phone: z.string().max(40).optional(),
-  service: z.string().max(120).optional(),
-  message: z.string().trim().min(10).max(3000),
-  privacyConsent: z.literal(true),
-  marketingConsent: z.boolean().optional(),
-  website: z.string().max(0).optional(),
-  turnstileToken: z.string().optional(),
-  utm: z.record(z.string()).optional(),
-  sourceUrl: z.string().url(),
-  referrer: z.string().optional(),
-  elapsedMs: z.number().int().nonnegative().optional()
-});
+export const contactFormSchema = z
+  .object({
+    name: z.string().trim().min(2).max(120),
+    company: z.string().max(120).optional(),
+    email: z.string().trim().email(),
+    phone: z.string().max(40).optional(),
+    service: z.string().max(120).optional(),
+    message: z.string().trim().max(3000),
+    channel: z.string().max(120).optional(),
+    privacyConsent: z.literal(true),
+    marketingConsent: z.boolean().optional(),
+    website: z.string().max(0).optional(),
+    turnstileToken: z.string().optional(),
+    utm: z.record(z.string()).optional(),
+    sourceUrl: z.string().url(),
+    referrer: z.string().optional(),
+    elapsedMs: z.number().int().nonnegative().optional()
+  })
+  .superRefine((value, ctx) => {
+    let advertising = false;
+    try {
+      advertising = new URL(value.sourceUrl).pathname.replace(/\/$/, '') === '/advertising';
+    } catch {
+      return; // The URL schema already reports this error.
+    }
+    if (
+      advertising &&
+      !['Google Ads', 'Meta Ads', 'Google Ads e Meta Ads'].includes(value.channel ?? '')
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['channel'],
+        message: 'Seleziona il canale.'
+      });
+    }
+    if (!advertising && value.message.length < 10) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['message'],
+        message: 'Raccontaci il progetto in almeno 10 caratteri.'
+      });
+    }
+  });
 
 export type ContactFormPayload = z.infer<typeof contactFormSchema>;
 

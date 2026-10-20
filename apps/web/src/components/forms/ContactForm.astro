@@ -169,31 +169,44 @@ const interestOptions = serviceOptions ?? [
       channelOptions && (
         <label class="contact-form__field" for={`${idPrefix}-channel`}>
           <span>
-            Canale di interesse <em>Facoltativo</em>
+            Canale di interesse <em>Obbligatorio</em>
           </span>
           <span class="contact-form__select">
-            <select id={`${idPrefix}-channel`} name="channel">
-              <option value="">Da valutare insieme</option>
+            <select
+              id={`${idPrefix}-channel`}
+              name="channel"
+              required
+              aria-describedby={`${idPrefix}-channel-error`}
+            >
+              <option value="">Seleziona il canale</option>
               {channelOptions.map((option) => (
                 <option value={option.value}>{option.label}</option>
               ))}
             </select>
             <IconChevronDown aria-hidden="true" stroke={1.8} />
           </span>
+          <small
+            id={`${idPrefix}-channel-error`}
+            class="contact-form__error"
+            data-error-for="channel"
+          />
         </label>
       )
     }
   </div>
   <label class="contact-form__field" for={`${idPrefix}-message`}>
-    <span>Raccontaci brevemente il progetto <em>Obbligatorio</em></span>
+    <span
+      >Raccontaci brevemente il progetto <em>{channelOptions ? 'Facoltativo' : 'Obbligatorio'}</em
+      ></span
+    >
     <textarea
       id={`${idPrefix}-message`}
       name="message"
       rows={density === 'compact' ? 3 : 6}
       placeholder={messagePlaceholder}
-      required
-      minlength="10"
-      maxlength={channelOptions ? '2900' : '3000'}
+      required={!channelOptions}
+      minlength={channelOptions ? undefined : '10'}
+      maxlength="3000"
       aria-describedby={`${idPrefix}-message-hint` + ' ' + `${idPrefix}-message-error`}></textarea>
     <span id={`${idPrefix}-message-hint`} class="contact-form__hint"
       >Bastano poche righe per iniziare.</span
@@ -245,7 +258,6 @@ const interestOptions = serviceOptions ?? [
 
 <script>
   import { pushEvent } from '@netmarket/analytics';
-  import { composeContactMessage } from '@/lib/contact-context';
   import {
     collectContactAttribution,
     persistContactAttribution,
@@ -289,6 +301,7 @@ const interestOptions = serviceOptions ?? [
         input.validity.valueMissing
           ? 'Inserisci il tuo numero di telefono.'
           : 'Usa solo numeri per il telefono.',
+      channel: () => 'Seleziona il canale di interesse.',
       service: () => form?.dataset.serviceError || 'Scegli l’ambito su cui vuoi lavorare.',
       message: (input) =>
         input.validity.tooShort || input.validity.customError
@@ -310,11 +323,6 @@ const interestOptions = serviceOptions ?? [
     ) {
       const field = input.closest<HTMLElement>('.contact-form__field, .contact-form__check');
       const error = form?.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
-      if (input.name === 'message' && form?.querySelector('[name="channel"]')) {
-        input.setCustomValidity(
-          input.value.trim().length < 10 ? 'Raccontaci il progetto in almeno 10 caratteri.' : ''
-        );
-      }
       const invalid = !input.validity.valid;
       field?.classList.toggle('contact-form__field--invalid', invalid && showError);
       input.setAttribute('aria-invalid', invalid && showError ? 'true' : 'false');
@@ -417,12 +425,8 @@ const interestOptions = serviceOptions ?? [
           company: String(data.get('company') || ''),
           phone: String(data.get('phone') || ''),
           service: String(data.get('service') || ''),
-          message: form.querySelector('[name="channel"]')
-            ? composeContactMessage(
-                String(data.get('message') || ''),
-                String(data.get('channel') || '')
-              )
-            : String(data.get('message') || ''),
+          message: String(data.get('message') || ''),
+          channel: data.has('channel') ? String(data.get('channel') || '') : undefined,
           privacyConsent: true,
           marketingConsent: false,
           website: String(data.get('website') || ''),

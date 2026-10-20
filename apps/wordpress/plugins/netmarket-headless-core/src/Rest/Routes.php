@@ -98,6 +98,11 @@ final class Routes
         $phone = sanitize_text_field((string) ($payload['phone'] ?? ''));
         $service = sanitize_text_field((string) ($payload['service'] ?? ''));
         $message = sanitize_textarea_field((string) ($payload['message'] ?? ''));
+        $channel = sanitize_text_field((string) ($payload['channel'] ?? ''));
+        // Accept the previously deployed form format during the release transition.
+        if (! array_key_exists('channel', $payload) && preg_match('/^Canale di interesse: (Google Ads e Meta Ads|Google Ads|Meta Ads)\\n\\n/', $message, $match)) {
+            $channel = $match[1];
+        }
         $website = sanitize_text_field((string) ($payload['website'] ?? ''));
         $privacy = filter_var($payload['privacyConsent'] ?? false, FILTER_VALIDATE_BOOL);
         $marketing = filter_var($payload['marketingConsent'] ?? false, FILTER_VALIDATE_BOOL);
@@ -136,8 +141,11 @@ final class Routes
         if ($service !== '' && ! preg_match('/^[a-z0-9-]{1,120}$/', $service)) {
             $errors['service'] = 'invalid_service';
         }
-        if (mb_strlen($message) < 10 || mb_strlen($message) > 3000) {
+        if ((! $requiresPhone && mb_strlen($message) < 10) || mb_strlen($message) > 3000) {
             $errors['message'] = 'invalid_message';
+        }
+        if ($requiresPhone && ! in_array($channel, ['Google Ads', 'Meta Ads', 'Google Ads e Meta Ads'], true)) {
+            $errors['channel'] = 'invalid_channel';
         }
         if ($sourceUrl === '' || mb_strlen($sourceUrl) > 500) {
             $errors['sourceUrl'] = 'invalid_source';
@@ -201,6 +209,7 @@ final class Routes
             'Azienda' => $company,
             'Telefono' => $phone,
             'Servizio' => $service,
+            'Canale di interesse' => $channel,
             'Curriculum' => $isCareer ? $cvName : '',
             'Marketing' => $marketing ? 'si' : 'no',
             'Pagina di provenienza' => $sourceUrl,
@@ -218,6 +227,9 @@ final class Routes
         if ($cc !== '') {
             $headers[] = 'Cc: ' . $cc;
         }
+        if ($requiresPhone && $cc !== 'giacomo@netmarket.it') {
+            $headers[] = 'Cc: giacomo@netmarket.it';
+        }
 
         $attachments = $isCareer && $cvPath !== '' ? [$cvPath] : [];
         $sent = wp_mail($recipient, $subject, $body, $headers, $attachments);
@@ -227,10 +239,6 @@ final class Routes
         }
 
         if (\Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::isAdvertising($sourceUrl)) {
-            $channel = '';
-            if (preg_match('/^Canale di interesse: (Google Ads e Meta Ads|Google Ads|Meta Ads)\\n\\n/', $message, $match)) {
-                $channel = $match[1];
-            }
             \Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::deliver([
                 'request_id' => $requestId,
                 'name' => $name,

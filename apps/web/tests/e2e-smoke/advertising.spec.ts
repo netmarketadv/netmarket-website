@@ -75,6 +75,7 @@ test('advertising form validates, retains attribution and confirms one lead', as
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
+  await page.locator('#contact-channel').selectOption('Google Ads');
   await page.locator('#contact-privacy').check();
   await submit.click();
   await expect(page).toHaveURL(/\/grazie\/$/);
@@ -106,6 +107,7 @@ test('advertising form preserves data and restores CTA after a failed request', 
   await page.locator('#contact-email').fill('mario@example.com');
   await page.locator('#contact-message').fill('Vorrei migliorare le campagne della mia azienda.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
+  await page.locator('#contact-channel').selectOption('Google Ads');
   await page.locator('#contact-privacy').check();
   await page
     .locator('#consulenza')
@@ -344,6 +346,7 @@ for (const storage of ['blocked', 'corrupt']) {
     await page.locator('#contact-email').fill('qa@example.com');
     await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
     await page.locator('#contact-service').selectOption('contatti-preventivi');
+    await page.locator('#contact-channel').selectOption('Google Ads');
     await page.locator('#contact-privacy').check();
     await page
       .locator('#consulenza')
@@ -378,6 +381,7 @@ test('an HTTP 200 challenge cannot become a lead', async ({ page }) => {
   await page.locator('#contact-email').fill('qa@example.com');
   await page.locator('#contact-message').fill('Controllo automatico del modulo contatti.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
+  await page.locator('#contact-channel').selectOption('Google Ads');
   await page.locator('#contact-privacy').check();
   await page
     .locator('#consulenza')
@@ -430,6 +434,7 @@ for (const objective of [
     await page.locator('#contact-phone').fill('3290000000');
     await page.locator('#contact-email').fill('qa@example.com');
     await page.locator('#contact-message').fill('Vorrei parlare del mio progetto.');
+    await page.locator('#contact-channel').selectOption('Google Ads');
     await page.locator('#contact-privacy').check();
     await page
       .locator('#consulenza')
