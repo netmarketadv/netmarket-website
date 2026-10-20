@@ -127,3 +127,9 @@ Dati aggiornati su indicazione del cliente: spesa Ads 7.500 €, fatturato IVA e
 Da 1024 px la hero ospita una seconda istanza del ContactForm canonico al posto dei media BRB. La card prezzo resta sotto al testo, con colore bianco anche in hover e focus. Sotto 1024 px resta la composizione media. Le istanze hanno ID, validazione, stato invio e form_id analytics distinti; le CTA obiettivo/canale continuano a preparare solo il form finale. Telefono obbligatorio numerico e placeholder budget sono configurati solo per advertising. La sezione finale include WhatsApp con messaggio precompilato e collegamento telefonico. I test non inviano lead reali.
 
 Verifiche candidato: check:fast, 28 smoke test landing con API simulate, test PHP webhook/validazione telefono, PHPCS e PHPStan. Controllo visivo desktop 1440 px e mobile 390 px. La validazione telefono lato CMS è limitata alle richieste advertising; gli altri moduli mantengono il comportamento precedente.
+
+## Modulo: requisiti e recapito (20 ottobre 2026)
+
+Nei due form advertising il canale è obbligatorio (Google Ads, Meta Ads o entrambi), il messaggio è facoltativo e il telefono resta obbligatorio con sole cifre. Canale, obiettivo e messaggio sono campi distinti nel payload, nel webhook e nell’email. Gli altri form mantengono il messaggio obbligatorio. Il server riconosce ancora il prefisso del canale dei form precedenti durante la transizione.
+
+Le richieste advertising arrivano a segreteria@netmarket.it, in CC a enrico@netmarket.it e giacomo@netmarket.it; gli altri flussi mantengono il recapito esistente. I test PHP intercettano wp_mail e il webhook; gli smoke browser simulano la risposta, senza creare lead reali. La conferma applicativa indica accettazione da wp_mail, non prova la consegna in casella.

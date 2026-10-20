@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { nextAutomaticChoice } from '../src/lib/advertising-prefill';
-import { composeContactMessage } from '../src/lib/contact-context';
+import { contactFormSchema } from '../src/lib/api/forms';
 
 describe('advertising comparison form choices', () => {
   it('replaces an earlier generated choice with the next CTA choice', () => {
@@ -20,15 +20,26 @@ describe('advertising comparison form choices', () => {
       'meta'
     );
   });
-  it('does not let channel context satisfy project description validation', () => {
-    for (const message of ['', '   ', 'ciao', 'a'.repeat(3001)]) {
-      expect(() => composeContactMessage(message, 'Google Ads e Meta Ads')).toThrow();
+  it('requires a valid channel and accepts an optional message only on advertising', () => {
+    const payload = {
+      name: 'QA Test',
+      email: 'qa@example.invalid',
+      privacyConsent: true,
+      sourceUrl: 'https://netmarket.it/advertising/',
+      message: '',
+      channel: 'Meta Ads'
+    };
+    expect(contactFormSchema.safeParse(payload).success).toBe(true);
+    expect(contactFormSchema.safeParse({ ...payload, message: 'Ciao' }).success).toBe(true);
+    for (const channel of [undefined, '', 'email']) {
+      expect(contactFormSchema.safeParse({ ...payload, channel }).success).toBe(false);
     }
-    expect(composeContactMessage('  Vendiamo prodotti artigianali.  ', 'Meta Ads')).toBe(
-      'Canale di interesse: Meta Ads\n\nVendiamo prodotti artigianali.'
-    );
-    expect(composeContactMessage('Testo scritto dal cliente.', '')).toBe(
-      'Testo scritto dal cliente.'
+    expect(
+      contactFormSchema.safeParse({ ...payload, sourceUrl: 'https://netmarket.it/contatti/' })
+        .success
+    ).toBe(false);
+    expect(contactFormSchema.safeParse({ ...payload, message: 'a'.repeat(3001) }).success).toBe(
+      false
     );
   });
 });

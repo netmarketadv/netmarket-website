@@ -62,7 +62,8 @@ class WP_REST_Request {
     public function get_file_params(): array { return []; }
 }
 class WP_REST_Response {
-    public function __construct(public array $data, public int $status) {}
+    public function __construct(public array $data, public int $status = 200) {}
+    public function header(string $name, string $value): void {}
 }
 $routes = new \Netmarket\HeadlessCore\Rest\Routes(new \Netmarket\HeadlessCore\Taxonomies\Registry());
 foreach ([
@@ -82,3 +83,33 @@ foreach ([
     check(isset($response->data['fields']['phone']) === $invalid, 'Phone validation must match landing policy');
 }
 echo "Advertising phone validation tests passed.\n";
+
+// All outbound transports are mocked; no email or lead reaches a real recipient.
+const MINUTE_IN_SECONDS = 60;
+$mailCalls = [];
+function get_transient(string $key): int { return 0; }
+function set_transient(string $key, mixed $value, int $ttl): bool { return true; }
+function apply_filters(string $name, mixed $value): mixed { return $value; }
+function wp_mail(string $to, string $subject, string $body, array $headers, array $attachments): bool {
+    global $mailCalls;
+    $mailCalls[] = compact('to', 'subject', 'body', 'headers');
+    return true;
+}
+$payload = ['name' => 'QA Test', 'email' => 'qa@example.invalid', 'phone' => '3290000000',
+    'sourceUrl' => 'https://netmarket.it/advertising/', 'privacyConsent' => true,
+    'channel' => 'Meta Ads', 'message' => ''];
+$response = $routes->contactForm(new WP_REST_Request($payload));
+check($response->status === 200, 'Optional blank message must succeed');
+check(count($mailCalls) === 1, 'One email per successful submission');
+check($mailCalls[0]['to'] === 'segreteria@netmarket.it', 'Correct To recipient');
+check(in_array('Cc: enrico@netmarket.it', $mailCalls[0]['headers'], true), 'Enrico must receive CC');
+check(in_array('Cc: giacomo@netmarket.it', $mailCalls[0]['headers'], true), 'Giacomo must receive CC');
+check(str_contains($mailCalls[0]['body'], 'Canale di interesse: Meta Ads'), 'Email includes the selected channel');
+foreach (['', 'Invalid'] as $channel) {
+    $response = $routes->contactForm(new WP_REST_Request(array_merge($payload, ['channel' => $channel])));
+    check($response->status === 422 && isset($response->data['fields']['channel']), 'Reject missing or invalid channel');
+}
+check(count($mailCalls) === 1, 'Invalid channel must never send mail');
+$response = $routes->contactForm(new WP_REST_Request(array_merge($payload, ['sourceUrl' => 'https://netmarket.it/contatti/'])));
+check($response->status === 422 && isset($response->data['fields']['message']), 'Other forms still require message');
+echo "Advertising optional message, channel and mail routing tests passed.\n";

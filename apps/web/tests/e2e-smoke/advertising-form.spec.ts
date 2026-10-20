@@ -13,6 +13,9 @@ async function fillVisitor(page: Page) {
     .locator('#contact-message')
     .fill('Vendiamo prodotti artigianali e cerchiamo nuovi clienti.');
   await page.locator('#contact-service').selectOption('contatti-preventivi');
+  if (!(await page.locator('#contact-channel').inputValue())) {
+    await page.locator('#contact-channel').selectOption('Meta Ads');
+  }
   await page.locator('#contact-privacy').check();
 }
 
@@ -53,26 +56,32 @@ test('new CTA choices replace automatic selections without overwriting visitor c
   await expect(page.locator('#contact-channel')).toHaveValue('Meta Ads');
 });
 
-test('automatic choices cannot satisfy the required project description', async ({ page }) => {
-  let requests = 0;
-  await page.route(endpoint, (route) => {
-    requests++;
-    return route.fulfill({ json: { success: true } });
+for (const placement of ['hero-contact', 'contact']) {
+  test(`${placement}: channel is mandatory and message is optional`, async ({ page }) => {
+    let requests = 0;
+    await page.route(endpoint, (route) => {
+      requests++;
+      expect(route.request().postDataJSON()).toMatchObject({ channel: 'Google Ads', message: '' });
+      return route.fulfill({ json: { success: true } });
+    });
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto(url);
+    await page.locator(`#${placement}-name`).fill('QA Netmarket');
+    await page.locator(`#${placement}-email`).fill('qa@example.invalid');
+    await page.locator(`#${placement}-phone`).fill('3290000000');
+    await page.locator(`#${placement}-service`).selectOption('contatti-preventivi');
+    await page.locator(`#${placement}-privacy`).check();
+    const form = page.locator('form').filter({ has: page.locator(`#${placement}-name`) });
+    await form.getByRole('button', { name: 'Richiedi confronto gratuito' }).click();
+    await expect(page.locator(`#${placement}-channel`)).toBeFocused();
+    await expect(page.locator(`#${placement}-channel-error`)).toContainText('Seleziona');
+    expect(requests).toBe(0);
+    await page.locator(`#${placement}-channel`).selectOption('Google Ads');
+    await form.getByRole('button', { name: 'Richiedi confronto gratuito' }).click();
+    await expect(page).toHaveURL(/\/grazie\/$/);
+    expect(requests).toBe(1);
   });
-  await page.goto(url);
-  await fillVisitor(page);
-  await page.locator('[data-advertising-channel="Meta Ads"]').click();
-  for (const text of ['', '     ', 'poche']) {
-    await page.locator('#contact-message').fill(text);
-    await submit(page).click();
-    await expect(page.locator('#contact-message')).toHaveAttribute('aria-invalid', 'true');
-    await expect(page.locator('#contact-message')).toBeFocused();
-  }
-  expect(requests).toBe(0);
-  expect(
-    await page.evaluate(() => window.dataLayer?.some((event) => event.event === 'generate_lead'))
-  ).toBe(false);
-});
+}
 
 test('confirmed success sends the channel separately from the objective and generates one anonymous event', async ({
   page
@@ -85,10 +94,9 @@ test('confirmed success sends the channel separately from the objective and gene
   await page.route(endpoint, async (route) => {
     requests++;
     const body = route.request().postDataJSON();
+    expect(body.channel).toBe('Meta Ads');
     expect(body.service).toBe('contatti-preventivi');
-    expect(body.message).toBe(
-      'Canale di interesse: Meta Ads\n\nVendiamo prodotti artigianali e cerchiamo nuovi clienti.'
-    );
+    expect(body.message).toBe('Vendiamo prodotti artigianali e cerchiamo nuovi clienti.');
     expect(body.sourceUrl).toContain('/advertising/');
     expect(body.utm).toMatchObject({ utm_source: 'meta', fbclid: 'comparison-test' });
     await responseGate;
@@ -297,6 +305,7 @@ test('desktop hero form is independent, numeric phone is required and direct lin
   await hero.getByLabel('Nome', { exact: false }).fill('QA Netmarket');
   await hero.locator('[name="email"]').fill('qa@example.invalid');
   await hero.locator('[name="service"]').selectOption('contatti-preventivi');
+  await hero.locator('[name="channel"]').selectOption('Google Ads');
   await hero
     .locator('[name="message"]')
     .fill('Vorrei acquisire nuovi contatti per la mia azienda.');
