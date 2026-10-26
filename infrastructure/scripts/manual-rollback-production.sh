@@ -27,6 +27,7 @@ done
 [[ "$CURRENT_SHA" =~ ^[0-9a-f]{40}$ && "$RESTORE_SHA" =~ ^[0-9a-f]{40}$ && "$CURRENT_SHA" != "$RESTORE_SHA" ]] || { echo "SHA non validi."; exit 1; }
 [[ "$SNAPSHOT" == "before-$CURRENT_SHA" ]] || { echo "Serve lo snapshot esatto before-<current-sha>, mai latest."; exit 1; }
 if [[ "$MODE" == execute ]]; then
+  [[ "${GITHUB_ACTIONS:-}" == true && "${GITHUB_REPOSITORY:-}" == netmarketadv/netmarket-website && "${GITHUB_REF:-}" == refs/heads/main ]] || { echo "Rollback execute consentito solo nella pipeline production protetta."; exit 1; }
   [[ "$DIGEST" =~ ^[0-9a-f]{64}$ && "$CONFIRM" == "ROLLBACK NETMARKET $CURRENT_SHA TO $RESTORE_SHA" ]] || { echo "Conferma esatta e digest del piano obbligatori."; exit 1; }
 fi
 for var in SG_SSH_HOST SG_SSH_PORT SG_SSH_USER SG_SSH_PRIVATE_KEY SG_SSH_KNOWN_HOSTS; do

@@ -15,6 +15,11 @@ expected_digest="$6"
 parent="$(dirname -- "$target")"
 rollback="$parent/.netmarket-rollbacks/$snapshot"
 
+validate_current_identity() {
+  [[ -d "$target" && ! -L "$target" && -s "$target/netmarket-release" && ! -L "$target/netmarket-release" ]] || return 1
+  [[ "$(cat "$target/netmarket-release")" == "$current" ]] || return 1
+}
+
 validate_release() {
   local directory="$1" sha="$2" ref refs
   [[ -d "$directory" && ! -L "$directory" ]] || return 1
@@ -38,7 +43,7 @@ tree_digest() {
   (cd -- "$1" && find . -path './.well-known' -prune -o -type f -print0 |
     LC_ALL=C sort -z | xargs -0 sha256sum | sha256sum | cut -d ' ' -f 1)
 }
-validate_release "$target" "$current" || { echo "Frontend corrente non corrispondente o incompleto."; exit 1; }
+validate_current_identity || { echo "Identita frontend corrente non verificabile."; exit 1; }
 validate_release "$rollback" "$restore" || { echo "Snapshot non corrispondente o incompleto."; exit 1; }
 digest="$(tree_digest "$rollback")"
 [[ "$expected_digest" == - || "$expected_digest" == "$digest" ]] || { echo "Snapshot cambiato rispetto al piano."; exit 1; }
@@ -51,7 +56,7 @@ fi
 lock="$parent/.netmarket-release-lock"
 mkdir -- "$lock" || { echo "Operazione production gia in corso."; exit 1; }
 trap 'rmdir -- "$lock"' EXIT
-validate_release "$target" "$current" && validate_release "$rollback" "$restore" || { echo "Stato cambiato prima del ripristino."; exit 1; }
+validate_current_identity && validate_release "$rollback" "$restore" || { echo "Stato cambiato prima del ripristino."; exit 1; }
 [[ "$(tree_digest "$rollback")" == "$expected_digest" ]] || { echo "Integrita snapshot cambiata."; exit 1; }
 failed="$parent/.netmarket-failed/$current-$(date -u +%Y%m%d%H%M%S)"
 [[ ! -e "$failed" ]] || { echo "Destinazione failed gia presente."; exit 1; }

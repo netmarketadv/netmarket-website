@@ -47,6 +47,17 @@ describe('actual CMS client provenance', () => {
     expect(JSON.stringify(records())).not.toContain('unit-test-token');
     expect(JSON.stringify(records())).not.toContain('content');
   });
+  it('records the actual response origin instead of trusting a redirect', async () => {
+    const records = audit();
+    const response = new Response(JSON.stringify({ value: 'content' }));
+    Object.defineProperty(response, 'url', { value: 'https://unexpected.example/settings' });
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
+    await fetchCms('/settings', z.object({ value: z.string() }));
+    expect(records()).toMatchObject([
+      { origin: 'https://unexpected.example', authenticated: false }
+    ]);
+  });
+
   it('records denied access even when a caller could catch the error', async () => {
     const records = audit();
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 403 })));

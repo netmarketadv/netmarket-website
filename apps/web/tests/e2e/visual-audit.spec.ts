@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 for (const path of ['/', '/agenzia/', '/servizi/siti-web/']) {
   test(`project rail advances and resumes after returning to ${path}`, async ({ page }) => {

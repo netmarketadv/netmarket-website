@@ -75,7 +75,10 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
       const parsed = parseEndpoint(path, schema, payload) as z.output<TSchema>;
       recordCmsAccess(path, {
         status: 'ok',
-        authenticated: Boolean(headers.Authorization),
+        authenticated:
+          Boolean(headers.Authorization) &&
+          new URL(response.url || endpoint).origin === new URL(endpoint).origin,
+        origin: new URL(response.url || endpoint).origin,
         payload
       });
       return parsed;

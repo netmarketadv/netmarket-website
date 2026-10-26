@@ -1,4 +1,4 @@
-export function auditCmsProvenance(entries) {
+export function auditCmsProvenance(entries, requiredSlugs = {}) {
   if (!entries.length) throw new Error('Nessuna provenienza CMS registrata.');
   for (const entry of entries) {
     if (
@@ -24,6 +24,12 @@ export function auditCmsProvenance(entries) {
       pages.some((entry) => !Number.isInteger(entry.count) || entry.count <= 0)
     ) {
       throw new Error('Archivio CMS principale mancante o vuoto: ' + archive);
+    }
+    const returned = new Set(
+      pages.flatMap((entry) => (Array.isArray(entry.slugs) ? entry.slugs : []))
+    );
+    if ((requiredSlugs[archive] ?? []).some((slug) => !returned.has(slug))) {
+      throw new Error('Contenuti CMS approvati mancanti nella build: ' + archive);
     }
     const expected = Math.max(...pages.map((entry) => entry.pagination?.totalPages ?? 0));
     const seen = new Set(pages.map((entry) => entry.pagination?.page));

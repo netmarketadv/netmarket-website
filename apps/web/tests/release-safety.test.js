@@ -19,11 +19,32 @@ describe('production approval and CMS provenance', () => {
       })
     ).toThrow('branch');
     expect(() =>
-      assertProductionProtection({
-        protection_rules: [{ type: 'required_reviewers', reviewers: [{}] }],
-        deployment_branch_policy: { custom_branch_policies: true }
-      })
+      assertProductionProtection(
+        {
+          protection_rules: [{ type: 'required_reviewers', reviewers: [{}] }],
+          deployment_branch_policy: { custom_branch_policies: true }
+        },
+        [{ name: 'main', type: 'branch' }]
+      )
     ).not.toThrow();
+  });
+
+  it('rejects wildcard branches, extra branches and tags in the production policy', () => {
+    const environment = {
+      protection_rules: [{ type: 'required_reviewers', reviewers: [{}] }],
+      deployment_branch_policy: { custom_branch_policies: true }
+    };
+    for (const policies of [
+      [],
+      [{ name: '*', type: 'branch' }],
+      [{ name: 'main', type: 'tag' }],
+      [
+        { name: 'main', type: 'branch' },
+        { name: 'develop', type: 'branch' }
+      ]
+    ]) {
+      expect(() => assertProductionProtection(environment, policies)).toThrow('main');
+    }
   });
 
   const entries = () =>
@@ -47,6 +68,15 @@ describe('production approval and CMS provenance', () => {
     data[0].authenticated = false;
     expect(() => auditCmsProvenance(data)).toThrow('autenticato');
   });
+  it('rejects primary records removed between preflight and the actual build', () => {
+    const data = entries();
+    data[0].slugs = ['approved'];
+    expect(() => auditCmsProvenance(data, { services: ['approved'] })).not.toThrow();
+    expect(() => auditCmsProvenance(data, { services: ['approved', 'missing'] })).toThrow(
+      'mancanti nella build'
+    );
+  });
+
   it('rejects empty or missing primary archives and incomplete pagination', () => {
     expect(() => auditCmsProvenance(entries().slice(1))).toThrow('mancante');
     const empty = entries();
@@ -101,6 +131,35 @@ describe('manual production rollback against local synthetic fixtures only', () 
       });
     return { parent, target, saved, run };
   }
+  it('refuses a real execute wrapper outside the protected workflow before reading SSH secrets', () => {
+    const wrapper = fileURLToPath(
+      new URL('../../../infrastructure/scripts/manual-rollback-production.sh', import.meta.url)
+    );
+    const result = spawnSync(
+      'bash',
+      [
+        wrapper,
+        '--execute',
+        '--host',
+        'netmarket.it',
+        '--path',
+        '/home/customer/www/netmarket.it/public_html',
+        '--snapshot',
+        'before-' + current,
+        '--current',
+        current,
+        '--restore',
+        restore
+      ],
+      {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_ACTIONS: '', GITHUB_REPOSITORY: '', GITHUB_REF: '' }
+      }
+    );
+    expect(result.status).not.toBe(0);
+    expect(result.stdout).toContain('pipeline production protetta');
+  });
+
   it('plans without mutation and requires a digest before any switch', () => {
     const f = fixture(),
       plan = f.run();
@@ -117,6 +176,17 @@ describe('manual production rollback against local synthetic fixtures only', () 
     expect(readFileSync(join(f.target, 'netmarket-release'), 'utf8').trim()).toBe(restore);
     expect(result.stdout).toContain('Frontend rimosso conservato');
   });
+  it('can recover a damaged current frontend while keeping snapshot integrity strict', () => {
+    const f = fixture();
+    rmSync(join(f.target, 'assets/app.js'));
+    writeFileSync(join(f.target, 'index.html'), 'damaged current release');
+    const plan = f.run();
+    expect(plan.status, plan.stderr + plan.stdout).toBe(0);
+    const digest = plan.stdout.match(/^digest=([0-9a-f]{64})$/m)[1];
+    expect(f.run('execute', digest).status).toBe(0);
+    expect(readFileSync(join(f.target, 'netmarket-release'), 'utf8').trim()).toBe(restore);
+  });
+
   it('rejects a changed snapshot, wrong identity and latest selection without mutation', () => {
     const f = fixture(),
       digest = f.run().stdout.match(/^digest=([0-9a-f]{64})$/m)[1];

@@ -3,6 +3,8 @@ import { mkdirSync, readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 import { createHash } from 'node:crypto';
 import { auditCmsProvenance } from './audit-cms-provenance.mjs';
+import { verifyProductionCandidate } from './verify-production-candidate.mjs';
+import { redactKnownSecrets, assertNoKnownSecrets } from './candidate-secrets.mjs';
 
 const sha = process.env.PUBLIC_BUILD_SHA;
 if (
@@ -34,7 +36,14 @@ const build = spawnSync('pnpm', ['build'], {
   maxBuffer: 32 * 1024 * 1024
 });
 const log = (build.stdout ?? '') + (build.stderr ?? '');
-writeFileSync(resolve(output, 'build.log'), log);
+const secrets = [
+  process.env.CMS_BASIC_AUTH_PASSWORD,
+  process.env.CMS_BUILD_TOKEN,
+  Buffer.from(process.env.CMS_BASIC_AUTH_USER + ':' + process.env.CMS_BASIC_AUTH_PASSWORD).toString(
+    'base64'
+  )
+];
+writeFileSync(resolve(output, 'build.log'), redactKnownSecrets(log, secrets));
 if (
   build.status !== 0 ||
   /CMS.*(?:unavailable|skipped)|using (?:local build|migration snapshot) fallback|trying .*fallback/i.test(
@@ -50,7 +59,10 @@ const entries = readFileSync(auditPath, 'utf8')
   .split('\n')
   .filter(Boolean)
   .map((line) => JSON.parse(line));
-const provenance = auditCmsProvenance(entries);
+const inventory = JSON.parse(
+  readFileSync(new URL('../../data/releases/stape-cms-inventory.json', import.meta.url), 'utf8')
+);
+const provenance = auditCmsProvenance(entries, inventory.requiredSlugs);
 execFileSync(process.execPath, ['infrastructure/scripts/audit-production-build.mjs'], {
   stdio: 'inherit'
 });
@@ -63,6 +75,7 @@ function walk(directory) {
     return entry.isDirectory() ? walk(path) : [path];
   });
 }
+for (const file of walk(dist)) assertNoKnownSecrets(readFileSync(file), secrets);
 const files = Object.fromEntries(
   walk(dist)
     .sort()
@@ -89,6 +102,7 @@ writeFileSync(
     2
   ) + '\n'
 );
+verifyProductionCandidate({ directory: output, expectedSha: sha, frontendDirectory: dist });
 console.log(
   'Candidate completo e autenticato: ' +
     sha +

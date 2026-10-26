@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../e2e/fixtures';
 
 const endpoint = '**/wp-json/netmarket/v1/forms/contact';
 const url = '/advertising/';
