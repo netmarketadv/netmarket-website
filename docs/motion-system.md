@@ -111,7 +111,7 @@ La state machine reveal e:
 - `ready`: elemento registrato dall'orchestratore e temporaneamente animabile;
 - `revealed`: elemento visibile in modo definitivo, con delay ripulito dopo l'ingresso.
 
-Gli elementi sopra o gia vicini al viewport vengono rivelati in modo fail-safe. Alla registrazione e al refresh GSAP, i target gia vicini al viewport usano il bordo inferiore come soglia di ingresso: un reload con scroll ripristinato non lascia nascosto un titolo gia parzialmente visibile. I target ancora lontani mantengono le soglie editoriali esistenti. Lo stagger e percepibile ma breve; non deve mai rallentare la leggibilita del contenuto.
+Gli elementi sopra o gia vicini al viewport vengono rivelati in modo fail-safe. Alla registrazione e al refresh GSAP, i target gia vicini al viewport usano il bordo inferiore come soglia di ingresso: un reload con scroll ripristinato non lascia nascosto un titolo gia parzialmente visibile. Un IntersectionObserver condiviso avvia lo stesso tween se il contenuto entra effettivamente nel viewport dopo cambi di geometria o scroll ripristinato, senza aggiungere listener scroll e senza cambiare easing o durate. I target gia superati vengono completati al primo frame; quelli ancora lontani restano affidati al motore di scroll. Lo stagger e percepibile ma breve; non deve mai rallentare la leggibilita del contenuto.
 
 ## Performance Budget
 

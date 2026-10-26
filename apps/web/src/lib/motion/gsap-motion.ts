@@ -4,10 +4,11 @@ import { prefersReducedMotion } from './reduced-motion';
 
 type GsapTarget = string | Element | Element[] | HTMLElement[] | NodeListOf<Element>;
 type GsapVars = Record<string, unknown>;
+type GsapTween = { play: () => void; progress: (value: number) => void };
 type Gsap = {
   registerPlugin: (...plugins: unknown[]) => void;
   set: (target: GsapTarget, vars: GsapVars) => void;
-  to: (target: GsapTarget, vars: GsapVars) => void;
+  to: (target: GsapTarget, vars: GsapVars) => GsapTween;
   fromTo: (target: GsapTarget, fromVars: GsapVars, toVars: GsapVars) => void;
   quickTo: (target: GsapTarget, property: string, vars: GsapVars) => (value: number) => void;
 };
@@ -197,11 +198,35 @@ function finalVarsFor(target: HTMLElement) {
   return { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' };
 }
 
-function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = false): void {
+function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   const candidates = lineOnly
     ? Array.from(document.querySelectorAll<HTMLElement>(lineRevealSelector))
     : collectRevealTargets();
   const targets = candidates.filter((target) => target.dataset.motionState !== 'revealed');
+  // Restored scroll and late line/font layout can invalidate ScrollTrigger's cached start.
+  // Keep the existing tween, but start it when the browser observes visible content.
+  const pending = new Map<HTMLElement, GsapTween>();
+  const revealVisible = (target: HTMLElement, passed = false) => {
+    const tween = pending.get(target);
+    if (!tween) return;
+    pending.delete(target);
+    observer?.unobserve(target);
+    if (passed) tween.progress(1);
+    else tween.play();
+    if (pending.size === 0) observer?.disconnect();
+  };
+  const observer = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) revealVisible(entry.target as HTMLElement);
+        });
+      })
+    : undefined;
+  const watch = (target: HTMLElement, tween: GsapTween) => {
+    if (target.dataset.motionState === 'revealed') return;
+    pending.set(target, tween);
+    observer?.observe(target);
+  };
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
     target.dataset.motionReveal = 'ready';
@@ -212,7 +237,7 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
       if (words.length > 0) {
         const lineIndexes = lineIndexForWords(words);
         gsap.set(words, { yPercent: 112, opacity: 0, rotate: 0.001 });
-        gsap.to(words, {
+        const tween = gsap.to(words, {
           yPercent: 0,
           opacity: 1,
           duration: 0.82,
@@ -236,12 +261,13 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
             target.classList.add('is-visible');
           }
         });
+        watch(target, tween);
         return;
       }
     }
 
     gsap.set(target, initialVarsFor(target));
-    gsap.to(target, {
+    const tween = gsap.to(target, {
       ...finalVarsFor(target),
       duration: target.matches(mediaRevealSelector) ? 0.96 : 0.72,
       ease: target.matches(mediaRevealSelector) ? 'power4.out' : 'expo.out',
@@ -259,14 +285,15 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
         gsap.set(target, { clearProps: 'clipPath,filter,transform' });
       }
     });
+    watch(target, tween);
   });
 
   window.requestAnimationFrame(() => {
     targets.forEach((target) => {
       if (target.dataset.motionState === 'revealed') return;
-      if (elementIsNearViewport(target)) {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.refresh());
-      }
+      const rect = target.getBoundingClientRect();
+      if (rect.bottom < 0) revealVisible(target, true);
+      else if (rect.top < window.innerHeight) revealVisible(target);
     });
   });
 }
@@ -371,7 +398,7 @@ export async function initGsapMotion(options: GsapMotionOptions = {}): Promise<b
     gsap.registerPlugin(ScrollTrigger);
     document.documentElement.classList.add(options.lineOnly ? 'motion-gsap-lines' : 'motion-gsap');
     document.documentElement.dataset.motionEngine = options.lineOnly ? 'gsap-lines' : 'gsap';
-    revealWithGsap(gsap, ScrollTrigger, options.lineOnly);
+    revealWithGsap(gsap, options.lineOnly);
     if (!options.lineOnly) {
       enhanceMediaScroll(gsap);
       enhanceScrollProgress(gsap);

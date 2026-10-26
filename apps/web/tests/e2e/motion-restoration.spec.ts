@@ -15,14 +15,31 @@ for (const viewport of [
       document.addEventListener(
         'DOMContentLoaded',
         () => {
-          void document.fonts.ready.then(() => {
+          void (async () => {
+            await document.fonts.ready;
             const target = document.getElementById('reviews-title');
-            if (target)
-              window.scrollTo({
-                top: target.getBoundingClientRect().top + scrollY - innerHeight * 0.97,
-                behavior: 'instant'
+            if (!target) return;
+            // Word splitting changes geometry in WebKit. Restore the intended position
+            // after that layout is ready, rather than testing a heading outside the viewport.
+            await new Promise<void>((resolve) => {
+              const observer = new MutationObserver(() => {
+                if (target.dataset.motionLineSplit !== 'ready') return;
+                observer.disconnect();
+                resolve();
               });
-          });
+              if (target.dataset.motionLineSplit === 'ready') resolve();
+              else
+                observer.observe(target, {
+                  attributes: true,
+                  attributeFilter: ['data-motion-line-split']
+                });
+            });
+            await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+            window.scrollTo({
+              top: target.getBoundingClientRect().top + scrollY - innerHeight * 0.97,
+              behavior: 'instant'
+            });
+          })();
         },
         { once: true }
       );
