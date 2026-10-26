@@ -36,7 +36,7 @@ for (const route of requiredRoutes) {
 const home = await get('/');
 if (meta(home.body, 'netmarket-build') !== expectedSha) failures.push('homepage: SHA non corrispondente');
 if (meta(home.body, 'netmarket-environment') !== 'production') failures.push('homepage: environment non production');
-if (!home.body.includes('GTM-K782CJ46')) failures.push('homepage: GTM production assente');
+if (!home.body.includes('https://web.netmarket.it/10ddffrvzl.js?')) failures.push('homepage: GTM production assente');
 if (!home.body.includes("analytics_storage: 'denied'")) failures.push('homepage: Consent Mode denied assente');
 
 const assetUrls = [...home.body.matchAll(/(?:src|href)=["'](\/assets\/[^"']+)/g)].map((match) => match[1]);
