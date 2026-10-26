@@ -228,7 +228,7 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
           },
           scrollTrigger: {
             trigger: target,
-            start: 'top 94%',
+            start: () => (elementIsNearViewport(target) ? 'top bottom' : 'top 94%'),
             once: true
           },
           onStart: () => {
@@ -248,7 +248,7 @@ function revealWithGsap(gsap: Gsap, ScrollTrigger: ScrollTrigger, lineOnly = fal
       delay: delayFor(target),
       scrollTrigger: {
         trigger: target,
-        start: 'top 96%',
+        start: () => (elementIsNearViewport(target) ? 'top bottom' : 'top 96%'),
         once: true
       },
       onStart: () => {
