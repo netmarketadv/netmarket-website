@@ -122,3 +122,11 @@ Ordine operativo:
 ### Webhook CMS: deploy ripetibili
 
 La configurazione distingue creazione e aggiornamento dell’opzione server-only. Su un valore esistente, `wp option update` senza `--autoload` accetta anche il caso invariato; `wp option set-autoload ... off` mantiene separatamente l’esclusione dall’autoload. Un’opzione nuova viene creata direttamente con autoload disabilitato. Il valore continua a passare solo da stdin, senza output o argomenti di processo. Questo evita il falso errore WP-CLI nei deploy successivi alla prima configurazione.
+
+## Candidate Stape e rollback production manuale
+
+Il workflow production propone ora la modalità `candidate` senza deploy; la modalità `deploy`
+richiede la conferma esplicita esistente. Entrambe richiedono un reviewer production effettivo
+e un candidate senza errori o fallback CMS. Il rollback manuale richiede snapshot esatto,
+SHA, digest del piano e approvazione. Procedure e blocchi correnti sono nel
+[rapporto del candidate Stape](stape-release-candidate.md). Nessun rilascio è autorizzato dal solo rapporto.

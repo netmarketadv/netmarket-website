@@ -1,5 +1,8 @@
 # Audit pre-release Stape Custom Loader — 26 ottobre 2026
 
+> Riferimento storico del branch sorgente. Preparazione e verifiche successive:
+> [candidate isolato e blocchi aggiornati](stape-release-candidate.md).
+
 **Giudizio: NO-GO per il rilascio del candidate attuale.** La sostituzione del loader è
 compatibile a livello di codice e configurazione pubblica. È stata corretta una regressione
 privacy del noscript. Restano da chiudere la completezza CMS del candidate, la sua preparazione
