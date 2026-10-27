@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netmarket\Release;
+namespace Netmarket\HeadlessCore\Release;
 
 use Netmarket\HeadlessCore\ContentTypes\Registry;
 use Netmarket\HeadlessCore\Content\Relations;

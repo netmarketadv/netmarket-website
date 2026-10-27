@@ -28,7 +28,7 @@ if (in_array($mode, ['apply', 'rollback'], true)) {
     }
 }
 $plan = json_decode(file_get_contents($planFile), true, 512, JSON_THROW_ON_ERROR);
-$importer = new \Netmarket\Release\Importer($plan, $digest, $assets, $journal);
+$importer = new \Netmarket\HeadlessCore\Release\Importer($plan, $digest, $assets, $journal);
 $result = match ($mode) {
     'apply' => $importer->apply(),
     'rollback-plan' => $importer->rollback(),

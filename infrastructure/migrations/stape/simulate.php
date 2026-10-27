@@ -101,7 +101,7 @@ $before=serialize([$GLOBALS['simPosts'][$untouched],$GLOBALS['simMeta'][$untouch
 if (($argv[4] ?? '') === 'conflict') {
     wp_insert_post(['post_type'=>'nm_service','post_status'=>'draft','post_name'=>$plan['records'][0]['slug'],'post_title'=>'Existing unowned editorial content']);
 }
-$importer=new \Netmarket\Release\Importer($plan,$digest,$argv[2],$journal);
+$importer=new \Netmarket\HeadlessCore\Release\Importer($plan,$digest,$argv[2],$journal);
 $dry=$importer->inspect();
 if (count($GLOBALS['simPosts']) !== 1 || file_exists($journal)) throw new RuntimeException('Dry-run wrote state');
 if (($argv[4] ?? '') === 'partial-failure') {
@@ -114,7 +114,7 @@ if (($argv[4] ?? '') === 'partial-failure') {
     exit(0);
 }
 $applied=$importer->apply();
-$again=(new \Netmarket\Release\Importer($plan,$digest,$argv[2],$journal))->apply();
+$again=(new \Netmarket\HeadlessCore\Release\Importer($plan,$digest,$argv[2],$journal))->apply();
 if (!$again['unchanged']) throw new RuntimeException('Idempotency failed');
 $serializer=new \Netmarket\HeadlessCore\Rest\Routes(new \Netmarket\HeadlessCore\Taxonomies\Registry());
 $method=new ReflectionMethod($serializer,'serializePost');
