@@ -72,7 +72,7 @@ jobs:
     if: ${{ inputs.mode == 'candidate' }}
     needs: guard
     environment: production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     concurrency:
       group: production-candidate-${{ github.sha }}
@@ -152,6 +152,12 @@ jobs:
           CMS_BASIC_AUTH_USER: ''
           CMS_BASIC_AUTH_PASSWORD: ''
 
+      - name: Use official signed Ubuntu archive for browser dependencies
+        run: |
+          set -Eeuo pipefail
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "30";' 'Acquire::https::Timeout "30";' | sudo tee /etc/apt/apt.conf.d/80netmarket-browser-network >/dev/null
       - name: Install Playwright browser
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
 
