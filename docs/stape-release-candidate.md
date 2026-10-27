@@ -439,3 +439,15 @@ si disconnettono a fine coda, senza polling continuo o nuovi preset. Il test sen
 sposta il contenuto tramite un cambio layout tardivo: sul bundle precedente fallisce in Firefox e
 WebKit con ready invece di revealed, fornendo una riproduzione negativa deterministica.
 Tracking, consensi, loader e contenuti CMS invariati; nessuna configurazione live modificata.
+
+### Apertura nativa scheda progetto nella QA (27 ottobre 2026)
+
+La run `40547611756` ha prodotto un candidate CMS integro (233 file, 60 accessi autenticati,
+zero retry CMS, 17 record e 38 media verificati), motion 21/21 e smoke Stape 3/3.
+I log completi mostrano però un retry per ciascuna full E2E: il test rail raggiunge il timeout
+aspettando la nuova scheda dopo il clic centrale; non falliscono le assertion sul tracking.
+Il problema non si è riprodotto nelle 15 ripetizioni locali del test precedente sugli stessi byte.
+Il test ora passa prima attraverso hover reale e verifica is-paused, quindi usa l'apertura nativa
+Ctrl/Cmd+clic con attesa concorrente della scheda. Restano invariati timeout, destinazione,
+main visibile e tutte le assertion di avanzamento/ripresa. Nessuna modifica runtime o tracking.
+La validazione completa resta necessaria prima della selezione del nuovo candidate.

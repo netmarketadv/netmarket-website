@@ -25,9 +25,14 @@ for (const path of ['/', '/agenzia/', '/servizi/siti-web/']) {
     const projectLink = rail.locator('a').first();
     await expect(projectLink).toHaveAttribute('href', /^\/progetti\/.+\/$/);
     const destination = new URL((await projectLink.getAttribute('href'))!, page.url()).href;
-    const newTab = page.context().waitForEvent('page');
-    await projectLink.click({ button: 'middle' });
-    const projectTab = await newTab;
+    // Pause the moving rail through its real hover interaction before activating
+    // the link. Use the native new-tab modifier rather than an auxiliary click.
+    await projectLink.hover();
+    await expect(rail).toHaveClass(/is-paused/);
+    const [projectTab] = await Promise.all([
+      page.context().waitForEvent('page'),
+      projectLink.click({ modifiers: ['ControlOrMeta'] })
+    ]);
     await projectTab.bringToFront();
     await projectTab.waitForURL(destination, { waitUntil: 'domcontentloaded' });
     await expect(projectTab).toHaveURL(destination);
