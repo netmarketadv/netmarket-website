@@ -133,3 +133,13 @@ richiede la conferma esplicita esistente. Entrambe richiedono un reviewer produc
 e un candidate senza errori o fallback CMS. Il rollback manuale richiede snapshot esatto,
 SHA, digest del piano e approvazione. Procedure e blocchi correnti sono nel
 [rapporto del candidate Stape](stape-release-candidate.md). Nessun rilascio è autorizzato dal solo rapporto.
+
+## Contenuti CMS per il rilascio Stape
+
+Il workflow separato `Import Stape CMS Content` prepara il piano read-only o applica/annulla
+soltanto il manifest CMS revisionato, con digest e conferma esatti, main e approvazione
+production. Non deploya il plugin o il frontend. Dopo apply verifica via HTTPS autenticato
+i contenuti rispetto al manifest; il candidate verifica anche assenza di drift della build.
+Il gate production richiede reviewer, solo main e bypass amministrativo disabilitato.
+La suite motion è ripetibile con `pnpm test:e2e:motion` sui tre engine. Manifest, checkpoint
+e rollback dei contenuti sono descritti nel [rapporto unico Stape](stape-release-candidate.md).

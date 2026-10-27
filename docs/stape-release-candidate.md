@@ -1,289 +1,342 @@
-# Stape: rapporto conclusivo del candidate
+# Stape — resoconto operativo e checkpoint di rilascio
 
-Aggiornato il 26 ottobre 2026. Questo documento sostituisce il precedente resoconto del
-candidate. [Audit iniziale](stape-pre-release-audit.md) e [guida loader](stape-custom-loader.md).
+Aggiornato il **27 ottobre 2026**. Questo è il rapporto unico corrente; l'
+[audit iniziale](stape-pre-release-audit.md) resta storico e la
+[guida loader](stape-custom-loader.md) descrive il bootstrap approvato.
 
-## 1. Stato: NO-GO per la pubblicazione
+## 1. Stato effettivo
 
-Le correzioni tecniche locali sono implementate e verificate. Il difetto motion della
-baseline è risolto; pipeline, completezza CMS, promozione dell'artifact e rollback sono
-rafforzati. Restano prerequisiti che richiedono operazioni esterne espressamente vietate
-senza autorizzazione: pubblicazione dei contenuti CMS, configurazione del reviewer e
-pubblicazione del branch/workflow. Non esiste ancora un artifact production completo.
+**Preparazione locale completata; pubblicazione in attesa delle autorizzazioni A–D sotto.**
+Il rilascio non è ancora GO: manca l'esecuzione delle operazioni live richieste per ottenere
+un artifact autenticato e completo. Non è stato dichiarato riuscito un deploy inesistente.
 
-Nessun push, merge, workflow remoto, deploy, rollback reale, modifica CMS, protezione GitHub,
-container GTM o configurazione Stape è stato effettuato. La scelta del reviewer `netmarketadv`
-è recepita nel payload locale; non equivale all'autorizzazione ad applicarlo.
+Sono implementati il ripristino fedele dei contenuti CMS, l'importer protetto e reversibile,
+la verifica del contenuto autenticato, la correzione motion e i controlli della release.
+Il CMS live è ancora vuoto per servizi, case study e clienti: il suo popolamento non era
+autorizzato. Nessun push, PR remota, merge, deploy, rollback reale, modifica alle protezioni,
+plugin WordPress, container GTM o configurazione Stape è stato eseguito.
 
-### Blocchi effettivi
+Produzione riconfermata via SSH read-only e GitHub main:
+`6b2e5524ba43e237229e0f56e86161edd87e1165`. Nessun nuovo frontend è online.
 
-1. **CMS realmente vuoto:** `nm_service` e `nm_case_study` sono registrati ma senza contenuti
-   in alcuno stato. Non è un problema risolvibile aggiungendo credenziali alla build.
-2. **Environment production senza required reviewer:** branch ammesso soltanto `main`,
-   ma l'approvazione obbligatoria non è configurata. Il nuovo guard lo rifiuta.
-3. **Pipeline protetta non eseguita:** branch/workflow non pubblicati né integrati in main.
-   L'accesso con i secret del runner e il candidate autenticato completo restano da provare.
+## 2. Contenuti ricostruiti e confrontati
 
-Nessuna deroga, archivio fittizio o artifact parziale è stato utilizzato per ottenere GO.
+Il [manifest completo](../data/releases/stape-cms-import.json) contiene:
 
-## 2. Problemi risolti e implementazioni
+| Oggetti | Quantità | Origine e trattamento |
+| --- | ---: | --- |
+| Servizi | 9 | Fallback versionati + overlay/pilot già pubblicati, senza nuovi testi |
+| Case study | 8 | Snapshot storico + trasformazioni/media già presenti nella baseline |
+| Clienti di supporto | 7 | Nomi, slug e loghi già presenti nei payload dei progetti |
+| Allegati | 38 | Originali verificati, con alt delle fonti; nessun allegato esistente modificato |
 
-### CMS e provenienza
+Digest SHA256 esatto del manifest approvabile:
 
-Il preflight usa soltanto l'origine canonica HTTPS e i secret Basic Auth esistenti. Rifiuta
-secret mancanti, challenge, risposte non JSON, archivi vuoti e assenza degli slug della
-baseline. Non ripiega su richieste anonime. La successiva build registra le richieste
-realmente eseguite: origine della risposta, autenticazione, hash, quantità, slug e paginazione.
-L'audit rifiuta errori/accessi saltati, fallback, pagine incomplete e contenuti obbligatori
-mancanti anche se sono cambiati dopo il preflight. I log sono redatti e il frontend è
-controllato per impedire la distribuzione dei valori segreti noti.
+```text
+a00a92281f7ac5b2b0eed79c745da6c5b060eb2793c7d86f3502bb33fb8926b4
+```
 
-La vecchia cache SSH, non consumata dal client frontend, non costituisce una fonte valida.
-I 64 accessi saltati della precedente build locale non sono stati riclassificati come PASS:
-ora rendono impossibile la produzione dell'artifact ufficiale.
+Le fonti includono `service-fallbacks.ts`, `service-pilots.ts`, `service-experiences.ts`,
+`lib/services/content.ts`, `lib/projects/content.ts`, `presentation.ts`,
+`sirene-blu-media.ts` e `case-study-transform-dry-run.json`. Il manifest registra hash
+SHA256, provenienza e riferimenti simbolici; gli ID sintetici dei fallback non diventano
+ID WordPress. Relazioni e media saranno risolti con gli ID realmente creati dal CMS.
+L'estrazione deriva dal commit `30fd5ef`, con le fonti dichiarate ancora identiche nel candidate.
 
-### Motion isolato dall'integrazione Stape
+**Confronto pubblicato: 17/17 testi principali, 17/17 titoli, 17/17 descrizioni identici.**
+La GET HTTP delle pagine ha ricevuto 403: il confronto è stato effettuato sui 17 file HTML
+realmente distribuiti nel document root, letti via SSH, insieme al marcatore SHA della
+baseline. Nessuna challenge aggirata e nessuno script di tracking eseguito.
+Il [confronto versionato](../data/releases/stape-cms-published-comparison.json) conserva
+hash e risultati; gli HTML originali sono nelle evidenze locali.
 
-Il titolo «Cosa resta dopo il progetto.» poteva rimanere con opacity 0 dopo ripristino dello
-scroll: era già nel viewport ma sotto la soglia di partenza del reveal (94%). Inoltre il
-layout dopo font/line split poteva rendere obsoleta la posizione memorizzata da ScrollTrigger,
-particolarmente in WebKit. La correzione avvia lo stesso tween quando il target è già visibile;
-un IntersectionObserver copre l'assestamento tardivo e completa i target già superati.
-Preset, easing, durata, reduced-motion e visibilità senza JavaScript sono preservati.
+I 38 riferimenti media sono stati verificati via GET contro le copie pubblicate. Per quelli
+presenti nel repository il confronto dei byte è esatto. Gli otto originali CMS necessari
+alla riproducibilità offline sono conservati in `data/releases/stape-cms-media/`; gli altri
+sono già in `apps/web/public`. Il piano non dipende da futuri download modificabili.
+Nel manifest sono normalizzati soltanto due MIME dichiarati erroneamente PNG nelle fonti: i byte reali di
+VENITALY e product photography sono WebP. Non è stata convertita alcuna immagine.
+WordPress potrà generare normalmente i propri derivati responsive dagli originali.
 
-Due test di regressione desktop/mobile verificano geometria fra 94% e 100% del viewport,
-stato revealed, opacità di titolo e singole parole. Le assertion originali sono intatte.
-I commit motion sono separati dal codice Stape e dalle modifiche di infrastruttura.
+Restano i due noindex già pubblicati (VENITALY e app Sirene Blu), gli altri sei progetti
+restano indicizzabili. I campi storici vuoti restano vuoti; niente metriche, date, relazioni
+o testi inventati. Non emerge una decisione di riscrittura editoriale necessaria: si chiede
+l'approvazione della pubblicazione di questo pacchetto, non di contenuti nuovi da redigere.
 
-### Candidate riproducibile e promozione dello stesso artifact
+## 3. Importazione, simulazione e rollback dei contenuti
 
-`Deploy Production` ha due operazioni distinte: `candidate` produce l'artifact dopo
-preflight, full validation, full E2E, invarianti tracking, build CMS autenticata, audit e
-suite sullo stesso frontend statico. `deploy` richiede l'ID di quella run riuscita, SHA
-identico, main canonico e artifact univoco non scaduto. Non ricostruisce il frontend.
+Implementazione in `infrastructure/migrations/stape/` e
+`infrastructure/scripts/import-stape-cms.sh`; workflow separato
+`Import Stape CMS Content`, esclusivamente su main e environment production protetto.
+Non deploya il plugin WordPress e non distribuisce il frontend.
 
-Il manifest verifica SHA, provenienza CMS, hash dell'archivio e di ogni file, marcatori e
-file essenziali. Archivio senza traversal/symlink/hardlink; estrazione in directory nuova e
-confronto dell'esatto insieme di file. Ulteriore verifica immediatamente prima dell'upload.
-Il controllo dello SHA live usa SSH autenticato read-only, evitando di interpretare la
-challenge HTTP SiteGround come prova del contenuto. Il vecchio bootstrap Google è ammesso
-soltanto per verificare esplicitamente la baseline attuale; il post-deploy richiede Stape.
+L'importer è **create-only**: rifiuta un contenuto preesistente non appartenente al lotto,
+non lo sovrascrive. Riutilizza soltanto allegati con hash e alt già identici; per questo
+piano sono previsti 38 nuovi allegati, lasciando intatti i 104 esistenti. Crea solo i termini
+mancanti fra quelli già elencati nel manifest, senza rinominare termini esistenti.
+Prepara i record in bozza, risolve tutte le relazioni e pubblica dopo la compilazione dei
+metadati. La stessa importazione completata, ripetuta invariata, non crea duplicati.
 
-Le E2E del candidate usano loopback, servizi tracking simulati e mock dei form; gli asset
-immagine canonici restano leggibili via GET. Questo consente QA dell'artifact senza inviare
-lead o eventi reali. Non certifica Iubenda o ricevitori GA4/Ads/Meta reali.
+Prima delle scritture richiede target canonico, checkout main pulito e SHA esatto, digest
+del manifest, integrità dei file, implementazione CMS compatibile e conferma esplicita.
+Controlla MIME reali e SVG privi di script/riferimenti esterni eseguibili.
 
-### Rollback protetto dopo pipeline riuscita
+Il backup della porzione toccata e il journal degli oggetti creati restano privati, fuori
+dal document root, in:
 
-Workflow manuale autonomo `Rollback Production Manual`: piano read-only, successiva
-esecuzione con nuova approvazione, SHA corrente e atteso nello snapshot, snapshot esatto,
-digest e conferma esplicita. Condivide il lock con il deploy; la build candidate non blocca
-un ripristino urgente. Controlla integrità prima/dopo, preserva il frontend rimosso e recupera
-lo stato originale se fallisce la verifica immediata. Può ripristinare un frontend danneggiato
-se il suo marcatore identifica ancora lo SHA; un'identità ignota è rifiutata. L'esecuzione
-locale fuori dalla pipeline è vietata. Anche il rollback automatico usa lo snapshot esatto.
+```text
+/home/customer/www/cms.netmarket.it/.netmarket-cms-imports/<digest>/journal.json
+```
 
-## 3. Commit e file
+Il journal registra proprietà, ID e impronte degli oggetti del lotto. Il rollback verifica
+identità, modifiche successive e riferimenti esterni prima di cancellare esclusivamente
+oggetti/termini creati dall'importazione. Un record modificato o riutilizzato altrove blocca
+la cancellazione automatica. Un'applicazione interrotta non viene ripresa silenziosamente:
+il journal rimane disponibile per ripristino o riconciliazione.
 
-Baseline production/main verificata: `6b2e5524ba43e237229e0f56e86161edd87e1165`.
-Branch: `codex/stape-release-candidate`, nel worktree dedicato.
+Il rollback CMS è separato da quello frontend: **prima di cancellare i media del lotto deve
+essere già online il frontend baseline**, che non dipende dai nuovi allegati. Il worker
+verifica realmente quel marcatore e rifiuta la cancellazione altrimenti. Il semplice rollback
+frontend non richiede di cancellare i contenuti CMS.
 
-| Commit | Contenuto |
+### Risultati della simulazione e delle letture reali
+
+- Simulazione completa: 24 record + 38 allegati, riesecuzione senza duplicati e rollback
+  dei 62 oggetti, preservando un contenuto estraneo. Recuperata anche un'applicazione
+  parziale con errore iniettato durante la pubblicazione.
+- Verificati i rifiuti per contenuti estranei preesistenti, riferimenti irrisolti, campi
+  sconosciuti, media corrotti, modifiche editoriali successive e uso esterno degli oggetti.
+- La simulazione usa il motore PHP e le vere classi Registry/Sanitizer/Routes del progetto
+  con un backend WordPress **in memoria**. Non è un'importazione su un database WordPress reale.
+- Nel WordPress reale, il preflight read-only ha verificato tutti i 24 record senza conflitti
+  né scritture. Gli hash di Registry, FieldDefinition, Sanitizer, Routes, Relations e Media
+  coincidono con le classi usate localmente.
+- Runtime reale CMS: PHP 8.2.35, DOM e fileinfo disponibili, upload scrivibili; verifica dei
+  permessi soltanto in lettura, senza creare directory.
+
+Dopo l'importazione autorizzata il workflow dovrà superare sia il preflight HTTPS Basic Auth
+con i secret esistenti sia `audit-import.mjs`: confronto effettivo dei 17 record API con il
+manifest, inclusi testi, SEO, noindex, media, tassonomie e relazioni. Nessun fallback anonimo.
+Questi controlli HTTPS autenticati **non sono ancora stati eseguiti nel runner**.
+
+## 4. Candidate, sicurezza GitHub e tracking
+
+La pipeline production produce il candidate solo dopo full validation, full E2E, motion
+cross-browser, invarianti, accessi CMS autenticati, build senza fallback e audit production.
+Il nuovo audit confronta inoltre gli hash delle collezioni verificate con quelli delle
+risposte realmente consumate dalla build: modifiche CMS durante la costruzione bloccano
+l'artifact. Un archivio vuoto, parziale, con accessi saltati o dati diversi dal piano è rifiutato.
+
+La pubblicazione scarica l'artifact della run candidate riuscita sullo stesso SHA e ne
+verifica manifest, hash archivio/file, percorsi, tipi, marcatori e insieme esatto dei file.
+Promuove gli stessi byte, senza rebuild. Candidate, deploy, import CMS e rollback mantengono
+le rispettive approvazioni e i lock necessari; nessun job si autoapprova.
+
+Configurazione remota osservata: repository **pubblico**, required reviewer assente,
+branch ammesso soltanto main e `can_admins_bypass=true`. Il gate ora richiede anche bypass
+amministrativo disabilitato: non basta un reviewer formalmente configurato se si può
+saltare l'approvazione. La modifica remota è nel checkpoint A, non è stata applicata.
+
+Il reviewer richiesto è `netmarketadv`, ID 257532415. `prevent_self_review=false` consente
+alla stessa persona di avviare e approvare manualmente una run: **non è revisione
+indipendente**. L'agente non assegna approvazioni a se stesso. Main non ha branch protection
+(API 404) né ruleset; la procedura resta PR + controlli + revisione umana, mai push diretto.
+Non sono state cambiate le politiche del repository.
+
+Iubenda, Consent Mode v2, dataLayer, dispatcher Astro, sei eventi richiesti, container,
+Google Ads/Meta e deduplicazione restano invariati. URL/query del loader originale sono
+identici; DOMContentLoaded e caricamento soltanto production restano invariati. Nessun
+iframe noscript non protetto dal consenso e nessun doppio bootstrap Google/Stape.
+Gli invarianti byte/hash sono passati. L'eventuale perdita di visite concluse prima del
+bootstrap rimane un limite preesistente, non quantificato dai mock.
+
+La correzione motion copre sia titoli vicini al bordo sia ripristini tardivi che saltano
+oltre gli elementi senza una transizione IntersectionObserver. Usa gli stessi tween,
+easing e durate, un solo controllo passivo accorpato per frame e rimozione degli ascoltatori
+quando non restano reveal pendenti. Le assertion originali non sono state cambiate.
+
+## 5. Risultati dei test
+
+| Controllo | Risultato effettivo |
 | --- | --- |
-| `637d9154c582cb1aef3b9c626fdc0126c25253f5` | Integrazione Stape isolata, primo gate e recovery; genitore esattamente la baseline |
-| `35befc538453c983f9c5f437ba5fa7b0d991c328` | Documentazione iniziale |
-| `1e04694d04bf425567b0931406e986b9db5429ce` | Correzione reveal dopo scroll ripristinato e test |
-| `af1d255deaaba534c6939e06325633e8efceee5e` | Recovery layout tardivo e regressione cross-engine |
-| `95505b0765587d6439fb3cb9cab3ef614b7ad571` | CMS completo obbligatorio, promozione artifact, controlli integrità e rollback, harness QA |
+| Installazione `pnpm install --frozen-lockfile --offline` | PASS, nessuna dipendenza o lockfile aggiornati |
+| Full `pnpm validate` finale | PASS: lint, typecheck, **128 test unitari**, build locale, PHP lint, PHPCS, PHPStan, secret scan |
+| Full E2E statico con isolamento dei servizi esterni | **118/118 PASS**: preservati i 116 precedenti, aggiunti due casi di ripristino tardivo |
+| Motion Chromium / Firefox / WebKit | **15/15 PASS**: preservati i nove precedenti + sei nuove esecuzioni |
+| Stabilità WebKit dopo correzione intermittente | **15/15 PASS**, cinque casi ripetuti tre volte |
+| CMS importer | **9 test PASS**, incluse simulazione completa, idempotenza, rollback e rifiuti |
+| Confronto con il frontend distribuito | 17/17 testi, titoli e descrizioni identici alla baseline |
+| Media originali | Byte/hash verificati per tutti i 38 riferimenti |
+| Preflight CMS nativo reale | PASS read-only, 24 record, zero conflitti/scritture |
+| Invarianti Stape / consenso / eventi / dispatcher | PASS |
+| Smoke Stape in loopback | Tutti i quattro casi nei rispettivi ambienti: uno local, tre production; servizi esterni simulati |
+| Audit strutturale configurazione production | PASS: 68 HTML, 63 URL sitemap, 3 keep, 59 redirect, 4 gone |
+| Actionlint ufficiale 1.7.12 | PASS su production, import CMS e rollback |
+| Sintassi PHP/Bash nuova infrastruttura e `git diff --check` | PASS |
+| Piano rollback frontend su SiteGround | PASS read-only, digest e snapshot verificati; nessuno switch |
+| Pipeline protetta, import CMS reale e artifact autenticato | **NON ESEGUITI**, richiedono il checkpoint |
+| Ricezione GA4/Ads/Meta, consenso reale, Safari/AdBlock reali | **NON ESEGUITI**, nessun deploy né conversione di prova autorizzati |
 
-Questo report e le guide sono salvati in un successivo commit solo documentale, identificabile
-con `git log -1`. Lo SHA del futuro artifact sarà quello effettivo su main, non un hash
-abbreviato di questa tabella. Nessun merge/rebase/reset del checkout originale; lavori estranei
-rimangono nel branch/worktree originale e non sono inclusi.
+Il conteggio unitario è 118 precedenti + 9 CMS + 1 controllo bypass. Il PHP necessario ai
+nuovi test è presente nell'[immagine ufficiale Ubuntu dei runner GitHub](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md).
+Il test motion originale è fallito una volta in WebKit prima dell'ultima correzione: quel
+fallimento è conservato nelle evidenze, non ignorato. Le verifiche successive sopra sono verdi.
 
-File interessati, raggruppati per responsabilità:
+La build locale della full validation usa le fonti deterministiche del repository. Anche
+la build con configurazione production usata per audit/smoke contiene accessi CMS saltati:
+**è soltanto diagnostica, non un artifact production valido**. Lo smoke non esegue CMP o
+conversioni reali. I casi Stape esclusivi dell'altro ambiente non sono contati come test
+eseguiti; ciascuno dei quattro è stato eseguito nell'ambiente pertinente.
 
-- Motion: `apps/web/src/lib/motion/gsap-motion.ts`,
-  `apps/web/tests/e2e/motion-restoration.spec.ts`, `docs/motion-system.md`.
-- Readiness CMS: `apps/web/src/lib/api/{client,provenance}.ts`,
-  `infrastructure/scripts/{preflight-production-cms,audit-cms-provenance}.mjs`,
-  `data/releases/stape-cms-inventory.json`.
-- Artifact: `infrastructure/scripts/{build-production-candidate,verify-production-candidate,stage-production-candidate,check-production-candidate-run,candidate-secrets}.mjs`.
-- Policy/rollback: i due workflow production,
-  `infrastructure/config/production-environment.json`,
-  `infrastructure/scripts/check-production-protection.mjs`,
-  `manual-rollback-production.sh`, `manual-rollback-remote.sh`, `verify-production-release.sh`.
-- QA: test `candidate-integrity`, `candidate-secrets`, `cms-preflight`, `cms-provenance`,
-  `release-safety`; fixture E2E e import delle suite. Nessuna assertion preesistente rimossa.
-- Guide: questo rapporto, `docs/stape-custom-loader.md`, `docs/deployment.md`.
+## 6. Commit, PR e artifact
 
-Per l'elenco esatto completo e il diff: `git diff --stat 6b2e5524ba43e237229e0f56e86161edd87e1165 HEAD`
-e `git show --stat 95505b0`. Nessuna modifica PHP/WordPress o dipendenze.
+Branch isolato: `codex/stape-release-candidate`, discendente diretto della baseline online.
+Main remoto è ancora la baseline: nessuna divergenza da riconciliare mediante merge di
+lavori estranei. Gli altri branch/worktree e le modifiche preesistenti sono preservati.
 
-## 4. Verifiche eseguite e limiti
-
-| Controllo | Esito reale |
+| Commit | Responsabilità |
 | --- | --- |
-| Full `pnpm validate`, codice finale | PASS: lint, typecheck, 118 test unitari, build, PHP lint, PHPCS, PHPStan, secret scan |
-| Full E2E frontend statico, harness finale | **116/116 PASS**; mock dei servizi esterni, nessun evento reale |
-| Motion originale + regressioni, Chromium/Firefox/WebKit | **9/9 PASS**, assertion originali preservate |
-| Smoke Stape locale senza tracking | 1 PASS, 3 casi esclusivi production non applicabili |
-| Smoke Stape configurazione production in loopback | 3 PASS, 1 caso esclusivo locale non applicabile; stessi 3 PASS anche WebKit |
-| Invarianti Iubenda/consensi/eventi/dispatcher/loader | PASS, confronto byte per byte/hash contro baseline e loader approvato |
-| Actionlint ufficiale 1.7.12, due workflow | PASS, checksum del tool verificato |
-| Sintassi Bash e `git diff --check` | PASS |
-| Integrità artifact/provenienza/policy/rollback | PASS nei test positivi e negativi su risposte simulate e filesystem sintetici |
-| Piano rollback sul filesystem SiteGround reale | PASS read-only; nessuna scrittura/switch |
-| CMS nativo e API pubbliche, policy GitHub reale | Verificati read-only; blocchi confermati |
-| Audit production/provenienza dell'artifact ufficiale | **NON ESEGUITI**: CMS vuoto, workflow protetto non pubblicato/eseguito |
-| Ricezione servizi tracking e consenso reali, Safari/AdBlock reali | **NON ESEGUITI**, collaudo autorizzato dopo deploy |
+| `637d915` | Loader Stape approvato e prima preparazione della release isolata |
+| `35befc5`, `30fd5ef` | Resoconti e guide precedenti |
+| `1e04694`, `af1d255` | Correzioni motion iniziali e regressioni |
+| `95505b0` | CMS obbligatorio, integrità, promozione senza rebuild e rollback protetto |
+| `71693af` | Correzione isolata dello scroll ripristinato tardivamente |
+| `1fe02894557b1ea855ec7c20b2f7838508608ced` | Manifest e media, importer, audit del contenuto, workflow CMS e gate motion ripetibile |
+| `8ae4481e3566ea755cc29659762e912fa232caec` | Rifiuto del bypass amministrativo nel gate production |
+| `fb50626192592a7651ad38ad8904317e38be8f6c` | Namespace del motore CMS allineato agli standard, con i test del motore ripetuti |
+| `b59ed8c21d912fde2fbf39ebdfd96d40ae0e790f` | Permessi dei media pubblici e verifica HTTP/MIME, con journal privato |
 
-Runtime locale Node 24.19.0, dipendenze bloccate dal lockfile. Installato soltanto il browser
-Firefox corrispondente alla versione Playwright già bloccata; nessuna dipendenza aggiornata.
-Un tentativo esplorativo della suite contro Astro dev è stato interrotto perché privo della
-trasformazione build degli heading: non è conteggiato come controllo superato. La verifica
-valida è stata eseguita successivamente contro il frontend statico, 116/116.
+Questo rapporto viene salvato con un successivo commit documentale. Lo SHA del futuro
+artifact sarà quello effettivo della run main approvata, non un hash abbreviato della tabella.
+**Artifact production: non prodotto. SHA artifact: non disponibile. Deploy: non eseguito.**
 
-La build locale usa i fallback deterministici previsti dal repository: verifica codice e UI,
-**non è il candidate production**. Gli smoke loopback production simulano CMP e richieste
-esterne; WebKit non equivale a un collaudo Safari reale. Evidenze locali non versionate:
-`artifacts/stape-release-evidence/` (log, diff e indice). Nessuna certificazione inventata
-di ricezione GA4/Ads/Meta o di conformità privacy/accessibilità.
+La PR non esiste ancora (verificato via GitHub); titolo e descrizione pronti in
+`artifacts/stape-release-evidence/2026-10-27/pull-request.md`. Non è stata aperta perché
+il push necessario non è autorizzato. I file nuovi sono principalmente il manifest e gli
+originali media, `infrastructure/migrations/stape/*`, il wrapper import, il workflow CMS,
+il gate policy e la configurazione/test motion. Il plugin WordPress resta invariato.
 
-## 5. Contenuti CMS, artifact e SHA
+Elenco/diff esatti: `git diff --stat 6b2e5524ba43e237229e0f56e86161edd87e1165 HEAD`.
+Log, confronto, preflight e patch sono in `artifacts/stape-release-evidence/2026-10-27/`.
+Sono evidenze locali, non artifact da pubblicare.
 
-GET pubbliche: servizi 0, case study 0, insight 27. Verifica supplementare tramite alias SSH
-canonico, solo lettura, sul sito `https://cms.netmarket.it`:
-`wp_count_posts` per `nm_service` e `nm_case_study`, entrambi registrati, restituisce zero
-per tutti gli stati, inclusi draft/private/trash. Plugin proprietario attivo 0.1.0.
-Quindi la mancata autenticazione locale non spiega da sola gli archivi vuoti.
+## 7. Unico checkpoint di approvazione A–D
 
-L'inventario versionato registra baseline, SHA256 delle fonti e 9 servizi/8 case study
-necessari. Fonti già presenti nel repository: `apps/web/src/data/service-fallbacks.ts` e
-`data/migrations/case-studies/case-study-transform-dry-run.json`. Non sono stati presentati
-come contenuti provenienti dal CMS. L'intervento necessario è una pubblicazione CMS
-**separata e autorizzata**, con revisione editoriale delle fonti e degli overlay esistenti,
-mappatura schema/relazioni/SEO/noindex e media CMS reali; non riutilizzare ID provvisori 900x
-o vecchi media ID senza verifica. Nessun contenuto inventato o import live eseguito.
+Tutto il lavoro locale necessario a questo checkpoint è preparato. Si richiedono insieme
+le seguenti autorizzazioni, da eseguire nell'ordine indicato senza ripetere l'audit.
 
-I nomi dei secret Basic Auth sono presenti nel repository; SSH/percorso in production.
-Valori non estratti, stampati o inventati. Validità delle credenziali nel runner ancora
-non dimostrata. Il preflight autenticato e l'audit di ogni richiesta build devono riuscire
-nella pipeline ufficiale dopo il popolamento CMS; nessun accesso saltato accettato.
-
-**Artifact production: non prodotto. SHA artifact: non disponibile.** Dopo run riuscita,
-`production-candidate-<sha>` conterrà `frontend.tgz`, `release.json` con SHA/run/timestamp,
-hash archivio/file e provenienza, `cms-preflight.json`, `cms-access.jsonl` e log redatto.
-Upload valido soltanto dopo tutti i gate. Output falliti restano diagnostici, mai promuovibili.
-Retenzione artifact 14 giorni: se scaduto, nuova run candidate e nuova approvazione.
-
-## 6. Autorizzazioni ancora necessarie
-
-### Reviewer production: azione esatta pronta, non eseguita
-
-Utente scelto: **netmarketadv**, ID GitHub verificato **257532415**. Payload locale pronto:
-`infrastructure/config/production-environment.json`. Prevede required reviewer, nessuna
-attesa aggiunta e policy custom main già esistente. Dopo autorizzazione esplicita:
+**A — Protezioni GitHub production.** Applicare il payload già pronto
+`infrastructure/config/production-environment.json`: reviewer `netmarketadv`, self-review
+umana consentita, policy custom solo main. Poi disabilitare in Settings → Environments →
+production **Allow administrators to bypass configured protection rules**, salvare e
+verificare via API `can_admins_bypass=false`. Il payload REST non dichiara di impostare
+un campo non previsto dal suo schema; la seconda operazione è un'impostazione UI distinta.
+È la procedura descritta dalla [documentazione GitHub](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
+Non cambiare visibilità, secret, altri environment o regole di merge.
 
 ```sh
 gh api --method PUT repos/netmarketadv/netmarket-website/environments/production \
   --input infrastructure/config/production-environment.json
 ```
 
-`prevent_self_review=false` permette al medesimo account umano di avviare e approvare
-manualmente la run; non rappresenta un'approvazione indipendente di seconda persona.
-L'agente non approva run. L'opzione preesistente `can_admins_bypass=true` non è stata
-modificata né usata; il processo richiede comunque il normale gate. Prima di applicare il
-payload ricontrollare la configurazione per preservare eventuali cambiamenti concorrenti.
-Il guard ricontrolla reviewer e policy effettiva main dopo l'environment gate.
-[Schema REST GitHub](https://docs.github.com/en/rest/deployments/environments).
+**B — Pubblicazione del codice.** Push del solo branch candidate, apertura della PR verso
+main e integrazione tramite PR soltanto dopo Quality Full verde e revisione umana del diff.
+Nessun push diretto main, force push o approvazione PR autoattribuita. La creazione della PR
+non distribuisce il frontend production.
 
-Sono inoltre necessarie autorizzazioni distinte per pubblicare i contenuti CMS revisionati,
-fare push del branch e portarlo in main tramite PR/review, avviare le run protette e infine
-eseguire il deploy. Nessuna di queste operazioni è implicitamente autorizzata da questo report.
-Il rilascio resta bloccato finché i contenuti non sono reali/completi e la run non è verde.
+**C — Pubblicazione del pacchetto CMS.** Dopo A/B, usare il workflow
+`Import Stape CMS Content`: prima `mode=plan` con il digest sopra (read-only), poi
+`mode=apply` con lo stesso digest e conferma esatta:
 
-## 7. Pubblicazione e rollback
+```text
+IMPORT NETMARKET CMS a00a92281f7ac5b2b0eed79c745da6c5b060eb2793c7d86f3502bb33fb8926b4
+```
 
-### Pubblicazione dopo lo sblocco
+Approvare manualmente il normale environment gate. Il journal resta privato (0600); solo
+i file immagine autorizzati sono leggibili pubblicamente (0644). La verifica successiva
+richiede anche HEAD pubblico HTTP 200 e MIME corretto per i media effettivamente esposti.
 
-1. Revisionare i commit isolati e autorizzare push/PR/integrazione in main, senza importare
-   il working tree originale. Configurare il reviewer con autorizzazione separata.
-2. Completare l'intervento CMS approvato; controllare schema, media, slug, SEO e contenuti.
-3. Avviare `Deploy Production`, `mode=candidate`, sullo SHA main approvato, con
-   `expected_live_sha=6b2e5524ba43e237229e0f56e86161edd87e1165` se ancora attuale e conferma
-   `BUILD NETMARKET CANDIDATE`. Approvazione umana dell'environment.
-4. Pretendere tutti i gate verdi: accessi CMS autenticati/completi, nessun fallback,
-   full quality/E2E, audit production, integrità e smoke. Esaminare artifact, manifest,
-   provenienza e run. Il solo PASS locale non autorizza il rilascio.
-5. Dopo approvazione esplicita del deploy, avviare `mode=deploy` sullo **stesso SHA**,
-   `candidate_run_id=<run-riuscita>`, SHA live atteso e conferma `DEPLOY NETMARKET`.
-   Nuova approvazione environment; download, verifica e pubblicazione degli stessi byte,
-   nessuna rebuild/CMS fallback. Il controllo supporto form live avviene solo in questa fase.
-6. Verificare SHA online, metadati, smoke funzionale/SEO/redirect e collaudo reale sotto.
-   Con challenge SiteGround al runner, il workflow registra il differimento delle verifiche
-   HTTP pubbliche: devono essere completate da rete esterna, non dichiarate PASS.
+Approvare il lotto soltanto se questi effetti sono accettati. L'effetto è la pubblicazione nel CMS
+di 9 servizi, 8 progetti, 7 clienti, 38 nuovi allegati e dei soli termini mancanti del
+manifest. I contenuti diventano leggibili dalle API CMS; nessun deploy frontend/plugin.
+Conservare journal privato e prova HTTPS autenticata; nessun PASS senza quella prova.
 
-### Ripristino frontend senza modificare GTM/CMS/Stape
+**D — Generazione ufficiale del candidate, senza deploy.** Sullo SHA main integrato,
+avviare `Deploy Production`, `mode=candidate`, con SHA live effettivo e conferma
+`BUILD NETMARKET CANDIDATE`. Approvare l'environment e pretendere tutti i gate verdi,
+compresi contenuto CMS autenticato identico al piano e assenza di drift della build.
+Esaminare manifest, provenienza, hash e resa visiva del frontend realmente prodotto.
+I correlati derivati dal CMS possono cambiare ordine rispetto alla precedente selezione
+locale: questa verifica dell'artifact è ancora da eseguire; non sono state inventate
+relazioni per forzarlo.
 
-1. `Rollback Production Manual`, `mode=plan`, SHA online, SHA da ripristinare e snapshot
-   esatto `before-<sha-online>`. Approvare production. Niente `latest`.
-2. Esaminare integrità e digest restituiti. Per tornare dalla futura release Stape alla
-   baseline, usare `restore_sha=6b2e5524ba43e237229e0f56e86161edd87e1165` e snapshot creato
-   dal nuovo deploy. Non usare il digest dello snapshot storico sotto.
-3. Solo dopo autorizzazione esplicita, nuova run `mode=execute`, stessi parametri,
-   digest del piano e conferma `ROLLBACK NETMARKET <current_sha> TO <restore_sha>`.
-   Nuova approvazione; controllo SHA/digest e integrità prima/dopo lo switch.
-4. Verificare SHA e smoke online, poi ricezione tracking della versione ripristinata.
-   Non ripubblicare container né cambiare WordPress o Stape.
+Questo checkpoint non autorizza la pubblicazione di un artifact ancora inesistente.
+Il consenso finale al deploy dovrà riferirsi alla run, allo SHA e all'artifact risultanti,
+che saranno allora concretamente revisionabili. Lo stesso vale per un rollback reale.
 
-Piano read-only verificato realmente sullo snapshot esistente
-`before-6b2e5524ba43e237229e0f56e86161edd87e1165`, restore
-`9ae69fd10588b36d2d915f69fcf39f1346b77ee3`, digest
+## 8. Pubblicazione e ripristino dopo approvazione
+
+### Frontend
+
+Dopo D e approvazione esplicita del rilascio, `Deploy Production`, `mode=deploy`, sullo
+stesso SHA, `candidate_run_id=<run-riuscita>`, `expected_live_sha=<sha-reale>` e conferma
+`DEPLOY NETMARKET`. Nuova approvazione environment; promozione dello stesso archivio senza
+rebuild. Snapshot `.netmarket-rollbacks/before-<nuovo-sha>`, verifica SHA/integrità via SSH,
+smoke funzionale, SEO e redirect. Con challenge SiteGround, i controlli HTTP pubblici
+rimandati dal runner vanno completati da rete esterna: non contano come PASS.
+
+### Rollback frontend
+
+`Rollback Production Manual` funziona anche dopo un deploy riuscito. Prima `mode=plan`,
+SHA corrente, `restore_sha=6b2e5524ba43e237229e0f56e86161edd87e1165` per tornare alla baseline,
+snapshot esatto `before-<sha-corrente>`. Poi, solo autorizzato, `mode=execute`, digest appena
+ottenuto e conferma `ROLLBACK NETMARKET <current_sha> TO <restore_sha>`, con nuova approvazione.
+Verifiche prima/dopo e conservazione del frontend rimosso. Niente `latest`, cambi GTM o CMS.
+
+Il piano reale provato oggi riguarda lo snapshot storico `before-6b2e5524ba43e237229e0f56e86161edd87e1165`,
+che contiene `9ae69fd10588b36d2d915f69fcf39f1346b77ee3`, digest
 `9fe3fec43045c45fc8ceda1ccde12f617037431be84907bd5589d32a23f9d519`.
-È una prova di compatibilità del piano sul filesystem reale; nessuna esecuzione reale del
-rollback e nessuna prova del futuro snapshot Stape, che non esiste ancora.
+Non è il futuro snapshot Stape: per quello servirà il nuovo piano dopo il deploy.
 
-## 8. Tracking preservato e checklist di collaudo reale
+### Rollback CMS
 
-Iubenda, Consent Mode v2, dataLayer, dispatcher Astro e script eventi restano identici alla
-baseline. Invariati `page_view`, `generate_lead`, `contact`, `click_tel`, `click_whatsapp`,
-`click_email`, deduplicazione Meta e container. Il loader originale mantiene esattamente URL
-e query. DOMContentLoaded rimane invariato: anticiparlo senza validazione CMP reale sarebbe
-un cambiamento non dimostrato; gli eventi già accodati restano nel dataLayer. Restano possibili
-perdite se si lascia la pagina prima del bootstrap, non quantificate dai mock.
+È facoltativo e separato dal ripristino frontend. Prima ripristinare il frontend baseline;
+poi `Import Stape CMS Content`, `mode=rollback-plan` con il digest del manifest, ed esaminare
+il journal. Soltanto autorizzato, `mode=rollback`, conferma
+`ROLLBACK NETMARKET CMS <digest>` e nuova approvazione. Un oggetto modificato o usato altrove
+richiede riconciliazione umana, non cancellazione forzata. Nessun rollback reale è stato eseguito.
 
-Nessun iframe noscript non protetto dal consenso. Una sola inizializzazione Stape, assenza
-del vecchio loader Google concorrente, verificate nei test del frontend. GET read-only del
-resource Google/Stape: versione 26, 47 tag, hash comune
-`78c231199827f004179bedd109b778d58ceb6e53841e05ed82f18865a821f80d`.
-Questo confronto non prova la ricezione di eventi remoti. Nessun container pubblicato.
+## 9. Collaudo reale ancora da eseguire
 
-Tutti i seguenti test sui servizi reali sono **NON ESEGUITI**. Dopo deploy autorizzato,
-registrare per ogni prova SHA, timestamp UTC, browser/versione, stato consenso, event ID,
-evidenze Network/Tag Assistant/DebugView/preview server/Meta Test Events/diagnostica Ads.
+Nessuna ricezione reale GA4, Ads o Meta è stata dichiarata riuscita. Dopo deploy autorizzato,
+registrare SHA, timestamp UTC, browser/versione, consenso, event ID e prova del servizio.
 
-- [ ] SHA e ambiente online corretti; una sola richiesta bootstrap tramite Stape, nessun
-  loader Google concorrente; URL/query originali, nessun errore CSP o JavaScript.
-- [ ] Iubenda reale: primo accesso, nessuna scelta, rifiuto, soli consensi statistici,
-  marketing, revoca e visita successiva; verificare default/update Consent Mode v2 e invii
-  effettivi secondo il consenso. Senza JavaScript nessun iframe GTM.
-- [ ] GA4 `page_view` e `generate_lead` ricevuti, transizioni Astro senza duplicati.
-- [ ] Form confermato e contatti telefono/WhatsApp/email: `contact`, `click_tel`,
-  `click_whatsapp`, `click_email`; errori/challenge form non generano lead. Test lead reali
-  soltanto autorizzati e riconoscibili, concordando la gestione dei destinatari.
-- [ ] Meta Pixel e Meta CAPI: PageView/Lead ricevuti, stesso `event_id` browser/server,
-  una sola conversione deduplicata; nessun dato personale improprio nei payload/log.
-- [ ] Google Ads: conversioni attese ricevute e diagnostica coerente con il consenso.
-- [ ] Data Client ed endpoint server funzionanti. Con protezione Enhanced Ad Blocker i
-  percorsi possono essere codificati: non richiedere necessariamente `/data` o `/g/collect`
-  letterali; verificare elaborazione nel server preview.
-- [ ] Chrome e Firefox normali, Safari reale macOS/iOS, AdBlock reale con filtri/versione
-  registrati e confronto con evidenze della configurazione precedente. I test WebKit locali
-  e i mock non sostituiscono questi controlli.
-- [ ] Snapshot nuovo verificabile, piano rollback disponibile e collaudo pubblico completo
-  anche se il runner SiteGround fosse intercettato da challenge.
+- [ ] SHA online, frontend e media, CMS, sitemap e tutti i redirect; nessuna regressione
+  visiva/funzionale o errore CSP/JavaScript.
+- [ ] Unico bootstrap GTM attraverso Stape, URL/query originali, assenza del bootstrap
+  Google concorrente; distinguere le librerie Google caricate dai tag dal secondo container.
+- [ ] Iubenda reale: nessuna scelta, rifiuto, statistiche, marketing, revoca e visita successiva;
+  default/update Consent Mode v2 e invii effettivi coerenti. Zero iframe GTM senza JavaScript.
+- [ ] GA4 `page_view` e `generate_lead`, navigazione Astro senza duplicati; lead soltanto su
+  successo reale, assente su errori/challenge. Lead di prova reali soltanto autorizzati.
+- [ ] `contact`, `click_tel`, `click_whatsapp`, `click_email` ricevuti; payload e destinatari corretti.
+- [ ] Google Ads: ricezione e diagnostica delle conversioni, con stato consenso registrato.
+- [ ] Meta Pixel + CAPI: PageView/Lead, stesso `event_id` browser/server e una conversione
+  deduplicata; evidenze in Test Events/preview server, niente dati personali impropri.
+- [ ] Data Client/elaborazione server. Con Enhanced Ad Blocker i percorsi possono essere
+  codificati: non pretendere sempre `/data` e `/g/collect` letterali.
+- [ ] Chrome/Firefox normali, Safari reale macOS/iOS e AdBlock reale con filtri/versione;
+  confronto con la configurazione precedente. WebKit locale non equivale a Safari reale.
+- [ ] Snapshot nuovo verificabile e piano rollback disponibile.
 
-Il GO finale richiede l'artifact autenticato completo e le approvazioni prima del rilascio;
-l'accettazione operativa richiede anche il collaudo reale post-deploy. I controlli locali
-completati non sono una garanzia su ricevitori esterni o future modifiche del CMS.
+## 10. Limiti residui e chiusura
+
+Il codice locale è verificato e il pacchetto CMS è pronto. Per procedere occorrono le
+approvazioni A–D e quelle GitHub umane: l'agente non può attribuirsele. La validità effettiva
+dei secret nel runner, l'import WordPress reale e il candidate autenticato sono verifiche
+future obbligatorie, non problemi occultati da fallback. Una successiva modifica editoriale
+al lotto blocca l'audit o il rollback e richiede una revisione esplicita.
+
+Non si considera concluso il go-live fino alla pubblicazione e alle prove reali eseguibili.
+Questo rapporto non concede quelle autorizzazioni: fornisce codice, manifest e procedure
+concrete affinché il processo possa proseguire direttamente dopo il checkpoint.
