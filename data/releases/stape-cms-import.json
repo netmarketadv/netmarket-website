@@ -1,0 +1,2764 @@
+{
+  "format": "stape-cms-v1",
+  "target": "https://cms.netmarket.it",
+  "baseline": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+  "sourceSha": "30fd5efe0de42679d1263efd94495645869d24ee",
+  "sources": [
+    {
+      "path": "apps/web/src/data/service-fallbacks.ts",
+      "sha256": "296283b8aad39024790926aa41f38bcabbd5722deda31e52baf192a1789ebffd"
+    },
+    {
+      "path": "apps/web/src/data/service-pilots.ts",
+      "sha256": "1643d4ab9148d1d401501046c93bb51bf0acce88057b0916eefa799ff8aae0cf"
+    },
+    {
+      "path": "apps/web/src/data/service-experiences.ts",
+      "sha256": "440c979a50747a79f2bb9128484a782a275554917d754f331ebfa6b89522af4d"
+    },
+    {
+      "path": "apps/web/src/lib/services/content.ts",
+      "sha256": "704902eb89ac6f4b11c74f334aefa5e292863b92bf3905ad3b14d5441ef61066"
+    },
+    {
+      "path": "apps/web/src/lib/projects/content.ts",
+      "sha256": "6fa88522512e169173cbe5e97ddc32256a3bd71d43de08a9d9fe60b7c1a29a1f"
+    },
+    {
+      "path": "apps/web/src/lib/projects/presentation.ts",
+      "sha256": "ddec9ad65680a2fdf7818c4d008d8a5d988a79f7b35c38e282121efe10dc06ab"
+    },
+    {
+      "path": "apps/web/src/lib/projects/sirene-blu-media.ts",
+      "sha256": "47bb418dc63ef18e2ec77f8d212b161baba0957ec557d881c7021c6cc6e78d99"
+    },
+    {
+      "path": "data/migrations/case-studies/case-study-transform-dry-run.json",
+      "sha256": "55261128a697b5ab27597300fb8306a131b89a2f26fdaa2620649ae81bb89de3"
+    },
+    {
+      "path": "apps/web/src/data/home.ts",
+      "sha256": "cea87a714836b0428a537763c80435546b9cd32b39bab9eb3b107005eab3b799"
+    },
+    {
+      "path": "apps/wordpress/plugins/netmarket-headless-core/src/ContentTypes/Registry.php",
+      "sha256": "40cd914dece148836b61734b0242ea8ed5a726c5f70e660174f55e46f94c233b"
+    },
+    {
+      "path": "apps/wordpress/plugins/netmarket-headless-core/src/Rest/Routes.php",
+      "sha256": "78d8ef5c03980600e1ab33670c949164706900faaaaebbb60243b0c616e7f068"
+    }
+  ],
+  "records": [
+    {
+      "type": "nm_service",
+      "slug": "siti-web",
+      "title": "Siti web",
+      "excerpt": "Un sito Netmarket non nasce da una grafica isolata. Parte da obiettivi, contenuti, percorsi utente e requisiti tecnici, poi diventa un sistema pubblicabile, veloce e governabile dal team.",
+      "content": "",
+      "meta": {
+        "seo_title": "Siti web aziendali",
+        "meta_description": "Siti web aziendali progettati da Netmarket a Padova con UX, contenuti, WordPress/headless, SEO tecnica, performance e integrazioni.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "0222ca3b05495720e8cbfa1c1cce2534eddc160a0df045e8a03b1064e7294ce1"
+        },
+        "priority": 10,
+        "featured": true,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Siti web che mettono ordine tra contenuti, tecnologia e marketing.",
+        "short_description": "Progettiamo siti web aziendali per rendere chiara l’offerta, facilitare il contatto e sostenere SEO, campagne e aggiornamenti nel tempo.",
+        "hero_image": {
+          "media": "0222ca3b05495720e8cbfa1c1cce2534eddc160a0df045e8a03b1064e7294ce1"
+        },
+        "value_props": [
+          {
+            "title": "Prima il senso, poi le pagine",
+            "description": "Mappiamo servizi, pubblici, contenuti esistenti e priorità commerciali prima di disegnare template e interfacce."
+          },
+          {
+            "title": "Design e sviluppo nello stesso sistema",
+            "description": "UX, UI, frontend, CMS e componenti vengono progettati insieme, così il sito resta coerente quando cresce."
+          },
+          {
+            "title": "SEO tecnica fin dall’architettura",
+            "description": "Heading, metadata, performance, internal link, migrazione URL e contenuti sono trattati come parte del progetto, non come rifinitura finale."
+          },
+          {
+            "title": "Collegato a marketing e operatività",
+            "description": "Form, analytics, landing, contenuti, campagne e integrazioni vengono considerati nel disegno del sito, quando servono al progetto."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Il sito non spiega bene cosa fa l’azienda",
+            "description": "Servizi, differenze, prove e prossimi passi vengono riscritti in una struttura leggibile per clienti, motori di ricerca e team commerciali."
+          },
+          {
+            "title": "Aggiornare contenuti è lento o rischioso",
+            "description": "Template, CMS e componenti riducono contenuti duplicati, pagine isolate e interventi tecnici per modifiche ricorrenti."
+          },
+          {
+            "title": "SEO, performance e conversione arrivano troppo tardi",
+            "description": "Le scelte tecniche e editoriali entrano nel lavoro prima del lancio: struttura, velocità, tracciamenti e redirect candidate."
+          },
+          {
+            "title": "Il sito è scollegato dal resto del marketing",
+            "description": "La pagina web deve dialogare con campagne, social, email, materiali commerciali e dati, non restare una vetrina separata."
+          }
+        ],
+        "process": [
+          {
+            "title": "Audit e obiettivi",
+            "description": "Analizziamo sito esistente, contenuti, query, vincoli tecnici, stakeholder e azioni che il sito deve facilitare."
+          },
+          {
+            "title": "Architettura e contenuti",
+            "description": "Definiamo sitemap, gerarchie, template, messaggi principali, internal link e piano di migrazione quando esiste un sito già online."
+          },
+          {
+            "title": "Design system e interfacce",
+            "description": "Costruiamo layout, componenti, stati responsive e direzione visuale coerenti con identità, pubblico e contenuti reali."
+          },
+          {
+            "title": "Sviluppo e CMS",
+            "description": "Implementiamo frontend, WordPress o architettura headless, form, media, tassonomie e componenti aggiornabili."
+          },
+          {
+            "title": "QA e pubblicazione",
+            "description": "Verifichiamo accessibilità, no-JS, performance, SEO tecnica, redirect candidate, analytics e comportamento sui viewport principali."
+          },
+          {
+            "title": "Ottimizzazione",
+            "description": "Dopo il lancio il sito può evolvere con nuove pagine, campagne, contenuti editoriali e miglioramenti misurati."
+          }
+        ],
+        "results": [
+          {
+            "label": "Esperienza",
+            "value": "dal 1986",
+            "context": "Netmarket lavora su comunicazione, web e marketing con continuità storica."
+          },
+          {
+            "label": "Progetti web collegati",
+            "value": "5+",
+            "context": "Case study legacy già mappati al servizio Siti web nello storico lavori."
+          },
+          {
+            "label": "Sistema",
+            "value": "CMS + SEO + UX",
+            "context": "La pagina modello unisce contenuti, sviluppo, performance e internal linking."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Quanto costa realizzare un sito web aziendale?",
+            "answer": "Dipende da obiettivi, numero di pagine, contenuti, design, CMS, integrazioni e migrazione. Per questo Netmarket parte da un confronto sul progetto prima di proporre un preventivo."
+          },
+          {
+            "question": "Quanto tempo serve per pubblicare un nuovo sito?",
+            "answer": "I tempi cambiano in base a complessità, contenuti disponibili e approvazioni. Un progetto ordinato include analisi, architettura, design, sviluppo, test, SEO tecnica e pubblicazione."
+          },
+          {
+            "question": "Realizzate anche restyling di siti già online?",
+            "answer": "Sì. In quel caso partiamo da contenuti, URL, performance, SEO esistente e criticità operative, così la migrazione non cancella ciò che funziona già."
+          },
+          {
+            "question": "Meglio WordPress, sviluppo custom o headless?",
+            "answer": "Non esiste una risposta unica. WordPress è utile quando il team deve gestire contenuti con continuità; un approccio custom o headless ha senso quando performance, integrazioni e controllo del frontend diventano centrali."
+          },
+          {
+            "question": "Il sito viene progettato anche per la SEO?",
+            "answer": "Sì, se il progetto lo richiede. Struttura, heading, metadata, performance, contenuti, internal link e migrazione URL vengono considerati già nella progettazione."
+          },
+          {
+            "question": "Dopo la pubblicazione chi aggiorna il sito?",
+            "answer": "Il sito può essere predisposto per aggiornamenti interni tramite CMS e per interventi evolutivi Netmarket su contenuti, sezioni, performance, campagne e integrazioni."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/seo"
+          },
+          {
+            "record": "nm_service/branding-e-comunicazione"
+          },
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/ecommerce"
+          },
+          {
+            "record": "nm_service/software-e-integrazioni"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "0222ca3b05495720e8cbfa1c1cce2534eddc160a0df045e8a03b1064e7294ce1"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "ux-ui-design",
+            "name": "UX/UI design"
+          },
+          {
+            "slug": "architettura-contenuti",
+            "name": "Architettura contenuti"
+          },
+          {
+            "slug": "frontend",
+            "name": "Frontend"
+          },
+          {
+            "slug": "seo-tecnica",
+            "name": "SEO tecnica"
+          },
+          {
+            "slug": "performance",
+            "name": "Performance"
+          },
+          {
+            "slug": "analytics",
+            "name": "Analytics"
+          },
+          {
+            "slug": "lead-generation",
+            "name": "Lead generation"
+          },
+          {
+            "slug": "migrazione-seo",
+            "name": "Migrazione SEO"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "wordpress",
+            "name": "WordPress"
+          },
+          {
+            "slug": "woocommerce",
+            "name": "WooCommerce"
+          },
+          {
+            "slug": "astro",
+            "name": "Astro"
+          },
+          {
+            "slug": "typescript",
+            "name": "TypeScript"
+          },
+          {
+            "slug": "php",
+            "name": "PHP"
+          },
+          {
+            "slug": "javascript",
+            "name": "JavaScript"
+          },
+          {
+            "slug": "rest-api",
+            "name": "REST API"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "ecommerce",
+      "title": "Ecommerce",
+      "excerpt": "Un ecommerce funziona quando piattaforma, catalogo, fiducia, marketing e operatività restano allineati. Per questo partiamo da prodotti, processi e obiettivi prima di scegliere layout e funzionalità.",
+      "content": "",
+      "meta": {
+        "seo_title": "Ecommerce e cataloghi digitali",
+        "meta_description": "Ecommerce e cataloghi digitali progettati da Netmarket con UX, WooCommerce, contenuti, tracking, SEO e gestione operativa.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "952ff3936f1f7f60adf05e55f7ab28ca06296e24122926b8c0f47a6226ca8f5e"
+        },
+        "priority": 20,
+        "featured": true,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Ecommerce pensati come sistema di vendita, non solo come catalogo online.",
+        "short_description": "Progettiamo ecommerce e cataloghi digitali collegando UX, schede prodotto, checkout, contenuti, tracking e gestione operativa.",
+        "hero_image": {
+          "media": "952ff3936f1f7f60adf05e55f7ab28ca06296e24122926b8c0f47a6226ca8f5e"
+        },
+        "value_props": [
+          {
+            "title": "Catalogo leggibile e governabile",
+            "description": "Categorie, varianti, schede prodotto e contenuti vengono organizzati per aiutare acquisto, aggiornamento e gestione interna."
+          },
+          {
+            "title": "Percorso di acquisto senza frizioni inutili",
+            "description": "Ricerca, scheda prodotto, carrello, checkout e segnali di fiducia vengono progettati come un unico flusso."
+          },
+          {
+            "title": "Marketing collegato alla piattaforma",
+            "description": "SEO, campagne, tracciamenti, promozioni e contenuti devono portare traffico verso pagine pronte a convertire."
+          },
+          {
+            "title": "Evoluzione dopo il lancio",
+            "description": "Uno store va letto nel tempo: categorie, contenuti, mobile, conversioni e dati guidano gli interventi successivi."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Il catalogo cresce ma diventa difficile da leggere",
+            "description": "Mettiamo ordine tra categorie, varianti, filtri, informazioni prodotto e priorità commerciali."
+          },
+          {
+            "title": "Il traffico arriva ma non compra",
+            "description": "Analizziamo dove si interrompe il percorso: contenuto, fiducia, mobile, checkout, tracciamento o offerta."
+          },
+          {
+            "title": "Gestione interna e sito non parlano",
+            "description": "Quando serve, integriamo ecommerce e strumenti operativi per ridurre lavoro manuale e incoerenze."
+          },
+          {
+            "title": "Le campagne non hanno una base solida",
+            "description": "Landing, prodotto, tracking e creatività devono essere coerenti prima di aumentare budget e pressione media."
+          }
+        ],
+        "process": [
+          {
+            "title": "Catalogo e business",
+            "description": "Mappiamo prodotti, margini, varianti, regole commerciali, mercati e gestione quotidiana."
+          },
+          {
+            "title": "UX e contenuti prodotto",
+            "description": "Disegniamo categorie, schede, percorsi mobile, rassicurazioni e contenuti necessari alla scelta."
+          },
+          {
+            "title": "Sviluppo piattaforma",
+            "description": "Costruiamo lo store, il CMS, le integrazioni essenziali, i pagamenti e il tracciamento."
+          },
+          {
+            "title": "Lancio e ottimizzazione",
+            "description": "Verifichiamo SEO, performance, analytics, conversioni e interventi iterativi post pubblicazione."
+          }
+        ],
+        "results": [
+          {
+            "label": "Proof ecommerce",
+            "value": "+3M",
+            "context": "Fatturato ecommerce 2025 dichiarato nel caso studio Pazzo Design."
+          },
+          {
+            "label": "Ordine medio",
+            "value": "€360",
+            "context": "Valore medio ordine riportato nel caso studio Pazzo Design."
+          },
+          {
+            "label": "Traffico 2025",
+            "value": "+1,2M",
+            "context": "Utenti attivi 2025 dichiarati nel caso studio Pazzo Design."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Quando ha senso aprire o rifare un ecommerce?",
+            "answer": "Quando catalogo, domanda, margini e gestione interna permettono di sostenere vendita, contenuti, assistenza e marketing nel tempo. Non basta mettere online i prodotti."
+          },
+          {
+            "question": "Realizzate ecommerce con WooCommerce?",
+            "answer": "Sì, WooCommerce è una delle tecnologie pertinenti quando il progetto richiede WordPress, gestione contenuti e uno store flessibile. La scelta dipende da catalogo, integrazioni e obiettivi."
+          },
+          {
+            "question": "Potete collegare ecommerce e gestionale?",
+            "answer": "Quando il perimetro tecnico lo richiede, valutiamo integrazioni con strumenti gestionali, flussi dati, cataloghi e processi operativi per ridurre passaggi manuali."
+          },
+          {
+            "question": "Seguite anche marketing e campagne dopo il lancio?",
+            "answer": "Sì, se rientra nel progetto. Ecommerce, SEO, advertising, contenuti e tracking devono lavorare insieme per capire cosa porta vendite e cosa va migliorato."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/seo"
+          },
+          {
+            "record": "nm_service/advertising"
+          },
+          {
+            "record": "nm_service/software-e-integrazioni"
+          },
+          {
+            "record": "nm_service/content-production"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "952ff3936f1f7f60adf05e55f7ab28ca06296e24122926b8c0f47a6226ca8f5e"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "catalogo-ecommerce",
+            "name": "Architettura catalogo"
+          },
+          {
+            "slug": "ux-checkout",
+            "name": "UX checkout"
+          },
+          {
+            "slug": "schede-prodotto",
+            "name": "Schede prodotto"
+          },
+          {
+            "slug": "tracking-ecommerce",
+            "name": "Tracking ecommerce"
+          },
+          {
+            "slug": "seo-ecommerce",
+            "name": "SEO ecommerce"
+          },
+          {
+            "slug": "ottimizzazione-conversione",
+            "name": "Ottimizzazione conversione"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "woocommerce",
+            "name": "WooCommerce"
+          },
+          {
+            "slug": "wordpress",
+            "name": "WordPress"
+          },
+          {
+            "slug": "analytics",
+            "name": "Analytics"
+          },
+          {
+            "slug": "search-console",
+            "name": "Search Console"
+          },
+          {
+            "slug": "payment-gateway",
+            "name": "Gateway di pagamento"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "software-e-integrazioni",
+      "title": "Software e integrazioni",
+      "excerpt": "Non trasformiamo ogni esigenza in una piattaforma. Prima capiamo flussi, persone, dati e vincoli; poi progettiamo lo strumento minimo e stabile per ridurre lavoro manuale e dispersione.",
+      "content": "",
+      "meta": {
+        "seo_title": "Software custom, CRM e integrazioni",
+        "meta_description": "Software custom, CRM, app e integrazioni per collegare processi, dati, ecommerce e strumenti operativi aziendali.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "3cf6f087b4bf4db4b23608ea52ffff5bc34e2cbf7b763e8b0a2e31e80884eda5"
+        },
+        "priority": 30,
+        "featured": true,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Software, CRM e integrazioni costruiti attorno ai processi reali.",
+        "short_description": "Sviluppiamo strumenti digitali, CRM, app, automazioni e integrazioni quando sito, dati e operatività devono lavorare insieme.",
+        "hero_image": {
+          "media": "3cf6f087b4bf4db4b23608ea52ffff5bc34e2cbf7b763e8b0a2e31e80884eda5"
+        },
+        "value_props": [
+          {
+            "title": "Flussi prima delle feature",
+            "description": "Mappiamo chi usa lo strumento, quali dati servono e quali passaggi devono diventare più semplici."
+          },
+          {
+            "title": "Integrazioni dove servono davvero",
+            "description": "API, gestionali, ecommerce, CRM e fonti dati vengono collegati solo quando il beneficio operativo è chiaro."
+          },
+          {
+            "title": "Interfacce per lavorare meglio",
+            "description": "Dashboard, pannelli e form devono aiutare persone reali, non aggiungere un altro luogo da controllare."
+          },
+          {
+            "title": "Manutenzione leggibile",
+            "description": "Un software utile deve poter evolvere: codice, ruoli e responsabilità restano comprensibili nel tempo."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Dati copiati a mano tra strumenti",
+            "description": "Riduciamo passaggi ripetitivi e incoerenze collegando fonti, form, gestionali e dashboard."
+          },
+          {
+            "title": "Processi commerciali poco tracciabili",
+            "description": "CRM, pipeline e automazioni aiutano a capire stato dei lead, follow-up e responsabilità."
+          },
+          {
+            "title": "Software esistenti che non si parlano",
+            "description": "Valutiamo integrazioni progressive, evitando rifacimenti totali quando basta far dialogare ciò che esiste."
+          },
+          {
+            "title": "Strumenti troppo complessi per il team",
+            "description": "Progettiamo interfacce essenziali, ruoli chiari e dati ordinati per facilitare adozione e supporto."
+          }
+        ],
+        "process": [
+          {
+            "title": "Mappa operativa",
+            "description": "Analizziamo persone, strumenti, dati, eccezioni, autorizzazioni e punti di attrito."
+          },
+          {
+            "title": "Priorità e prototipo",
+            "description": "Definiamo cosa serve subito, cosa può aspettare e come validare il flusso prima dello sviluppo completo."
+          },
+          {
+            "title": "Sviluppo e integrazione",
+            "description": "Costruiamo componenti, API, dashboard e collegamenti mantenendo controllo su sicurezza e manutenzione."
+          },
+          {
+            "title": "Passaggio operativo",
+            "description": "Testiamo, documentiamo, formiamo il team e gestiamo evoluzioni o supporto quando previsto."
+          }
+        ],
+        "results": [
+          {
+            "label": "Loyalty Sirene Blu",
+            "value": "100mila",
+            "context": "Utenti registrati al programma fedeltà riportati nel caso studio Sirene Blu."
+          },
+          {
+            "label": "Ambito",
+            "value": "app + casse",
+            "context": "App mobile, carta fedeltà, anagrafica e integrazione con gestionale casse."
+          },
+          {
+            "label": "Proof CRM",
+            "value": "Venitaly",
+            "context": "Caso studio CRM custom, manutenzione e supporto applicativo."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Quando serve un software custom invece di uno strumento già pronto?",
+            "answer": "Quando i processi, i dati o le integrazioni sono centrali e gli strumenti standard creano più lavoro di quello che risolvono."
+          },
+          {
+            "question": "Potete integrare strumenti già esistenti?",
+            "answer": "Sì, quando esistono API, export, database o flussi tecnicamente gestibili. Prima verifichiamo vincoli, sicurezza e qualità dei dati."
+          },
+          {
+            "question": "Sviluppate anche CRM?",
+            "answer": "Sì, se il progetto richiede gestione lead, pipeline, task, comunicazioni o dati commerciali ordinati attorno al lavoro del team."
+          },
+          {
+            "question": "Come si evita di creare un software troppo complesso?",
+            "answer": "Partendo dai flussi essenziali, validando priorità e costruendo per iterazioni. Non ogni richiesta deve diventare una feature."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/ecommerce"
+          },
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/advertising"
+          },
+          {
+            "record": "nm_service/concorsi-a-premi"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "3cf6f087b4bf4db4b23608ea52ffff5bc34e2cbf7b763e8b0a2e31e80884eda5"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "crm-custom",
+            "name": "CRM custom"
+          },
+          {
+            "slug": "integrazioni-api",
+            "name": "Integrazioni API"
+          },
+          {
+            "slug": "automazioni",
+            "name": "Automazioni"
+          },
+          {
+            "slug": "dashboard-operative",
+            "name": "Dashboard operative"
+          },
+          {
+            "slug": "app-mobile",
+            "name": "App mobile"
+          },
+          {
+            "slug": "data-flow",
+            "name": "Flussi dati"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "rest-api",
+            "name": "REST API"
+          },
+          {
+            "slug": "php",
+            "name": "PHP"
+          },
+          {
+            "slug": "typescript",
+            "name": "TypeScript"
+          },
+          {
+            "slug": "javascript",
+            "name": "JavaScript"
+          },
+          {
+            "slug": "wordpress",
+            "name": "WordPress"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "seo",
+      "title": "SEO",
+      "excerpt": "La SEO non è una promessa di posizione. È un lavoro continuo su struttura, pagine, segnali tecnici e contenuti utili, così il sito diventa più comprensibile e più governabile.",
+      "content": "",
+      "meta": {
+        "seo_title": "SEO tecnica e contenuti",
+        "meta_description": "SEO tecnica, audit, contenuti, performance e migrazioni per rendere il sito più chiaro, trovabile e misurabile.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "3857de4c15e0e3fd175f5ecc2cb19357db0def047f5d1e8e0b9468abb8aa43e3"
+        },
+        "priority": 40,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "SEO tecnica e contenuti per rendere il sito più chiaro a persone e motori di ricerca.",
+        "short_description": "Lavoriamo su architettura, contenuti, performance, metadata, Search Console e migrazioni per migliorare la qualità organica del sito.",
+        "hero_image": {
+          "media": "3857de4c15e0e3fd175f5ecc2cb19357db0def047f5d1e8e0b9468abb8aa43e3"
+        },
+        "value_props": [
+          {
+            "title": "Audit prima delle attività",
+            "description": "Analizziamo struttura, indicizzazione, contenuti, performance e query per capire dove intervenire."
+          },
+          {
+            "title": "Contenuti con un ruolo preciso",
+            "description": "Ogni pagina deve rispondere a un intento, sostenere internal link e non cannibalizzare altre sezioni."
+          },
+          {
+            "title": "SEO integrata a web e marketing",
+            "description": "Le decisioni SEO hanno effetto su sito, campagne, copy, analytics e priorità editoriali."
+          },
+          {
+            "title": "Migrazioni con controllo",
+            "description": "Quando un sito cambia, inventariamo URL, metadata, redirect candidate e contenuti da preservare."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Pagine indicizzate ma poco utili",
+            "description": "Riorganizziamo contenuti e gerarchie per ridurre rumore, duplicazioni e pagine senza funzione."
+          },
+          {
+            "title": "Traffico che non sostiene il business",
+            "description": "Le query vengono lette in base a intenti, servizi, prove e possibilità di conversione."
+          },
+          {
+            "title": "Rifacimenti che perdono visibilità",
+            "description": "La migrazione va preparata prima del lancio con mapping, canonical, sitemap e controlli."
+          },
+          {
+            "title": "Decisioni basate su sensazioni",
+            "description": "Search Console, analytics e dati tecnici aiutano a ordinare priorità e verificare effetti."
+          }
+        ],
+        "process": [
+          {
+            "title": "Audit tecnico-editoriale",
+            "description": "Verifichiamo crawling, indexability, struttura, performance, contenuti, metadata e dati disponibili."
+          },
+          {
+            "title": "Mappa intenti e pagine",
+            "description": "Definiamo quali pagine servono, quali vanno consolidate e quali relazioni interne costruire."
+          },
+          {
+            "title": "Ottimizzazione",
+            "description": "Interveniamo su template, heading, copy, media, schema, internal link e segnali tecnici."
+          },
+          {
+            "title": "Monitoraggio",
+            "description": "Leggiamo query, copertura, performance e conversioni per decidere gli interventi successivi."
+          }
+        ],
+        "results": [
+          {
+            "label": "Proof",
+            "value": "Albertini",
+            "context": "Caso studio mappato a Siti web e SEO nella migrazione."
+          },
+          {
+            "label": "Metodo",
+            "value": "audit + contenuti",
+            "context": "Approccio coerente con pagine legacy e sistema servizi."
+          },
+          {
+            "label": "Migrazione",
+            "value": "URL map",
+            "context": "Il progetto usa inventari, sitemap e redirect candidate per evitare perdita di controllo."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Potete garantire la prima posizione su Google?",
+            "answer": "No. Nessuna attività SEO seria può garantire una posizione. Possiamo però migliorare struttura, contenuti, performance e misurazione per aumentare qualità e probabilità di visibilità."
+          },
+          {
+            "question": "Da dove parte un progetto SEO?",
+            "answer": "Da un audit del sito, delle query, dei contenuti e dei vincoli tecnici. Solo dopo ha senso definire priorità operative."
+          },
+          {
+            "question": "La SEO serve anche durante il rifacimento del sito?",
+            "answer": "Sì. È uno dei momenti più delicati: URL, redirect, contenuti, metadata, canonical e sitemap vanno gestiti prima della pubblicazione."
+          },
+          {
+            "question": "Scrivete anche contenuti SEO?",
+            "answer": "Sì, quando il piano lo richiede. I contenuti vengono progettati per rispondere a intenti reali e collegarsi al resto del sito."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/ecommerce"
+          },
+          {
+            "record": "nm_service/advertising"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "3857de4c15e0e3fd175f5ecc2cb19357db0def047f5d1e8e0b9468abb8aa43e3"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "audit-seo",
+            "name": "Audit SEO"
+          },
+          {
+            "slug": "seo-tecnica",
+            "name": "SEO tecnica"
+          },
+          {
+            "slug": "seo-on-page",
+            "name": "SEO on-page"
+          },
+          {
+            "slug": "content-strategy",
+            "name": "Content strategy"
+          },
+          {
+            "slug": "internal-linking",
+            "name": "Internal linking"
+          },
+          {
+            "slug": "migrazione-seo",
+            "name": "Migrazione SEO"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "search-console",
+            "name": "Search Console"
+          },
+          {
+            "slug": "analytics",
+            "name": "Analytics"
+          },
+          {
+            "slug": "structured-data",
+            "name": "Structured data"
+          },
+          {
+            "slug": "core-web-vitals",
+            "name": "Core Web Vitals"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "advertising",
+      "title": "Advertising",
+      "excerpt": "La campagna non è solo budget. Funziona quando offerta, pubblico, messaggio, canale e pagina di arrivo sono coerenti e misurabili.",
+      "content": "",
+      "meta": {
+        "seo_title": "Advertising digitale e pubblicità",
+        "meta_description": "Advertising digitale, campagne social, landing, creatività, tracking e pubblicità tradizionale coordinati con il marketing.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "e2f9743635d714d02fca21aa3883430a2b712ce5a9a203ae3aacab8d9fd2d14b"
+        },
+        "priority": 50,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Campagne pubblicitarie collegate a messaggi, landing e dati.",
+        "short_description": "Gestiamo advertising digitale e pubblicità tradizionale coordinando obiettivi, creatività, media, tracciamento e pagine di destinazione.",
+        "hero_image": {
+          "media": "e2f9743635d714d02fca21aa3883430a2b712ce5a9a203ae3aacab8d9fd2d14b"
+        },
+        "value_props": [
+          {
+            "title": "Obiettivo prima del canale",
+            "description": "Lead, vendite, traffico, awareness e promozioni richiedono scelte diverse di messaggio, pubblico e misurazione."
+          },
+          {
+            "title": "Creatività pensata per il contesto",
+            "description": "Asset, copy e formati vengono collegati al canale, alla landing e alla promessa commerciale."
+          },
+          {
+            "title": "Tracking leggibile",
+            "description": "Eventi, conversioni e analytics servono a capire quali attività generano valore e dove intervenire."
+          },
+          {
+            "title": "Digitale e offline nello stesso piano",
+            "description": "Quando serve, campagne radio, materiali e iniziative promozionali dialogano con sito e canali digitali."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Budget distribuito senza priorità",
+            "description": "Definiamo canali e investimenti in base a obiettivi, target, pagine disponibili e capacità di gestione lead."
+          },
+          {
+            "title": "Annunci scollegati dalla landing",
+            "description": "Allineiamo promessa, contenuto, form e percorso per non disperdere traffico qualificato."
+          },
+          {
+            "title": "Conversioni difficili da leggere",
+            "description": "Il tracciamento viene impostato per distinguere contatti, vendite, micro-conversioni e qualità del traffico."
+          },
+          {
+            "title": "Campagne una tantum senza apprendimento",
+            "description": "Ogni attivazione deve lasciare dati utili per migliorare creatività, pubblico e offerta."
+          }
+        ],
+        "process": [
+          {
+            "title": "Scenario e obiettivi",
+            "description": "Chiarimento di pubblico, proposta, budget, canali, tempi e pagina di destinazione."
+          },
+          {
+            "title": "Creatività e landing",
+            "description": "Produciamo messaggi, asset e pagine coerenti con l’azione richiesta all’utente."
+          },
+          {
+            "title": "Setup e tracciamento",
+            "description": "Configuriamo campagne, eventi, conversioni e controlli prima della pubblicazione."
+          },
+          {
+            "title": "Lettura e ottimizzazione",
+            "description": "Monitoriamo andamento, qualità dei contatti e segnali di conversione per correggere il piano."
+          }
+        ],
+        "results": [
+          {
+            "label": "Canali",
+            "value": "online + offline",
+            "context": "Le fonti legacy citano campagne digitali, radio, stampa e pianificazione media."
+          },
+          {
+            "label": "Proof BRB",
+            "value": "ecosistema",
+            "context": "Caso studio legato a ecommerce, sito e strategia social/SEO."
+          },
+          {
+            "label": "Approccio",
+            "value": "landing + dati",
+            "context": "Advertising collegato a creatività, destinazioni e tracciamenti."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Gestite Google Ads e campagne social?",
+            "answer": "Le fonti Netmarket descrivono campagne digitali e social advertising. La scelta delle piattaforme va definita in base a obiettivo, pubblico e tracciamento disponibile."
+          },
+          {
+            "question": "Serve una landing page dedicata?",
+            "answer": "Spesso sì. Una campagna performa meglio quando la pagina riprende promessa, contenuto e azione richiesta, invece di mandare tutto alla home."
+          },
+          {
+            "question": "Come si misura una campagna?",
+            "answer": "Con eventi e conversioni coerenti: contatti, vendite, richieste, iscrizioni o altre azioni utili. Le metriche vanno lette rispetto all’obiettivo."
+          },
+          {
+            "question": "Fate anche pubblicità tradizionale?",
+            "answer": "Sì, le fonti Netmarket citano campagne radio, stampa, materiali promozionali e pianificazione media come parte della comunicazione integrata."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/ecommerce"
+          },
+          {
+            "record": "nm_service/social-media"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "e2f9743635d714d02fca21aa3883430a2b712ce5a9a203ae3aacab8d9fd2d14b"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "media-planning",
+            "name": "Media planning"
+          },
+          {
+            "slug": "landing-campaign",
+            "name": "Landing campaign"
+          },
+          {
+            "slug": "conversion-tracking",
+            "name": "Conversion tracking"
+          },
+          {
+            "slug": "creative-ads",
+            "name": "Creatività advertising"
+          },
+          {
+            "slug": "lead-generation",
+            "name": "Lead generation"
+          },
+          {
+            "slug": "offline-advertising",
+            "name": "Pubblicità tradizionale"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "google-ads",
+            "name": "Google Ads"
+          },
+          {
+            "slug": "meta-ads",
+            "name": "Meta Ads"
+          },
+          {
+            "slug": "analytics",
+            "name": "Analytics"
+          },
+          {
+            "slug": "tag-manager",
+            "name": "Tag Manager"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "social-media",
+      "title": "Social media",
+      "excerpt": "Una presenza social utile non vive di uscite casuali. Ha un ruolo nel marketing, un tono coerente, format sostenibili e una lettura dei risultati.",
+      "content": "",
+      "meta": {
+        "seo_title": "Social media management",
+        "meta_description": "Social media management con strategia, piano editoriale, contenuti, campagne e reporting per aziende e PMI.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "109ea013c97a0d181ab003e85dc27c0a1d1b6bda2af5a06fc8ba2aab1387f47e"
+        },
+        "priority": 60,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Social media con direzione editoriale, contenuti e continuità.",
+        "short_description": "Gestiamo canali social, piani editoriali, contenuti e campagne per rendere riconoscibile l’azienda nel tempo.",
+        "hero_image": {
+          "media": "109ea013c97a0d181ab003e85dc27c0a1d1b6bda2af5a06fc8ba2aab1387f47e"
+        },
+        "value_props": [
+          {
+            "title": "Piano editoriale sostenibile",
+            "description": "Rubriche, frequenze e contenuti vengono costruiti attorno a obiettivi e risorse reali."
+          },
+          {
+            "title": "Tono coerente con il brand",
+            "description": "Testi, visual e format devono sembrare parte della stessa azienda, non contenuti isolati."
+          },
+          {
+            "title": "Produzione collegata ai canali",
+            "description": "Foto, video, grafiche e copy vengono adattati a piattaforme, formati e campagne."
+          },
+          {
+            "title": "Dati per migliorare la rotta",
+            "description": "Performance e interazioni aiutano a capire cosa ripetere, cosa cambiare e cosa smettere."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Post pubblicati senza direzione",
+            "description": "Definiamo priorità, format e messaggi prima di riempire il calendario."
+          },
+          {
+            "title": "Social separati da sito e campagne",
+            "description": "Colleghiamo contenuti social a pagine, promozioni, advertising e obiettivi commerciali."
+          },
+          {
+            "title": "Tono diverso a ogni uscita",
+            "description": "Costruiamo linee editoriali e visuali per mantenere riconoscibilità e coerenza."
+          },
+          {
+            "title": "Report difficili da interpretare",
+            "description": "Le metriche vengono lette in base al ruolo del canale: relazione, traffico, lead, promozione o reputazione."
+          }
+        ],
+        "process": [
+          {
+            "title": "Direzione editoriale",
+            "description": "Chiarimento di pubblico, messaggi, ruolo dei canali e priorità di comunicazione."
+          },
+          {
+            "title": "Format e calendario",
+            "description": "Definiamo rubriche, frequenze, contenuti ricorrenti e momenti commerciali."
+          },
+          {
+            "title": "Produzione e pubblicazione",
+            "description": "Prepariamo copy, visual, adattamenti e contenuti coerenti con brand e piattaforma."
+          },
+          {
+            "title": "Analisi e miglioramento",
+            "description": "Leggiamo risultati e feedback per ottimizzare piano editoriale e campagne."
+          }
+        ],
+        "results": [
+          {
+            "label": "Proof BRB",
+            "value": "social + SEO",
+            "context": "Portfolio legacy cita strategia social e SEO per BRB."
+          },
+          {
+            "label": "Canali",
+            "value": "Meta + LinkedIn",
+            "context": "Le fonti legacy citano Facebook, Instagram e LinkedIn nella gestione social."
+          },
+          {
+            "label": "Metodo",
+            "value": "piano + contenuti",
+            "context": "La pagina social legacy cita gestione, pubblicità e creazione contenuti."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Vi occupate solo della pubblicazione dei post?",
+            "answer": "No. La pubblicazione è una parte del lavoro: prima servono direzione editoriale, format, contenuti, obiettivi e lettura dei risultati."
+          },
+          {
+            "question": "Quali canali social gestite?",
+            "answer": "Le fonti legacy Netmarket citano Facebook, Instagram e LinkedIn. I canali effettivi vanno scelti in base a pubblico e obiettivo."
+          },
+          {
+            "question": "Create anche i contenuti?",
+            "answer": "Sì, quando il progetto lo prevede: copy, grafiche, foto, video e adattamenti per formati social e campagne."
+          },
+          {
+            "question": "Quanto tempo serve per vedere risultati?",
+            "answer": "Dipende da stato dei canali, frequenza, contenuti, investimento e obiettivi. I social richiedono continuità, non singole uscite scollegate."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/advertising"
+          },
+          {
+            "record": "nm_service/branding-e-comunicazione"
+          },
+          {
+            "record": "nm_service/siti-web"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "109ea013c97a0d181ab003e85dc27c0a1d1b6bda2af5a06fc8ba2aab1387f47e"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "piano-editoriale",
+            "name": "Piano editoriale"
+          },
+          {
+            "slug": "social-copywriting",
+            "name": "Social copywriting"
+          },
+          {
+            "slug": "content-creation",
+            "name": "Content creation"
+          },
+          {
+            "slug": "community-management",
+            "name": "Community management"
+          },
+          {
+            "slug": "social-ads",
+            "name": "Social ads"
+          },
+          {
+            "slug": "reporting-social",
+            "name": "Reporting social"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "instagram",
+            "name": "Instagram"
+          },
+          {
+            "slug": "facebook",
+            "name": "Facebook"
+          },
+          {
+            "slug": "linkedin",
+            "name": "LinkedIn"
+          },
+          {
+            "slug": "meta-ads",
+            "name": "Meta Ads"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "branding-e-comunicazione",
+      "title": "Branding e comunicazione",
+      "excerpt": "La comunicazione non è solo un logo. È il modo in cui un’azienda si presenta, spiega il proprio valore e resta coerente tra sito, social, materiali, campagne e relazione commerciale.",
+      "content": "",
+      "meta": {
+        "seo_title": "Brand identity e comunicazione coordinata",
+        "meta_description": "Branding, comunicazione, immagine coordinata, copy e materiali online/offline per rendere l’azienda riconoscibile.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "b73ebe2285516375120544c24b2901b629d0c3ec91a10072d923c0fc651520b6"
+        },
+        "priority": 70,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Identità, messaggi e materiali per rendere l’azienda riconoscibile.",
+        "short_description": "Lavoriamo su branding, comunicazione, immagine coordinata, copy, materiali e campagne online e offline.",
+        "hero_image": {
+          "media": "b73ebe2285516375120544c24b2901b629d0c3ec91a10072d923c0fc651520b6"
+        },
+        "value_props": [
+          {
+            "title": "Posizionamento leggibile",
+            "description": "Prima dei materiali, serve capire cosa rende l’azienda riconoscibile e a chi deve parlare."
+          },
+          {
+            "title": "Sistema visivo coordinato",
+            "description": "Logo, palette, tipografia, layout e materiali devono costruire continuità tra canali."
+          },
+          {
+            "title": "Messaggi che aiutano il business",
+            "description": "Copy, payoff, claim e contenuti commerciali devono chiarire valore, differenze e prossimi passi."
+          },
+          {
+            "title": "Online e offline coerenti",
+            "description": "La stessa identità deve funzionare su sito, social, packaging, brochure, radio, eventi e campagne."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Materiali che sembrano di aziende diverse",
+            "description": "Riorganizziamo regole visuali, copy e applicazioni per dare riconoscibilità al brand."
+          },
+          {
+            "title": "Il valore non è chiaro",
+            "description": "Lavoriamo su messaggi, gerarchie e tono per spiegare meglio cosa fa l’azienda e perché sceglierla."
+          },
+          {
+            "title": "Campagne e sito non parlano la stessa lingua",
+            "description": "Allineiamo comunicazione commerciale, contenuti digitali e materiali offline."
+          },
+          {
+            "title": "Il brand deve evolvere senza perdere memoria",
+            "description": "Un restyling deve valorizzare ciò che funziona già e rendere più chiaro ciò che oggi confonde."
+          }
+        ],
+        "process": [
+          {
+            "title": "Analisi identitaria",
+            "description": "Raccogliamo storia, mercato, pubblici, materiali esistenti, tono e differenze reali."
+          },
+          {
+            "title": "Direzione creativa",
+            "description": "Definiamo territorio visivo, messaggi, criteri e applicazioni prioritarie."
+          },
+          {
+            "title": "Sistema e materiali",
+            "description": "Produciamo asset, linee guida, copy e formati per sito, social, stampa o campagne."
+          },
+          {
+            "title": "Applicazione sui canali",
+            "description": "Portiamo il sistema nei punti di contatto che servono davvero al progetto."
+          }
+        ],
+        "results": [
+          {
+            "label": "Esperienza",
+            "value": "dal 1986",
+            "context": "Netmarket nasce come agenzia di comunicazione tradizionale e integra poi il digitale."
+          },
+          {
+            "label": "Proof legacy",
+            "value": "Pazzo + Thais",
+            "context": "Portfolio legacy cita branding per Pazzo Design e sviluppo brand Thais."
+          },
+          {
+            "label": "Sistema",
+            "value": "online + offline",
+            "context": "Le fonti Netmarket descrivono comunicazione integrata digitale e tradizionale."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Branding significa solo creare un logo?",
+            "answer": "No. Il logo è una parte del sistema. Branding significa definire identità, messaggi, tono, regole visuali e applicazioni coerenti."
+          },
+          {
+            "question": "Potete lavorare su materiali già esistenti?",
+            "answer": "Sì. Partiamo da ciò che l’azienda usa già per capire cosa preservare, cosa ordinare e cosa aggiornare."
+          },
+          {
+            "question": "Create anche materiali offline?",
+            "answer": "Sì, le fonti Netmarket citano immagine coordinata, packaging, stampa, campagne e materiali promozionali."
+          },
+          {
+            "question": "Come si collega il branding al sito?",
+            "answer": "Il sito traduce identità e messaggi in contenuti, layout, gerarchie e percorsi. Per questo branding e web dovrebbero dialogare fin dall’inizio."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/social-media"
+          },
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/advertising"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "b73ebe2285516375120544c24b2901b629d0c3ec91a10072d923c0fc651520b6"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "brand-identity",
+            "name": "Brand identity"
+          },
+          {
+            "slug": "immagine-coordinata",
+            "name": "Immagine coordinata"
+          },
+          {
+            "slug": "copywriting",
+            "name": "Copywriting"
+          },
+          {
+            "slug": "graphic-design",
+            "name": "Graphic design"
+          },
+          {
+            "slug": "packaging",
+            "name": "Packaging"
+          },
+          {
+            "slug": "art-direction",
+            "name": "Art direction"
+          }
+        ],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "content-production",
+      "title": "Content production",
+      "excerpt": "La produzione contenuti diventa efficace quando nasce da un piano: cosa deve spiegare, dove sarà usata, quali formati servono e come può essere riutilizzata.",
+      "content": "",
+      "meta": {
+        "seo_title": "Produzione contenuti per web e campagne",
+        "meta_description": "Content production per siti, social, campagne ed ecommerce: foto, video, copy, visual e asset riutilizzabili.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "e88b57f95f47814bb17b9e876980ed5351b8bd4516b5e57207ee7f31eb98fdd3"
+        },
+        "priority": 80,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Contenuti visivi e testuali pensati per essere usati davvero.",
+        "short_description": "Produciamo foto, video, copy, visual e asset per siti, social, campagne, ecommerce e materiali commerciali.",
+        "hero_image": {
+          "media": "e88b57f95f47814bb17b9e876980ed5351b8bd4516b5e57207ee7f31eb98fdd3"
+        },
+        "value_props": [
+          {
+            "title": "Produzione guidata dalla strategia",
+            "description": "Prima di scattare, scrivere o montare definiamo obiettivi, canali, formati e messaggi."
+          },
+          {
+            "title": "Asset riutilizzabili",
+            "description": "Un contenuto può alimentare sito, social, schede prodotto, campagne, presentazioni e materiali commerciali."
+          },
+          {
+            "title": "Coerenza con brand e canali",
+            "description": "Visual, tono e formato vengono adattati senza perdere riconoscibilità."
+          },
+          {
+            "title": "Dalla produzione alla pubblicazione",
+            "description": "I contenuti vengono pensati per entrare concretamente in pagine, campagne e calendari editoriali."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Mancano immagini e testi utilizzabili",
+            "description": "Costruiamo librerie di contenuti che evitano soluzioni improvvisate o visual generici."
+          },
+          {
+            "title": "Ogni canale richiede un formato diverso",
+            "description": "Pianifichiamo adattamenti per sito, social, advertising, ecommerce e materiali commerciali."
+          },
+          {
+            "title": "I contenuti non spiegano il valore",
+            "description": "Copy, foto e video devono aiutare scelta, fiducia e comprensione, non solo riempire spazi."
+          },
+          {
+            "title": "Produzione scollegata dal calendario",
+            "description": "Organizziamo priorità e riuso in modo che gli asset sostengano campagne e aggiornamenti."
+          }
+        ],
+        "process": [
+          {
+            "title": "Piano contenuti",
+            "description": "Definiamo messaggi, soggetti, formati, canali e materiali da produrre."
+          },
+          {
+            "title": "Produzione",
+            "description": "Realizziamo testi, visual, shooting, video o asset grafici in base al progetto."
+          },
+          {
+            "title": "Adattamento",
+            "description": "Prepariamo varianti per pagine, social, advertising, ecommerce e presentazioni."
+          },
+          {
+            "title": "Organizzazione",
+            "description": "Gli asset entrano nel sistema editoriale e possono essere riutilizzati nel tempo."
+          }
+        ],
+        "results": [
+          {
+            "label": "Proof Rigomar",
+            "value": "sito + shooting",
+            "context": "Caso studio mappato a Siti web e Content production."
+          },
+          {
+            "label": "Formati",
+            "value": "foto + video + copy",
+            "context": "Le fonti legacy comunicazione citano fotografia, video e multimedia."
+          },
+          {
+            "label": "Uso",
+            "value": "multi-canale",
+            "context": "Contenuti pensati per sito, social, campagne e materiali commerciali."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Realizzate shooting fotografici?",
+            "answer": "Sì, le fonti legacy e il caso Rigomar confermano attività di shooting fotografico collegate a progetti web e comunicazione."
+          },
+          {
+            "question": "Create anche video e contenuti multimediali?",
+            "answer": "Sì, la comunicazione legacy Netmarket include video e multimedia. Il formato viene scelto in base a canale e obiettivo."
+          },
+          {
+            "question": "I contenuti possono essere usati su più canali?",
+            "answer": "Sì. Il lavoro migliore nasce proprio pensando al riuso su sito, social, campagne, ecommerce e materiali commerciali."
+          },
+          {
+            "question": "Scrivete anche testi per sito e campagne?",
+            "answer": "Sì, quando il progetto lo prevede: copy, microcopy, testi editoriali, contenuti prodotto e adattamenti per canale."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/social-media"
+          },
+          {
+            "record": "nm_service/branding-e-comunicazione"
+          },
+          {
+            "record": "nm_service/advertising"
+          },
+          {
+            "record": "nm_service/siti-web"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "e88b57f95f47814bb17b9e876980ed5351b8bd4516b5e57207ee7f31eb98fdd3"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "shooting-fotografico",
+            "name": "Shooting fotografico"
+          },
+          {
+            "slug": "video-production",
+            "name": "Video production"
+          },
+          {
+            "slug": "copywriting",
+            "name": "Copywriting"
+          },
+          {
+            "slug": "asset-social",
+            "name": "Asset social"
+          },
+          {
+            "slug": "creativita-adv",
+            "name": "Creatività ADV"
+          },
+          {
+            "slug": "contenuti-prodotto",
+            "name": "Contenuti prodotto"
+          }
+        ],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_service",
+      "slug": "concorsi-a-premi",
+      "title": "Concorsi a premi",
+      "excerpt": "Un concorso a premi non è solo un’idea promozionale. Richiede una meccanica chiara, strumenti affidabili, comunicazione coerente e attenzione agli aspetti operativi e normativi del progetto.",
+      "content": "",
+      "meta": {
+        "seo_title": "Concorsi a premi digitali e promozionali",
+        "meta_description": "Concorsi a premi con ideazione, meccanica, piattaforma digitale, comunicazione, dati e gestione operativa.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "26ca224a780f2a11221d6a827f18955bd8b54bbd34bd9d7afda276009e353738"
+        },
+        "priority": 90,
+        "featured": false,
+        "cta_label": "Parliamone",
+        "cta_url": "https://www.netmarket.it/#contatti",
+        "subtitle": "Concorsi a premi con regia strategica, tecnica e operativa.",
+        "short_description": "Progettiamo e gestiamo concorsi a premi integrando meccanica, comunicazione, piattaforme digitali, raccolta dati e coordinamento operativo.",
+        "hero_image": {
+          "media": "26ca224a780f2a11221d6a827f18955bd8b54bbd34bd9d7afda276009e353738"
+        },
+        "value_props": [
+          {
+            "title": "Meccanica comprensibile",
+            "description": "Partecipazione, premi, canali e regole operative devono essere chiari per azienda e utenti."
+          },
+          {
+            "title": "Sviluppo digitale integrato",
+            "description": "Landing, form, caricamento documenti, verifica partecipazioni e dati vengono progettati attorno al flusso reale."
+          },
+          {
+            "title": "Comunicazione coordinata",
+            "description": "Concept, visual, materiali, social, advertising e punto vendita devono raccontare la stessa iniziativa."
+          },
+          {
+            "title": "Gestione responsabile",
+            "description": "Coordiniamo passaggi operativi e documentali senza trasformare la pagina in consulenza legale."
+          }
+        ],
+        "problems": [
+          {
+            "title": "Troppe parti da coordinare",
+            "description": "Mettiamo insieme idea, materiali, piattaforma, dati, comunicazione e gestione operativa."
+          },
+          {
+            "title": "Partecipazione complicata",
+            "description": "Il flusso utente deve essere semplice, chiaro e adatto al contesto del concorso."
+          },
+          {
+            "title": "Dati e privacy da governare",
+            "description": "La raccolta partecipazioni richiede attenzione a moduli, consensi, gestione dati e strumenti."
+          },
+          {
+            "title": "Promozione scollegata dai canali",
+            "description": "Il concorso funziona meglio quando è integrato con sito, social, advertising e materiali offline."
+          }
+        ],
+        "process": [
+          {
+            "title": "Obiettivo e meccanica",
+            "description": "Definiamo pubblico, premi, modalità di partecipazione, canali e vincoli del progetto."
+          },
+          {
+            "title": "Concept e materiali",
+            "description": "Costruiamo identità dell’iniziativa, copy, visual e materiali digitali o fisici."
+          },
+          {
+            "title": "Piattaforma e dati",
+            "description": "Sviluppiamo landing, form, tracciamenti e flussi di gestione partecipazioni quando necessari."
+          },
+          {
+            "title": "Coordinamento e supporto",
+            "description": "Accompagniamo lancio, gestione operativa, comunicazione e chiusura dell’iniziativa."
+          }
+        ],
+        "results": [
+          {
+            "label": "Proof Sirene Blu",
+            "value": "2024",
+            "context": "Caso studio dedicato a ideazione, sviluppo e gestione completa del concorso."
+          },
+          {
+            "label": "Ambito",
+            "value": "concept + piattaforma",
+            "context": "Il caso studio cita naming, identità, materiali e piattaforma web dedicata."
+          },
+          {
+            "label": "Integrazione",
+            "value": "online + punto vendita",
+            "context": "Il concorso è stato pensato per traffico nei punti vendita e partecipazione digitale."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Un concorso a premi può essere gestito online?",
+            "answer": "Sì. Le fonti Netmarket descrivono concorsi digitali con landing, form, caricamento scontrini e gestione partecipazioni."
+          },
+          {
+            "question": "Vi occupate anche degli aspetti normativi?",
+            "answer": "Netmarket coordina gli aspetti operativi e documentali del progetto. La pagina non sostituisce una consulenza legale: il perimetro va definito caso per caso."
+          },
+          {
+            "question": "Un concorso può essere collegato a social e advertising?",
+            "answer": "Sì, ed è spesso utile. Comunicazione, campagne, sito e materiali aiutano a rendere chiara l’iniziativa e aumentare partecipazione."
+          },
+          {
+            "question": "Quali meccaniche si possono usare?",
+            "answer": "Le fonti legacy citano concorsi online, instant win, estrazione finale e operazioni a premio. La scelta dipende da obiettivo, pubblico e vincoli."
+          }
+        ],
+        "related_services": [
+          {
+            "record": "nm_service/advertising"
+          },
+          {
+            "record": "nm_service/content-production"
+          },
+          {
+            "record": "nm_service/software-e-integrazioni"
+          },
+          {
+            "record": "nm_service/social-media"
+          }
+        ]
+      },
+      "thumbnail": {
+        "media": "26ca224a780f2a11221d6a827f18955bd8b54bbd34bd9d7afda276009e353738"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [
+          {
+            "slug": "meccanica-concorso",
+            "name": "Meccanica concorso"
+          },
+          {
+            "slug": "landing-concorso",
+            "name": "Landing concorso"
+          },
+          {
+            "slug": "gestione-partecipazioni",
+            "name": "Gestione partecipazioni"
+          },
+          {
+            "slug": "concept-promozionale",
+            "name": "Concept promozionale"
+          },
+          {
+            "slug": "materiali-punto-vendita",
+            "name": "Materiali punto vendita"
+          },
+          {
+            "slug": "supporto-operativo",
+            "name": "Supporto operativo"
+          }
+        ],
+        "nm_technology": [
+          {
+            "slug": "form-web",
+            "name": "Form web"
+          },
+          {
+            "slug": "database",
+            "name": "Database"
+          },
+          {
+            "slug": "analytics",
+            "name": "Analytics"
+          }
+        ]
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "brb",
+      "title": "BRB",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "BRB",
+        "logo": {
+          "media": "1d4c722097637b5bfb3aa15323817a3fe646ff74cdd24436dcaf32bf728df4db"
+        }
+      },
+      "thumbnail": {
+        "media": "1d4c722097637b5bfb3aa15323817a3fe646ff74cdd24436dcaf32bf728df4db"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "casi-studio-strategia-digitale-ecommerce-brb",
+      "title": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Strategia digitale ed e-commerce BRB: caso studio completo",
+        "meta_description": "Scopri il caso studio BRB: strategia multi-canale, nuovo e-commerce e crescita del +292% del fatturato. Un ecosistema digitale completo.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "678c8f8d078edcfc2f961e223fd854007f916f77647c0bbfc084367c0beb508f"
+        },
+        "priority": 5210,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "BRB",
+        "short_description": "",
+        "project_year": 2025,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "Strategia Sviluppo web Social Media Cliente BRB Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2025 A fine 2025 il progetto BRB è stato completamente ripensato con l’obiettivo di fare un salto di qualità, passando da una gestione operativa dei social a una strategia strutturata e orientata alla crescita. In parallelo al lancio del nuovo e-commerce sviluppato da Netmarket, abbiamo analizzato il mercato degli integratori, le dinamiche dei competitor e le best practice di settore, definendo un sistema coordinato tra contenuti, piattaforma e acquisizione traffico. Come lo abbiamo sviluppato Analisi del progetto e del settore Definizione strategia multi-canale Nuova identità visiva social Struttura visuale del feed (griglia coordinata) Piano editoriale e calendario contenuti Sviluppo e-commerce completo Ottimizzazione SEO e struttura contenuti Come lo abbiamo realizzato Strategia e posizionamento Abbiamo ridefinito il progetto partendo dai dati e dal mercato, costruendo una strategia che integrasse social, contenuti e piattaforma e-commerce, con l’obiettivo di generare traffico qualificato e aumentare la conversione. Sistema contenuti e identità visiva È stata sviluppata una nuova linea visiva coerente e riconoscibile, progettata nel dettaglio anche a livello di griglia di pubblicazione, per aumentare la percezione del brand e migliorare la leggibilità dei contenuti. E-commerce e struttura SEO In contemporanea, abbiamo progettato e sviluppato il nuovo e-commerce, strutturato per intercettare traffico organico e supportare la conversione attraverso categorie, schede prodotto e contenuti editoriali. Risultati Nei primi 3 mesi successivi al lancio, il progetto ha mostrato una crescita significativa rispetto allo storico: +292% fatturato e-commerce +206% Ordini +39% Valore medio ordine +364% prodotti venduti",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Strategia Sviluppo web Social Media Cliente BRB Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2025 A fine 2025 il progetto BRB è stato completamente ripensato con l’obiettivo di fare un salto di qualità, passando da una gestione operativa dei social a una strategia strutturata e orientata alla crescita. In parallelo al lancio del nuovo e-commerce sviluppato da Netmarket, abbiamo analizzato il mercato degli integratori, le dinamiche dei competitor e le best practice di settore, definendo un sistema coordinato tra contenuti, piattaforma e acquisizione traffico. Come lo abbiamo sviluppato Analisi del progetto e del settore Definizione strategia multi-canale Nuova identità visiva social Struttura visuale del feed (griglia coordinata) Piano editoriale e calendario contenuti Sviluppo e-commerce completo Ottimizzazione SEO e struttura contenuti Come lo abbiamo realizzato Strategia e posizionamento Abbiamo ridefinito il progetto partendo dai dati e dal mercato, costruendo una strategia che integrasse social, contenuti e piattaforma e-commerce, con l’obiettivo di generare traffico qualificato e aumentare la conversione. Sistema contenuti e identità visiva È stata sviluppata una nuova linea visiva coerente e riconoscibile, progettata nel dettaglio anche a livello di griglia di pubblicazione, per aumentare la percezione del brand e migliorare la leggibilità dei contenuti. E-commerce e struttura SEO In contemporanea, abbiamo progettato e sviluppato il nuovo e-commerce, strutturato per intercettare traffico organico e supportare la conversione attraverso categorie, schede prodotto e contenuti editoriali. Risultati Nei primi 3 mesi successivi al lancio, il progetto ha mostrato una crescita significativa rispetto allo storico: +292% fatturato e-commerce +206% Ordini +39% Valore medio ordine +364% prodotti venduti",
+        "numeric_results": [
+          {
+            "label": "Risultato dichiarato",
+            "value": "+292%"
+          },
+          {
+            "label": "Risultato dichiarato",
+            "value": "+206%"
+          },
+          {
+            "label": "Risultato dichiarato",
+            "value": "+39%"
+          },
+          {
+            "label": "Risultato dichiarato",
+            "value": "+364%"
+          }
+        ],
+        "client": {
+          "record": "nm_client/brb"
+        },
+        "cover_image": {
+          "media": "678c8f8d078edcfc2f961e223fd854007f916f77647c0bbfc084367c0beb508f"
+        },
+        "gallery": [
+          {
+            "media": "11c09d901ff60f0eafce656b6e327e6900691ddfb28f500ebacdb86f8484c9a8"
+          },
+          {
+            "media": "6d4b470e56e81e2d016262470adb8cd91e416b9e6c8453be6ee690a1f08df733"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/social-media"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "678c8f8d078edcfc2f961e223fd854007f916f77647c0bbfc084367c0beb508f"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "sirene-blu",
+      "title": "Sirene Blu",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "Sirene Blu",
+        "logo": {
+          "media": "8c38099ae6ff031aae9fc48f9355bbeef947b48438ee13bdfa242e2ef3a5dcf0"
+        }
+      },
+      "thumbnail": {
+        "media": "8c38099ae6ff031aae9fc48f9355bbeef947b48438ee13bdfa242e2ef3a5dcf0"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa",
+      "title": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Sviluppo concorso a premi Sirene Blu 2024 - Netmarket",
+        "meta_description": "",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "07121cce09a071a6c8379b4179ddda0a797dd8ac102a8c079f56222ec00feb35"
+        },
+        "priority": 5928,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Sirene Blu",
+        "short_description": "",
+        "project_year": 2024,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Strategia Sviluppo web Concorsi a premi Gestione operativa Cliente Sirene Blu Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa Dalla strategia alla piattaforma digitale, fino alla gestione normativa e operativa Anno 2024 Il concorso a premi Sirene Blu 2024 nasce con l’obiettivo di aumentare il traffico nei punti vendita e incentivare la partecipazione attiva dei clienti attraverso una meccanica semplice ma efficace, garantendo al tempo stesso una gestione completamente conforme dal punto di vista normativo.Il progetto richiedeva un coordinamento completo tra strategia, creatività, tecnologia e burocrazia, con vincoli legati alla normativa sui concorsi a premi, alla gestione delle anagrafiche e al rispetto del GDPR.Per questo abbiamo sviluppato un intervento integrato che ha coperto tutte le fasi: ideazione della meccanica e del concept, definizione del naming e dell’identità visiva, realizzazione dei materiali di comunicazione per stampa e digitale, sviluppo di una piattaforma web dedicata per il caricamento degli scontrini e la verifica immediata delle vincite, gestione completa degli aspetti burocratici e normativi, e integrazione dei dati nel rispetto delle normative sulla privacy.",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/sirene-blu"
+        },
+        "cover_image": {
+          "media": "07121cce09a071a6c8379b4179ddda0a797dd8ac102a8c079f56222ec00feb35"
+        },
+        "gallery": [
+          {
+            "media": "8f213ff7576bef1e5d72dbb71a65099279d544d1c2f971a885a8a20e04b34443"
+          },
+          {
+            "media": "780d063bade9f06b91b44c48173d9931ca33c9be931e9d67641531f61850c687"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/concorsi-a-premi"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "07121cce09a071a6c8379b4179ddda0a797dd8ac102a8c079f56222ec00feb35"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "pazzo-design",
+      "title": "Pazzo Design",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "Pazzo Design",
+        "logo": {
+          "media": "a6b000d768570ec0a58c755d66316ffa8bc10301edc2aab36870316b065dcd1c"
+        }
+      },
+      "thumbnail": {
+        "media": "a6b000d768570ec0a58c755d66316ffa8bc10301edc2aab36870316b065dcd1c"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa",
+      "title": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Sviluppo E-commerce Arredo Casa | Caso Studio Netmarket",
+        "meta_description": "Caso studio e-commerce per tavoli e sedie: sviluppo, design e crescita fino a oltre 3M€ di fatturato. Scopri il progetto.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "c52b6c1eecbdfcf63a9727caf3f4124670b9be5393e17ee0f98309b9547a1cea"
+        },
+        "priority": 6171,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Pazzo Design",
+        "short_description": "",
+        "project_year": 2022,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Studio Sviluppo E-commerce Cliente Pazzo Design Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua. Lo sviluppo digitale di un'azienda artigiana italiano che ora vende per oltre €3M/anno online. Anno 2022 Risultati Nel 2025 l’e‑commerce ha riportato dati degni di nota, segnale che l'infrastruttura fa esattamente quello per cui è progettata. +3M fatturato e-commerce €360 Valore medio dell'ordine +1,2M Utenti attivi nel 2025 Pazzo Design è un brand italiano specializzato in tavoli e sedie per la casa, nato dall’evoluzione di un’attività familiare attiva nell’arredamento da circa sessant’anni.Nel 2022 il marchio decide di portare online questa esperienza, dando vita all’e‑commerce per vendere tavoli allungabili, consolle, sedie e poltrone a un pubblico nazionale. L’obiettivo del progetto affidato a Netmarket era trasformare un know‑how fisico consolidato in un e‑commerce verticale capace di scalare, mantenendo la percezione di qualità ed affidabilità della realtà tradizionale.Serviva una piattaforma solida, con una struttura catalogo chiara e una UX cucita su un target non necessariamente “nativo digitale”, ma disposto a investire in prodotti d’arredo di fascia medio‑alta. Netmarket ha curato progettazione, sviluppo e successivi miglioramenti dell’e‑commerce: architettura informativa, struttura del catalogo, UX delle schede prodotto, processo di checkout e integrazione dei contenuti istituzionali.Nel tempo il sito è stato ottimizzato iterativamente: razionalizzazione delle categorie, gestione delle varianti, miglioramento della leggibilità su mobile e affinamento di elementi di fiducia (policy chiare, contatti e servizio clienti ben visibili).",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/pazzo-design"
+        },
+        "cover_image": {
+          "media": "c52b6c1eecbdfcf63a9727caf3f4124670b9be5393e17ee0f98309b9547a1cea"
+        },
+        "gallery": [
+          {
+            "media": "e960c7ef5e69737e52c429a08c1759096ac125ce58110449b09e0dbb3d9e306d"
+          },
+          {
+            "media": "2f0cb514401872aabb357c60c3faf29fcc2678f2998ed6a198664828c7baa9bd"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/ecommerce"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "c52b6c1eecbdfcf63a9727caf3f4124670b9be5393e17ee0f98309b9547a1cea"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "progetto-e",
+      "title": "Progetto-e",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "Progetto-e",
+        "logo": {
+          "media": "66ae9e2192ff6e560369f3090bf0492be9bbc8150cfdac28be0a7d9cbd5c8a5c"
+        }
+      },
+      "thumbnail": {
+        "media": "66ae9e2192ff6e560369f3090bf0492be9bbc8150cfdac28be0a7d9cbd5c8a5c"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sviluppo-sito-web-fotovoltaico-progetto-e",
+      "title": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Sviluppo sito web fotovoltaico | Caso Studio Progetto-e Netmarket",
+        "meta_description": "Caso studio Progetto-e: sviluppo sito WordPress, SEO, contenuti e landing page per un’azienda del settore fotovoltaico. Scopri il progetto.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "185cb6764aa517abb0d2c1b7e8e618821a00bb71c43217204938e0a30b990e5f"
+        },
+        "priority": 6267,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Progetto-e",
+        "short_description": "",
+        "project_year": 2025,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Studio Sviluppo sito web Cliente Progetto-e Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale. Un sito progettato per valorizzare competenza tecnica, contenuti SEO e generazione di contatti qualificati nel settore energia. Anno 2025 Risultati Il nuovo sito Progetto-E è stato costruito per trasformare la presenza online dell’azienda in uno strumento più chiaro, autorevole e orientato alla crescita organica. WordPress Sito flessibile e aggiornabile SEO Struttura pensata per crescere su Google Landing Page Landing page e contenuti orientati al contatto Progetto-e aveva bisogno di un sito capace di raccontare in modo più chiaro la propria competenza nel fotovoltaico industriale e di supportare attività SEO, contenuti e lead generation. Netmarket ha sviluppato il nuovo sito web, lavorando su struttura, navigazione, identità visiva, contenuti e ottimizzazione organica. Il progetto ha incluso anche landing page commerciali, materiali scaricabili, campagne email integrate con Brevo e interventi tecnici post-pubblicazione. Il risultato è una presenza digitale più solida, pensata per valorizzare l’azienda come partner tecnico per imprese e realtà produttive interessate a soluzioni energetiche concrete",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/progetto-e"
+        },
+        "cover_image": {
+          "media": "185cb6764aa517abb0d2c1b7e8e618821a00bb71c43217204938e0a30b990e5f"
+        },
+        "gallery": [
+          {
+            "media": "eba6f1372aa915bd91f4359bb8e64c5ddbc9ba143bd6c702216e1b0d99fc1a25"
+          },
+          {
+            "media": "ae0f71a9cfa8e26a14997b81d44ba63976955aae32185f72cb36651128a27137"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "185cb6764aa517abb0d2c1b7e8e618821a00bb71c43217204938e0a30b990e5f"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "albertini-allestimenti",
+      "title": "Albertini Allestimenti",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "Albertini Allestimenti",
+        "logo": {
+          "media": "8e4b135faa164e434ac666cea82088cc24ca9e8456df9b7ae2178556239dd63a"
+        }
+      },
+      "thumbnail": {
+        "media": "8e4b135faa164e434ac666cea82088cc24ca9e8456df9b7ae2178556239dd63a"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sviluppo-sito-web-allestimenti-fieristici-albertini",
+      "title": "Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura.",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Sviluppo sito web per allestimenti fieristici | Caso Studio Netmarket",
+        "meta_description": "Caso studio Albertini Allestimenti: analisi, posizionamento, SEO research, sviluppo del nuovo sito istituzionale con portfolio e catalogo.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "d5628d22aaceecc8300e02676ee908f8b732b35305104ac34c13219f05c0cc5e"
+        },
+        "priority": 6277,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Albertini Allestimenti",
+        "short_description": "",
+        "project_year": 2024,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Analisi strategica SEO Sviluppo sito web Cliente Albertini Allestimenti Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura. Un sito istituzionale progettato per rinnovare l’immagine dell’azienda, valorizzare i casi studio e trasformare la navigazione in nuove richieste commerciali. Anno 2024 Risultato Il progetto ha trasformato il sito Albertini in una piattaforma più chiara, strutturata e orientata alla generazione di contatti qualificati. Analisi strategica Studio del posizionamento, dei competitor e dell’offerta Portfolio progetti Sezione dedicata alla raccolta e valorizzazione dei casi studio Lead generation Modulo con invio automatico del catalogo aziendale Albertini Allestimenti aveva bisogno di rinnovare completamente la propria presenza digitale, con un sito capace di raccontare in modo più chiaro servizi, competenze e progetti realizzati. Netmarket ha seguito il progetto partendo da analisi, studio grafico, analisi dei competitor, posizionamento, SEO research e definizione dell’alberatura. Il lavoro ha portato allo sviluppo di un nuovo sito istituzionale, con sezioni dedicate ai servizi, area casi studio e modulo per la richiesta automatizzata del catalogo. Il risultato è una piattaforma più moderna, ordinata e orientata al contatto, pensata per valorizzare l’esperienza di Albertini nel mondo degli allestimenti fieristici, degli showroom e dell’arredo contract.",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/albertini-allestimenti"
+        },
+        "cover_image": {
+          "media": "d5628d22aaceecc8300e02676ee908f8b732b35305104ac34c13219f05c0cc5e"
+        },
+        "gallery": [],
+        "services": [
+          {
+            "record": "nm_service/seo"
+          },
+          {
+            "record": "nm_service/siti-web"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "d5628d22aaceecc8300e02676ee908f8b732b35305104ac34c13219f05c0cc5e"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "rigomar",
+      "title": "Rigomar",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "Rigomar",
+        "logo": {
+          "media": "7d136088635d1c683d6c87b781749646acbfffc3a605d84eedd309a287edaf4c"
+        }
+      },
+      "thumbnail": {
+        "media": "7d136088635d1c683d6c87b781749646acbfffc3a605d84eedd309a287edaf4c"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda",
+      "title": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Sviluppo sito web e shooting | Caso Studio Rigomar",
+        "meta_description": "Sviluppo sito web, shooting fotografico e comunicazione visuale per valorizzare un’azienda specializzata nella produzione moda conto terzi.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "d0ae938a3e374fc56712556dac5be14b44502e061b1d2c7e90bf5e1df3e7c7ad"
+        },
+        "priority": 6284,
+        "featured": true,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Rigomar",
+        "short_description": "",
+        "project_year": 2024,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Sviluppo web Shooting Cliente Rigomar Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda. Un progetto costruito per raccontare Rigomar in modo più chiaro, contemporaneo e credibile, attraverso strategia, sviluppo web e contenuti visuali dedicati. Anno 2024 Rigomar aveva bisogno di una presenza digitale capace di raccontare meglio il proprio valore nel mondo della produzione moda conto terzi. Netmarket ha sviluppato un progetto completo che ha unito strategia, sviluppo del nuovo sito istituzionale e shooting fotografico dedicato. Il lavoro ha permesso di chiarire il posizionamento dell’azienda, valorizzare i servizi e costruire un’immagine più contemporanea, autorevole e coerente con il target B2B. Il risultato è un sito essenziale, premium e orientato al contatto, supportato da contenuti visuali pensati per rafforzare la percezione del brand.",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/rigomar"
+        },
+        "cover_image": {
+          "media": "d0ae938a3e374fc56712556dac5be14b44502e061b1d2c7e90bf5e1df3e7c7ad"
+        },
+        "gallery": [
+          {
+            "media": "e0e3c843105ce277162097614d0b70f729ee39712184f0973fd6ef4ffaf1fdac"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/content-production"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "d0ae938a3e374fc56712556dac5be14b44502e061b1d2c7e90bf5e1df3e7c7ad"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_client",
+      "slug": "venitaly",
+      "title": "VENITALY",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "brand_name": "VENITALY",
+        "logo": {
+          "media": "507e511fdd147cb8b63eed733e090cd904ba01a897e7fe67aface6d4a9dc2af7"
+        }
+      },
+      "thumbnail": {
+        "media": "507e511fdd147cb8b63eed733e090cd904ba01a897e7fe67aface6d4a9dc2af7"
+      },
+      "terms": {}
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sviluppo-crm-custom-venitaly",
+      "title": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "Software gestionale custom VENITALY | Caso Studio Netmarket",
+        "meta_description": "Sviluppo e manutenzione del CRM VENITALY: software gestionale custom per gestione utenti, dati, accessi e processi operativi aziendali.",
+        "canonical_override": "",
+        "noindex": true,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "2a2b96f7c7d111e699c66dc10a9219e8f8db981071b6d3c89612af18b4d825ea"
+        },
+        "priority": 6305,
+        "featured": false,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "VENITALY",
+        "short_description": "",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Sviluppo software Manutenzione Supporto documentale Cliente Venitaly Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo Un gestionale sviluppato da Netmarket per supportare le attività operative di VENITALY, con manutenzione continuativa, gestione degli account e interventi tecnici in contesti critici. Anno VENITALY utilizza un CRM custom sviluppato da Netmarket per gestire attività operative, dati e processi interni in modo più ordinato e strutturato. Netmarket ha seguito lo sviluppo del gestionale e continua ad affiancare il cliente con manutenzione applicativa, supporto tecnico e interventi evolutivi. In un contesto operativo critico, l’attività ha incluso anche il censimento degli account, l’aggiornamento delle credenziali e il blocco degli accessi non autorizzati. Un progetto meno visibile dal punto di vista estetico, ma centrale per raccontare una competenza concreta: la capacità di sviluppare e mantenere software gestionali custom, garantendo supporto tecnico e continuità operativa nel tempo. Risultati CRM custom Sviluppo di una piattaforma gestionale progettata sulle esigenze operative del cliente. Manutenzione costante Supporto tecnico continuativo per aggiornamenti, verifiche e gestione applicativa del sistema. Accessi controllati Censimento account, aggiornamento credenziali e blocco degli utenti non autorizzati.",
+        "numeric_results": [],
+        "client": {
+          "record": "nm_client/venitaly"
+        },
+        "cover_image": {
+          "media": "2a2b96f7c7d111e699c66dc10a9219e8f8db981071b6d3c89612af18b4d825ea"
+        },
+        "gallery": [
+          {
+            "media": "91c518deee8efad5317d477cf246f109baf5f84516bb90414904e3907aeba93f"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/software-e-integrazioni"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "2a2b96f7c7d111e699c66dc10a9219e8f8db981071b6d3c89612af18b4d825ea"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "app-mobile-programma-fedelta-sirene-blu",
+      "title": "App mobile e programma fedeltà Sirene Blu",
+      "excerpt": "",
+      "content": "",
+      "meta": {
+        "seo_title": "App mobile e programma fedeltà | Caso Studio Sirene Blu",
+        "meta_description": "Sviluppo app mobile, programma fidelity e integrazione custom con gestionale casse. Oltre 100.000 iscritti al programma fedeltà.",
+        "canonical_override": "",
+        "noindex": true,
+        "social_title": "",
+        "social_description": "",
+        "social_image": {
+          "media": "7c9f8f3b496ba4f83d863f4570fb9e21b5bfc8f50e0ab5d205e8e65913560740"
+        },
+        "priority": 6312,
+        "featured": false,
+        "cta_label": "",
+        "cta_url": "",
+        "public_client_name": "Sirene Blu",
+        "short_description": "",
+        "project_year": 2025,
+        "project_status": "published",
+        "project_url": "",
+        "context": "",
+        "challenge": "",
+        "objectives": [],
+        "approach": "",
+        "solution": "",
+        "qualitative_result": "",
+        "additional_content": "Sviluppo app Software custom Programma fedeltà Cliente Sirene Blu App mobile e programma fedeltà Sirene Blu Un ecosistema digitale per portare la carta fedeltà sempre con il cliente, collegare app, punti vendita e gestionale casse, e trasformare il programma loyalty in uno strumento di relazione e analisi. Anno 2025 Sirene Blu è una catena con oltre 70 negozi in Italia dedicati alla cura e all’igiene della persona e alla pulizia della casa. Un’insegna costruita su risparmio, assortimento, qualità e servizio, con un rapporto quotidiano e diretto con migliaia di clienti nei punti vendita.Il progetto affidato a Netmarket nasceva da un’esigenza precisa: trasformare il programma fedeltà in uno strumento digitale più accessibile, integrato e utile sia per il cliente finale sia per l’azienda.Netmarket ha sviluppato l’app mobile Sirene Blu e l’infrastruttura del programma fidelity, progettando un sistema capace di collegare carta fedeltà, anagrafica clienti, logiche di accumulo punti, sconti attivi, volantino mensile, punti vendita e gestionale casse.L’app permette ai clienti di avere la propria carta fedeltà sempre a portata di mano, accumulare punti, accedere a sconti immediati, visualizzare le promozioni disponibili, trovare il negozio più vicino e consultare il volantino mensile. Una soluzione semplice nell’esperienza utente, ma costruita su un impianto tecnico articolato.Il lavoro non si è limitato allo sviluppo dell’app. Netmarket ha progettato anche il programma fedeltà alla base del sistema: gestione dell’anagrafica, logiche di funzionamento, collegamento con i dati cliente e integrazione custom con il gestionale casse. Questo consente al programma fidelity di dialogare con l’operatività reale dei punti vendita, rendendo l’esperienza coerente tra app, negozio fisico e sistema gestionale. Il risultato è un ecosistema loyalty che oggi ha superato i 100.000 iscritti. Un dato importante non solo dal punto di vista quantitativo, ma anche strategico: il programma consente a Sirene Blu di costruire una relazione più diretta con i clienti, valorizzare promozioni e offerte, migliorare la fidelizzazione e raccogliere informazioni utili sui comportamenti d’acquisto.Per un’insegna retail con una rete ampia di punti vendita, la fidelity non è solo una carta sconto. È uno strumento di conoscenza. Permette di analizzare frequenza d’acquisto, preferenze, categorie più rilevanti, risposta alle promozioni e abitudini dei clienti nel tempo.Questo apre la strada ad attività più evolute: campagne mirate, offerte più pertinenti, analisi di mercato, segmentazione della base utenti e decisioni commerciali basate su dati reali.L’app Sirene Blu e il programma fedeltà rappresentano quindi un progetto digitale ad alto impatto: uno strumento pensato per semplificare l’esperienza del cliente, supportare i negozi e dare all’azienda una base dati solida su cui costruire strategie di marketing, vendita e relazione.Un progetto che racconta bene il modo in cui Netmarket lavora sui software custom: partire da un’esigenza concreta, costruire un sistema stabile, integrarlo con i processi esistenti e trasformarlo in valore misurabile per l’azienda. Risultati 100mila Il programma fedeltà Sirene Blu ha superato quota 100.000 utenti registrati. App mobile Carta fedeltà, sconti, punti vendita e volantino sempre accessibili da smartphone. Integrazione Collegamento tra programma fidelity, anagrafica clienti e gestionale casse.",
+        "numeric_results": [
+          {
+            "label": "Risultato dichiarato",
+            "value": "100mila"
+          }
+        ],
+        "client": {
+          "record": "nm_client/sirene-blu"
+        },
+        "cover_image": {
+          "media": "7c9f8f3b496ba4f83d863f4570fb9e21b5bfc8f50e0ab5d205e8e65913560740"
+        },
+        "gallery": [
+          {
+            "media": "7c9f8f3b496ba4f83d863f4570fb9e21b5bfc8f50e0ab5d205e8e65913560740"
+          },
+          {
+            "media": "5a500a196abe3a9266928e6da4a3a7bcab5b770ea8438b0576d1c3abb7428f1c"
+          },
+          {
+            "media": "67e5444e6bbe46277039a8162e2c97549b2de82d534059369dbd2924f2255514"
+          },
+          {
+            "media": "1ffa88861f770036632e223ceb44406922ab9c8ad9ce9eb2bbdc7addb9facfe3"
+          },
+          {
+            "media": "8753235682d25004fac639b8a4cbbfdc3d03e07e764d73f067124cdd9af8cc4c"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/software-e-integrazioni"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "thumbnail": {
+        "media": "7c9f8f3b496ba4f83d863f4570fb9e21b5bfc8f50e0ab5d205e8e65913560740"
+      },
+      "terms": {
+        "nm_sector": [],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    }
+  ],
+  "media": [
+    {
+      "key": "0222ca3b05495720e8cbfa1c1cce2534eddc160a0df045e8a03b1064e7294ce1",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-realizzazione-siti-web_netmarket.png",
+      "alt": "Visual servizio sviluppo e realizzazione siti web Netmarket",
+      "mimeType": "image/png",
+      "sha256": "7b4899fc248888991348fd3376d96ba863b626397278ff9d16fd437c79d44415",
+      "filename": "sviluppo-realizzazione-siti-web_netmarket.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/0222ca3b05495720e8cbfa1c1cce2534eddc160a0df045e8a03b1064e7294ce1-sviluppo-realizzazione-siti-web_netmarket.png"
+    },
+    {
+      "key": "952ff3936f1f7f60adf05e55f7ab28ca06296e24122926b8c0f47a6226ca8f5e",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/sviluppo-ecommerce_netmarket-1.png",
+      "alt": "Visual servizio sviluppo ecommerce Netmarket",
+      "mimeType": "image/png",
+      "sha256": "50339297395d0f1d963a8ddbdc6a138aebebcba8b17858f64a5bc406f2bd658a",
+      "filename": "sviluppo-ecommerce_netmarket-1.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/952ff3936f1f7f60adf05e55f7ab28ca06296e24122926b8c0f47a6226ca8f5e-sviluppo-ecommerce_netmarket-1.png"
+    },
+    {
+      "key": "3cf6f087b4bf4db4b23608ea52ffff5bc34e2cbf7b763e8b0a2e31e80884eda5",
+      "sourceUrl": "/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly.webp",
+      "alt": "Software gestionale custom VENITALY",
+      "mimeType": "image/webp",
+      "sha256": "87ec62e0d724b1d4855833b77c83eb210f501702c9902ba934a5cd775e5e6fd4",
+      "filename": "6305-sviluppo-software-gestionale-venitaly.webp",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly.webp"
+    },
+    {
+      "key": "3857de4c15e0e3fd175f5ecc2cb19357db0def047f5d1e8e0b9468abb8aa43e3",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/marketing-digitale_netmarket.png",
+      "alt": "Visual servizio SEO e marketing digitale Netmarket",
+      "mimeType": "image/png",
+      "sha256": "4c45425756681b61a2f0ff589785ff2e9562205d4fe6b9cab4a1d08da18f953e",
+      "filename": "marketing-digitale_netmarket.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/3857de4c15e0e3fd175f5ecc2cb19357db0def047f5d1e8e0b9468abb8aa43e3-marketing-digitale_netmarket.png"
+    },
+    {
+      "key": "e2f9743635d714d02fca21aa3883430a2b712ce5a9a203ae3aacab8d9fd2d14b",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/pubblicita-tradizionale-radio_netmarket-1.png",
+      "alt": "Visual servizio advertising e pubblicità Netmarket",
+      "mimeType": "image/png",
+      "sha256": "18318adc12a1b3b1a3ed204c6f5ceff2e23c7697d7de61df64805c4f78336990",
+      "filename": "pubblicita-tradizionale-radio_netmarket-1.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/e2f9743635d714d02fca21aa3883430a2b712ce5a9a203ae3aacab8d9fd2d14b-pubblicita-tradizionale-radio_netmarket-1.png"
+    },
+    {
+      "key": "109ea013c97a0d181ab003e85dc27c0a1d1b6bda2af5a06fc8ba2aab1387f47e",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/social-media-management_netmarket.png",
+      "alt": "Visual servizio social media management Netmarket",
+      "mimeType": "image/png",
+      "sha256": "68de2db50f6bb2d31e1423705478b9ef5a3ca378077cc74996de5250534c3b9b",
+      "filename": "social-media-management_netmarket.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/109ea013c97a0d181ab003e85dc27c0a1d1b6bda2af5a06fc8ba2aab1387f47e-social-media-management_netmarket.png"
+    },
+    {
+      "key": "b73ebe2285516375120544c24b2901b629d0c3ec91a10072d923c0fc651520b6",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/comunicazione-grafica-branding_netmarket.png",
+      "alt": "Visual servizio comunicazione grafica e branding Netmarket",
+      "mimeType": "image/png",
+      "sha256": "c387ad61c7a337564f9c2a9dd2a77d23d0d82b2a44004cae59437f5de4cf8010",
+      "filename": "comunicazione-grafica-branding_netmarket.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/b73ebe2285516375120544c24b2901b629d0c3ec91a10072d923c0fc651520b6-comunicazione-grafica-branding_netmarket.png"
+    },
+    {
+      "key": "e88b57f95f47814bb17b9e876980ed5351b8bd4516b5e57207ee7f31eb98fdd3",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/product-photography-netmarket.webp",
+      "alt": "Fotografia di prodotto realizzata da Netmarket",
+      "mimeType": "image/webp",
+      "sha256": "8c731a5f15e97426bf5c0c311fa4ed2891205c5e8dce6a0c59df3398e758783a",
+      "filename": "product-photography-netmarket.webp",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/e88b57f95f47814bb17b9e876980ed5351b8bd4516b5e57207ee7f31eb98fdd3-product-photography-netmarket.webp"
+    },
+    {
+      "key": "26ca224a780f2a11221d6a827f18955bd8b54bbd34bd9d7afda276009e353738",
+      "sourceUrl": "https://cms.netmarket.it/wp-content/uploads/2026/09/concorsi-a-premi_netmarket.png",
+      "alt": "Visual servizio concorsi a premi Netmarket",
+      "mimeType": "image/png",
+      "sha256": "ebfdcdf41c592f8250af59c9560d1c50bea25b0edd51dacff8f9d2fa6c58096a",
+      "filename": "concorsi-a-premi_netmarket.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "data/releases/stape-cms-media/26ca224a780f2a11221d6a827f18955bd8b54bbd34bd9d7afda276009e353738-concorsi-a-premi_netmarket.png"
+    },
+    {
+      "key": "1d4c722097637b5bfb3aa15323817a3fe646ff74cdd24436dcaf32bf728df4db",
+      "sourceUrl": "/media/case-studies/legacy/5210-baracco-logo2026.svg",
+      "alt": "BRB",
+      "mimeType": "image/svg+xml",
+      "sha256": "35a75ca8080d93f0b3a1d3f0821673a1287d5f8b102e7a54cddbeadc8cc094eb",
+      "filename": "5210-baracco-logo2026.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5210-baracco-logo2026.svg"
+    },
+    {
+      "key": "678c8f8d078edcfc2f961e223fd854007f916f77647c0bbfc084367c0beb508f",
+      "sourceUrl": "/media/case-studies/legacy/5210-gestione-social-media-creazione-contenuti-brand-alimentare.jpg",
+      "alt": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+      "mimeType": "image/jpeg",
+      "sha256": "2c10b0aae2c7a709ab5ddbe80e95ca063dcbd09e6bc3cc8b95066aa4d312277b",
+      "filename": "5210-gestione-social-media-creazione-contenuti-brand-alimentare.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5210-gestione-social-media-creazione-contenuti-brand-alimentare.jpg"
+    },
+    {
+      "key": "11c09d901ff60f0eafce656b6e327e6900691ddfb28f500ebacdb86f8484c9a8",
+      "sourceUrl": "/media/case-studies/legacy/5210-sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg",
+      "alt": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+      "mimeType": "image/jpeg",
+      "sha256": "0d75aec0e37dfc3ac8e3daaabddb55c38274bd02bf3086625c7a696bd7c1bfc2",
+      "filename": "5210-sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5210-sviluppo-ecommerce-brand-alimentare-padova-1024x896.jpg"
+    },
+    {
+      "key": "6d4b470e56e81e2d016262470adb8cd91e416b9e6c8453be6ee690a1f08df733",
+      "sourceUrl": "/media/case-studies/legacy/5210-feed-instagram-social-brb.png",
+      "alt": "Strategia digitale e nuovo e-commerce BRB: costruzione di un ecosistema integrato",
+      "mimeType": "image/png",
+      "sha256": "8010933389765b62574e4004c5fab7dde3a148a3d7e6cb00b239e7b55b817b9c",
+      "filename": "5210-feed-instagram-social-brb.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5210-feed-instagram-social-brb.png"
+    },
+    {
+      "key": "8c38099ae6ff031aae9fc48f9355bbeef947b48438ee13bdfa242e2ef3a5dcf0",
+      "sourceUrl": "/media/case-studies/legacy/5928-sirene-blu-logo.svg",
+      "alt": "logo cliente sirene blu",
+      "mimeType": "image/svg+xml",
+      "sha256": "23c5e1649fffbc50c32a5c602a12ac92fbcdd8de729ad2dc8dab3e10c3810623",
+      "filename": "5928-sirene-blu-logo.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5928-sirene-blu-logo.svg"
+    },
+    {
+      "key": "07121cce09a071a6c8379b4179ddda0a797dd8ac102a8c079f56222ec00feb35",
+      "sourceUrl": "/media/case-studies/legacy/5928-branding-aziendale-.jpg",
+      "alt": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+      "mimeType": "image/jpeg",
+      "sha256": "fb95c3ec20102887e905cf34941f4e5955c6007458e284516353a8276d50d7df",
+      "filename": "5928-branding-aziendale-.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5928-branding-aziendale-.jpg"
+    },
+    {
+      "key": "8f213ff7576bef1e5d72dbb71a65099279d544d1c2f971a885a8a20e04b34443",
+      "sourceUrl": "/media/case-studies/legacy/5928-branding-aziendale-sirene-blu-2-1024x576.jpg",
+      "alt": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+      "mimeType": "image/jpeg",
+      "sha256": "8fd51da34dab5a1360c77de94df7fdae86bf8665589edd6d1e2078aa46be86fb",
+      "filename": "5928-branding-aziendale-sirene-blu-2-1024x576.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5928-branding-aziendale-sirene-blu-2-1024x576.jpg"
+    },
+    {
+      "key": "780d063bade9f06b91b44c48173d9931ca33c9be931e9d67641531f61850c687",
+      "sourceUrl": "/media/case-studies/legacy/5928-branding-aziendale--1024x576.jpg",
+      "alt": "Concorso a premi Sirene Blu 2024: ideazione, sviluppo e gestione completa",
+      "mimeType": "image/jpeg",
+      "sha256": "600df4343f51d58de7f692784894dae9c7e674e7e84558ef5e78709a96af7fe6",
+      "filename": "5928-branding-aziendale--1024x576.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/5928-branding-aziendale--1024x576.jpg"
+    },
+    {
+      "key": "a6b000d768570ec0a58c755d66316ffa8bc10301edc2aab36870316b065dcd1c",
+      "sourceUrl": "/media/case-studies/legacy/6171-pazzodesign-logo2026.svg",
+      "alt": "Pazzo Design",
+      "mimeType": "image/svg+xml",
+      "sha256": "89174b5f26fa81ec1e646765f4c5027cfe598b6c71deab2e9c6a4655ec121a97",
+      "filename": "6171-pazzodesign-logo2026.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6171-pazzodesign-logo2026.svg"
+    },
+    {
+      "key": "c52b6c1eecbdfcf63a9727caf3f4124670b9be5393e17ee0f98309b9547a1cea",
+      "sourceUrl": "/media/case-studies/legacy/6171-iPhone-Mockup-pazzodesign.jpg",
+      "alt": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+      "mimeType": "image/jpeg",
+      "sha256": "8c9ea3fed599445dd403177157af6a3f8d708e6363e3853d5ea4e8c0d544638d",
+      "filename": "6171-iPhone-Mockup-pazzodesign.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6171-iPhone-Mockup-pazzodesign.jpg"
+    },
+    {
+      "key": "e960c7ef5e69737e52c429a08c1759096ac125ce58110449b09e0dbb3d9e306d",
+      "sourceUrl": "/media/case-studies/legacy/6171-ecommerce-negozio-arredamento-1024x683.jpg",
+      "alt": "agenzia creazione ecommerce professionali",
+      "mimeType": "image/jpeg",
+      "sha256": "21e6141e2ffd29ac2dbe7004c84da7aed84766d5b51769918f5c7d8a3d2a3af6",
+      "filename": "6171-ecommerce-negozio-arredamento-1024x683.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6171-ecommerce-negozio-arredamento-1024x683.jpg"
+    },
+    {
+      "key": "2f0cb514401872aabb357c60c3faf29fcc2678f2998ed6a198664828c7baa9bd",
+      "sourceUrl": "/media/case-studies/legacy/6171-Tablet-Mockup-pazzo-design.jpg",
+      "alt": "Sviluppo E-commerce Pazzo Design: studio, sviluppo e assistenza continua.",
+      "mimeType": "image/jpeg",
+      "sha256": "f142bb651203ed79a882966aa84094b7ef3e3b0342746cf53e5a6c06b6087c25",
+      "filename": "6171-Tablet-Mockup-pazzo-design.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6171-Tablet-Mockup-pazzo-design.jpg"
+    },
+    {
+      "key": "66ae9e2192ff6e560369f3090bf0492be9bbc8150cfdac28be0a7d9cbd5c8a5c",
+      "sourceUrl": "/media/case-studies/legacy/6267-logo1-progettoe-white-2.svg",
+      "alt": "Progetto-e",
+      "mimeType": "image/svg+xml",
+      "sha256": "c65ab34f3f97825b4b40c02370b474dc14411fd2e29497b0b51693a0e071e9ee",
+      "filename": "6267-logo1-progettoe-white-2.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6267-logo1-progettoe-white-2.svg"
+    },
+    {
+      "key": "185cb6764aa517abb0d2c1b7e8e618821a00bb71c43217204938e0a30b990e5f",
+      "sourceUrl": "/media/case-studies/legacy/6267-sviluppo-sito-web-aziendale-progettoe.webp",
+      "alt": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+      "mimeType": "image/webp",
+      "sha256": "dd2fb5808d3f9743a08fb0dd96d494afcaeda2d2560e79dbba3c6f678aaeb332",
+      "filename": "6267-sviluppo-sito-web-aziendale-progettoe.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6267-sviluppo-sito-web-aziendale-progettoe.webp"
+    },
+    {
+      "key": "eba6f1372aa915bd91f4359bb8e64c5ddbc9ba143bd6c702216e1b0d99fc1a25",
+      "sourceUrl": "/media/case-studies/legacy/6267-installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg",
+      "alt": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+      "mimeType": "image/jpeg",
+      "sha256": "13fcde701136a6c5e438c8acb0aa38249b422bdd897802d5ffc322a46c8da0f2",
+      "filename": "6267-installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6267-installazione-e-messa-in-esercizio-impianto-fotovoltaico-1.jpg"
+    },
+    {
+      "key": "ae0f71a9cfa8e26a14997b81d44ba63976955aae32185f72cb36651128a27137",
+      "sourceUrl": "/media/case-studies/legacy/6267-impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg",
+      "alt": "Sviluppo sito web Progetto-e: una presenza digitale più solida per il fotovoltaico aziendale.",
+      "mimeType": "image/jpeg",
+      "sha256": "d792d3a284d0815e1c8a9e6888322aaed5c8d2a817602f3fc6c9116c04fac0a4",
+      "filename": "6267-impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg",
+      "action": "create",
+      "sourceMimeType": "image/jpeg",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6267-impianti-fotovoltaici-aziendali-industriali-alta-qualita.jpg"
+    },
+    {
+      "key": "8e4b135faa164e434ac666cea82088cc24ca9e8456df9b7ae2178556239dd63a",
+      "sourceUrl": "/media/case-studies/legacy/6277-Logotipo-albertini-new.svg",
+      "alt": "Albertini Allestimenti",
+      "mimeType": "image/svg+xml",
+      "sha256": "3451a4f39df38d3bc69860f7cb4bac45f0b3b682c33c4d15f99e1f151c0591e8",
+      "filename": "6277-Logotipo-albertini-new.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6277-Logotipo-albertini-new.svg"
+    },
+    {
+      "key": "d5628d22aaceecc8300e02676ee908f8b732b35305104ac34c13219f05c0cc5e",
+      "sourceUrl": "/media/case-studies/legacy/6277-sviluppo-sito-web-aziendale-albertini-allestimenti.webp",
+      "alt": "Sviluppo sito web Albertini: una nuova presenza digitale per raccontare allestimenti, design e progetti su misura.",
+      "mimeType": "image/webp",
+      "sha256": "d64d02219a7d84dfc3bc71945b0cf6c8e807fcbe60380178e1d09dcf0d38667d",
+      "filename": "6277-sviluppo-sito-web-aziendale-albertini-allestimenti.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6277-sviluppo-sito-web-aziendale-albertini-allestimenti.webp"
+    },
+    {
+      "key": "7d136088635d1c683d6c87b781749646acbfffc3a605d84eedd309a287edaf4c",
+      "sourceUrl": "/media/case-studies/legacy/6284-rigomar-logo-small-h.png",
+      "alt": "Rigomar",
+      "mimeType": "image/png",
+      "sha256": "1e16579dea80c23e426e01cf807b098f41a40929ed0f2434bbaac24b24f26ce0",
+      "filename": "6284-rigomar-logo-small-h.png",
+      "action": "create",
+      "sourceMimeType": "image/png",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6284-rigomar-logo-small-h.png"
+    },
+    {
+      "key": "d0ae938a3e374fc56712556dac5be14b44502e061b1d2c7e90bf5e1df3e7c7ad",
+      "sourceUrl": "/media/case-studies/legacy/6284-shooting-azienda-produzione-moda-rigomar-netmarket.webp",
+      "alt": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+      "mimeType": "image/webp",
+      "sha256": "faf59b02aba8cc3510efe8b276c15525380113dfd90e2551b4439d62f03e2c1d",
+      "filename": "6284-shooting-azienda-produzione-moda-rigomar-netmarket.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6284-shooting-azienda-produzione-moda-rigomar-netmarket.webp"
+    },
+    {
+      "key": "e0e3c843105ce277162097614d0b70f729ee39712184f0973fd6ef4ffaf1fdac",
+      "sourceUrl": "/media/case-studies/legacy/6284-sviluppo-sito-web-rigomar--1024x576.webp",
+      "alt": "Sviluppo sito web e shooting fotografico per Rigomar: una presenza digitale più autorevole per il mondo della produzione moda.",
+      "mimeType": "image/webp",
+      "sha256": "c11a341604efcc330485d5b4d600c02fe6a14ba271bf0ff6ef5b1a503a8c9f9d",
+      "filename": "6284-sviluppo-sito-web-rigomar--1024x576.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6284-sviluppo-sito-web-rigomar--1024x576.webp"
+    },
+    {
+      "key": "507e511fdd147cb8b63eed733e090cd904ba01a897e7fe67aface6d4a9dc2af7",
+      "sourceUrl": "/media/case-studies/legacy/6305-venitaly-logo.svg",
+      "alt": "VENITALY",
+      "mimeType": "image/svg+xml",
+      "sha256": "8101e297bba0ea79293848602bf3a595e94647d7c8ee393081eb4eeca3c5eab0",
+      "filename": "6305-venitaly-logo.svg",
+      "action": "create",
+      "sourceMimeType": "image/svg+xml",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6305-venitaly-logo.svg"
+    },
+    {
+      "key": "2a2b96f7c7d111e699c66dc10a9219e8f8db981071b6d3c89612af18b4d825ea",
+      "sourceUrl": "/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly.webp",
+      "alt": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+      "mimeType": "image/webp",
+      "sha256": "87ec62e0d724b1d4855833b77c83eb210f501702c9902ba934a5cd775e5e6fd4",
+      "filename": "6305-sviluppo-software-gestionale-venitaly.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly.webp"
+    },
+    {
+      "key": "91c518deee8efad5317d477cf246f109baf5f84516bb90414904e3907aeba93f",
+      "sourceUrl": "/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly-1024x576.webp",
+      "alt": "Sviluppo CRM VENITALY: software custom, manutenzione e supporto applicativo",
+      "mimeType": "image/webp",
+      "sha256": "1b239c9724110cd84045742a7e4f8551fdea48c029195bc7f556ee3e49c05f80",
+      "filename": "6305-sviluppo-software-gestionale-venitaly-1024x576.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/legacy/6305-sviluppo-software-gestionale-venitaly-1024x576.webp"
+    },
+    {
+      "key": "7c9f8f3b496ba4f83d863f4570fb9e21b5bfc8f50e0ab5d205e8e65913560740",
+      "sourceUrl": "/media/case-studies/sirene-blu-app/01.webp",
+      "alt": "La nuova app Sirene Blu con carta fedeltà digitale",
+      "mimeType": "image/webp",
+      "sha256": "b8dffe80eb23ec9da176c29db3d951f2f1978f820aab138669daca090db774bd",
+      "filename": "01.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/sirene-blu-app/01.webp"
+    },
+    {
+      "key": "5a500a196abe3a9266928e6da4a3a7bcab5b770ea8438b0576d1c3abb7428f1c",
+      "sourceUrl": "/media/case-studies/sirene-blu-app/02.webp",
+      "alt": "Accesso alla carta fedeltà nella nuova app Sirene Blu",
+      "mimeType": "image/webp",
+      "sha256": "b738b1342b020fdd5f021c1324731785d08e62b8175147f9d0af5a1bbb2475ae",
+      "filename": "02.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/sirene-blu-app/02.webp"
+    },
+    {
+      "key": "67e5444e6bbe46277039a8162e2c97549b2de82d534059369dbd2924f2255514",
+      "sourceUrl": "/media/case-studies/sirene-blu-app/03.webp",
+      "alt": "Menu della nuova app Sirene Blu",
+      "mimeType": "image/webp",
+      "sha256": "fd40c709f8f415718f776d4e42a31b6d00f4b4e8e502cc37a5734cbb02c632ec",
+      "filename": "03.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/sirene-blu-app/03.webp"
+    },
+    {
+      "key": "1ffa88861f770036632e223ceb44406922ab9c8ad9ce9eb2bbdc7addb9facfe3",
+      "sourceUrl": "/media/case-studies/sirene-blu-app/04.webp",
+      "alt": "Mappa dei punti vendita nella nuova app Sirene Blu",
+      "mimeType": "image/webp",
+      "sha256": "f06ebaff3e30d8c7d8c222aa9df62f4b4d6eda9ea0c00d84ace55016a284107a",
+      "filename": "04.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/sirene-blu-app/04.webp"
+    },
+    {
+      "key": "8753235682d25004fac639b8a4cbbfdc3d03e07e764d73f067124cdd9af8cc4c",
+      "sourceUrl": "/media/case-studies/sirene-blu-app/05.webp",
+      "alt": "Sconti e punti fedeltà nella nuova app Sirene Blu",
+      "mimeType": "image/webp",
+      "sha256": "a6f5a651424c37490b4ede0a0e258e7f011d675e928594178ef8ea05560fdd52",
+      "filename": "05.webp",
+      "action": "create",
+      "sourceMimeType": "image/webp",
+      "assetPath": "apps/web/public/media/case-studies/sirene-blu-app/05.webp"
+    }
+  ]
+}

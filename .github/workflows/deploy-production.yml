@@ -153,10 +153,20 @@ jobs:
           CMS_BASIC_AUTH_PASSWORD: ''
 
       - name: Install Playwright browser
-        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
 
       - name: Full E2E (local tracking disabled)
         run: pnpm test:e2e
+        env:
+          PUBLIC_DEPLOY_ENV: local
+          PUBLIC_SITE_URL: http://localhost:4321
+          PUBLIC_ANALYTICS_ENABLED: 'false'
+          PUBLIC_GTM_ID: ''
+          CMS_BASIC_AUTH_USER: ''
+          CMS_BASIC_AUTH_PASSWORD: ''
+
+      - name: Motion regression on Chromium, Firefox and WebKit
+        run: pnpm test:e2e:motion
         env:
           PUBLIC_DEPLOY_ENV: local
           PUBLIC_SITE_URL: http://localhost:4321
@@ -170,6 +180,12 @@ jobs:
 
       - name: Build authenticated production candidate without CMS fallback
         run: node infrastructure/scripts/build-production-candidate.mjs
+
+      - name: Verify reviewed CMS content and absence of drift during build
+        run: node infrastructure/migrations/stape/audit-import.mjs
+        env:
+          CMS_BUILD_PROVENANCE_PATH: artifacts/production-candidate-${{ github.sha }}/cms-access.jsonl
+          CMS_IMPORT_AUDIT_PATH: artifacts/production-candidate-${{ github.sha }}/cms-import-audit.json
 
       - name: Production tracking smoke against the exact candidate (external requests mocked)
         run: |

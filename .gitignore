@@ -16,3 +16,5 @@ test-results/
 
 artifacts/production-candidate-*/
 artifacts/stape-release-evidence/
+
+/artifacts/stape-cms-preparation/
