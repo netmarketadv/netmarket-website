@@ -150,6 +150,28 @@ export function auditImportedContent(plan, collections) {
   }
   return { recordsVerified: verified };
 }
+export async function verifyPublicMedia(collections, fetchImpl = fetch) {
+  const media = new Map();
+  const visit = (value) => {
+    if (!value || typeof value !== 'object') return;
+    if (value.mimeType && value.url) media.set(value.url, value.mimeType);
+    for (const child of Object.values(value)) visit(child);
+  };
+  visit(collections);
+  for (const [url, mimeType] of media) {
+    if (new URL(url).origin !== 'https://cms.netmarket.it')
+      throw new Error('Unexpected public media origin.');
+    const response = await fetchImpl(url, {
+      method: 'HEAD',
+      redirect: 'error',
+      signal: AbortSignal.timeout(30000)
+    });
+    if (response.status !== 200 || response.headers.get('content-type')?.split(';')[0] !== mimeType)
+      throw new Error('Imported media unavailable publicly or has unexpected MIME.');
+  }
+  return media.size;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const raw = readFileSync('data/releases/stape-cms-import.json');
   const plan = JSON.parse(raw);
@@ -178,7 +200,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     collections[key] = payload.data;
     digests[archive] = createHash('sha256').update(JSON.stringify(payload)).digest('hex');
   }
-  const result = auditImportedContent(plan, collections);
+  const result = {
+    ...auditImportedContent(plan, collections),
+    publicMediaVerified: await verifyPublicMedia(collections)
+  };
   if (process.env.CMS_BUILD_PROVENANCE_PATH) {
     const entries = readFileSync(process.env.CMS_BUILD_PROVENANCE_PATH, 'utf8')
       .trim()

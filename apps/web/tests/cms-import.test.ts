@@ -5,7 +5,10 @@ import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { serviceSchema, caseStudySchema } from '@netmarket/schemas';
-import { auditImportedContent } from '../../../infrastructure/migrations/stape/audit-import.mjs';
+import {
+  auditImportedContent,
+  verifyPublicMedia
+} from '../../../infrastructure/migrations/stape/audit-import.mjs';
 
 const root = resolve('../..');
 const planPath = resolve(root, 'data/releases/stape-cms-import.json');
@@ -230,5 +233,33 @@ describe('create-only CMS import of the complete baseline inventory', () => {
     } finally {
       rmSync(temp, { recursive: true, force: true });
     }
+  });
+  it('requires public media access with correct MIME and without credentials', async () => {
+    const collections = {
+      media: [
+        { url: 'https://cms.netmarket.it/wp-content/uploads/image.webp', mimeType: 'image/webp' }
+      ]
+    };
+    const calls: Array<RequestInit | undefined> = [];
+    const result = await verifyPublicMedia(
+      collections,
+      async (_url: Parameters<typeof fetch>[0], options?: RequestInit) => {
+        calls.push(options);
+        return new Response(null, { status: 200, headers: { 'content-type': 'image/webp' } });
+      }
+    );
+    expect(result).toBe(1);
+    expect(calls[0]?.method).toBe('HEAD');
+    expect(calls[0]?.redirect).toBe('error');
+    expect(calls[0]?.headers).toBeUndefined();
+    await expect(
+      verifyPublicMedia(collections, async () => new Response(null, { status: 403 }))
+    ).rejects.toThrow('unavailable publicly');
+    await expect(
+      verifyPublicMedia(
+        collections,
+        async () => new Response(null, { status: 200, headers: { 'content-type': 'text/html' } })
+      )
+    ).rejects.toThrow('unexpected MIME');
   });
 });

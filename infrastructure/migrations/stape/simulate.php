@@ -15,6 +15,7 @@ $GLOBALS['simTerms'] = [];
 $GLOBALS['simRelations'] = [];
 $GLOBALS['simNext'] = 50000;
 $GLOBALS['simUploads'] = $argv[3];
+umask(0077);
 function get_option($key) { return $key === 'siteurl' ? 'https://cms.netmarket.it' : ''; }
 function get_post_stati() { return array_fill_keys(['publish','draft','private','trash','inherit'], true); }
 function get_post_types() { return array_fill_keys(['post','attachment','nm_service','nm_case_study','nm_client'], true); }
@@ -116,6 +117,9 @@ if (($argv[4] ?? '') === 'partial-failure') {
 $applied=$importer->apply();
 $again=(new \Netmarket\HeadlessCore\Release\Importer($plan,$digest,$argv[2],$journal))->apply();
 if (!$again['unchanged']) throw new RuntimeException('Idempotency failed');
+foreach ($GLOBALS['simPosts'] as $post) {
+    if ($post->post_type === 'attachment' && (fileperms(get_attached_file($post->ID)) & 0777) !== 0644) throw new RuntimeException('Imported public media is unreadable under private worker umask');
+}
 $serializer=new \Netmarket\HeadlessCore\Rest\Routes(new \Netmarket\HeadlessCore\Taxonomies\Registry());
 $method=new ReflectionMethod($serializer,'serializePost');
 $payloads=['services'=>[],'projects'=>[]];

@@ -229,6 +229,9 @@ final class Importer
             if ($written !== strlen($bytes)) {
                 throw new RuntimeException('Media write incomplete.');
             }
+            if (!chmod($file, 0644)) {
+                throw new RuntimeException('Cannot set public media permissions.');
+            }
             $id = wp_insert_attachment(wp_slash(['post_title' => $media['filename'], 'post_mime_type' => $media['mimeType'], 'post_status' => 'inherit', 'meta_input' => ['_stape_import_digest' => $this->digest, '_stape_import_media' => $media['key']]]), $file, 0, true);
             if (is_wp_error($id)) {
                 unlink($file);
