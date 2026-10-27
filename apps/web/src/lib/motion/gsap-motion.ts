@@ -211,9 +211,18 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     if (!tween) return;
     pending.delete(target);
     observer?.unobserve(target);
-    if (passed) tween.progress(1);
-    else tween.play();
-    if (pending.size === 0) observer?.disconnect();
+    if (passed) {
+      tween.progress(1);
+      // A completed ScrollTrigger tween may not emit onStart during scroll restoration.
+      target.dataset.motionState = 'revealed';
+      target.classList.add('is-visible');
+    } else tween.play();
+    if (pending.size === 0) {
+      observer?.disconnect();
+      window.removeEventListener('scroll', scheduleCheck);
+      window.removeEventListener('resize', scheduleCheck);
+      window.removeEventListener('pageshow', scheduleCheck);
+    }
   };
   const observer = 'IntersectionObserver' in window
     ? new IntersectionObserver((entries) => {
@@ -226,6 +235,18 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     if (target.dataset.motionState === 'revealed') return;
     pending.set(target, tween);
     observer?.observe(target);
+  };
+  let frame = 0;
+  const checkPending = () => {
+    frame = 0;
+    pending.forEach((_tween, target) => {
+      const rect = target.getBoundingClientRect();
+      if (rect.bottom < 0) revealVisible(target, true);
+      else if (rect.top < window.innerHeight && rect.bottom >= 0) revealVisible(target);
+    });
+  };
+  const scheduleCheck = () => {
+    if (!frame) frame = window.requestAnimationFrame(checkPending);
   };
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
@@ -288,14 +309,13 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     watch(target, tween);
   });
 
-  window.requestAnimationFrame(() => {
-    targets.forEach((target) => {
-      if (target.dataset.motionState === 'revealed') return;
-      const rect = target.getBoundingClientRect();
-      if (rect.bottom < 0) revealVisible(target, true);
-      else if (rect.top < window.innerHeight) revealVisible(target);
-    });
-  });
+  // A late native restoration can jump directly from below to above the viewport,
+  // without crossing an IntersectionObserver threshold. Watch only pending reveals.
+  window.addEventListener('scroll', scheduleCheck, { passive: true });
+  window.addEventListener('resize', scheduleCheck, { passive: true });
+  window.addEventListener('pageshow', scheduleCheck);
+  document.fonts?.ready.then(scheduleCheck).catch(() => undefined);
+  scheduleCheck();
 }
 
 function enhanceMediaScroll(gsap: Gsap): void {

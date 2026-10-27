@@ -91,3 +91,40 @@ for (const viewport of [
       .toBe(true);
   });
 }
+
+for (const viewport of [
+  { width: 1280, height: 720 },
+  { width: 390, height: 844 }
+]) {
+  test(`late scroll restoration reveals already passed content (${viewport.width}px)`, async ({
+    page
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      );
+      window.scrollTo({ top: document.body.scrollHeight * 0.7, behavior: 'instant' });
+    });
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
+            .filter(
+              (element) =>
+                element.getBoundingClientRect().bottom < 0 && !element.closest('[hidden]')
+            )
+            .filter(
+              (element) =>
+                getComputedStyle(element).opacity === '0' ||
+                element.dataset.motionState !== 'revealed'
+            )
+            .map((element) => element.textContent?.trim().slice(0, 70))
+        )
+      )
+      .toEqual([]);
+  });
+}
