@@ -29,6 +29,7 @@ for (const path of ['/', '/agenzia/', '/servizi/siti-web/']) {
     await projectLink.click({ button: 'middle' });
     const projectTab = await newTab;
     await projectTab.bringToFront();
+    await projectTab.waitForURL(destination, { waitUntil: 'domcontentloaded' });
     await expect(projectTab).toHaveURL(destination);
     await expect(projectTab.locator('main')).toBeVisible();
     await projectTab.close();

@@ -418,3 +418,7 @@ continua a gestire scrub/timeline. La regressione modulo tardivo forza anche un 
 stagger. Il test rail passa realmente in primo piano alla scheda progetto e verifica URL e main
 visibile prima di tornare, mantenendo tutti i controlli su avanzamento e ripresa del rail.
 Nessuna modifica a loader Stape, Iubenda, consenso, dataLayer o tracking.
+La prima QA della correzione ha evidenziato anche una navigazione popup ancora in attesa quando
+scadeva l'assertion URL a 5 secondi. Il test ora attende esplicitamente la navigazione all'URL
+progetto fino a DOMContentLoaded, entro il timeout test già esistente, prima delle stesse
+assertion URL e main. Non assume più che l'evento creazione scheda equivalga a navigazione completa.
