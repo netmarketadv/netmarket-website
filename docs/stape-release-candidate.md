@@ -391,3 +391,15 @@ Nei soli runner effimeri GitHub la mirrorlist APT punta quindi all'archivio uffi
 via HTTPS; firme pacchetti e verifiche TLS restano abilitate. Connessioni limitate a 30 secondi
 e tre retry evitano attese indefinite del mirror. Nessuna modifica ai repository o alla
 configurazione di sistema dei server Netmarket. Gli stessi controlli completi restano obbligatori.
+
+### Contesto E2E sul frontend production esatto (27 ottobre 2026)
+
+La run `40530660031` ha superato tutti i gate fino alla build autenticata senza fallback,
+audit semantico CMS e anti-drift, poi il collaudo completo sul frontend production ha dato 117/119.
+Due test avevano assunzioni di ambiente: noindex hardcoded anche in production, e il caso
+consenso non pronto in conflitto con la fixture CMP condivisa che chiama automaticamente onConsentRead.
+Il test robots usa ora l'helper canonico con aspettativa esatta index/follow in production e noindex
+negli altri ambienti. Il solo scenario storage-denied controlla esplicitamente il mock Iubenda,
+verificando prima dell'invio consent-ready=false; restano identiche le assertion di zero eventi
+prima del consenso, un solo generate_lead dopo due notifiche e una sola richiesta form.
+Nessuna modifica a robots, Iubenda, consensi, eventi o codice runtime del prodotto.

@@ -250,6 +250,11 @@ test('case hierarchy distinguishes estimated CLV from attributed revenue and sch
 test('storage-denied success waits for consent readiness and cannot submit twice', async ({
   page
 }) => {
+  // This scenario owns consent timing, including on the production artifact where
+  // the shared CMP mock would otherwise call onConsentRead automatically.
+  await page.route('https://cdn.iubenda.com/cs/iubenda_cs.js*', (route) =>
+    route.fulfill({ status: 200, contentType: 'text/javascript', body: '' })
+  );
   await page.addInitScript(() => {
     Object.defineProperty(window, 'sessionStorage', {
       get() {
@@ -265,6 +270,7 @@ test('storage-denied success waits for consent readiness and cannot submit twice
   });
   await page.goto(url);
   await fillVisitor(page);
+  expect(await page.evaluate(() => window.__netmarketConsentReady)).toBe(false);
   await submit(page).click();
   await expect(page.locator('#contact-form-status')).toContainText('Richiesta ricevuta');
   expect(
