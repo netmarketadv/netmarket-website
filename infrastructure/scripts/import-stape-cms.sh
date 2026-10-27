@@ -51,5 +51,6 @@ fi
 export NETMARKET_APPROVED_IMPORT="$digest"
 confirmation="IMPORT NETMARKET CMS $digest"
 if [[ "$mode" == rollback ]]; then confirmation="ROLLBACK NETMARKET CMS $digest"; fi
-wp --path=/home/customer/www/cms.netmarket.it/public_html eval-file "$package/infrastructure/migrations/stape/run.php" "$mode" "$package/data/releases/stape-cms-import.json" "$digest" "$package/artifacts/stape-cms-preparation/media" "$root/journal.json" "$confirmation"
+# Include preserves strict_types and __DIR__; WP-CLI's default eval prepends code.
+wp --path=/home/customer/www/cms.netmarket.it/public_html eval-file --use-include "$package/infrastructure/migrations/stape/run.php" "$mode" "$package/data/releases/stape-cms-import.json" "$digest" "$package/artifacts/stape-cms-preparation/media" "$root/journal.json" "$confirmation"
 REMOTE

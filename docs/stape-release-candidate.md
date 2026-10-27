@@ -340,3 +340,13 @@ al lotto blocca l'audit o il rollback e richiede una revisione esplicita.
 Non si considera concluso il go-live fino alla pubblicazione e alle prove reali eseguibili.
 Questo rapporto non concede quelle autorizzazioni: fornisce codice, manifest e procedure
 concrete affinché il processo possa proseguire direttamente dopo il checkpoint.
+
+### Correzione esecuzione WP-CLI (27 ottobre 2026)
+
+La prima run apply `40503958293` si è fermata al parsing PHP, prima dell'import:
+`wp eval-file` valuta il file anteponendo codice e rende invalido `declare(strict_types=1)`.
+Il CMS è stato ricontrollato in sola lettura: nessun journal e zero servizi, case study e clienti.
+Lo script usa ora l'opzione ufficiale `--use-include`, disponibile nel WP-CLI installato,
+che conserva sia `strict_types` sia la risoluzione di `__DIR__`. Il manifest approvato,
+i contenuti e il tracking restano invariati. Un test esegue l'entrypoint PHP reale via
+include e verifica che raggiunga il guard sul digest senza errori di parsing.

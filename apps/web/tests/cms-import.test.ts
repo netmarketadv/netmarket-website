@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -16,6 +16,37 @@ const plan = JSON.parse(readFileSync(planPath, 'utf8'));
 const digest = createHash('sha256').update(readFileSync(planPath)).digest('hex');
 
 describe('create-only CMS import of the complete baseline inventory', () => {
+  it('loads the strict PHP entrypoint through include before enforcing the plan guard', () => {
+    const temp = mkdtempSync(join(tmpdir(), 'netmarket-import-entrypoint-'));
+    try {
+      mkdirSync(join(temp, 'wp-admin/includes'), { recursive: true });
+      writeFileSync(join(temp, 'wp-admin/includes/image.php'), '<?php\n');
+      const entrypoint = resolve(root, 'infrastructure/migrations/stape/run.php');
+      const result = spawnSync(
+        'php',
+        [
+          '-r',
+          'define("ABSPATH", $argv[1]); $args = []; try { include $argv[2]; } ' +
+            'catch (RuntimeException $error) { echo $error->getMessage(); exit(3); }',
+          temp + '/',
+          entrypoint
+        ],
+        { encoding: 'utf8' }
+      );
+      expect(result.status).toBe(3);
+      expect(result.stdout).toBe('Exact plan digest mismatch.');
+      expect(result.stderr).toBe('');
+      const script = readFileSync(
+        resolve(root, 'infrastructure/scripts/import-stape-cms.sh'),
+        'utf8'
+      );
+      expect(script).toContain(
+        'eval-file --use-include "$package/infrastructure/migrations/stape/run.php"'
+      );
+    } finally {
+      rmSync(temp, { recursive: true, force: true });
+    }
+  });
   it('retains the exact 9 services and 8 case studies, real asset bytes and no synthetic IDs', () => {
     const inventory = JSON.parse(
       readFileSync(resolve(root, 'data/releases/stape-cms-inventory.json'), 'utf8')
