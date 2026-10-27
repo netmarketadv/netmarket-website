@@ -1,5 +1,31 @@
 import { expect, test } from './fixtures';
 
+test('late layout changes reveal visible content without IntersectionObserver', async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    Reflect.deleteProperty(window, 'IntersectionObserver');
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        const spacer = document.createElement('div');
+        spacer.id = 'motion-layout-spacer';
+        spacer.style.height = '10000px';
+        document.body.prepend(spacer);
+      },
+      { once: true }
+    );
+  });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  await page.evaluate(() => document.fonts.ready);
+  const actions = page.locator('.home-hero__actions');
+  await expect(actions).toHaveAttribute('data-motion-state', 'ready');
+  await page.evaluate(() => document.getElementById('motion-layout-spacer')?.remove());
+  await expect(actions).toHaveAttribute('data-motion-state', 'revealed');
+  await expect(actions).toHaveCSS('opacity', '1');
+});
+
 test('motion reveal handles a late enhancement module without leaving visible content hidden', async ({
   page
 }) => {

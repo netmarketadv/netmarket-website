@@ -16,6 +16,8 @@ Il motion Netmarket comunica qualita, precisione e controllo. Questa pagina docu
 
 Il sistema usa GSAP per entrance, line reveal e media reveal. I tween entrance partono in pausa e sono avviati da un solo osservatore di visibilità, con recupero dello scroll ripristinato: ScrollTrigger non deve poterli rimettere in pausa durante un refresh di layout o font. ScrollTrigger gestisce gli enhancement legati allo scroll, come scrub media e timeline. CSS e Web Animations API governano fallback, micro-interazioni, menu, accordion, hover, focus e stati rapidi.
 
+Finché restano reveal pending, un ResizeObserver sul body e gli eventi load catturati richiedono lo stesso controllo geometrico coalescente in requestAnimationFrame. Questo recupera cambi layout tardivi anche senza un evento scroll o una transizione IntersectionObserver; observer e listener vengono rimossi quando tutti i reveal sono avviati.
+
 Non vengono usati plugin premium Club GSAP. Lo splitting dei titoli e proprietario: il DOM viene preparato in modo progressivo, senza dipendere da SplitText.
 
 React non e usato: il sito e Astro statico e le interazioni sono progressive enhancement.

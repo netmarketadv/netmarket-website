@@ -422,3 +422,20 @@ La prima QA della correzione ha evidenziato anche una navigazione popup ancora i
 scadeva l'assertion URL a 5 secondi. Il test ora attende esplicitamente la navigazione all'URL
 progetto fino a DOMContentLoaded, entro il timeout test già esistente, prima delle stesse
 assertion URL e main. Non assume più che l'evento creazione scheda equivalga a navigazione completa.
+
+### Recupero trasporto CMS e layout tardivo (27 ottobre 2026)
+
+La run `40541173823` ha completato 119 E2E locali, ma la build autenticata ha incontrato un
+singolo fetch failed su /insights/threads-nuovo-social-di-meta: il gate ha correttamente rifiutato
+il fallback. Il client GET usa ora al massimo tre tentativi, ciascuno con timeout 10s, attese
+1s/2s, stesso endpoint e stesse credenziali; retry soltanto per trasporto e HTTP 5xx. 401/403/404,
+429, JSON o schema non validi non vengono ritentati. Esaurimento -> errore e build ancora rifiutata.
+La provenienza registra attempts e retries senza errori grezzi, credenziali o payload.
+
+Un reveal WebKit risultava ancora ready dopo cambi layout tardivi non intercettati da scroll,
+resize window o intersezione (ad esempio immagini dentro regioni clippate). Finché esistono
+pending, body ResizeObserver e load capture richiamano lo stesso controllo geometrico in RAF;
+si disconnettono a fine coda, senza polling continuo o nuovi preset. Il test senza IntersectionObserver
+sposta il contenuto tramite un cambio layout tardivo: sul bundle precedente fallisce in Firefox e
+WebKit con ready invece di revealed, fornendo una riproduzione negativa deterministica.
+Tracking, consensi, loader e contenuti CMS invariati; nessuna configurazione live modificata.

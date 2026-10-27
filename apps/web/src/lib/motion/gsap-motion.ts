@@ -197,9 +197,11 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     ? Array.from(document.querySelectorAll<HTMLElement>(lineRevealSelector))
     : collectRevealTargets();
   const targets = candidates.filter((target) => target.dataset.motionState !== 'revealed');
+  if (targets.length === 0) return;
   // One owner starts entrance tweens. A ScrollTrigger refresh must not re-pause
   // an entrance already started by IntersectionObserver after layout/font changes.
   const pending = new Map<HTMLElement, GsapTween>();
+  let layoutObserver: ResizeObserver | undefined;
   const revealVisible = (target: HTMLElement, passed = false) => {
     const tween = pending.get(target);
     if (!tween) return;
@@ -213,6 +215,8 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     } else tween.play();
     if (pending.size === 0) {
       observer?.disconnect();
+      layoutObserver?.disconnect();
+      document.removeEventListener('load', scheduleCheck, true);
       window.removeEventListener('scroll', scheduleCheck);
       window.removeEventListener('resize', scheduleCheck);
       window.removeEventListener('pageshow', scheduleCheck);
@@ -300,6 +304,13 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   window.addEventListener('scroll', scheduleCheck, { passive: true });
   window.addEventListener('resize', scheduleCheck, { passive: true });
   window.addEventListener('pageshow', scheduleCheck);
+  // Images and other late content can move a pending reveal without a window
+  // resize/scroll or an intersection transition (for example within clipped art).
+  document.addEventListener('load', scheduleCheck, true);
+  if ('ResizeObserver' in window && document.body) {
+    layoutObserver = new ResizeObserver(scheduleCheck);
+    layoutObserver.observe(document.body);
+  }
   document.fonts?.ready.then(scheduleCheck).catch(() => undefined);
   scheduleCheck();
 }
