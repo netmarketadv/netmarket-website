@@ -1,4 +1,5 @@
 import { expect, test, isolateExternalTracking } from '../e2e/fixtures';
+import { expectEnvironmentRobots } from '../e2e/helpers';
 
 const endpoint = '**/wp-json/netmarket/v1/forms/contact';
 
@@ -8,7 +9,7 @@ test('advertising goals, FAQ and responsive layout remain usable', async ({ page
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Google Ads e Meta Ads. Più contatti e più vendite.'
   );
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await expectEnvironmentRobots(page);
   await expect(page.locator('#contact-service')).toHaveValue('');
   await expect(page.locator('#metodo')).toHaveCSS('background-color', 'rgb(8, 11, 22)');
   await expect(page.locator('#metodo h3').first()).toHaveCSS('color', 'rgb(255, 255, 255)');
