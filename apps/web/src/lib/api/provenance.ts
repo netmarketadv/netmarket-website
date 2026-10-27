@@ -3,8 +3,9 @@ import { createHash } from 'node:crypto';
 
 export function recordCmsAccess(
   path: string,
-  result:
+  result: (
     { status: 'ok'; authenticated: boolean; payload: unknown; origin: string } | { status: 'error' }
+  ) & { attempts?: number; retries?: Array<'transport' | number> }
 ): void {
   const output = process.env.CMS_AUDIT_PATH;
   if (!output) return;
@@ -20,6 +21,8 @@ export function recordCmsAccess(
       origin: result.status === 'ok' ? result.origin : 'https://cms.netmarket.it',
       status: result.status,
       authenticated: result.status === 'ok' && result.authenticated,
+      attempts: result.attempts ?? 1,
+      retries: result.retries ?? [],
       ...(result.status === 'ok'
         ? {
             sha256: createHash('sha256').update(JSON.stringify(payload)).digest('hex'),
