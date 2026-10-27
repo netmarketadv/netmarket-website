@@ -1,5 +1,33 @@
 import { expect, test } from './fixtures';
 
+test('motion reveal handles a late enhancement module without leaving visible content hidden', async ({
+  page
+}) => {
+  await page.route('**/*gsap-motion*.js', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await route.continue();
+  });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
+          .filter((element) => {
+            const rect = element.getBoundingClientRect();
+            return rect.top < innerHeight && rect.bottom > 0 && !element.closest('[hidden]');
+          })
+          .filter(
+            (element) =>
+              element.dataset.motionState !== 'revealed' ||
+              getComputedStyle(element).opacity === '0'
+          )
+          .map((element) => element.className)
+      )
+    )
+    .toEqual([]);
+});
+
 for (const viewport of [
   { width: 1280, height: 720 },
   { width: 390, height: 844 }
@@ -44,7 +72,7 @@ for (const viewport of [
         { once: true }
       );
     });
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
     await page.evaluate(() => document.fonts.ready);
     const heading = page.getByRole('heading', { name: 'Cosa resta dopo il progetto.' });
@@ -100,7 +128,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
     await page.evaluate(async () => {
       await document.fonts.ready;
