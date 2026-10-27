@@ -14,7 +14,7 @@ Il motion Netmarket comunica qualita, precisione e controllo. Questa pagina docu
 
 ## Technology Choice
 
-Il sistema usa GSAP e ScrollTrigger come enhancement principale per entrance, line reveal, media reveal e scroll motion. CSS, IntersectionObserver e Web Animations API restano fallback e governano micro-interazioni, menu, accordion, hover, focus e stati rapidi.
+Il sistema usa GSAP per entrance, line reveal e media reveal. I tween entrance partono in pausa e sono avviati da un solo osservatore di visibilità, con recupero dello scroll ripristinato: ScrollTrigger non deve poterli rimettere in pausa durante un refresh di layout o font. ScrollTrigger gestisce gli enhancement legati allo scroll, come scrub media e timeline. CSS e Web Animations API governano fallback, micro-interazioni, menu, accordion, hover, focus e stati rapidi.
 
 Non vengono usati plugin premium Club GSAP. Lo splitting dei titoli e proprietario: il DOM viene preparato in modo progressivo, senza dipendere da SplitText.
 

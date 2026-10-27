@@ -403,3 +403,22 @@ negli altri ambienti. Il solo scenario storage-denied controlla esplicitamente i
 verificando prima dell'invio consent-ready=false; restano identiche le assertion di zero eventi
 prima del consenso, un solo generate_lead dopo due notifiche e una sola richiesta form.
 Nessuna modifica a robots, Iubenda, consensi, eventi o codice runtime del prodotto.
+
+### Stabilità reveal WebKit e cambio scheda (27 ottobre 2026)
+
+La run `40534213728` ha prodotto un artifact ufficiale completo, ma l'esame dei log ha rilevato
+due prove motion WebKit passate soltanto al retry e un retry del test rail durante il cambio scheda.
+L'artifact non viene quindi selezionato come rilascio definitivo. I casi WebKit, rimasti nascosti
+oltre 5 secondi, dimostrano un problema ulteriore rispetto al campionamento prematuro già corretto:
+lo stesso tween entrance aveva due controller di avvio, ScrollTrigger e IntersectionObserver;
+un refresh poteva rimetterlo in pausa dopo la rimozione dall'insieme pending.
+I soli tween entrance ora partono paused e vengono avviati dall'osservatore già esistente.
+Durate, easing, stagger, preset, recupero scroll e reduced motion restano invariati; ScrollTrigger
+continua a gestire scrub/timeline. La regressione modulo tardivo forza anche un resize durante lo
+stagger. Il test rail passa realmente in primo piano alla scheda progetto e verifica URL e main
+visibile prima di tornare, mantenendo tutti i controlli su avanzamento e ripresa del rail.
+Nessuna modifica a loader Stape, Iubenda, consenso, dataLayer o tracking.
+La prima QA della correzione ha evidenziato anche una navigazione popup ancora in attesa quando
+scadeva l'assertion URL a 5 secondi. Il test ora attende esplicitamente la navigazione all'URL
+progetto fino a DOMContentLoaded, entro il timeout test già esistente, prima delle stesse
+assertion URL e main. Non assume più che l'evento creazione scheda equivalga a navigazione completa.

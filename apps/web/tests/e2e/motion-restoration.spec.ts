@@ -9,6 +9,9 @@ test('motion reveal handles a late enhancement module without leaving visible co
   });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  // Force layout refresh while delayed entrance tweens are still pending.
+  await page.setViewportSize({ width: 1280, height: 700 });
+  await page.setViewportSize({ width: 1280, height: 720 });
   await expect
     .poll(() =>
       page.evaluate(() =>
