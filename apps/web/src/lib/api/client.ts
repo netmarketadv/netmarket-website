@@ -48,6 +48,8 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   path: string,
   schema: TSchema
 ): Promise<z.output<TSchema>> {
+  let attempts = 0;
+  const retries: Array<'transport' | number> = [];
   try {
     const env = getServerEnv();
     const publicEnv = getPublicEnv();
@@ -62,11 +64,28 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
       throw new Error(`CMS endpoint ${path} skipped because CMS credentials are not configured.`);
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10_000);
-    const response = await fetch(endpoint, { headers, signal: controller.signal }).finally(() => {
-      clearTimeout(timeout);
-    });
+    let response: Response | undefined;
+    for (attempts = 1; attempts <= 3; attempts++) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10_000);
+      try {
+        response = await fetch(endpoint, { headers, signal: controller.signal });
+      } catch (error) {
+        if (attempts === 3) throw error;
+        retries.push('transport');
+      } finally {
+        clearTimeout(timeout);
+      }
+      // Never retry denied access, rate limits, invalid JSON or schema errors.
+      if (response && (response.status < 500 || response.status > 599 || attempts === 3)) break;
+      if (response) {
+        retries.push(response.status);
+        await response.body?.cancel();
+        response = undefined;
+      }
+      await new Promise((resolve) => setTimeout(resolve, attempts * 1000));
+    }
+    if (!response) throw new Error('CMS response missing after bounded attempts.');
     if (!response.ok) {
       throw new Error(`CMS endpoint ${path} ha risposto con status ${response.status}.`);
     }
@@ -79,7 +98,9 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
           Boolean(headers.Authorization) &&
           new URL(response.url || endpoint).origin === new URL(endpoint).origin,
         origin: new URL(response.url || endpoint).origin,
-        payload
+        payload,
+        attempts,
+        retries
       });
       return parsed;
     } catch (error) {
@@ -89,7 +110,7 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
       throw error;
     }
   } catch (error) {
-    recordCmsAccess(path, { status: 'error' });
+    recordCmsAccess(path, { status: 'error', attempts, retries });
     throw error;
   }
 }
