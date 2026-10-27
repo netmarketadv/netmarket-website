@@ -375,3 +375,14 @@ caricamento tardivo su tutti e tre i browser. Gli invarianti runtime motion/Stap
 I test di restoration usano esplicitamente DOMContentLoaded e poi le verifiche già presenti
 su motore, font, geometria e visibilità: non attendono più il load globale di immagini remote,
 che nella prima prova ripetuta ha causato due timeout di navigazione, non errori di reveal.
+
+### Runner browser esplicito (27 ottobre 2026)
+
+Il secondo tentativo del candidate `40518422680` ha superato preflight CMS autenticato e
+full validation, ma è rimasto oltre 35 minuti nell'installazione delle dipendenze WebKit:
+il mirror Ubuntu 26.04 ritentava libavcodec62 e altri pacchetti. Run cancellata prima del timeout,
+nessun artifact valido prodotto, nessun test saltato e nessuna pubblicazione.
+Il job candidate e il job Quality Full E2E fissano ora ubuntu-24.04, piattaforma ufficialmente
+supportata dalla versione Playwright 1.62.0 già nel lockfile. La cache browser include la versione
+Ubuntu per evitare binari condivisi fra immagini OS diverse. Browser, test, timeout, secret,
+protezioni production e runtime frontend restano invariati. Non viene modificato alcun mirror live.

@@ -72,7 +72,7 @@ jobs:
     if: ${{ inputs.mode == 'candidate' }}
     needs: guard
     environment: production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     concurrency:
       group: production-candidate-${{ github.sha }}
