@@ -360,3 +360,18 @@ La normalizzazione frontend converte esclusivamente dimensioni SVG numeriche zer
 valori negativi, stringhe e dimensioni raster zero restano invalidi. Non vengono inventate dimensioni,
 modificati contenuti CMS o indeboliti i gate contro fallback/accessi saltati. Il simulatore CMS
 riproduce ora lo stesso metadata SVG reale e i test coprono anche i loghi annidati nei case study.
+
+### Sincronizzazione regressione motion (27 ottobre 2026)
+
+La run `40509620372` ha superato validate e full E2E, ma il controllo motion WebKit ha
+campionato reveal ancora in attesa dello stagger dopo il caricamento asincrono del motore.
+Riproduzione deterministica sul codice invariato: modulo GSAP ritardato di 800 ms,
+reveal ready/opacity=0 a 950 ms da DOMContentLoaded, tutti visibili dopo il normale budget.
+L'ipotesi di conflitto runtime non è stata confermata: nessuna modifica al prodotto.
+Il test attende ora il motore effettivamente inizializzato e usa assertion ritentate con
+lo stesso criterio array vuoto, entro il timeout E2E esistente, in ogni fase scroll/reload.
+Nessun elemento escluso, assertion rimossa o test saltato. Un caso dedicato riproduce il
+caricamento tardivo su tutti e tre i browser. Gli invarianti runtime motion/Stape restano intatti.
+I test di restoration usano esplicitamente DOMContentLoaded e poi le verifiche già presenti
+su motore, font, geometria e visibilità: non attendono più il load globale di immagini remote,
+che nella prima prova ripetuta ha causato due timeout di navigazione, non errori di reveal.

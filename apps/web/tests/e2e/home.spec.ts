@@ -853,23 +853,26 @@ test('header records scrolled state without layout overlap', async ({ page }) =>
 
 test('motion reveal never leaves normal content hidden during scroll states', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  // Dynamic enhancement can arrive after DOMContentLoaded on a busy runner.
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
   await page.waitForTimeout(950);
-  expect(await hiddenRevealProblems(page, 'active')).toEqual([]);
+  await expect.poll(() => hiddenRevealProblems(page, 'active')).toEqual([]);
 
   await scrollToEndProgressively(page);
-  expect(await hiddenRevealProblems(page, 'all')).toEqual([]);
+  await expect.poll(() => hiddenRevealProblems(page, 'all')).toEqual([]);
 
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(80);
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(950);
-  expect(await hiddenRevealProblems(page, 'all')).toEqual([]);
+  await expect.poll(() => hiddenRevealProblems(page, 'all')).toEqual([]);
 
   await page.evaluate(() => window.scrollTo(0, Math.round(document.body.scrollHeight * 0.5)));
   await page.waitForTimeout(80);
   await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
   await page.waitForTimeout(950);
-  expect(await hiddenRevealProblems(page, 'passed')).toEqual([]);
+  await expect.poll(() => hiddenRevealProblems(page, 'passed')).toEqual([]);
 });
 
 test('motion reveal uses the enhanced animation engine', async ({ page }) => {
