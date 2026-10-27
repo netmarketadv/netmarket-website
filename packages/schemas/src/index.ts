@@ -5,7 +5,7 @@ const assetUrlSchema = z
   .url()
   .or(z.string().regex(/^\/(?!\/)/));
 
-export const mediaAssetSchema = z.object({
+const mediaAssetObjectSchema = z.object({
   id: z.number().int().nonnegative(),
   url: assetUrlSchema,
   alt: z.string(),
@@ -16,6 +16,19 @@ export const mediaAssetSchema = z.object({
   sizes: z.string().nullable().optional(),
   focalPoint: z.string().nullable().optional()
 });
+
+// WordPress can report 0 for SVG dimensions it cannot determine. Keep the
+// validated output positive or unknown, without inventing intrinsic dimensions.
+export const mediaAssetSchema = z.preprocess((value) => {
+  if (typeof value !== 'object' || value === null || !('mimeType' in value)) return value;
+  if (value.mimeType !== 'image/svg+xml') return value;
+  return Object.fromEntries(
+    Object.entries(value).map(([key, dimension]) => [
+      key,
+      (key === 'width' || key === 'height') && dimension === 0 ? null : dimension
+    ])
+  );
+}, mediaAssetObjectSchema);
 
 export const imageAssetSchema = mediaAssetSchema;
 

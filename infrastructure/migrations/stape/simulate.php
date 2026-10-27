@@ -63,7 +63,7 @@ function wp_unique_filename($dir,$name) { if (file_exists($dir.'/'.$name)) throw
 function get_attached_file($id) { return get_post_meta($id,'_wp_attached_file',true); }
 function wp_get_attachment_url($id) { return 'https://cms.netmarket.it/wp-content/uploads/test/'.basename(get_attached_file($id)); }
 function wp_get_image_mime($file) { return (new finfo(FILEINFO_MIME_TYPE))->file($file); }
-function wp_generate_attachment_metadata($id,$file) { if (str_ends_with($file,'.svg')) return []; $info=getimagesize($file);return ['width'=>$info[0],'height'=>$info[1]]; }
+function wp_generate_attachment_metadata($id,$file) { if (str_ends_with($file,'.svg')) return ['width'=>0,'height'=>0]; $info=getimagesize($file);return ['width'=>$info[0],'height'=>$info[1]]; }
 function wp_update_attachment_metadata($id,$meta) { update_post_meta($id,'_wp_attachment_metadata',$meta); }
 function wp_get_attachment_metadata($id) { return get_post_meta($id,'_wp_attachment_metadata',true); }
 function get_post_mime_type($id) { return get_post($id)?->post_mime_type; }
