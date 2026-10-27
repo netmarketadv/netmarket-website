@@ -25,6 +25,27 @@ const image = {
 const relation = { id: 1, slug: 'siti-web', title: 'Siti web', type: 'nm_service', image };
 
 describe('shared schemas', () => {
+  it('normalizes only unknown SVG dimensions from WordPress, including nested client logos', () => {
+    const logo = { ...image, mimeType: 'image/svg+xml', width: 0, height: 0 };
+    expect(mediaAssetSchema.parse(logo)).toMatchObject({ width: null, height: null });
+    expect(
+      caseStudySchema.parse({
+        id: 4,
+        slug: 'sirene-blu',
+        title: 'Sirene Blu',
+        client: { ...relation, image: logo },
+        seo
+      }).client?.image
+    ).toMatchObject({ width: null, height: null });
+    expect(mediaAssetSchema.parse({ ...logo, width: 300, height: 100 })).toMatchObject({
+      width: 300,
+      height: 100
+    });
+    expect(mediaAssetSchema.safeParse({ ...image, width: 0 }).success).toBe(false);
+    expect(mediaAssetSchema.safeParse({ ...logo, width: -1 }).success).toBe(false);
+    expect(mediaAssetSchema.safeParse({ ...logo, width: '0' }).success).toBe(false);
+    expect(logo.width).toBe(0);
+  });
   it('parses media and SEO metadata', () => {
     expect(mediaAssetSchema.parse(image).id).toBe(10);
     expect(

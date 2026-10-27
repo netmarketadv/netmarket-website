@@ -350,3 +350,13 @@ Lo script usa ora l'opzione ufficiale `--use-include`, disponibile nel WP-CLI in
 che conserva sia `strict_types` sia la risoluzione di `__DIR__`. Il manifest approvato,
 i contenuti e il tracking restano invariati. Un test esegue l'entrypoint PHP reale via
 include e verifica che raggiunga il guard sul digest senza errori di parsing.
+
+### Compatibilità dimensioni SVG CMS (27 ottobre 2026)
+
+L'import reale `40505019923` è riuscito e l'audit autenticato ha verificato 17 record e 38 media.
+La prima build ufficiale `40505633732` ha poi rifiutato il candidate: i loghi SVG di WordPress
+riportano dimensioni sconosciute come zero, incompatibili con lo schema frontend positivo/null.
+La normalizzazione frontend converte esclusivamente dimensioni SVG numeriche zero in null;
+valori negativi, stringhe e dimensioni raster zero restano invalidi. Non vengono inventate dimensioni,
+modificati contenuti CMS o indeboliti i gate contro fallback/accessi saltati. Il simulatore CMS
+riproduce ora lo stesso metadata SVG reale e i test coprono anche i loghi annidati nei case study.
