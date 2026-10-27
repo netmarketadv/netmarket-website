@@ -22,10 +22,15 @@ for (const path of ['/', '/agenzia/', '/servizi/siti-web/']) {
         );
     });
     expect(widths.every((difference) => difference < 1)).toBe(true);
+    const projectLink = rail.locator('a').first();
+    await expect(projectLink).toHaveAttribute('href', /^\/progetti\/.+\/$/);
+    const destination = new URL((await projectLink.getAttribute('href'))!, page.url()).href;
     const newTab = page.context().waitForEvent('page');
-    await rail.locator('a').first().click({ button: 'middle' });
+    await projectLink.click({ button: 'middle' });
     const projectTab = await newTab;
-    await projectTab.waitForLoadState('domcontentloaded');
+    await projectTab.bringToFront();
+    await expect(projectTab).toHaveURL(destination);
+    await expect(projectTab.locator('main')).toBeVisible();
     await projectTab.close();
     await page.bringToFront();
     await page.mouse.move(0, 0);

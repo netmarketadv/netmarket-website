@@ -59,12 +59,6 @@ function collectRevealTargets(): HTMLElement[] {
   return Array.from(new Set([...roots, ...roots.flatMap(applyStagger)]));
 }
 
-function elementIsNearViewport(target: HTMLElement): boolean {
-  const rect = target.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  return rect.bottom >= 0 && rect.top <= viewportHeight * 1.04;
-}
-
 function headingTargets(root: HTMLElement): HTMLElement[] {
   if (
     /^H[1-4]$/.test(root.tagName) ||
@@ -203,8 +197,8 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     ? Array.from(document.querySelectorAll<HTMLElement>(lineRevealSelector))
     : collectRevealTargets();
   const targets = candidates.filter((target) => target.dataset.motionState !== 'revealed');
-  // Restored scroll and late line/font layout can invalidate ScrollTrigger's cached start.
-  // Keep the existing tween, but start it when the browser observes visible content.
+  // One owner starts entrance tweens. A ScrollTrigger refresh must not re-pause
+  // an entrance already started by IntersectionObserver after layout/font changes.
   const pending = new Map<HTMLElement, GsapTween>();
   const revealVisible = (target: HTMLElement, passed = false) => {
     const tween = pending.get(target);
@@ -213,7 +207,7 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     observer?.unobserve(target);
     if (passed) {
       tween.progress(1);
-      // A completed ScrollTrigger tween may not emit onStart during scroll restoration.
+      // Jumping to completion may not emit onStart during scroll restoration.
       target.dataset.motionState = 'revealed';
       target.classList.add('is-visible');
     } else tween.play();
@@ -272,11 +266,7 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
               heading.dataset.motionLineComplete = 'true';
             });
           },
-          scrollTrigger: {
-            trigger: target,
-            start: () => (elementIsNearViewport(target) ? 'top bottom' : 'top 94%'),
-            once: true
-          },
+          paused: true,
           onStart: () => {
             target.dataset.motionState = 'revealed';
             target.classList.add('is-visible');
@@ -293,11 +283,7 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
       duration: target.matches(mediaRevealSelector) ? 0.96 : 0.72,
       ease: target.matches(mediaRevealSelector) ? 'power4.out' : 'expo.out',
       delay: delayFor(target),
-      scrollTrigger: {
-        trigger: target,
-        start: () => (elementIsNearViewport(target) ? 'top bottom' : 'top 96%'),
-        once: true
-      },
+      paused: true,
       onStart: () => {
         target.dataset.motionState = 'revealed';
         target.classList.add('is-visible');
