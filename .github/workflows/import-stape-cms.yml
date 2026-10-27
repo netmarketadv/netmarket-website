@@ -1,0 +1,88 @@
+name: Import Stape CMS Content
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [plan, apply, rollback-plan, rollback]
+        default: plan
+        description: Piano senza scritture oppure import/rollback contenuti approvato
+      plan_sha256:
+        type: string
+        required: true
+        description: Digest esatto del manifest contenuti revisionato
+      confirm:
+        type: string
+        default: ''
+        description: IMPORT NETMARKET CMS <digest> oppure ROLLBACK NETMARKET CMS <digest>
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node infrastructure/scripts/check-production-protection.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+  content:
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      PLAN_SHA256: ${{ inputs.plan_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node infrastructure/scripts/check-production-protection.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Verify source and materialize exact media bytes
+        if: ${{ inputs.mode == 'apply' }}
+        run: node infrastructure/migrations/stape/materialize.mjs
+      - name: Protected content operation (plan writes nothing remotely)
+        run: |
+          mkdir -p artifacts/stape-cms-preparation/media
+          bash infrastructure/scripts/import-stape-cms.sh
+        env:
+          MODE: ${{ inputs.mode }}
+          CONFIRM: ${{ inputs.confirm }}
+          SG_CMS_WORDPRESS_PATH: ${{ secrets.SG_CMS_WORDPRESS_PATH }}
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+      - name: Verify every required service and case study through authenticated HTTPS
+        if: ${{ inputs.mode == 'apply' }}
+        run: |
+          node infrastructure/scripts/preflight-production-cms.mjs
+          node infrastructure/migrations/stape/audit-import.mjs
+          mv "artifacts/production-candidate-$GITHUB_SHA/cms-preflight.json" artifacts/stape-cms-preparation/cms-authenticated-verification.json
+        env:
+          PUBLIC_BUILD_SHA: ${{ github.sha }}
+          CMS_API_BASE_URL: https://cms.netmarket.it/wp-json/netmarket/v1/
+          CMS_BASIC_AUTH_USER: ${{ secrets.CMS_BASIC_AUTH_USER }}
+          CMS_BASIC_AUTH_PASSWORD: ${{ secrets.CMS_BASIC_AUTH_PASSWORD }}
+      - name: Upload CMS verification evidence (not a frontend production candidate)
+        if: ${{ always() && inputs.mode == 'apply' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-import-verification-${{ github.run_id }}
+          path: |
+            artifacts/stape-cms-preparation/cms-authenticated-verification.json
+            artifacts/stape-cms-preparation/cms-import-audit.json
+            data/releases/stape-cms-import.json
+            artifacts/production-candidate-${{ github.sha }}/cms-preflight.json
+          if-no-files-found: ignore

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 for (const width of [390, 430, 768, 1024, 1280, 1440, 1728]) {
   test(`catalog foundations and controls fit at ${width}px`, async ({ page }) => {

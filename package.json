@@ -34,7 +34,8 @@
     "php:cs": "composer --working-dir=apps/wordpress/plugins/netmarket-headless-core run phpcs",
     "php:stan": "composer --working-dir=apps/wordpress/plugins/netmarket-headless-core run phpstan",
     "secrets:scan": "node infrastructure/scripts/scan-secrets.mjs",
-    "validate": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm php:lint && pnpm php:cs && pnpm php:stan && pnpm secrets:scan"
+    "validate": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm php:lint && pnpm php:cs && pnpm php:stan && pnpm secrets:scan",
+    "test:e2e:motion": "pnpm --filter @netmarket/web exec playwright test --config playwright.motion.config.ts"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

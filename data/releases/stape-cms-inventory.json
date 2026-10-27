@@ -1,0 +1,36 @@
+{
+  "baseline": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+  "sources": [
+    {
+      "path": "apps/web/src/data/service-fallbacks.ts",
+      "sha256": "296283b8aad39024790926aa41f38bcabbd5722deda31e52baf192a1789ebffd"
+    },
+    {
+      "path": "data/migrations/case-studies/case-study-transform-dry-run.json",
+      "sha256": "55261128a697b5ab27597300fb8306a131b89a2f26fdaa2620649ae81bb89de3"
+    }
+  ],
+  "requiredSlugs": {
+    "services": [
+      "siti-web",
+      "ecommerce",
+      "software-e-integrazioni",
+      "seo",
+      "advertising",
+      "social-media",
+      "branding-e-comunicazione",
+      "content-production",
+      "concorsi-a-premi"
+    ],
+    "case-studies": [
+      "app-mobile-programma-fedelta-sirene-blu",
+      "sviluppo-crm-custom-venitaly",
+      "sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda",
+      "sviluppo-sito-web-allestimenti-fieristici-albertini",
+      "sviluppo-sito-web-fotovoltaico-progetto-e",
+      "sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa",
+      "concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa",
+      "casi-studio-strategia-digitale-ecommerce-brb"
+    ]
+  }
+}

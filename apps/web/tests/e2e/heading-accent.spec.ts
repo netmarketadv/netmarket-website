@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 for (const path of ['/', '/servizi/siti-web/', '/agenzia/', '/lavora-con-noi/', '/nod/', '/design-system/']) {
   test(`heading accents use the blue token without highlight on ${path}`, async ({ page }) => {

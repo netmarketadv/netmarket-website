@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, isolateExternalTracking } from '../e2e/fixtures';
 
 const endpoint = '**/wp-json/netmarket/v1/forms/contact';
 
@@ -125,6 +125,7 @@ test('campaign content and native links remain available without JavaScript', as
   browser
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/advertising/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

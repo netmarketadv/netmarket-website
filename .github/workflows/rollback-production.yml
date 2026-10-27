@@ -1,0 +1,93 @@
+name: Rollback Production Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Piano read-only oppure ripristino approvato
+        type: choice
+        options: [plan, execute]
+        default: plan
+      current_sha:
+        description: SHA frontend attualmente online (40 caratteri)
+        required: true
+        type: string
+      restore_sha:
+        description: SHA frontend contenuto nello snapshot (40 caratteri)
+        required: true
+        type: string
+      snapshot:
+        description: Snapshot esatto before-<current_sha>; latest vietato
+        required: true
+        type: string
+      snapshot_digest:
+        description: Digest SHA256 ottenuto dalla precedente esecuzione plan
+        default: '-'
+        type: string
+      confirm:
+        description: Per execute scrivere ROLLBACK NETMARKET <current_sha> TO <restore_sha>
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require actual production approval policy
+        run: node infrastructure/scripts/check-production-protection.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  rollback:
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recheck approval policy after environment gate
+        run: node infrastructure/scripts/check-production-protection.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Verify exact snapshot or execute approved rollback
+        env:
+          MODE: ${{ inputs.mode }}
+          CURRENT_SHA: ${{ inputs.current_sha }}
+          RESTORE_SHA: ${{ inputs.restore_sha }}
+          SNAPSHOT: ${{ inputs.snapshot }}
+          SNAPSHOT_DIGEST: ${{ inputs.snapshot_digest }}
+          CONFIRM: ${{ inputs.confirm }}
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
+          SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_USER: ${{ secrets.SG_SSH_USER }}
+          SG_SSH_PRIVATE_KEY: ${{ secrets.SG_SSH_PRIVATE_KEY }}
+          SG_SSH_KNOWN_HOSTS: ${{ secrets.SG_SSH_KNOWN_HOSTS }}
+          SG_PRODUCTION_DEPLOY_PATH: ${{ secrets.SG_PRODUCTION_DEPLOY_PATH }}
+        run: |
+          set -Eeuo pipefail
+          test "$GITHUB_REF" = refs/heads/main
+          args=(--host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH" --snapshot "$SNAPSHOT" --current "$CURRENT_SHA" --restore "$RESTORE_SHA" --digest "$SNAPSHOT_DIGEST")
+          if [ "$MODE" = plan ]; then
+            bash infrastructure/scripts/manual-rollback-production.sh --dry-run "${args[@]}"
+          elif [ "$MODE" = execute ]; then
+            bash infrastructure/scripts/manual-rollback-production.sh --execute "${args[@]}" --confirm "$CONFIRM"
+          else
+            exit 1
+          fi

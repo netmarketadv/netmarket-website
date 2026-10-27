@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, isolateExternalTracking } from './fixtures';
 import { collectCriticalConsoleErrors, expectEnvironmentRobots } from './helpers';
 
 test.setTimeout(120_000);
@@ -49,6 +49,7 @@ test('service detail renders SEO, breadcrumb and CTA', async ({ page }) => {
 test('services remain visible without javascript', async ({ browser }) => {
   const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/servizi/ecommerce/', { waitUntil: 'domcontentloaded' });
   await expect(

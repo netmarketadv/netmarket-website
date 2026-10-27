@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { expect, test } from '@playwright/test';
+import { expect, test, isolateExternalTracking } from './fixtures';
 import type { Page } from '@playwright/test';
 import {
   collectCriticalConsoleErrors,
@@ -197,6 +197,7 @@ test('design system page is internal and noindexed', async ({ page }) => {
 
 test('motion enhancement keeps content visible without javascript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL: testBaseUrl() });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(
@@ -738,6 +739,7 @@ test('case study slider remains stable on mobile touch viewports', async ({ brow
     isMobile: true,
     baseURL: testBaseUrl()
   });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.locator('.home-case-slider').scrollIntoViewIfNeeded();
@@ -808,6 +810,7 @@ test('case study slider supports mouse drag and wraps without reaching an end', 
 
 test('client marquee respects reduced motion', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce', baseURL: testBaseUrl() });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
@@ -925,6 +928,7 @@ test('motion reveal is robust on mobile and reduced motion', async ({ browser })
     viewport: { width: 390, height: 1000 },
     baseURL: testBaseUrl()
   });
+  await isolateExternalTracking(mobileContext);
   const mobile = await mobileContext.newPage();
   await mobile.goto('/', { waitUntil: 'domcontentloaded' });
   await scrollToEndProgressively(mobile);
@@ -936,6 +940,7 @@ test('motion reveal is robust on mobile and reduced motion', async ({ browser })
     reducedMotion: 'reduce',
     baseURL: testBaseUrl()
   });
+  await isolateExternalTracking(reducedContext);
   const reduced = await reducedContext.newPage();
   await reduced.goto('/', { waitUntil: 'domcontentloaded' });
   await reduced.waitForTimeout(250);

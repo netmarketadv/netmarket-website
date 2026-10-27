@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, isolateExternalTracking } from './fixtures';
 import { collectCriticalConsoleErrors } from './helpers';
 
 test.setTimeout(120_000);
@@ -144,6 +144,7 @@ test('siti web service page is editorial, crawlable, and conversion ready', asyn
 test('siti web content remains semantic and readable without javascript', async ({ browser }) => {
   const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+  await isolateExternalTracking(context);
   const page = await context.newPage();
   await page.goto('/servizi/siti-web/', { waitUntil: 'domcontentloaded' });
 

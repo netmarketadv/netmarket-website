@@ -13,3 +13,8 @@ test-results/
 !.env.example
 *.log
 *.local
+
+artifacts/production-candidate-*/
+artifacts/stape-release-evidence/
+
+/artifacts/stape-cms-preparation/

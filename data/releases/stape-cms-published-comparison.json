@@ -1,0 +1,189 @@
+[
+  {
+    "path": "/servizi/siti-web/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "9e2e75761fb7112a50a8cc7fc12e7c3edd79719cc1c36c5f64de0869fac71d88",
+    "mainSha256": "c4cac8e1925945dfdedf5ae9c66785e1b0995e53c218f04129b66b33fa2a3228"
+  },
+  {
+    "path": "/servizi/ecommerce/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "687ee0457a1e21297c171ea71d1373577f1bf7b66f2153ab135df5e8f2bd63d3",
+    "mainSha256": "aaf583197cdd0e15df3b5ffd34aa1c97bd7e1dd8d88763d0005b58132cfded80"
+  },
+  {
+    "path": "/servizi/software-e-integrazioni/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "0fd0c15e534ddc5caeafb431a6abfb40eae235d39747966174c7487bf6b9d814",
+    "mainSha256": "bb7d77cd02d0f43a799782c99be33f353dd24bb8c7fb71b7f71355408b6cc795"
+  },
+  {
+    "path": "/servizi/seo/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "d0b4a79bb6f78d53eb6c28d2dd780085a12e2df3c5b049ea27a1748bdda0fac8",
+    "mainSha256": "b65df0750275372a3bd570dc8307391ce079f2f685ad3ec30346e5b883270b3e"
+  },
+  {
+    "path": "/servizi/advertising/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "63c69aa646af79c05f1b015149ee70ba653a3c458165381c6fffc266b5ed94ee",
+    "mainSha256": "9a92ec6c02887e4e64361c39e7d00ad29aa5edd413e14e2aaf31b196396d574a"
+  },
+  {
+    "path": "/servizi/social-media/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "b784a16190e45dc49fab34812ac1d3c6620f9c77d6f56608d53ad98843f3eeb5",
+    "mainSha256": "9ca1676c18a0989b73aee86cc54dc435ce7993062194d1826a9bd9c59b89c9f9"
+  },
+  {
+    "path": "/servizi/branding-e-comunicazione/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "36630f105ea910f1ae2e4ea7ea34d7f060017915700794c34e79d6db5b733c9d",
+    "mainSha256": "ee2d290e2fa65db45709d352151b659fb1831f768bec7f5413baa22484a5da7f"
+  },
+  {
+    "path": "/servizi/content-production/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "6bbc24499db39f1daa07ad6ef9454a0a4289be2a2be792927983f184063554b4",
+    "mainSha256": "04bb3354bd6fff9bdb15b45926b45bbf716739152136b367a4016ce8872c5e97"
+  },
+  {
+    "path": "/servizi/concorsi-a-premi/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "8dc100c99705f849448f8c856f1e903bcd8e40d379701c800a27057677bc78db",
+    "mainSha256": "687f367803235da04b1ff0453e6532cbad34dcf3a267c6b3ac300ca96cf70744"
+  },
+  {
+    "path": "/progetti/casi-studio-strategia-digitale-ecommerce-brb/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "11a616e96d58d54963076d0858130b2ba59b51ca6602abe4bf56e08b73f318ea",
+    "mainSha256": "a41f57c7d77b187b45d1c62c5d4b70d6562cb3b7fdcfc547baa0991a9ea2f1d4"
+  },
+  {
+    "path": "/progetti/concorso-a-premi-sirene-blu-2024-ideazione-sviluppo-e-gestione-completa/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "9c736fa890b80428b51036da0bace5ea26d31e7bdcc052ad1289b4c3cb826719",
+    "mainSha256": "7344880a0a068383a9c54fc04f09c42d79700da94a27ec22cfd5127dc003c2fa"
+  },
+  {
+    "path": "/progetti/sviluppo-e-commerce-per-tavoli-e-sedie-per-la-casa/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "778e3cae38621ddb7632a8e67304730d10028114ec4d3230dab2c6fbc66b105a",
+    "mainSha256": "8b7a65a61e80127f62b97fc2b35cbe546642c4b535de7574102f9d27c883a6e2"
+  },
+  {
+    "path": "/progetti/sviluppo-sito-web-fotovoltaico-progetto-e/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "2fa4240d6570fe1d6acf4e948f4a7a066a8cb5d5a55134df79e7c4c4f1a84c51",
+    "mainSha256": "91f1b040b0bf44e76a16c7d4c55d0439ba24fa6d603ab39eb398486da6d59f78"
+  },
+  {
+    "path": "/progetti/sviluppo-sito-web-allestimenti-fieristici-albertini/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "f5e699be502a8fe89a1c915c07994d57b1cddda6082312de2278645774760bd1",
+    "mainSha256": "51423be763f55013236c6e1a32b3208d6fb582a17eadf2c28b9dbf33c9e18fb7"
+  },
+  {
+    "path": "/progetti/sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "index, follow",
+    "publicHtmlSha256": "c75e303fd892e4838e1063da48e2f022e7e01edfe3a77bbc241ea5f190c45f38",
+    "mainSha256": "890a20b45467312fed1dca4e026e20f911f633430077ec644c8d27336408494a"
+  },
+  {
+    "path": "/progetti/sviluppo-crm-custom-venitaly/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "noindex, nofollow, noarchive",
+    "publicHtmlSha256": "9ae0cd0aa5bf33c77a9c4d264739b2a23612a78b022c278a3354d0fc036c236e",
+    "mainSha256": "411c24d2200d5362b50e64562292fc456d4302cd25686326a0958a3ff2720a49"
+  },
+  {
+    "path": "/progetti/app-mobile-programma-fedelta-sirene-blu/",
+    "source": "read-only SSH deployed document root (public HTTP comparison received 403)",
+    "publishedSha": "6b2e5524ba43e237229e0f56e86161edd87e1165",
+    "mainTextEqual": true,
+    "titleEqual": true,
+    "descriptionEqual": true,
+    "publicRobots": "noindex, nofollow, noarchive",
+    "publicHtmlSha256": "39226a7e5b7b167457c7a9e3c4c9115a3f47146e60f4785e56984f362b6be6f9",
+    "mainSha256": "f6b900cd906af27ec9e9b5758c9ed703bbd0df7d262a3a51407d7f228fc0b6ee"
+  }
+]

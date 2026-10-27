@@ -15,6 +15,7 @@ import {
   testimonialCollectionSchema
 } from '@netmarket/schemas';
 import { getPublicEnv, getServerEnv } from '@/lib/env';
+import { recordCmsAccess } from './provenance';
 
 type CollectionParams = {
   page?: number;
@@ -47,33 +48,48 @@ export async function fetchCms<TSchema extends z.ZodTypeAny>(
   path: string,
   schema: TSchema
 ): Promise<z.output<TSchema>> {
-  const env = getServerEnv();
-  const publicEnv = getPublicEnv();
-  const endpoint = new URL(path.replace(/^\//, ''), env.CMS_API_BASE_URL).toString();
-  const headers: Record<string, string> = { Accept: 'application/json' };
-  if (env.CMS_BUILD_TOKEN) {
-    headers.Authorization = `Bearer ${env.CMS_BUILD_TOKEN}`;
-  } else if (env.CMS_BASIC_AUTH_USER && env.CMS_BASIC_AUTH_PASSWORD) {
-    headers.Authorization = `Basic ${btoa(`${env.CMS_BASIC_AUTH_USER}:${env.CMS_BASIC_AUTH_PASSWORD}`)}`;
-  }
-  if (!headers.Authorization && endpoint.includes('cms.netmarket.it')) {
-    throw new Error(`CMS endpoint ${path} skipped because CMS credentials are not configured.`);
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
-  const response = await fetch(endpoint, { headers, signal: controller.signal }).finally(() => {
-    clearTimeout(timeout);
-  });
-  if (!response.ok) {
-    throw new Error(`CMS endpoint ${path} ha risposto con status ${response.status}.`);
-  }
   try {
-    return parseEndpoint(path, schema, await response.json()) as z.output<TSchema>;
-  } catch (error) {
-    if (publicEnv.PUBLIC_DEPLOY_ENV === 'local') {
-      console.error(error);
+    const env = getServerEnv();
+    const publicEnv = getPublicEnv();
+    const endpoint = new URL(path.replace(/^\//, ''), env.CMS_API_BASE_URL).toString();
+    const headers: Record<string, string> = { Accept: 'application/json' };
+    if (env.CMS_BUILD_TOKEN) {
+      headers.Authorization = `Bearer ${env.CMS_BUILD_TOKEN}`;
+    } else if (env.CMS_BASIC_AUTH_USER && env.CMS_BASIC_AUTH_PASSWORD) {
+      headers.Authorization = `Basic ${btoa(`${env.CMS_BASIC_AUTH_USER}:${env.CMS_BASIC_AUTH_PASSWORD}`)}`;
     }
+    if (!headers.Authorization && endpoint.includes('cms.netmarket.it')) {
+      throw new Error(`CMS endpoint ${path} skipped because CMS credentials are not configured.`);
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    const response = await fetch(endpoint, { headers, signal: controller.signal }).finally(() => {
+      clearTimeout(timeout);
+    });
+    if (!response.ok) {
+      throw new Error(`CMS endpoint ${path} ha risposto con status ${response.status}.`);
+    }
+    try {
+      const payload: unknown = await response.json();
+      const parsed = parseEndpoint(path, schema, payload) as z.output<TSchema>;
+      recordCmsAccess(path, {
+        status: 'ok',
+        authenticated:
+          Boolean(headers.Authorization) &&
+          new URL(response.url || endpoint).origin === new URL(endpoint).origin,
+        origin: new URL(response.url || endpoint).origin,
+        payload
+      });
+      return parsed;
+    } catch (error) {
+      if (publicEnv.PUBLIC_DEPLOY_ENV === 'local') {
+        console.error(error);
+      }
+      throw error;
+    }
+  } catch (error) {
+    recordCmsAccess(path, { status: 'error' });
     throw error;
   }
 }

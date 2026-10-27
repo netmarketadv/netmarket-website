@@ -43,6 +43,11 @@ if [[ "${PUBLIC_DEPLOY_ENV:-}" != "production" || "${PUBLIC_SITE_URL:-}" != "htt
   exit 1
 fi
 
+if [[ ! "${EXPECTED_LIVE_SHA:-}" =~ ^[0-9a-f]{40}$ || ! "${PUBLIC_BUILD_SHA:-}" =~ ^[0-9a-f]{40}$ ]]; then
+  echo "SHA corrente e candidate obbligatori e completi."
+  exit 1
+fi
+
 BUILD_DIR="apps/web/dist"
 if [[ ! -f "$BUILD_DIR/index.html" || ! -f "$BUILD_DIR/.htaccess" ]]; then
   echo "Artifact production incompleto."
@@ -77,7 +82,7 @@ SSH_ARGS=(-p "$SG_SSH_PORT" -i "$KEY_FILE" -o "UserKnownHostsFile=$KNOWN_HOSTS_F
 RSYNC_SSH="ssh ${SSH_ARGS[*]}"
 
 ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" \
-  "test -d '$PATH_TARGET' && test -w '$PATH_TARGET' && command -v rsync >/dev/null"
+  "test -d '$PATH_TARGET' && test -w '$PATH_TARGET' && test \"\$(cat '$PATH_TARGET/netmarket-release')\" = '$EXPECTED_LIVE_SHA' && command -v rsync >/dev/null"
 
 if [[ "$DRY_RUN" == true ]]; then
   echo "Dry-run production verso $HOST:$PATH_TARGET"

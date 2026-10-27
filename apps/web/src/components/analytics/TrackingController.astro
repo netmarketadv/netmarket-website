@@ -1,21 +1,18 @@
 ---
 import { getPublicEnv } from '@/lib/env';
+import { isTrackingEnabled } from '@/lib/tracking-config';
 
 const env = getPublicEnv();
-const trackingEnabled =
-  env.PUBLIC_DEPLOY_ENV === 'production' &&
-  env.PUBLIC_ANALYTICS_ENABLED &&
-  /^GTM-[A-Z0-9]+$/.test(env.PUBLIC_GTM_ID);
-const gtmId = env.PUBLIC_GTM_ID;
+const trackingEnabled = isTrackingEnabled(env);
 ---
 
 {
   trackingEnabled && (
     <>
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
+      <link rel="preconnect" href="https://web.netmarket.it" />
       <link rel="preconnect" href="https://cdn.iubenda.com" />
       <link rel="preconnect" href="https://cs.iubenda.com" />
-      <script is:inline define:vars={{ gtmId }}>
+      <script is:inline>
         window.__netmarketConsentReady = false;
         window.dataLayer = window.dataLayer || [];
         window.gtag =
@@ -83,19 +80,12 @@ const gtmId = env.PUBLIC_GTM_ID;
       <script is:inline src="https://cs.iubenda.com/sync/2837332.js"></script>
       <script is:inline src="https://cdn.iubenda.com/cs/gpp/stub.js"></script>
       <script is:inline src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
-      <script is:inline define:vars={{ gtmId }}>
+      <script is:inline>
         function loadTagManager() {
           if (window.__netmarketGtmLoaded) return;
           window.__netmarketGtmLoaded = true;
-          (function (w, d, s, l, i) {
-            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-            const firstScript = d.getElementsByTagName(s)[0];
-            const script = d.createElement(s);
-            const layer = l !== 'dataLayer' ? '&l=' + l : '';
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
-            firstScript.parentNode.insertBefore(script, firstScript);
-          })(window, document, 'script', 'dataLayer', gtmId);
+          // Original Stape snippet; retain its opaque query exactly as supplied.
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://web.netmarket.it/10ddffrvzl.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','433kq=BR5LNTIrSS9bQkQxLFJSQhpHRFxXQAAKURQTBgsHFg8JDlgbEg%3D%3D');
         }
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', loadTagManager, { once: true });

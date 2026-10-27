@@ -5,7 +5,7 @@
 GitHub Environment protetto `production` e un avvio manuale confermato dalla stringa
 `DEPLOY NETMARKET`.
 
-La preparazione locale del candidato production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload.
+La preparazione diagnostica locale del build production è disponibile con `pnpm build:production-candidate`. Il comando genera configurazione indexabile e redirect nel solo artifact locale, quindi esegue i gate SEO e routing descritti in `docs/migration/go-live-readiness.md`. Non effettua upload.
 
 Lo staging statico viene pubblicato con `infrastructure/scripts/deploy-staging.sh`, che richiede build Astro già generata, SSH con known hosts espliciti e path assoluto.
 
@@ -40,20 +40,23 @@ infrastructure/scripts/rollback-staging.sh --execute --host staging.netmarket.it
 
 ## Production
 
-Il deploy production esegue nell'ordine: guard host/branch, controllo secret, pull della
-cache CMS, fast quality gates, audit del build production, dry-run rsync, upload in una
-release separata, sostituzione del document root, smoke funzionale, smoke SEO e verifica
-completa della redirect map. Se un controllo post-deploy fallisce, il workflow ripristina
-automaticamente la release precedente; errori anteriori allo switch non attivano rollback.
+Il workflow `Deploy Production` separa due operazioni protette, entrambe soltanto su
+`main`: `mode=candidate` produce e verifica l'artifact completo; `mode=deploy` richiede
+`candidate_run_id` e pubblica esattamente quell'artifact, senza rebuild. Required reviewer,
+SHA live atteso, checkout, provenienza CMS autenticata, integrità e run riuscita vengono
+verificati prima della pubblicazione. Un candidate con fallback o accessi CMS saltati è rifiutato.
+Il comando locale `pnpm build:production-candidate` è soltanto diagnostico e non sostituisce
+questa procedura protetta.
 
-Il document root precedente viene conservato come
-`.netmarket-rollbacks/before-<sha>`. La directory `.well-known` viene copiata nella nuova
-release prima dello switch. Il rollback è separato e deve essere invocato esplicitamente:
-
-```sh
-infrastructure/scripts/rollback-production.sh --dry-run --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH"
-infrastructure/scripts/rollback-production.sh --execute --host netmarket.it --path "$SG_PRODUCTION_DEPLOY_PATH" --release latest
-```
+Il deploy conserva il document root in `.netmarket-rollbacks/before-<nuovo-sha>` e preserva
+`.well-known`. Errori dopo lo switch attivano il rollback automatico allo snapshot esatto.
+Per un rollback successivo anche a una pipeline riuscita, usare `Rollback Production Manual`:
+prima `mode=plan`, poi, solo previa autorizzazione, `mode=execute`, con SHA corrente, SHA da
+ripristinare, snapshot `before-<sha-corrente>`, digest ottenuto dal piano e conferma esatta
+`ROLLBACK NETMARKET <sha-corrente> TO <sha-da-ripristinare>`. Entrambe le run richiedono
+l'approvazione dell'environment; `latest` non è ammesso. Non usare il vecchio wrapper rollback
+production come procedura operativa. Dettagli, limiti e collaudo nel
+[rapporto Stape](stape-release-candidate.md).
 
 Secret richiesti nel GitHub Environment `production`:
 
@@ -122,3 +125,21 @@ Ordine operativo:
 ### Webhook CMS: deploy ripetibili
 
 La configurazione distingue creazione e aggiornamento dell’opzione server-only. Su un valore esistente, `wp option update` senza `--autoload` accetta anche il caso invariato; `wp option set-autoload ... off` mantiene separatamente l’esclusione dall’autoload. Un’opzione nuova viene creata direttamente con autoload disabilitato. Il valore continua a passare solo da stdin, senza output o argomenti di processo. Questo evita il falso errore WP-CLI nei deploy successivi alla prima configurazione.
+
+## Candidate Stape e rollback production manuale
+
+Il workflow production propone ora la modalità `candidate` senza deploy; la modalità `deploy`
+richiede la conferma esplicita esistente. Entrambe richiedono un reviewer production effettivo
+e un candidate senza errori o fallback CMS. Il rollback manuale richiede snapshot esatto,
+SHA, digest del piano e approvazione. Procedure e blocchi correnti sono nel
+[rapporto del candidate Stape](stape-release-candidate.md). Nessun rilascio è autorizzato dal solo rapporto.
+
+## Contenuti CMS per il rilascio Stape
+
+Il workflow separato `Import Stape CMS Content` prepara il piano read-only o applica/annulla
+soltanto il manifest CMS revisionato, con digest e conferma esatti, main e approvazione
+production. Non deploya il plugin o il frontend. Dopo apply verifica via HTTPS autenticato
+i contenuti rispetto al manifest; il candidate verifica anche assenza di drift della build.
+Il gate production richiede reviewer, solo main e bypass amministrativo disabilitato.
+La suite motion è ripetibile con `pnpm test:e2e:motion` sui tre engine. Manifest, checkpoint
+e rollback dei contenuti sono descritti nel [rapporto unico Stape](stape-release-candidate.md).

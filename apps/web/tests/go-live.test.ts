@@ -54,7 +54,7 @@ describe('go-live safeguards', () => {
       new URL('../src/components/analytics/TrackingController.astro', import.meta.url),
       'utf8'
     );
-    expect(tracking).toContain("env.PUBLIC_DEPLOY_ENV === 'production'");
+    expect(tracking).toContain('isTrackingEnabled(env)');
     expect(tracking).toContain("window.gtag('consent', 'default'");
     expect(tracking).toContain("analytics_storage: 'denied'");
     expect(tracking).toContain('https://cs.iubenda.com/sync/2837332.js');
@@ -86,7 +86,8 @@ describe('go-live safeguards', () => {
 
     expect(workflow).toContain('environment: production');
     expect(workflow).not.toContain('push:');
-    expect(workflow).toContain("inputs.confirm == 'DEPLOY NETMARKET'");
+    expect(workflow).toContain("test \"$CONFIRM\" = 'DEPLOY NETMARKET'");
+    expect(workflow).toContain("needs: guard");
     expect(workflow).toContain('SG_PRODUCTION_DEPLOY_PATH');
     expect(workflow).not.toContain('SG_STAGING_DEPLOY_PATH');
     expect(workflow).toContain("failure() && env.DEPLOY_COMPLETED == 'true'");
