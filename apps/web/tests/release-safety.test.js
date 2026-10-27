@@ -22,7 +22,8 @@ describe('production approval and CMS provenance', () => {
       assertProductionProtection(
         {
           protection_rules: [{ type: 'required_reviewers', reviewers: [{}] }],
-          deployment_branch_policy: { custom_branch_policies: true }
+          deployment_branch_policy: { custom_branch_policies: true },
+          can_admins_bypass: false
         },
         [{ name: 'main', type: 'branch' }]
       )
@@ -44,6 +45,21 @@ describe('production approval and CMS provenance', () => {
       ]
     ]) {
       expect(() => assertProductionProtection(environment, policies)).toThrow('main');
+    }
+  });
+
+  it('rejects enabled or unverifiable administrator approval bypass', () => {
+    for (const bypass of [true, undefined]) {
+      expect(() =>
+        assertProductionProtection(
+          {
+            protection_rules: [{ type: 'required_reviewers', reviewers: [{}] }],
+            deployment_branch_policy: { custom_branch_policies: true },
+            can_admins_bypass: bypass
+          },
+          [{ name: 'main', type: 'branch' }]
+        )
+      ).toThrow('bypass');
     }
   });
 

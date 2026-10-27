@@ -18,6 +18,9 @@ export function assertProductionProtection(environment, branchPolicies) {
       'Production deve autorizzare esclusivamente il branch main, senza wildcard o tag.'
     );
   }
+  if (environment.can_admins_bypass !== false) {
+    throw new Error('Production deve impedire il bypass amministrativo delle approvazioni.');
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -57,5 +60,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (!branches.ok)
     throw new Error('Impossibile verificare i branch production: HTTP ' + branches.status);
   assertProductionProtection(await response.json(), (await branches.json()).branch_policies);
-  console.log('Production: reviewer obbligatorio e limitazione branch verificati.');
+  console.log('Production: reviewer obbligatorio, bypass disabilitato e solo main verificati.');
 }
