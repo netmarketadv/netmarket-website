@@ -1,5 +1,41 @@
 import { expect, test } from './fixtures';
 
+test('position-only layout recovery uses the bounded motion failsafe', async ({ page }) => {
+  await page.addInitScript(() => {
+    Reflect.deleteProperty(window, 'IntersectionObserver');
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        const copy = document.querySelector<HTMLElement>('.home-hero__copy');
+        if (copy) {
+          copy.style.position = 'relative';
+          copy.style.top = '10000px';
+        }
+      },
+      { once: true }
+    );
+  });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    );
+  });
+  const actions = page.locator('.home-hero__actions');
+  await expect(actions).toHaveAttribute('data-motion-state', 'ready');
+  const sizes = await page.evaluate(() => {
+    const before = document.body.getBoundingClientRect();
+    document.querySelector<HTMLElement>('.home-hero__copy')!.style.top = '0px';
+    const after = document.body.getBoundingClientRect();
+    return { before: [before.width, before.height], after: [after.width, after.height] };
+  });
+  expect(sizes.after).toEqual(sizes.before);
+  await expect(actions).toHaveAttribute('data-motion-state', 'revealed');
+  await expect(actions).toHaveCSS('opacity', '1');
+});
+
 test('late layout changes reveal visible content without IntersectionObserver', async ({
   page
 }) => {

@@ -202,6 +202,7 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   // an entrance already started by IntersectionObserver after layout/font changes.
   const pending = new Map<HTMLElement, GsapTween>();
   let layoutObserver: ResizeObserver | undefined;
+  let recoveryTimer: number | undefined;
   const revealVisible = (target: HTMLElement, passed = false) => {
     const tween = pending.get(target);
     if (!tween) return;
@@ -216,6 +217,7 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     if (pending.size === 0) {
       observer?.disconnect();
       layoutObserver?.disconnect();
+      window.clearTimeout(recoveryTimer);
       document.removeEventListener('load', scheduleCheck, true);
       window.removeEventListener('scroll', scheduleCheck);
       window.removeEventListener('resize', scheduleCheck);
@@ -245,6 +247,14 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   };
   const scheduleCheck = () => {
     if (!frame) frame = window.requestAnimationFrame(checkPending);
+  };
+  const recoverAfterLayoutSettles = () => {
+    if (pending.size === 0) return;
+    scheduleCheck();
+    window.clearTimeout(recoveryTimer);
+    // A position-only change need not resize the body or produce a new
+    // intersection. Reuse the CSS reveal's bounded failsafe, without polling.
+    recoveryTimer = window.setTimeout(scheduleCheck, motionConfig.revealFailsafeDelayMs);
   };
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
@@ -311,8 +321,8 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     layoutObserver = new ResizeObserver(scheduleCheck);
     layoutObserver.observe(document.body);
   }
-  document.fonts?.ready.then(scheduleCheck).catch(() => undefined);
-  scheduleCheck();
+  document.fonts?.ready.then(recoverAfterLayoutSettles).catch(() => undefined);
+  recoverAfterLayoutSettles();
 }
 
 function enhanceMediaScroll(gsap: Gsap): void {
