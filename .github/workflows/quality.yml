@@ -26,6 +26,15 @@ on:
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
   workflow_dispatch:
+    inputs:
+      diagnostic_run_id:
+        description: Optional failed official candidate run to reproduce read-only
+        type: string
+        default: ''
+      diagnostic_sha:
+        description: Exact 40-character main SHA of that diagnostic artifact
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -178,3 +187,90 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+
+  candidate-reproduction:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnostic_run_id != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    env:
+      CMS_BASIC_AUTH_USER: ''
+      CMS_BASIC_AUTH_PASSWORD: ''
+      CMS_BUILD_TOKEN: ''
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4322
+      PLAYWRIGHT_ISOLATE_EXTERNALS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Verify diagnostic origin (never promote it)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DIAGNOSTIC_RUN_ID: ${{ inputs.diagnostic_run_id }}
+          DIAGNOSTIC_SHA: ${{ inputs.diagnostic_sha }}
+        run: |
+          set -Eeuo pipefail
+          [[ "$DIAGNOSTIC_RUN_ID" =~ ^[1-9][0-9]*$ ]]
+          [[ "$DIAGNOSTIC_SHA" =~ ^[0-9a-f]{40}$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$DIAGNOSTIC_RUN_ID" > /tmp/source-run.json
+          jq -e --arg sha "$DIAGNOSTIC_SHA" '.head_sha == $sha and .head_branch == "main" and .event == "workflow_dispatch" and .path == ".github/workflows/deploy-production.yml" and .conclusion == "failure" and .head_repository.full_name == "netmarketadv/netmarket-website"' /tmp/source-run.json >/dev/null
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.diagnostic_run_id }}
+          name: production-diagnostics-${{ inputs.diagnostic_sha }}
+          path: artifacts/read-only-reproduction
+      - name: Verify archive and restore only to local preview directory
+        env:
+          DIAGNOSTIC_SHA: ${{ inputs.diagnostic_sha }}
+        run: |
+          set -Eeuo pipefail
+          node --input-type=module -e 'import {verifyProductionCandidate} from "./infrastructure/scripts/verify-production-candidate.mjs"; console.log(verifyProductionCandidate({directory:"artifacts/read-only-reproduction",expectedSha:process.env.DIAGNOSTIC_SHA}));'
+          mkdir -p apps/web/dist
+          tar -xzf artifacts/read-only-reproduction/frontend.tgz -C apps/web/dist
+      - name: Use official signed Ubuntu archive for browser dependencies
+        run: |
+          set -Eeuo pipefail
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "30";' 'Acquire::https::Timeout "30";' | sudo tee /etc/apt/apt.conf.d/80netmarket-browser-network >/dev/null
+      - run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
+      - name: Start local preview of the diagnostic bytes
+        run: |
+          set -Eeuo pipefail
+          pnpm --filter @netmarket/web preview --host 127.0.0.1 --port 4322 >/tmp/netmarket-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4322/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Reproduce native project-tab cases without retries
+        id: rail
+        continue-on-error: true
+        run: pnpm --filter @netmarket/web exec playwright test tests/e2e/visual-audit.spec.ts --grep 'project rail advances' --repeat-each=3 --retries=0 --workers=2 --trace=on --output=test-results/rail
+      - name: Reproduce initial motion case on all engines without retries
+        id: motion
+        continue-on-error: true
+        run: pnpm --filter @netmarket/web exec playwright test --config playwright.motion.config.ts --grep 'motion reveal never leaves' --repeat-each=3 --retries=0 --workers=2 --trace=on --output=test-results/motion
+      - name: Preserve reproduction traces and screenshots
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidate-reproduction-${{ github.run_id }}
+          path: apps/web/test-results/
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Require both reproductions to pass
+        if: ${{ always() }}
+        env:
+          RAIL_OUTCOME: ${{ steps.rail.outcome }}
+          MOTION_OUTCOME: ${{ steps.motion.outcome }}
+        run: test "$RAIL_OUTCOME" = success && test "$MOTION_OUTCOME" = success
