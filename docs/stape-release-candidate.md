@@ -489,3 +489,13 @@ Quality Full include ora la matrice motion prima del merge. QA e candidate conse
 screenshot per fase prima che il test successivo li sovrascriva; gli artifact di evidenza non
 sono artifact production. La conservazione è di un giorno, coerente con il limite repository.
 I workflow sperimentali di confronto restano nei branch diagnostici e sono esclusi dal rilascio.
+
+La prima QA della PR58 (`40673755501`) ha completato 121 E2E senza retry, ma motion ha richiesto
+due retry WebKit. Il semplice timer che richiamava un RAF non copriva una pausa dei frame:
+inoltre il target usciva dai pending al play, prima di onStart. Il recupero ora conserva i tween
+accodati fino all'avvio effettivo e, dopo il limite canonico, completa direttamente quelli ancora
+pending nel viewport o già passati. Non dipende da un altro frame o dal ticker per renderli visibili.
+Scroll, resize, load e font riarmano la stessa singola verifica differita, senza polling.
+Il controllo negativo con requestAnimationFrame bloccato fallisce in tutti e tre i browser sul
+recupero precedente; i due nuovi casi ripetuti tre volte passano 18/18 dopo la correzione.
+Le animazioni effettivamente avviate escono dai pending e conservano il comportamento normale.

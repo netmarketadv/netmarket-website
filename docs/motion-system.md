@@ -146,3 +146,7 @@ limitata dopo inizializzazione/font. Copre spostamenti di sola posizione che non
 il body e non notificano l'intersezione; non introduce polling e cancella il timer quando
 non restano reveal pending. La regressione mantiene invariata la dimensione del body e verifica
 il recupero in WebKit; durate, easing, stagger e gestione reduced motion restano quelli canonici.
+Il failsafe completa direttamente i soli target ancora pending che risultano nel viewport o già
+passati, anche se il browser non consegna altri animation frame. Un tween accodato resta pending
+fino a onStart; il limite non interrompe le animazioni già avviate. Scroll/resize/load/font
+riarmano la stessa verifica differita, con cleanup completo e senza intervallo di polling.

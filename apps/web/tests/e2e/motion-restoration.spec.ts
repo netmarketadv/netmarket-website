@@ -1,5 +1,17 @@
 import { expect, test } from './fixtures';
 
+test('visible reveals recover when animation frames stop', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.requestAnimationFrame = () => 0;
+  });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  const actions = page.locator('.home-hero__actions');
+  await expect(actions).toHaveAttribute('data-motion-state', 'ready');
+  await expect(actions).toHaveAttribute('data-motion-state', 'revealed');
+  await expect(actions).toHaveCSS('opacity', '1');
+});
+
 test('position-only layout recovery uses the bounded motion failsafe', async ({ page }) => {
   await page.addInitScript(() => {
     Reflect.deleteProperty(window, 'IntersectionObserver');
