@@ -150,3 +150,6 @@ Il failsafe completa direttamente i soli target ancora pending che risultano nel
 passati, anche se il browser non consegna altri animation frame. Un tween accodato resta pending
 fino a onStart; il limite non interrompe le animazioni già avviate. Scroll/resize/load/font
 riarmano la stessa verifica differita, con cleanup completo e senza intervallo di polling.
+Per un entrance già avviato, un timer cancellato in onComplete completa il tween solo oltre
+la sua durata prevista più `revealFailsafeDelayMs`. Copre una pausa del ticker dopo onStart;
+non cambia la durata normale e non si applica agli effetti scrub/timeline.

@@ -1,5 +1,35 @@
 import { expect, test } from './fixtures';
 
+test('started reveals recover when animation frames stop', async ({ page }) => {
+  await page.addInitScript(() => {
+    const nativeFrame = window.requestAnimationFrame.bind(window);
+    window.requestAnimationFrame = (callback) =>
+      nativeFrame((time) => {
+        if (
+          document.querySelector<HTMLElement>('.home-hero__actions')?.dataset.motionState ===
+          'revealed'
+        )
+          return;
+        callback(time);
+      });
+  });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-motion-engine', 'gsap');
+  const actions = page.locator('.home-hero__actions');
+  await expect(actions).toHaveAttribute('data-motion-state', 'revealed');
+  await expect(actions).toHaveCSS('opacity', '1');
+  await expect
+    .poll(() =>
+      page
+        .locator('#page-title .nm-motion-word__inner')
+        .evaluateAll(
+          (words) =>
+            words.length > 0 && words.every((word) => getComputedStyle(word).opacity === '1')
+        )
+    )
+    .toBe(true);
+});
+
 test('visible reveals recover when animation frames stop', async ({ page }) => {
   await page.addInitScript(() => {
     window.requestAnimationFrame = () => 0;

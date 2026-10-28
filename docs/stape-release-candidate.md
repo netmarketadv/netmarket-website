@@ -499,3 +499,11 @@ Scroll, resize, load e font riarmano la stessa singola verifica differita, senza
 Il controllo negativo con requestAnimationFrame bloccato fallisce in tutti e tre i browser sul
 recupero precedente; i due nuovi casi ripetuti tre volte passano 18/18 dopo la correzione.
 Le animazioni effettivamente avviate escono dai pending e conservano il comportamento normale.
+
+La QA successiva `40675299467` ha passato122E2E senza retry e tutti i nuovi casi, ma ha rilevato
+un titolo WebKit già avviato con parole ancora incomplete. Il recupero copre quindi anche
+l'arresto dopo onStart: un timer di completamento usa la durata già prevista più il margine
+canonico1250ms e viene cancellato in onComplete. Interessa solo gli entrance, non scrub/timeline;
+le animazioni sane completano e cancellano il timer prima della soglia. La regressione arresta
+i frame appena le azioni iniziano, verificando sia opacità finale sia tutte le parole del titolo.
+Fallisce3/3 sul recupero precedente; i tre scenari mirati ripetuti tre volte passano27/27 dopo il fix.

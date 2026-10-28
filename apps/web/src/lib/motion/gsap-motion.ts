@@ -279,15 +279,18 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
       if (words.length > 0) {
         const lineIndexes = lineIndexForWords(words);
         gsap.set(words, { yPercent: 112, opacity: 0, rotate: 0.001 });
-        const tween = gsap.to(words, {
+        const duration = 0.82;
+        let completionTimer: number | undefined;
+        const tween: GsapTween = gsap.to(words, {
           yPercent: 0,
           opacity: 1,
-          duration: 0.82,
+          duration,
           ease: 'expo.out',
           stagger: (index: number, element: Element) =>
             (lineIndexes.get(element as HTMLElement) ?? index) * 0.075,
           delay: delayFor(target),
           onComplete: () => {
+            window.clearTimeout(completionTimer);
             gsap.set(words, { clearProps: 'transform,opacity' });
             headings.forEach((heading) => {
               heading.dataset.motionLineComplete = 'true';
@@ -297,6 +300,10 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
           onStart: () => {
             target.dataset.motionState = 'revealed';
             target.classList.add('is-visible');
+            completionTimer = window.setTimeout(
+              () => tween.progress(1),
+              duration * 1000 + motionConfig.revealFailsafeDelayMs
+            );
             releaseTarget(target);
           }
         });
@@ -306,18 +313,25 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     }
 
     gsap.set(target, initialVarsFor(target));
-    const tween = gsap.to(target, {
+    const duration = target.matches(mediaRevealSelector) ? 0.96 : 0.72;
+    let completionTimer: number | undefined;
+    const tween: GsapTween = gsap.to(target, {
       ...finalVarsFor(target),
-      duration: target.matches(mediaRevealSelector) ? 0.96 : 0.72,
+      duration,
       ease: target.matches(mediaRevealSelector) ? 'power4.out' : 'expo.out',
       delay: delayFor(target),
       paused: true,
       onStart: () => {
         target.dataset.motionState = 'revealed';
         target.classList.add('is-visible');
+        completionTimer = window.setTimeout(
+          () => tween.progress(1),
+          duration * 1000 + motionConfig.revealFailsafeDelayMs
+        );
         releaseTarget(target);
       },
       onComplete: () => {
+        window.clearTimeout(completionTimer);
         gsap.set(target, { clearProps: 'clipPath,filter,transform' });
       }
     });
