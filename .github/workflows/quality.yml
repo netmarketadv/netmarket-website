@@ -31,6 +31,11 @@ on:
         description: Optional failed official candidate run to reproduce read-only
         type: string
         default: ''
+      diagnostic_server:
+        description: Preview transport used for diagnostic bytes
+        type: choice
+        options: [astro, static]
+        default: astro
       diagnostic_sha:
         description: Exact 40-character main SHA of that diagnostic artifact
         type: string
@@ -244,9 +249,17 @@ jobs:
           printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "30";' 'Acquire::https::Timeout "30";' | sudo tee /etc/apt/apt.conf.d/80netmarket-browser-network >/dev/null
       - run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
       - name: Start local preview of the diagnostic bytes
+        env:
+          DIAGNOSTIC_SERVER: ${{ inputs.diagnostic_server }}
         run: |
           set -Eeuo pipefail
-          pnpm --filter @netmarket/web preview --host 127.0.0.1 --port 4322 >/tmp/netmarket-preview.log 2>&1 &
+          if [ "$DIAGNOSTIC_SERVER" = static ]; then
+            python3 -m http.server 4322 --bind 127.0.0.1 --directory apps/web/dist >/tmp/netmarket-preview.log 2>&1 &
+          elif [ "$DIAGNOSTIC_SERVER" = astro ]; then
+            pnpm --filter @netmarket/web preview --host 127.0.0.1 --port 4322 >/tmp/netmarket-preview.log 2>&1 &
+          else
+            exit 1
+          fi
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:4322/ >/dev/null; then exit 0; fi
             sleep 1
