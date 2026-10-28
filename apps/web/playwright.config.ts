@@ -24,6 +24,7 @@ export default defineConfig({
     : {}),
   use: {
     baseURL,
+    ...(process.env.PLAYWRIGHT_CHROMIUM_CHANNEL === 'chromium' ? { channel: 'chromium' } : {}),
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
     video: 'off'

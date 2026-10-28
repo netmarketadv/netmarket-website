@@ -31,6 +31,16 @@ on:
         description: Optional failed official candidate run to reproduce read-only
         type: string
         default: ''
+      diagnostic_workers:
+        description: Browser workers for read-only reproduction
+        type: choice
+        options: ['2', '1']
+        default: '2'
+      diagnostic_browser_channel:
+        description: Chromium executable used for the native popup comparison
+        type: choice
+        options: [headless-shell, chromium]
+        default: headless-shell
       diagnostic_server:
         description: Preview transport used for diagnostic bytes
         type: choice
@@ -206,6 +216,7 @@ jobs:
       CMS_BUILD_TOKEN: ''
       PLAYWRIGHT_BASE_URL: http://127.0.0.1:4322
       PLAYWRIGHT_ISOLATE_EXTERNALS: 'true'
+      DIAGNOSTIC_WORKERS: ${{ inputs.diagnostic_workers }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -267,12 +278,14 @@ jobs:
           exit 1
       - name: Reproduce native project-tab cases without retries
         id: rail
+        env:
+          PLAYWRIGHT_CHROMIUM_CHANNEL: ${{ inputs.diagnostic_browser_channel == 'chromium' && 'chromium' || '' }}
         continue-on-error: true
-        run: pnpm --filter @netmarket/web exec playwright test tests/e2e/visual-audit.spec.ts --grep 'project rail advances' --repeat-each=3 --retries=0 --workers=2 --trace=on --output=test-results/rail
+        run: pnpm --filter @netmarket/web exec playwright test tests/e2e/visual-audit.spec.ts --grep 'project rail advances' --repeat-each=3 --retries=0 --workers="$DIAGNOSTIC_WORKERS" --trace=on --output=test-results/rail
       - name: Reproduce initial motion case on all engines without retries
         id: motion
         continue-on-error: true
-        run: pnpm --filter @netmarket/web exec playwright test --config playwright.motion.config.ts --grep 'motion reveal never leaves' --repeat-each=3 --retries=0 --workers=2 --trace=on --output=test-results/motion
+        run: pnpm --filter @netmarket/web exec playwright test --config playwright.motion.config.ts --grep 'motion reveal never leaves' --repeat-each=3 --retries=0 --workers="$DIAGNOSTIC_WORKERS" --trace=on --output=test-results/motion
       - name: Preserve reproduction traces and screenshots
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
