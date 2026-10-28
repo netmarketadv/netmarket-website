@@ -140,3 +140,9 @@ La CTA mobile usa IntersectionObserver sulla CTA hero e sulla sezione form. Ingr
 La mappa è una visualizzazione geografica Natural Earth: una selezione esplicita cambia raggio, evidenza Italia e collegamenti. Transizioni duration-slow/ease-layout, nessun autoplay geografico o falsa presenza di sedi. Con reduced motion gli stati cambiano immediatamente. Il mockup reale BRB nella hero passa da -5° a -2° all’hover solo per puntatori precisi, con duration-slow/ease-layout, senza muovere il layout.
 
 Menu landing: ingresso opacity + translateY negativo della distanza sm, durata base/ease-enter; disabilitato in reduced motion. Il rail advertising usa snap inline proximity, overflow-y hidden e nessuna intercettazione wheel/touch; i gesti verticali continuano sulla pagina. La mappa mantiene transizioni solo su selezione, anche nella composizione mobile compatta.
+
+Il controller GSAP riusa `revealFailsafeDelayMs` (1250 ms) per una verifica geometrica
+limitata dopo inizializzazione/font. Copre spostamenti di sola posizione che non ridimensionano
+il body e non notificano l'intersezione; non introduce polling e cancella il timer quando
+non restano reveal pending. La regressione mantiene invariata la dimensione del body e verifica
+il recupero in WebKit; durate, easing, stagger e gestione reduced motion restano quelli canonici.

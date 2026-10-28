@@ -451,3 +451,41 @@ Il test ora passa prima attraverso hover reale e verifica is-paused, quindi usa 
 Ctrl/Cmd+clic con attesa concorrente della scheda. Restano invariati timeout, destinazione,
 main visibile e tutte le assertion di avanzamento/ripresa. Nessuna modifica runtime o tracking.
 La validazione completa resta necessaria prima della selezione del nuovo candidate.
+
+### Riproduzione CI e correzioni basate sulle trace (28 ottobre 2026)
+
+La run `40564189910` ha passato validazione, 120 E2E locali, build CMS e audit,
+ma ha fallito sul rail production; motion includeva un retry WebKit. Nessun artifact
+promuovibile o deploy. I diagnostici contengono gli stessi file production e restano esclusi
+alla promozione. Sono stati riprodotti su runner Ubuntu senza environment production o secret CMS.
+
+| Confronto sugli stessi byte 883f82c | Rail, senza retry | Motion iniziale, senza retry |
+| --- | --- | --- |
+| Astro preview, headless shell, 2 worker, run 40665171245 | 3/9 | 7/9 |
+| Server statico, headless shell, 2 worker, run 40667008307 | 7/9 | 9/9 |
+| Astro preview, mock limitati ai servizi esterni, run 40667960848 | 4/9 | 9/9 |
+| Astro preview, headless shell, 1 worker, run 40669285270 | 3/9 | 9/9 |
+| Astro preview, Chromium completo, 2 worker, run 40669870039 | 9/9 | 8/9 |
+
+Gli step diagnostici proseguono per raccogliere entrambi i gruppi; il job finale verifica
+`outcome`, non `conclusion`, e rifiuta qualsiasi fallimento. Le run diagnostiche fallite
+non sono candidate. Nei popup falliti la trace registra HTTP 200 ma corpo HTML non completato
+(size -1), senza caricamento degli asset della pagina; nei casi riusciti il corpo è completo.
+Il confronto del renderer ha mantenuto server, byte, worker e assertion: la QA usa ora il canale
+Chromium completo già installato, con la stessa versione bloccata di Playwright. Firefox e
+WebKit restano nella matrice motion. I mock intercettano soltanto gli URL esterni; navigazioni
+locali e richieste form controllate dai singoli test mantengono il proprio percorso.
+
+Per WebKit, le geometrie del fallimento mostrano la tile dentro il viewport, documento visibile
+e focus attivo. Un cambio di sola posizione può non produrre una variazione del body osservato.
+La nuova regressione disattiva IntersectionObserver, sposta il contenitore senza cambiare le
+dimensioni del body e ripristina la posizione dopo l'inizializzazione: sul bundle precedente
+fallisce in WebKit con ready; dopo la correzione tutta la matrice locale passa 72/72 senza retry.
+Il controller GSAP riusa il failsafe canonico di 1250 ms già previsto dal reveal CSS:
+una verifica differita dopo inizializzazione/font, timer cancellato a fine pending, nessun polling,
+nessun nuovo easing, durata o preset. Loader, temporizzazione GTM, eventi e consensi invariati.
+
+Quality Full include ora la matrice motion prima del merge. QA e candidate conservano trace e
+screenshot per fase prima che il test successivo li sovrascriva; gli artifact di evidenza non
+sono artifact production. La conservazione è di un giorno, coerente con il limite repository.
+I workflow sperimentali di confronto restano nei branch diagnostici e sono esclusi dal rilascio.

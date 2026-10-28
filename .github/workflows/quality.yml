@@ -178,3 +178,49 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+      - name: Preserve full E2E browser evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-e2e-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
+
+  motion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION || '22' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-ubuntu-24.04-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Use official signed Ubuntu archive for browser dependencies
+        run: |
+          set -Eeuo pipefail
+          test -f /etc/apt/apt-mirrors.txt
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "30";' 'Acquire::https::Timeout "30";' | sudo tee /etc/apt/apt.conf.d/80netmarket-browser-network >/dev/null
+      - name: Install Playwright browser
+        run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
+      - run: pnpm test:e2e:motion
+      - name: Preserve motion browser evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-motion-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
