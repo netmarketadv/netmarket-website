@@ -38,6 +38,10 @@ async function hiddenRevealProblems(page: Page, scope: 'active' | 'passed' | 'al
           className: String(element.className),
           state: element.getAttribute('data-motion-state'),
           opacity: style.opacity,
+          visibilityState: document.visibilityState,
+          focused: document.hasFocus(),
+          rect: { top: rect.top, bottom: rect.bottom, height: rect.height },
+          viewportHeight,
           text: (element.textContent ?? '').trim().replace(/\s+/g, ' ').slice(0, 80),
           problem: invisible && relevant && !allowedHidden(element)
         };
