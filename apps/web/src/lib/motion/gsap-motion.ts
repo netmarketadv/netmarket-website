@@ -201,25 +201,37 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   // One owner starts entrance tweens. A ScrollTrigger refresh must not re-pause
   // an entrance already started by IntersectionObserver after layout/font changes.
   const pending = new Map<HTMLElement, GsapTween>();
+  const queued = new WeakSet<HTMLElement>();
   let layoutObserver: ResizeObserver | undefined;
+  let recoveryTimer: number | undefined;
+  const releaseTarget = (target: HTMLElement) => {
+    pending.delete(target);
+    observer?.unobserve(target);
+    if (pending.size === 0) {
+      observer?.disconnect();
+      layoutObserver?.disconnect();
+      window.clearTimeout(recoveryTimer);
+      document.removeEventListener('load', recoverAfterLayoutSettles, true);
+      window.removeEventListener('scroll', recoverAfterLayoutSettles);
+      window.removeEventListener('resize', recoverAfterLayoutSettles);
+      window.removeEventListener('pageshow', recoverAfterLayoutSettles);
+    }
+  };
   const revealVisible = (target: HTMLElement, passed = false) => {
     const tween = pending.get(target);
     if (!tween) return;
-    pending.delete(target);
     observer?.unobserve(target);
     if (passed) {
+      releaseTarget(target);
       tween.progress(1);
       // Jumping to completion may not emit onStart during scroll restoration.
       target.dataset.motionState = 'revealed';
       target.classList.add('is-visible');
-    } else tween.play();
-    if (pending.size === 0) {
-      observer?.disconnect();
-      layoutObserver?.disconnect();
-      document.removeEventListener('load', scheduleCheck, true);
-      window.removeEventListener('scroll', scheduleCheck);
-      window.removeEventListener('resize', scheduleCheck);
-      window.removeEventListener('pageshow', scheduleCheck);
+    } else if (!queued.has(target)) {
+      queued.add(target);
+      // Keep it recoverable until GSAP actually emits onStart. A queued tween
+      // can otherwise remain invisible if the browser stops animation frames.
+      tween.play();
     }
   };
   const observer = 'IntersectionObserver' in window
@@ -246,6 +258,17 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
   const scheduleCheck = () => {
     if (!frame) frame = window.requestAnimationFrame(checkPending);
   };
+  const recoverAfterLayoutSettles = () => {
+    if (pending.size === 0) return;
+    scheduleCheck();
+    window.clearTimeout(recoveryTimer);
+    // The failsafe must not itself depend on a frame or a running GSAP ticker.
+    recoveryTimer = window.setTimeout(() => {
+      pending.forEach((_tween, target) => {
+        if (target.getBoundingClientRect().top < window.innerHeight) revealVisible(target, true);
+      });
+    }, motionConfig.revealFailsafeDelayMs);
+  };
   targets.forEach((target) => {
     target.dataset.motionState = 'ready';
     target.dataset.motionReveal = 'ready';
@@ -256,15 +279,18 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
       if (words.length > 0) {
         const lineIndexes = lineIndexForWords(words);
         gsap.set(words, { yPercent: 112, opacity: 0, rotate: 0.001 });
-        const tween = gsap.to(words, {
+        const duration = 0.82;
+        let completionTimer: number | undefined;
+        const tween: GsapTween = gsap.to(words, {
           yPercent: 0,
           opacity: 1,
-          duration: 0.82,
+          duration,
           ease: 'expo.out',
           stagger: (index: number, element: Element) =>
             (lineIndexes.get(element as HTMLElement) ?? index) * 0.075,
           delay: delayFor(target),
           onComplete: () => {
+            window.clearTimeout(completionTimer);
             gsap.set(words, { clearProps: 'transform,opacity' });
             headings.forEach((heading) => {
               heading.dataset.motionLineComplete = 'true';
@@ -274,6 +300,11 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
           onStart: () => {
             target.dataset.motionState = 'revealed';
             target.classList.add('is-visible');
+            completionTimer = window.setTimeout(
+              () => tween.progress(1),
+              duration * 1000 + motionConfig.revealFailsafeDelayMs
+            );
+            releaseTarget(target);
           }
         });
         watch(target, tween);
@@ -282,17 +313,25 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
     }
 
     gsap.set(target, initialVarsFor(target));
-    const tween = gsap.to(target, {
+    const duration = target.matches(mediaRevealSelector) ? 0.96 : 0.72;
+    let completionTimer: number | undefined;
+    const tween: GsapTween = gsap.to(target, {
       ...finalVarsFor(target),
-      duration: target.matches(mediaRevealSelector) ? 0.96 : 0.72,
+      duration,
       ease: target.matches(mediaRevealSelector) ? 'power4.out' : 'expo.out',
       delay: delayFor(target),
       paused: true,
       onStart: () => {
         target.dataset.motionState = 'revealed';
         target.classList.add('is-visible');
+        completionTimer = window.setTimeout(
+          () => tween.progress(1),
+          duration * 1000 + motionConfig.revealFailsafeDelayMs
+        );
+        releaseTarget(target);
       },
       onComplete: () => {
+        window.clearTimeout(completionTimer);
         gsap.set(target, { clearProps: 'clipPath,filter,transform' });
       }
     });
@@ -301,18 +340,18 @@ function revealWithGsap(gsap: Gsap, lineOnly = false): void {
 
   // A late native restoration can jump directly from below to above the viewport,
   // without crossing an IntersectionObserver threshold. Watch only pending reveals.
-  window.addEventListener('scroll', scheduleCheck, { passive: true });
-  window.addEventListener('resize', scheduleCheck, { passive: true });
-  window.addEventListener('pageshow', scheduleCheck);
+  window.addEventListener('scroll', recoverAfterLayoutSettles, { passive: true });
+  window.addEventListener('resize', recoverAfterLayoutSettles, { passive: true });
+  window.addEventListener('pageshow', recoverAfterLayoutSettles);
   // Images and other late content can move a pending reveal without a window
   // resize/scroll or an intersection transition (for example within clipped art).
-  document.addEventListener('load', scheduleCheck, true);
+  document.addEventListener('load', recoverAfterLayoutSettles, true);
   if ('ResizeObserver' in window && document.body) {
-    layoutObserver = new ResizeObserver(scheduleCheck);
+    layoutObserver = new ResizeObserver(recoverAfterLayoutSettles);
     layoutObserver.observe(document.body);
   }
-  document.fonts?.ready.then(scheduleCheck).catch(() => undefined);
-  scheduleCheck();
+  document.fonts?.ready.then(recoverAfterLayoutSettles).catch(() => undefined);
+  recoverAfterLayoutSettles();
 }
 
 function enhanceMediaScroll(gsap: Gsap): void {

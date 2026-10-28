@@ -8,7 +8,9 @@ export async function isolateExternalTracking(context: BrowserContext): Promise<
   if (!['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)) {
     throw new Error('La suite con servizi simulati deve usare esclusivamente loopback.');
   }
-  await context.route('**/*', async (route) => {
+  // Never intercept the preview's own navigation, including the initial request
+  // of a native popup. Only external services belong to this mock boundary.
+  await context.route((url) => url.origin !== origin.origin, async (route) => {
     const request = route.request();
     const url = new URL(request.url());
     if (url.origin === origin.origin) return route.continue();

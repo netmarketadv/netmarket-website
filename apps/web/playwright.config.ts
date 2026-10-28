@@ -22,6 +22,7 @@ export default defineConfig({
         }
       }
     : {}),
+  projects: [{ name: 'chromium', use: { browserName: 'chromium', channel: 'chromium' } }],
   use: {
     baseURL,
     screenshot: 'only-on-failure',

@@ -162,6 +162,7 @@ jobs:
         run: pnpm --filter @netmarket/web exec playwright install --with-deps chromium firefox webkit
 
       - name: Full E2E (local tracking disabled)
+        id: local_e2e
         run: pnpm test:e2e
         env:
           PUBLIC_DEPLOY_ENV: local
@@ -171,7 +172,18 @@ jobs:
           CMS_BASIC_AUTH_USER: ''
           CMS_BASIC_AUTH_PASSWORD: ''
 
+      - name: Preserve local-e2e browser evidence
+        if: ${{ always() && (steps.local_e2e.outcome == 'success' || steps.local_e2e.outcome == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-e2e-evidence-${{ github.sha }}-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
+
       - name: Motion regression on Chromium, Firefox and WebKit
+        id: motion_e2e
         run: pnpm test:e2e:motion
         env:
           PUBLIC_DEPLOY_ENV: local
@@ -180,6 +192,16 @@ jobs:
           PUBLIC_GTM_ID: ''
           CMS_BASIC_AUTH_USER: ''
           CMS_BASIC_AUTH_PASSWORD: ''
+
+      - name: Preserve motion browser evidence
+        if: ${{ always() && (steps.motion_e2e.outcome == 'success' || steps.motion_e2e.outcome == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-evidence-${{ github.sha }}-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
 
       - name: Verify approved tracking invariants
         run: node infrastructure/scripts/verify-stape-invariants.mjs
@@ -194,6 +216,7 @@ jobs:
           CMS_IMPORT_AUDIT_PATH: artifacts/production-candidate-${{ github.sha }}/cms-import-audit.json
 
       - name: Production tracking smoke against the exact candidate (external requests mocked)
+        id: production_e2e
         run: |
           set -Eeuo pipefail
           pnpm --filter @netmarket/web preview --host 127.0.0.1 --port 4322 &
@@ -206,6 +229,16 @@ jobs:
           curl --fail --silent http://127.0.0.1:4322/ >/dev/null
           PLAYWRIGHT_BASE_URL=http://127.0.0.1:4322 PLAYWRIGHT_ISOLATE_EXTERNALS=true pnpm test:e2e
           PLAYWRIGHT_BASE_URL=http://127.0.0.1:4322 STAPE_EXPECT_TRACKING=true pnpm test:e2e:smoke stape-tracking.spec.ts
+
+      - name: Preserve production-e2e browser evidence
+        if: ${{ always() && (steps.production_e2e.outcome == 'success' || steps.production_e2e.outcome == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-e2e-evidence-${{ github.sha }}-${{ github.run_attempt }}
+          path: apps/web/test-results/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 1
 
       - name: Upload validated production candidate
         uses: actions/upload-artifact@v4
