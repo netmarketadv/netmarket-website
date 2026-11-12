@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { CaseStudy, MediaAsset, RelationSummary } from '@netmarket/schemas';
-import { caseStudyCollectionSchema, caseStudySchema, parseEndpoint } from '@netmarket/schemas';
+import { caseStudyCollectionSchema, caseStudySchema } from '@netmarket/schemas';
 import { getCaseStudies } from '@/lib/api/client';
 import { withCurrentProjectMedia } from './sirene-blu-media';
 
@@ -91,11 +91,7 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
     // Use it for both routes and details so HTTP cache cannot serve another revision.
     const endpoint = 'case-studies?per_page=50&sort=priority';
     const file = resolve(cacheDir, `${encodeURIComponent(endpoint)}.json`);
-    const collection = parseEndpoint(
-      endpoint,
-      caseStudyCollectionSchema,
-      JSON.parse(readFileSync(file, 'utf8'))
-    );
+    const collection = caseStudyCollectionSchema.parse(JSON.parse(readFileSync(file, 'utf8')));
     if (collection.data.length === 0) {
       throw new Error('[projects] The CMS collection pulled for deploy is empty.');
     }
