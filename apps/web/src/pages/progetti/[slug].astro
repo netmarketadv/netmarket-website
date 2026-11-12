@@ -7,6 +7,7 @@ import CaseStudyMedia from '@/components/projects/CaseStudyMedia.astro';
 import CaseStudyResults from '@/components/projects/CaseStudyResults.astro';
 import RelatedProjects from '@/components/projects/RelatedProjects.astro';
 import CaseStudyCTA from '@/components/projects/CaseStudyCTA.astro';
+import { getCaseStudy } from '@/lib/api/client';
 import {
   getProjectArchiveData,
   getProjectDetailData,
@@ -23,7 +24,15 @@ export async function getStaticPaths() {
 
 const canonicalSiteUrl = 'https://netmarket.it';
 const { slug } = Astro.params;
-const data = slug ? await getProjectDetailData(slug) : undefined;
+const archive =
+  slug === 'app-mobile-programma-fedelta-sirene-blu' ? await getProjectArchiveData() : undefined;
+// The current CMS gallery includes the approved local exports and the newer images.
+const data =
+  slug && archive?.source === 'cms'
+    ? { project: await getCaseStudy(slug), projects: archive.projects }
+    : slug
+      ? await getProjectDetailData(slug)
+      : undefined;
 if (!data) return Astro.redirect('/404/');
 const { project, projects } = data;
 const presentation = projectPresentation(project);

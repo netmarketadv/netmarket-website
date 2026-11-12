@@ -140,6 +140,8 @@ Il workflow separato `Import Stape CMS Content` prepara il piano read-only o app
 soltanto il manifest CMS revisionato, con digest e conferma esatti, main e approvazione
 production. Non deploya il plugin o il frontend. Dopo apply verifica via HTTPS autenticato
 i contenuti rispetto al manifest; il candidate verifica anche assenza di drift della build.
+Il manifest editoriale `data/releases/case-studies-editorial-2026-11.json` estende il controllo
+del candidate con i nuovi casi studio e le immagini aggiunte, mantenendo intatto il piano storico di import e rollback.
 Il gate production richiede reviewer, solo main e bypass amministrativo disabilitato.
 La suite motion è ripetibile con `pnpm test:e2e:motion` sui tre engine. Manifest, checkpoint
 e rollback dei contenuti sono descritti nel [rapporto unico Stape](stape-release-candidate.md).

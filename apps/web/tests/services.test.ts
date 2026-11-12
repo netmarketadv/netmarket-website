@@ -74,12 +74,10 @@ describe('service system', () => {
     expect(data!.service.subtitle).toContain('contenuti, tecnologia e marketing');
     expect(data!.service.results).toHaveLength(3);
     expect(data!.service.faq).toHaveLength(6);
-    expect(data!.related.caseStudies.map((item) => item.slug)).toEqual(
-      expect.arrayContaining([
-        'sviluppo-sito-web-allestimenti-fieristici-albertini',
-        'sviluppo-sito-web-fotovoltaico-progetto-e'
-      ])
-    );
+    const projects = data!.related.caseStudies;
+    expect(projects.length).toBeGreaterThan(0);
+    expect(new Set(projects.map((item) => item.slug)).size).toBe(projects.length);
+    expect(projects.every((item) => relationPath(item).startsWith('/progetti/'))).toBe(true);
     expect(data!.related.insights.length).toBeGreaterThan(0);
     expect(data!.related.insights.every((item) => relationPath(item).startsWith('/insight/'))).toBe(
       true

@@ -34,6 +34,8 @@ Editors do not write HTML. Narrative fields are plain text, relations use search
 1. `GET /netmarket/v1/case-studies` and `GET /netmarket/v1/case-studies/{slug}` from the CMS during static build.
 2. The real migration snapshot in `data/migrations/case-studies/case-study-transform-dry-run.json` when the CMS is unavailable.
 
+The Sirene Blu app detail uses the complete CMS gallery when the archive is loaded from WordPress. The local exports remain available through the migration fallback.
+
 The snapshot uses local media under `apps/web/public/media/case-studies/legacy/`. Known dimensions are attached in the fallback loader to prevent layout shift. The compatibility layer can be removed after all structured fields have been migrated into `cms.netmarket.it` and verified.
 
 ## Related Projects
