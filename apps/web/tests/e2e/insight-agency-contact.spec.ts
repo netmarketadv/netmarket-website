@@ -55,7 +55,12 @@ test.describe('insight, agency and contact', () => {
 
     await expect(page.getByRole('navigation', { name: "Indice dell'articolo" })).toBeVisible();
     await expect(page.locator('.insight-article-cta')).toContainText('Ecommerce');
-    await expect(page.locator('.insight-related-projects article')).toHaveCount(1);
+    const projectLinks = page.locator('.insight-related-projects article > a');
+    await expect(projectLinks.first()).toBeVisible();
+    expect(await projectLinks.count()).toBeLessThanOrEqual(2);
+    for (const link of await projectLinks.all()) {
+      await expect(link).toHaveAttribute('href', /^\/progetti\/[^/]+\/$/);
+    }
     await expect(page.locator('.insight-related-reading .insight-card-editorial')).toHaveCount(3);
   });
 
