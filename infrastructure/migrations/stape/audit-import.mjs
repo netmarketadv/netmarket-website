@@ -4,6 +4,23 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+export function addEditorialProjects(baseline, editorial) {
+  const records = baseline.records.map((record) => {
+    const additions =
+      record.type === 'nm_case_study' ? editorial.galleryAdditions[record.slug] : undefined;
+    if (!additions) return record;
+    return {
+      ...record,
+      meta: { ...record.meta, gallery: [...record.meta.gallery, ...additions] }
+    };
+  });
+  return {
+    ...baseline,
+    records: [...records, ...editorial.records],
+    media: [...baseline.media, ...editorial.media]
+  };
+}
+
 export function auditImportedContent(plan, collections) {
   const media = new Map(plan.media.map((item) => [item.key, item]));
   const mapping = {
@@ -66,6 +83,7 @@ export function auditImportedContent(plan, collections) {
       const url = new URL(actual.url);
       return (
         url.origin === 'https://cms.netmarket.it' &&
+        (!source.url || source.url === actual.url) &&
         (source.existingId
           ? actual.id === source.existingId
           : url.pathname.includes('stape-' + source.key + '-'))
@@ -123,7 +141,18 @@ export function auditImportedContent(plan, collections) {
         const field = mapping[name];
         if (!field) fail('unsupported field ' + name);
         let value = field.split('.').reduce((object, key) => object?.[key], actual);
-        if (name === 'gallery') value = value?.map((item) => item.media);
+        if (name === 'gallery') {
+          if (
+            !Array.isArray(value) ||
+            expected.some((item, index) =>
+              ['alt', 'caption', 'layoutHint'].some(
+                (key) => key in item && item[key] !== value[index]?.[key]
+              )
+            )
+          )
+            fail(name);
+          value = value.map((item) => item.media);
+        }
         if (!check(expected, value)) fail(name);
       }
       const cta =
@@ -174,7 +203,12 @@ export async function verifyPublicMedia(collections, fetchImpl = fetch) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const raw = readFileSync('data/releases/stape-cms-import.json');
-  const plan = JSON.parse(raw);
+  // The historical import and its rollback still use the original plan.
+  const editorial = process.env.CMS_BUILD_PROVENANCE_PATH
+    ? readFileSync('data/releases/case-studies-editorial-2026-11.json')
+    : null;
+  const baseline = JSON.parse(raw);
+  const plan = editorial ? addEditorialProjects(baseline, JSON.parse(editorial)) : baseline;
   const user = process.env.CMS_BASIC_AUTH_USER;
   const secret = process.env.CMS_BASIC_AUTH_PASSWORD;
   if (!user || !secret) throw new Error('Existing CMS secrets required; no anonymous fallback.');
@@ -232,6 +266,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         ...result,
         source: 'authenticated-https-reviewed-import',
         planSha256: createHash('sha256').update(raw).digest('hex'),
+        ...(editorial ? { editorialSha256: createHash('sha256').update(editorial).digest('hex') } : {}),
         sourceSha: process.env.GITHUB_SHA,
         runId: process.env.GITHUB_RUN_ID,
         collectionSha256: digests

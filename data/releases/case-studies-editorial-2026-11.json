@@ -1,0 +1,709 @@
+{
+  "records": [
+    {
+      "type": "nm_case_study",
+      "slug": "dal-robottista-branding-sito-lead-generation",
+      "title": "Un marchio riconoscibile, dal primo annuncio al sopralluogo.",
+      "excerpt": "Identità visiva, sito, landing page e Google Ads per portare la specializzazione nei robot tagliaerba davanti a chi cerca una soluzione per il proprio giardino.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "Dal Robottista: branding, sito e Google Ads | Netmarket",
+        "meta_description": "Identità visiva, sito, landing page e Google Ads per portare la specializzazione nei robot tagliaerba davanti a chi cerca una soluzione per il proprio giardino.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5101,
+        "featured": false,
+        "public_client_name": "Dal Robottista",
+        "short_description": "Identità visiva, sito, landing page e Google Ads per portare la specializzazione nei robot tagliaerba davanti a chi cerca una soluzione per il proprio giardino.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://robottista.it/",
+        "context": "",
+        "challenge": "La competenza di Dal Robottista nella vendita, installazione e assistenza dei robot tagliaerba si era fatta conoscere soprattutto con il passaparola. Per raggiungere nuovi clienti servivano un’identità riconoscibile e un modo semplice per capire se il servizio fosse adatto al proprio giardino.",
+        "objectives": [],
+        "approach": "Abbiamo costruito l’identità visiva e l’abbiamo portata dal sito alle landing page. Sul sito, servizi, esempi di installazione e domande frequenti preparano la richiesta di sopralluogo; nelle landing page il messaggio riprende la ricerca che ha portato la persona all’annuncio.",
+        "solution": "Il sito principale concentra l’offerta in una pagina, con un percorso dedicato per richiedere il sopralluogo. Le landing page sostengono le campagne Google Ads di acquisizione contatti e offrono un ingresso più diretto a chi sta già valutando un’installazione.",
+        "qualitative_result": "Dal Robottista ha ora un sistema di acquisizione che affianca il passaparola: la stessa identità accompagna il cliente dall’annuncio alla richiesta di sopralluogo.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "robottista-sito.webp"
+        },
+        "gallery": [
+          {
+            "media": "robottista-identita.webp",
+            "alt": "Marchio Dal Robottista su un cartellino verde e blu",
+            "caption": "L’identità visiva applicata ai materiali del marchio.",
+            "layoutHint": "split"
+          },
+          {
+            "media": "robottista-applicazioni.webp",
+            "alt": "Adesivi verdi con il marchio Dal Robottista",
+            "caption": "Varianti e applicazioni dell’identità Dal Robottista.",
+            "layoutHint": "split"
+          },
+          {
+            "media": "robottista-servizi.webp",
+            "alt": "Monitor con le schede dei servizi Dal Robottista",
+            "caption": "I servizi di vendita, installazione e assistenza sul sito.",
+            "layoutHint": "device"
+          },
+          {
+            "media": "robottista-mobile.webp",
+            "alt": "Smartphone con il sito Dal Robottista in una tasca verde",
+            "caption": "Il progetto web nella visualizzazione per smartphone.",
+            "layoutHint": "portrait"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/branding-e-comunicazione"
+          },
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/advertising"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "servizi-per-il-giardino",
+            "name": "Servizi per il giardino"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "non-solo-tende-ecommerce-configurabile",
+      "title": "Portare online la scelta di un prodotto su misura.",
+      "excerpt": "Un ecommerce per configurare soluzioni outdoor su misura, affiancato da campagne che portano richieste di consulenza sui progetti più articolati.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "Non Solo Tende: ecommerce configurabile e lead generation | Netmarket",
+        "meta_description": "Un ecommerce per configurare soluzioni outdoor su misura, affiancato da campagne che portano richieste di consulenza sui progetti più articolati.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5102,
+        "featured": false,
+        "public_client_name": "Non Solo Tende",
+        "short_description": "Un ecommerce per configurare soluzioni outdoor su misura, affiancato da campagne che portano richieste di consulenza sui progetti più articolati.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://www.nstende.com/",
+        "context": "",
+        "challenge": "Una tenda, una pergola o una zanzariera su misura non si sceglie da una foto. Chi compra deve capire quali opzioni sono compatibili con il proprio spazio, che cosa cambia tra una configurazione e l’altra e quanto costa la scelta finale.",
+        "objectives": [],
+        "approach": "Abbiamo organizzato il catalogo attorno alle decisioni di acquisto. In base al prodotto, la scheda guida la selezione di misure, componenti, accessori, colori e materiali, aggiornando il prezzo man mano che si definisce la configurazione.",
+        "solution": "L’ecommerce mette a disposizione la configurazione online. Per chi sta valutando un intervento che richiede più confronto, soprattutto una pergola, le campagne di lead generation in corso aprono un percorso verso la consulenza commerciale.",
+        "qualitative_result": "Il cliente può arrivare a una configurazione e a un prezzo senza passaggi intermedi oppure chiedere aiuto sul proprio progetto. L’azienda può servire entrambi i percorsi con lo stesso catalogo.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "non-solo-tende-ecommerce.webp"
+        },
+        "gallery": [
+          {
+            "media": "non-solo-tende-configuratore.webp",
+            "alt": "Configuratore di una zanzariera con campi per misure e finiture",
+            "caption": "Una scheda prodotto mostra come scegliere misure, colore e opzioni.",
+            "layoutHint": "wide"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/ecommerce"
+          },
+          {
+            "record": "nm_service/advertising"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "arredamento-outdoor",
+            "name": "Arredamento outdoor"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "kuadrifoglio-sito-concorsi-volantino-digitale",
+      "title": "Un sito che tiene insieme offerte, concorsi e punti vendita.",
+      "excerpt": "Sviluppo del sito, gestione dei concorsi a premi e pubblicazione mensile del volantino digitale, con analisi della consultazione.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "Kuadrifoglio: sito, concorsi e volantino digitale | Netmarket",
+        "meta_description": "Sviluppo del sito, gestione dei concorsi a premi e pubblicazione mensile del volantino digitale, con analisi della consultazione.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5103,
+        "featured": false,
+        "public_client_name": "Kuadrifoglio",
+        "short_description": "Sviluppo del sito, gestione dei concorsi a premi e pubblicazione mensile del volantino digitale, con analisi della consultazione.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://www.kuadrifoglio.it/",
+        "context": "",
+        "challenge": "Kuadrifoglio aveva bisogno di dare una casa online a iniziative che partono dal negozio e cambiano durante l’anno: offerte, concorsi e comunicazioni legate alla spesa. Il cliente doveva poter ritrovare sul sito le informazioni viste in punto vendita.",
+        "objectives": [],
+        "approach": "Abbiamo sviluppato il sito e gestiamo ogni mese la pubblicazione del volantino online. Ne analizziamo la consultazione per dare alla rete una lettura delle interazioni con le offerte digitali.",
+        "solution": "Gestiamo anche i concorsi a premi. In “Profumo di Vacanza”, per esempio, l’acquisto nei punti vendita aderenti dava accesso alla partecipazione online tramite scontrino e a un esito immediato. Netmarket ha operato come soggetto delegato.",
+        "qualitative_result": "Il sito offre un punto di accesso stabile a iniziative che cambiano nel tempo. Chi visita il negozio può continuare online; chi gestisce le promozioni può leggere come viene consultato il volantino.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "kuadrifoglio-volantino-online.webp"
+        },
+        "gallery": [
+          {
+            "media": "kuadrifoglio-concorso-web.webp",
+            "alt": "Portatile con la pagina del concorso Profumo di Vacanza",
+            "caption": "La pagina web del concorso Profumo di Vacanza.",
+            "layoutHint": "device"
+          },
+          {
+            "media": "kuadrifoglio-concorso-totem.webp",
+            "alt": "Totem azzurro del concorso Profumo di Vacanza",
+            "caption": "Un materiale promozionale pensato per i punti vendita.",
+            "layoutHint": "portrait"
+          },
+          {
+            "media": "kuadrifoglio-concorso-materiali.webp",
+            "alt": "Materiali del concorso Kuadrifoglio in un vassoio da viaggio",
+            "caption": "La creatività del concorso riprende il tema del viaggio.",
+            "layoutHint": "portrait"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/concorsi-a-premi"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "retail-e-profumeria",
+            "name": "Retail e profumeria"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "4earth-sito-adozione-regalo-alberi",
+      "title": "Dalla scoperta dei boschi alla scelta di un albero.",
+      "excerpt": "Un sito che racconta la cura dei boschi italiani e dà alle persone un modo concreto per partecipare: adottare o regalare un albero.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "4earth: sito web per adottare e regalare alberi | Netmarket",
+        "meta_description": "Un sito che racconta la cura dei boschi italiani e dà alle persone un modo concreto per partecipare: adottare o regalare un albero.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5104,
+        "featured": false,
+        "public_client_name": "4earth",
+        "short_description": "Un sito che racconta la cura dei boschi italiani e dà alle persone un modo concreto per partecipare: adottare o regalare un albero.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://4earth.it/",
+        "context": "",
+        "challenge": "4earth aveva bisogno di rendere comprensibile il lavoro di tutela e recupero dei boschi e di mostrare che cosa può fare chi vuole partecipare, anche se incontra il progetto per la prima volta.",
+        "objectives": [],
+        "approach": "Abbiamo sviluppato il sito attorno al legame tra territorio e partecipazione. La homepage presenta la missione e le iniziative; i percorsi di adozione e regalo portano dalle ragioni del progetto alla scelta di un albero.",
+        "solution": "Le pagine pubbliche fanno convivere racconto, progetti di riforestazione e catalogo. Le persone possono esplorare la proposta, adottare o regalare un albero; le aziende trovano un ingresso alle iniziative rivolte alle organizzazioni.",
+        "qualitative_result": "Il sito mette a disposizione una scelta concreta accanto a ogni invito a partecipare: capire il progetto, esplorare gli alberi o approfondire le opportunità per le aziende.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "4earth-sito-mockup.webp"
+        },
+        "gallery": [
+          {
+            "media": "4earth-i-boschi.webp",
+            "alt": "Pagina I boschi con una fotografia del territorio di Torri del Benaco",
+            "caption": "La pagina I boschi presenta i luoghi raccontati dal progetto.",
+            "layoutHint": "wide"
+          },
+          {
+            "media": "4earth-adozioni-mobile.webp",
+            "alt": "Pagina Adotta un albero visualizzata su smartphone",
+            "caption": "Il percorso di adozione nella versione mobile del sito.",
+            "layoutHint": "portrait"
+          },
+          {
+            "media": "4earth-regala-un-albero.webp",
+            "alt": "Pagina Regala un albero con una dedica su un tronco",
+            "caption": "La pagina dedicata a chi vuole regalare un albero.",
+            "layoutHint": "wide"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/ecommerce"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "tutela-ambientale",
+            "name": "Tutela ambientale"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "orofino-gioiellerie-sito-punti-vendita-comunicazione",
+      "title": "Un’identità di rete, dal sito alla vetrina.",
+      "excerpt": "Il sito della catena e il repertorio dei negozi, insieme ai materiali promozionali che portano la comunicazione Orofino nelle gioiellerie.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "Orofino Gioiellerie: sito, punti vendita e comunicazione in store | Netmarket",
+        "meta_description": "Il sito della catena e il repertorio dei negozi, insieme ai materiali promozionali che portano la comunicazione Orofino nelle gioiellerie.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5105,
+        "featured": false,
+        "public_client_name": "Orofino Gioiellerie",
+        "short_description": "Il sito della catena e il repertorio dei negozi, insieme ai materiali promozionali che portano la comunicazione Orofino nelle gioiellerie.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://www.orofino.it/",
+        "context": "",
+        "challenge": "Per una catena di gioiellerie, la visita in negozio comincia spesso sul web. Le persone devono poter trovare il punto vendita vicino; la rete deve poter riprendere nelle vetrine e all’interno dei negozi la stessa voce con cui si presenta online.",
+        "objectives": [],
+        "approach": "Nel corso di una collaborazione pluriennale abbiamo sviluppato il sito Orofino Gioiellerie, con un repertorio dei punti vendita che aiuta a passare dalla scoperta del marchio alla visita in negozio.",
+        "solution": "Alla presenza digitale affianchiamo la comunicazione in store: cartelli promozionali e materiali per le campagne della catena, pensati per essere riconoscibili nei diversi punti vendita.",
+        "qualitative_result": "Il sito orienta chi cerca una gioielleria Orofino; i materiali in store danno continuità alla comunicazione quando il cliente arriva in negozio.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "orofino-gioiellerie-punti-vendita.webp"
+        },
+        "gallery": [
+          {
+            "media": "orofino-cartello-vetrina.webp",
+            "alt": "Cartello promozionale Orofino esposto accanto ai gioielli",
+            "caption": "La comunicazione promozionale nel punto vendita.",
+            "layoutHint": "portrait"
+          },
+          {
+            "media": "orofino-materiale-promozionale.webp",
+            "alt": "Stampato promozionale Orofino su una poltrona scura",
+            "caption": "Un esempio dei materiali prodotti per le campagne Orofino.",
+            "layoutHint": "portrait"
+          },
+          {
+            "media": "orofino-totem.webp",
+            "alt": "Totem con una creatività promozionale Orofino",
+            "caption": "Un’applicazione della comunicazione in store.",
+            "layoutHint": "portrait"
+          }
+        ],
+        "services": [
+          {
+            "record": "nm_service/siti-web"
+          },
+          {
+            "record": "nm_service/branding-e-comunicazione"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "gioielleria-retail",
+            "name": "Gioielleria retail"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    },
+    {
+      "type": "nm_case_study",
+      "slug": "sam-spazi-eventi-milano-lead-generation",
+      "title": "Trovare chi sta già organizzando il prossimo evento.",
+      "excerpt": "Campagne di lead generation per mettere in contatto la location con chi cerca uno spazio a Milano per feste ed eventi privati.",
+      "thumbnail": null,
+      "meta": {
+        "seo_title": "SAM Spazi Eventi Milano: advertising per eventi privati | Netmarket",
+        "meta_description": "Campagne di lead generation per mettere in contatto la location con chi cerca uno spazio a Milano per feste ed eventi privati.",
+        "canonical_override": "",
+        "noindex": false,
+        "social_title": "",
+        "social_description": "",
+        "social_image": null,
+        "priority": 5106,
+        "featured": false,
+        "public_client_name": "SAM · Spazi Eventi Milano",
+        "short_description": "Campagne di lead generation per mettere in contatto la location con chi cerca uno spazio a Milano per feste ed eventi privati.",
+        "project_year": 0,
+        "project_status": "published",
+        "project_url": "https://www.spazieventimilano.com/",
+        "context": "",
+        "challenge": "Chi organizza una festa privata deve trovare uno spazio adatto al tipo di evento e passare rapidamente dalla ricerca a un contatto. Per SAM la priorità era intercettare questa esigenza mentre la scelta della location è ancora aperta.",
+        "objectives": [],
+        "approach": "Abbiamo impostato l’advertising attorno al servizio di affitto dello spazio. Il messaggio mette a fuoco l’occasione d’uso e invita chi sta valutando una location a raccontare il proprio evento.",
+        "solution": "Le campagne di lead generation avviate a gennaio accompagnano la persona verso una richiesta di informazioni per feste ed eventi privati. Il progetto riguarda l’acquisizione contatti, su cui il team della location può aprire un confronto commerciale.",
+        "qualitative_result": "SAM dispone di un canale dedicato per intercettare nuove richieste mentre il cliente sta scegliendo dove organizzare il proprio evento.",
+        "additional_content": "",
+        "numeric_results": [],
+        "client": null,
+        "cover_image": {
+          "media": "sam-spazi-eventi-milano.webp"
+        },
+        "gallery": [],
+        "services": [
+          {
+            "record": "nm_service/advertising"
+          }
+        ],
+        "related_insights": [],
+        "related_case_studies": []
+      },
+      "terms": {
+        "nm_sector": [
+          {
+            "slug": "eventi-privati",
+            "name": "Eventi privati"
+          }
+        ],
+        "nm_capability": [],
+        "nm_technology": []
+      }
+    }
+  ],
+  "galleryAdditions": {
+    "sviluppo-sito-web-e-shooting-fotografico-per-rigomar-una-presenza-digitale-piu-autorevole-per-il-mondo-della-produzione-moda": [
+      {
+        "media": "rigomar-sito-laptop.webp",
+        "alt": "Sito Rigomar su un portatile sospeso sopra una base verde",
+        "caption": "Il sito Rigomar in un mockup desktop.",
+        "layoutHint": "device"
+      },
+      {
+        "media": "rigomar-sito-editoriale.webp",
+        "alt": "Portatile con una pagina Rigomar su una sedia trasparente",
+        "caption": "Una pagina editoriale del sito Rigomar.",
+        "layoutHint": "device"
+      },
+      {
+        "media": "rigomar-sito-portatile.webp",
+        "alt": "Portatile sorretto da una mano con il sito Rigomar sullo schermo",
+        "caption": "Il sito Rigomar e le immagini della produzione moda.",
+        "layoutHint": "device"
+      }
+    ],
+    "casi-studio-strategia-digitale-ecommerce-brb": [
+      {
+        "media": "brb-ecommerce-smartphone.webp",
+        "alt": "Smartphone con una scheda prodotto dell’ecommerce BRB",
+        "caption": "Il negozio BRB su smartphone.",
+        "layoutHint": "portrait"
+      },
+      {
+        "media": "brb-ecommerce-tablet.webp",
+        "alt": "Tablet con la scheda di un prodotto BRB",
+        "caption": "La scheda prodotto BRB nella visualizzazione tablet.",
+        "layoutHint": "split"
+      },
+      {
+        "media": "brb-contenuti-mobile.webp",
+        "alt": "Smartphone inclinato con i contenuti editoriali BRB",
+        "caption": "I contenuti del brand nella versione mobile.",
+        "layoutHint": "split"
+      },
+      {
+        "media": "brb-home-ecommerce.webp",
+        "alt": "Homepage dello shop BRB su un computer portatile",
+        "caption": "La homepage dell’ecommerce BRB.",
+        "layoutHint": "portrait"
+      }
+    ],
+    "app-mobile-programma-fedelta-sirene-blu": [
+      {
+        "media": "sirene-blu-app-identita.webp",
+        "alt": "Smartphone con l’icona Sirene Blu in una tasca di jeans",
+        "caption": "L’identità Sirene Blu nella presentazione dell’app.",
+        "layoutHint": "portrait"
+      },
+      {
+        "media": "sirene-blu-app-home.webp",
+        "alt": "Una mano mostra la schermata principale dell’app Sirene Blu",
+        "caption": "La schermata principale dell’app fedeltà.",
+        "layoutHint": "portrait"
+      },
+      {
+        "media": "sirene-blu-app-funzioni.webp",
+        "alt": "Tre smartphone mostrano diverse schermate dell’app Sirene Blu",
+        "caption": "Mappa, funzioni fedeltà e contenuti dell’app Sirene Blu.",
+        "layoutHint": "portrait"
+      }
+    ]
+  },
+  "media": [
+    {
+      "key": "robottista-sito.webp",
+      "existingId": 284,
+      "alt": "Sito Dal Robottista aperto su un portatile appoggiato sulle ginocchia",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/robottista-sito.webp"
+    },
+    {
+      "key": "robottista-identita.webp",
+      "existingId": 285,
+      "alt": "Marchio Dal Robottista su un cartellino verde e blu",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/robottista-identita.webp"
+    },
+    {
+      "key": "robottista-applicazioni.webp",
+      "existingId": 286,
+      "alt": "Adesivi verdi con il marchio Dal Robottista",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/robottista-applicazioni.webp"
+    },
+    {
+      "key": "robottista-servizi.webp",
+      "existingId": 287,
+      "alt": "Monitor con le schede dei servizi Dal Robottista",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/robottista-servizi.webp"
+    },
+    {
+      "key": "robottista-mobile.webp",
+      "existingId": 288,
+      "alt": "Smartphone con il sito Dal Robottista in una tasca verde",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/robottista-mobile.webp"
+    },
+    {
+      "key": "non-solo-tende-ecommerce.webp",
+      "existingId": 290,
+      "alt": "Homepage Non Solo Tende con una pergola bioclimatica",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/non-solo-tende-ecommerce.webp"
+    },
+    {
+      "key": "non-solo-tende-configuratore.webp",
+      "existingId": 291,
+      "alt": "Configuratore di una zanzariera con campi per misure e finiture",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/non-solo-tende-configuratore.webp"
+    },
+    {
+      "key": "kuadrifoglio-volantino-online.webp",
+      "existingId": 293,
+      "alt": "Pagina delle offerte del mese sul sito Kuadrifoglio",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/kuadrifoglio-volantino-online.webp"
+    },
+    {
+      "key": "kuadrifoglio-concorso-web.webp",
+      "existingId": 294,
+      "alt": "Portatile con la pagina del concorso Profumo di Vacanza",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/kuadrifoglio-concorso-web.webp"
+    },
+    {
+      "key": "kuadrifoglio-concorso-totem.webp",
+      "existingId": 295,
+      "alt": "Totem azzurro del concorso Profumo di Vacanza",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/kuadrifoglio-concorso-totem.webp"
+    },
+    {
+      "key": "kuadrifoglio-concorso-materiali.webp",
+      "existingId": 296,
+      "alt": "Materiali del concorso Kuadrifoglio in un vassoio da viaggio",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/kuadrifoglio-concorso-materiali.webp"
+    },
+    {
+      "key": "4earth-sito-mockup.webp",
+      "existingId": 298,
+      "alt": "Mockup 4earth con homepage su portatile e pagina adozioni su smartphone",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/4earth-sito-mockup.webp"
+    },
+    {
+      "key": "4earth-i-boschi.webp",
+      "existingId": 299,
+      "alt": "Pagina I boschi con una fotografia del territorio di Torri del Benaco",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/4earth-i-boschi.webp"
+    },
+    {
+      "key": "4earth-adozioni-mobile.webp",
+      "existingId": 300,
+      "alt": "Pagina Adotta un albero visualizzata su smartphone",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/4earth-adozioni-mobile.webp"
+    },
+    {
+      "key": "4earth-regala-un-albero.webp",
+      "existingId": 301,
+      "alt": "Pagina Regala un albero con una dedica su un tronco",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/4earth-regala-un-albero.webp"
+    },
+    {
+      "key": "orofino-gioiellerie-punti-vendita.webp",
+      "existingId": 303,
+      "alt": "Pagina Orofino con ricerca e mappa delle gioiellerie",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/orofino-gioiellerie-punti-vendita.webp"
+    },
+    {
+      "key": "orofino-cartello-vetrina.webp",
+      "existingId": 304,
+      "alt": "Cartello promozionale Orofino esposto accanto ai gioielli",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/orofino-cartello-vetrina.webp"
+    },
+    {
+      "key": "orofino-materiale-promozionale.webp",
+      "existingId": 305,
+      "alt": "Stampato promozionale Orofino su una poltrona scura",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/orofino-materiale-promozionale.webp"
+    },
+    {
+      "key": "orofino-totem.webp",
+      "existingId": 306,
+      "alt": "Totem con una creatività promozionale Orofino",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/orofino-totem.webp"
+    },
+    {
+      "key": "sam-spazi-eventi-milano.webp",
+      "existingId": 308,
+      "alt": "Pagina di Spazi Eventi Milano dedicata alle sale per feste",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/11/sam-spazi-eventi-milano.webp"
+    },
+    {
+      "key": "rigomar-sito-laptop.webp",
+      "existingId": 309,
+      "alt": "Sito Rigomar su un portatile sospeso sopra una base verde",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/rigomar-sito-laptop.webp"
+    },
+    {
+      "key": "rigomar-sito-editoriale.webp",
+      "existingId": 310,
+      "alt": "Portatile con una pagina Rigomar su una sedia trasparente",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/rigomar-sito-editoriale.webp"
+    },
+    {
+      "key": "rigomar-sito-portatile.webp",
+      "existingId": 311,
+      "alt": "Portatile sorretto da una mano con il sito Rigomar sullo schermo",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/rigomar-sito-portatile.webp"
+    },
+    {
+      "key": "brb-ecommerce-smartphone.webp",
+      "existingId": 312,
+      "alt": "Smartphone con una scheda prodotto dell’ecommerce BRB",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/brb-ecommerce-smartphone.webp"
+    },
+    {
+      "key": "brb-ecommerce-tablet.webp",
+      "existingId": 313,
+      "alt": "Tablet con la scheda di un prodotto BRB",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/brb-ecommerce-tablet.webp"
+    },
+    {
+      "key": "brb-contenuti-mobile.webp",
+      "existingId": 314,
+      "alt": "Smartphone inclinato con i contenuti editoriali BRB",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/brb-contenuti-mobile.webp"
+    },
+    {
+      "key": "brb-home-ecommerce.webp",
+      "existingId": 315,
+      "alt": "Homepage dello shop BRB su un computer portatile",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/brb-home-ecommerce.webp"
+    },
+    {
+      "key": "sirene-blu-app-identita.webp",
+      "existingId": 316,
+      "alt": "Smartphone con l’icona Sirene Blu in una tasca di jeans",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/sirene-blu-app-identita.webp"
+    },
+    {
+      "key": "sirene-blu-app-home.webp",
+      "existingId": 317,
+      "alt": "Una mano mostra la schermata principale dell’app Sirene Blu",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/sirene-blu-app-home.webp"
+    },
+    {
+      "key": "sirene-blu-app-funzioni.webp",
+      "existingId": 318,
+      "alt": "Tre smartphone mostrano diverse schermate dell’app Sirene Blu",
+      "mimeType": "image/webp",
+      "url": "https://cms.netmarket.it/wp-content/uploads/2026/10/sirene-blu-app-funzioni.webp"
+    }
+  ]
+}

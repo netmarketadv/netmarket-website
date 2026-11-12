@@ -6,6 +6,7 @@ import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { serviceSchema, caseStudySchema } from '@netmarket/schemas';
 import {
+  addEditorialProjects,
   auditImportedContent,
   verifyPublicMedia
 } from '../../../infrastructure/migrations/stape/audit-import.mjs';
@@ -51,6 +52,16 @@ describe('create-only CMS import of the complete baseline inventory', () => {
     const inventory = JSON.parse(
       readFileSync(resolve(root, 'data/releases/stape-cms-inventory.json'), 'utf8')
     );
+    const editorial = JSON.parse(
+      readFileSync(resolve(root, 'data/releases/case-studies-editorial-2026-11.json'), 'utf8')
+    );
+    const editorialSlugs = editorial.records.map((record: { slug: string }) => record.slug);
+    expect(
+      addEditorialProjects(plan, editorial)
+        .records.filter((record: { type: string }) => record.type === 'nm_case_study')
+        .map((record: { slug: string }) => record.slug)
+        .sort()
+    ).toEqual([...inventory.requiredSlugs['case-studies']].sort());
     for (const [type, key] of [
       ['nm_service', 'services'],
       ['nm_case_study', 'case-studies']
@@ -60,7 +71,11 @@ describe('create-only CMS import of the complete baseline inventory', () => {
           .filter((record: { type: string }) => record.type === type)
           .map((record: { slug: string }) => record.slug)
           .sort()
-      ).toEqual(inventory.requiredSlugs[key].sort());
+      ).toEqual(
+        inventory.requiredSlugs[key]
+          .filter((slug: string) => key !== 'case-studies' || !editorialSlugs.includes(slug))
+          .sort()
+      );
     }
     for (const media of plan.media) {
       expect(
