@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { CaseStudy, MediaAsset, RelationSummary } from '@netmarket/schemas';
-import { caseStudyCollectionSchema, caseStudySchema } from '@netmarket/schemas';
-import { getCaseStudies } from '@/lib/api/client';
+import { caseStudySchema } from '@netmarket/schemas';
+import { getCaseStudies, getCaseStudy } from '@/lib/api/client';
 import { withCurrentProjectMedia } from './sirene-blu-media';
 
 type ProjectSource = 'cms' | 'migration-snapshot';
@@ -85,23 +85,13 @@ export async function getProjectArchiveData(): Promise<ProjectArchiveData> {
 }
 
 async function loadArchiveData(): Promise<ProjectArchiveData> {
-  const cacheDir = process.env.CMS_API_CACHE_DIR;
-  if (cacheDir) {
-    // The deploy workflow pulls the complete collection directly from WordPress.
-    // Use it for both routes and details so HTTP cache cannot serve another revision.
-    const endpoint = 'case-studies?per_page=50&sort=priority';
-    const file = resolve(cacheDir, `${encodeURIComponent(endpoint)}.json`);
-    const collection = caseStudyCollectionSchema.parse(JSON.parse(readFileSync(file, 'utf8')));
-    if (collection.data.length === 0) {
-      throw new Error('[projects] The CMS collection pulled for deploy is empty.');
-    }
-    return { projects: collection.data.sort(byPriority), source: 'cms' };
-  }
-
   try {
     const collection = await getCaseStudies({ perPage: 50, sort: 'priority' });
     if (collection.data.length > 0) {
-      return { projects: collection.data.sort(byPriority), source: 'cms' };
+      return {
+        projects: collection.data.map(withCurrentProjectMedia).sort(byPriority),
+        source: 'cms'
+      };
     }
   } catch (error) {
     console.warn(
@@ -113,9 +103,25 @@ async function loadArchiveData(): Promise<ProjectArchiveData> {
 }
 
 export async function getProjectDetailData(slug: string): Promise<ProjectDetailData | undefined> {
-  const { projects, source } = await getProjectArchiveData();
-  const project = projects.find((candidate) => candidate.slug === slug);
-  return project ? { project, projects, source } : undefined;
+  try {
+    const project = withCurrentProjectMedia(await getCaseStudy(slug));
+    const { projects } = await getProjectArchiveData();
+    return { project, source: 'cms', projects };
+  } catch (error) {
+    console.warn(
+      `[projects] CMS case study "${slug}" unavailable, trying migration snapshot fallback: ${warningMessage(error)}`
+    );
+  }
+
+  const projects = fallbackProjects().sort(byPriority);
+  const index = projects.findIndex((project) => project.slug === slug);
+  const project = projects[index];
+  if (!project) return undefined;
+  return {
+    project,
+    source: 'migration-snapshot',
+    projects
+  };
 }
 
 function fallbackProjects(): CaseStudy[] {
