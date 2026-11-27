@@ -81,7 +81,14 @@ ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && wp core is-in
 
 # Configure the server-only integration through stdin, never through command arguments.
 # WP-CLI update with --autoload fails on an unchanged value; set autoload separately.
-if [[ -n "${ADVERTISING_WEBHOOK_URL:-}" ]]; then
-  printf '%s' "$ADVERTISING_WEBHOOK_URL" | ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && if wp option get-autoload nmhc_advertising_webhook_url >/dev/null 2>&1; then wp option update nmhc_advertising_webhook_url && wp option set-autoload nmhc_advertising_webhook_url off; else wp option add nmhc_advertising_webhook_url --autoload=off; fi" >/dev/null
-  echo "Advertising webhook configuration updated."
-fi
+configure_webhook() {
+  local option="$1"
+  local endpoint="$2"
+  if [[ -z "$endpoint" ]]; then
+    return 0
+  fi
+  printf '%s' "$endpoint" | ssh "${SSH_ARGS[@]}" "$SG_SSH_USER@$SG_SSH_HOST" "cd '$WP_PATH' && if wp option get-autoload '$option' >/dev/null 2>&1; then wp option update '$option' && wp option set-autoload '$option' off; else wp option add '$option' --autoload=off; fi" >/dev/null
+  echo "Configured CMS option $option."
+}
+configure_webhook nmhc_advertising_webhook_url "${ADVERTISING_WEBHOOK_URL:-}"
+configure_webhook nmhc_social_analysis_webhook_url "${SOCIAL_ANALYSIS_WEBHOOK_URL:-}"

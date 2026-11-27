@@ -11,10 +11,20 @@ final class AdvertisingWebhook
 
     public static function isAdvertising(string $source): bool
     {
+        return self::matchesLanding($source, '/advertising');
+    }
+
+    public static function isSocialAnalysis(string $source): bool
+    {
+        return self::matchesLanding($source, '/gestione-social');
+    }
+
+    private static function matchesLanding(string $source, string $path): bool
+    {
         $parts = parse_url($source);
         return is_array($parts) && ($parts['scheme'] ?? '') === 'https'
             && in_array($parts['host'] ?? '', ['netmarket.it', 'staging.netmarket.it'], true)
-            && rtrim($parts['path'] ?? '', '/') === '/advertising';
+            && rtrim($parts['path'] ?? '', '/') === $path;
     }
 
     public static function validEndpoint(string $url): bool
@@ -29,7 +39,9 @@ final class AdvertisingWebhook
     /** @param array<string, mixed> $lead */
     public static function deliver(array $lead, int $attempt = 0): void
     {
-        $url = (string) get_option('nmhc_advertising_webhook_url', '');
+        $social = self::isSocialAnalysis((string) ($lead['sourceUrl'] ?? ''));
+        $option = $social ? 'nmhc_social_analysis_webhook_url' : 'nmhc_advertising_webhook_url';
+        $url = (string) get_option($option, '');
         $status = 'configuration_missing';
         if (self::validEndpoint($url)) {
             $response = wp_remote_post($url, [

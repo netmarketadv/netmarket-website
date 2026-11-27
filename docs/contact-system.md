@@ -96,3 +96,9 @@ Il form spinge eventi `dataLayer`:
 Staging e locale non caricano script marketing. La conversione primaria e `generate_lead`: un marker
 temporaneo in `sessionStorage` permette di emetterla sulla pagina di conferma soltanto dopo una
 risposta positiva del backend. Un accesso diretto a `/grazie/` non genera conversioni.
+
+## Analisi social gratuita
+
+Il modulo di `/gestione-social/` usa lo stesso endpoint e i destinatari del contatto ordinario. Il CMS richiede azienda, email, consenso e uno dei quattro obiettivi proposti. Il server conserva nel messaggio l’obiettivo, il settore e l’eventuale profilo. Pagina e UTM passano nei campi di attribuzione del contatto.
+
+Dopo l’accettazione della notifica email il CMS inoltra il lead alla fonte NØD dedicata, con `request_id`, `service`, `objective`, `sector`, `profile`, recapito, consensi, UTM e provenienza. Usa il trasporto e i tentativi WP-Cron della landing advertising. Una fonte attiva e il secret di staging `SOCIAL_ANALYSIS_WEBHOOK_URL` configurano l’opzione privata `nmhc_social_analysis_webhook_url` attraverso **Deploy CMS Plugin**. Il contratto previsto è il webhook NØD già supportato dal progetto. Verificare il record nel CRM dopo l’attivazione. La notifica email accettata resta il criterio di successo del form anche durante un’indisponibilità del CRM.

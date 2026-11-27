@@ -10,7 +10,7 @@ $responseCode = 200;
 $responseBody = '{"success":true}';
 $calls = [];
 $scheduled = [];
-function get_option(string $key, mixed $default = false): mixed { global $endpoint; return $endpoint; }
+function get_option(string $key, mixed $default = false): mixed { global $endpoint, $lastOption; $lastOption = $key; return $endpoint; }
 function wp_json_encode(mixed $data): string { return json_encode($data, JSON_THROW_ON_ERROR); }
 function wp_remote_post(string $url, array $args): array { global $calls; $calls[] = [$url, $args]; return []; }
 function is_wp_error(mixed $value): bool { return false; }
@@ -51,6 +51,7 @@ echo "Advertising webhook tests passed.\n";
 // Exercise the real contact validator. Privacy remains false so no test can send mail.
 require __DIR__ . '/../src/Taxonomies/Registry.php';
 require __DIR__ . '/../src/Rest/Routes.php';
+function sanitize_key(string $key): string { return strtolower($key); }
 function sanitize_text_field(string $value): string { return trim(strip_tags($value)); }
 function sanitize_textarea_field(string $value): string { return trim(strip_tags($value)); }
 function sanitize_email(string $value): string { return $value; }
@@ -113,3 +114,23 @@ check(count($mailCalls) === 1, 'Invalid channel must never send mail');
 $response = $routes->contactForm(new WP_REST_Request(array_merge($payload, ['sourceUrl' => 'https://netmarket.it/contatti/'])));
 check($response->status === 422 && isset($response->data['fields']['message']), 'Other forms still require message');
 echo "Advertising optional message, channel and mail routing tests passed.\n";
+
+$social = ['name' => 'QA Social', 'email' => 'test@example.invalid', 'company' => 'QA',
+    'message' => 'Analisi social gratuita — Più richieste', 'privacyConsent' => true,
+    'sourceUrl' => 'https://staging.netmarket.it/gestione-social/', 'utm' => ['utm_source' => 'instagram'],
+    'social' => ['sector' => 'fitness', 'goal' => 'Più richieste', 'profile' => '@demo']];
+$endpoint = 'https://nod.netmarket.it/functions/inboundWebhook?source_id=social-test';
+$responseCode = 200;
+$responseBody = '{"success":true}';
+$response = $routes->contactForm(new WP_REST_Request($social));
+check($response->status === 200, 'Social lead requires only an email contact');
+check($lastOption === 'nmhc_social_analysis_webhook_url', 'Social must use its own CRM source');
+$sentLead = json_decode(end($calls)[1]['body'], true);
+check($sentLead['objective'] === 'Più richieste' && $sentLead['sector'] === 'fitness'
+    && $sentLead['profile'] === '@demo' && $sentLead['utm']['utm_source'] === 'instagram', 'Send structured sales context');
+$priorCalls = count($calls);
+$social['social']['goal'] = '';
+$response = $routes->contactForm(new WP_REST_Request($social));
+check($response->status === 422 && count($calls) === $priorCalls, 'Invalid objective cannot acquire a lead');
+check(! AdvertisingWebhook::isSocialAnalysis('https://example.com/gestione-social/'), 'Reject other landing hosts');
+echo "Social campaign source, validation and delivery passed.\n";

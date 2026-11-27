@@ -6,6 +6,7 @@ namespace Netmarket\HeadlessCore\Rest;
 
 use Netmarket\HeadlessCore\Content\Media;
 use Netmarket\HeadlessCore\Content\Relations;
+use Netmarket\HeadlessCore\Integrations\AdvertisingWebhook;
 use Netmarket\HeadlessCore\Taxonomies\Registry as TaxonomyRegistry;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -121,7 +122,25 @@ final class Routes
         $cvPath = '';
         $cvName = '';
 
+        $social = AdvertisingWebhook::isSocialAnalysis($sourceUrl);
+        $details = is_array($payload['social'] ?? null) ? $payload['social'] : [];
+        $goal = sanitize_text_field(is_string($details['goal'] ?? null) ? $details['goal'] : '');
+        $sector = sanitize_text_field(is_string($details['sector'] ?? null) ? $details['sector'] : '');
+        $profile = sanitize_text_field(is_string($details['profile'] ?? null) ? $details['profile'] : '');
         $errors = [];
+        if ($social) {
+            if ($company === '') {
+                $errors['company'] = 'required_company';
+            }
+            if (! in_array($goal, ['Più richieste', 'Più appuntamenti o iscritti', 'Più vendite online', 'Vorrei capire da dove partire'], true)) {
+                $errors['goal'] = 'invalid_goal';
+            }
+            if (! in_array($sector, ['generale', 'fitness', 'showroom'], true) || mb_strlen($profile) > 240) {
+                $errors['social'] = 'invalid_social_details';
+            }
+            $service = 'gestione-social';
+            $message = "Analisi social gratuita — $goal\nSettore: $sector" . ($profile !== '' ? "\nSito o profilo: $profile" : '');
+        }
         if ($website !== '') {
             $errors['website'] = 'bot_detected';
         }
@@ -134,7 +153,7 @@ final class Routes
         if (mb_strlen($company) > 120) {
             $errors['company'] = 'invalid_company';
         }
-        $requiresPhone = \Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::isAdvertising($sourceUrl);
+        $requiresPhone = AdvertisingWebhook::isAdvertising($sourceUrl);
         if (mb_strlen($phone) > 40 || ($requiresPhone && ! preg_match('/^[0-9]+$/D', $phone))) {
             $errors['phone'] = 'invalid_phone';
         }
@@ -238,14 +257,15 @@ final class Routes
             return new WP_REST_Response(['code' => 'mail_failed', 'message' => 'Invio non disponibile. Riprova più tardi.'], 500);
         }
 
-        if (\Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::isAdvertising($sourceUrl)) {
-            \Netmarket\HeadlessCore\Integrations\AdvertisingWebhook::deliver([
+        if ($requiresPhone || $social) {
+            AdvertisingWebhook::deliver([
                 'request_id' => $requestId,
                 'name' => $name,
                 'email' => $email,
                 'company' => $company,
                 'phone' => $phone,
-                'objective' => $service,
+                'objective' => $social ? $goal : $service,
+                ...($social ? ['service' => $service, 'sector' => $sector, 'profile' => $profile] : []),
                 'channel' => $channel,
                 'message' => $message,
                 'sourceUrl' => $sourceUrl,
