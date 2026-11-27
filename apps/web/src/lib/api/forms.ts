@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { socialGoals } from '../social-analysis';
 
 export const contactFormSchema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -12,6 +13,13 @@ export const contactFormSchema = z.object({
   website: z.string().max(0).optional(),
   turnstileToken: z.string().optional(),
   utm: z.record(z.string()).optional(),
+  social: z
+    .object({
+      goal: z.enum(socialGoals),
+      sector: z.enum(['generale', 'fitness', 'showroom']),
+      profile: z.string().max(240)
+    })
+    .optional(),
   sourceUrl: z.string().url(),
   referrer: z.string().optional(),
   elapsedMs: z.number().int().nonnegative().optional()
@@ -23,11 +31,12 @@ const CAREER_CV_MAX_BYTES = 5 * 1024 * 1024;
 const CAREER_CV_EXTENSIONS = new Set(['pdf', 'doc', 'docx']);
 
 async function assertSuccessfulResponse(response: Response): Promise<{ ok: true }> {
-  if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as {
-      message?: string;
-      code?: string;
-    } | null;
+  const body = (await response.json().catch(() => null)) as {
+    success?: boolean;
+    message?: string;
+    code?: string;
+  } | null;
+  if (!response.ok || body?.success !== true) {
     throw new Error(body?.message || body?.code || 'contact_form_failed');
   }
   return { ok: true };

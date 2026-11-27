@@ -28,7 +28,7 @@ export const designDecisions = [
   ],
   [
     'Raccogliere una richiesta',
-    'ContactForm / CareerForm',
+    'ContactForm / CareerForm / SocialAnalysisForm',
     'Flussi diversi; un unico stile per campi, errori e conferme.'
   ],
   [

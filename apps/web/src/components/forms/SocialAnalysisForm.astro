@@ -1,0 +1,168 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { IconArrowRight, IconChevronDown } from '@tabler/icons-astro';
+import { socialGoals } from '@/lib/social-analysis';
+import '@/styles/forms.css';
+---
+
+<form class="contact-form" data-social-analysis method="post" aria-labelledby="analisi-title">
+  <div class="contact-form__field contact-form__field--hidden" aria-hidden="true">
+    <label for="analysis-website">Lascia vuoto questo campo</label>
+    <input id="analysis-website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+  <div class="contact-form__grid">
+    <label class="contact-form__field">
+      <span>Nome</span>
+      <input name="name" autocomplete="name" required minlength="2" maxlength="120" />
+    </label>
+    <label class="contact-form__field">
+      <span>Azienda o attività</span>
+      <input name="company" autocomplete="organization" required maxlength="120" />
+    </label>
+  </div>
+  <label class="contact-form__field">
+    <span>La tua email</span>
+    <input
+      type="email"
+      name="email"
+      autocomplete="email"
+      inputmode="email"
+      required
+      maxlength="254"
+    />
+  </label>
+  <label class="contact-form__field">
+    <span>Cosa vorresti ottenere?</span>
+    <span class="contact-form__select">
+      <select name="goal" required>
+        <option value="">Scegli il tuo obiettivo</option>
+        {socialGoals.map((goal) => <option value={goal}>{goal}</option>)}
+      </select>
+      <IconChevronDown aria-hidden="true" stroke={1.8} />
+    </span>
+  </label>
+  <label class="contact-form__field">
+    <span>Sito o profilo social <em>Facoltativo</em></span>
+    <input
+      name="profile"
+      placeholder="Il tuo sito o @profilo"
+      maxlength="240"
+      autocapitalize="none"
+      spellcheck="false"
+    />
+  </label>
+  <label class="contact-form__check">
+    <input name="privacyConsent" type="checkbox" required />
+    <span
+      >Ho letto l’<a
+        href="https://www.iubenda.com/privacy-policy/69986431"
+        target="_blank"
+        rel="noopener noreferrer">informativa privacy</a
+      > e autorizzo il trattamento dei dati per essere ricontattato.</span
+    >
+  </label>
+  <div class="contact-form__footer">
+    <Button type="submit" class="contact-form__submit" size="large" disabled>
+      <span data-submit-label>Richiedi l’analisi gratuita</span><IconArrowRight
+        aria-hidden="true"
+      />
+    </Button>
+  </div>
+  <noscript
+    >Per inviare il modulo attiva JavaScript oppure scrivi a <a
+      href="mailto:segreteria@netmarket.it">segreteria@netmarket.it</a
+    >.</noscript
+  >
+  <p class="contact-form__status" role="status" tabindex="-1" aria-live="polite"></p>
+</form>
+<script>
+  import { pushEvent } from '@netmarket/analytics';
+  import { submitContactForm } from '@/lib/api/forms';
+  import { socialSector, campaignUtm, socialGoals } from '@/lib/social-analysis';
+
+  const form = document.querySelector<HTMLFormElement>('[data-social-analysis]');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const label = button?.querySelector<HTMLElement>('[data-submit-label]');
+  const status = form?.querySelector<HTMLElement>('[role="status"]');
+
+  if (form && button && label && status) {
+    const opened = Date.now();
+    const formId = 'gestione-social';
+    const submitLabel = label.textContent;
+    let locked = false;
+    button.disabled = false;
+    form.addEventListener(
+      'input',
+      () => {
+        pushEvent({ event: 'contact_form_start', form_id: formId });
+      },
+      { once: true }
+    );
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (locked) return;
+
+      for (const field of form.querySelectorAll<HTMLInputElement>(
+        'input[name="name"], input[name="company"], input[name="email"]'
+      )) {
+        field.value = field.value.trim();
+      }
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      const field = (key: string) => String(data.get(key) ?? '').trim();
+      const params = new URLSearchParams(location.search);
+      const sector = socialSector(params);
+      const goal = socialGoals.find((option) => option === field('goal'));
+      if (!goal) return;
+      locked = true;
+      const profile = field('profile');
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      label.textContent = 'Invio in corso…';
+      status.textContent = '';
+      pushEvent({ event: 'contact_form_submit', form_id: formId });
+      try {
+        await submitContactForm({
+          service: formId,
+          name: field('name'),
+          company: field('company'),
+          email: field('email'),
+          message: [
+            `Analisi social gratuita — ${goal}`,
+            `Settore: ${sector}`,
+            profile && `Sito o profilo: ${profile}`
+          ]
+            .filter(Boolean)
+            .join('\n'),
+          social: { goal, sector, profile },
+          website: field('website'),
+          privacyConsent: true,
+          marketingConsent: false,
+          sourceUrl: location.origin + location.pathname,
+          referrer: document.referrer ? new URL(document.referrer).origin : undefined,
+          utm: campaignUtm(params),
+          elapsedMs: Date.now() - opened
+        });
+      } catch {
+        locked = false;
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        label.textContent = submitLabel;
+        status.dataset.state = 'error';
+        status.textContent =
+          'Invio non riuscito. I tuoi dati sono ancora qui. Controlla il recapito e riprova.';
+        status.focus();
+        pushEvent({ event: 'contact_form_error', form_id: formId, error_code: 'submit_failed' });
+        return;
+      }
+      button.removeAttribute('aria-busy');
+      label.textContent = 'Richiesta inviata';
+      status.dataset.state = 'success';
+      status.textContent =
+        'Abbiamo ricevuto la tua richiesta. Ti scriveremo per guardare insieme i tuoi social e capire da dove partire.';
+      status.focus();
+      pushEvent({ event: 'contact_form_success', form_id: formId });
+      pushEvent({ event: 'generate_lead', form_id: formId, lead_type: 'contact' });
+    });
+  }
+</script>

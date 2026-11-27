@@ -1,0 +1,512 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import SectionHeading from '@/components/content/SectionHeading.astro';
+import SocialAnalysisForm from '@/components/forms/SocialAnalysisForm.astro';
+import Button from '@/components/ui/Button.astro';
+import { IconArrowDown, IconArrowUpRight } from '@tabler/icons-astro';
+import { sectors } from '@/lib/social-analysis';
+import { getProjectDetailData, projectPath } from '@/lib/projects/content';
+
+const cta = 'Richiedi l’analisi gratuita';
+const media = '/media/gestione-social';
+const brb = await getProjectDetailData('casi-studio-strategia-digitale-ecommerce-brb');
+const portrait = {
+  id: 0,
+  url: media + '/enrico-720.webp',
+  alt: 'Enrico Toso durante le riprese del reel Netmarket',
+  width: 720,
+  height: 1280
+};
+const steps = [
+  [
+    'Decidiamo cosa dire.',
+    'Ci racconti cosa vuoi ottenere e quali domande ti fanno i clienti. Da lì scegliamo gli argomenti e prepariamo il piano editoriale, con un calendario per le riprese e le uscite.'
+  ],
+  [
+    'Veniamo a girare da te.',
+    'Tu ci apri le porte della tua attività. Noi prepariamo le scene, giriamo in sede, montiamo i video e scriviamo i testi. Hai un referente con cui confrontarti prima che i contenuti escano.'
+  ],
+  [
+    'Pubblichiamo e seguiamo le richieste.',
+    'Ci occupiamo delle uscite. Insieme guardiamo quali contenuti hanno portato domande, prove o acquisti. Da quelle risposte scegliamo cosa girare la volta successiva.'
+  ]
+];
+---
+
+<BaseLayout
+  title="Gestione completa dei social per la tua attività"
+  description="Dal piano editoriale alle riprese in sede, dalla pubblicazione alle campagne. Richiedi a Netmarket una prima analisi gratuita dei tuoi social."
+  path="/gestione-social/"
+  motionMode="light"
+  socialImage={portrait}
+>
+  <div class="social-page">
+    <Section class="social-hero" labelledby="social-title">
+      <Container wide>
+        <div class="social-hero-grid">
+          <div class="social-intro">
+            <p class="nm-eyebrow">Gestione completa dei social</p>
+            <h1 id="social-title">
+              Tu segui la tua attività. <span class="nm-heading-accent"
+                >Ai tuoi social pensiamo noi.</span
+              >
+            </h1>
+            <p class="social-lead">
+              Decidiamo cosa raccontare, veniamo da te a girare e pubblichiamo. Poi gestiamo le
+              campagne per raggiungere chi potrebbe diventare cliente.
+            </p>
+            <p class="social-opening" data-sector-opening>{sectors.generale.opening}</p>
+            <Button href="#analisi" size="large">{cta}<IconArrowDown aria-hidden="true" /></Button>
+          </div>
+          <figure class="social-portrait">
+            <img
+              src={portrait.url}
+              srcset={media + '/enrico-432.webp 432w, ' + portrait.url + ' 720w'}
+              sizes="(max-width: 760px) 94vw, 42vw"
+              width="720"
+              height="1280"
+              alt={portrait.alt}
+              loading="eager"
+              fetchpriority="high"
+            />
+            <figcaption>Enrico Toso <span>Netmarket</span></figcaption>
+          </figure>
+        </div>
+      </Container>
+    </Section>
+
+    <Section class="social-proof" labelledby="proof-title" compact>
+      <Container wide>
+        <SectionHeading
+          eyebrow="Dal nostro lavoro"
+          id="proof-title"
+          title="Guarda cosa cambia sullo schermo."
+        />
+        <p class="social-example" data-sector-example>{sectors.generale.example}</p>
+        <div class="social-cases" data-social-cases>
+          <article class="social-case" data-project="brb">
+            <div class="social-case-copy">
+              <p class="nm-meta">BRB · Food e integrazione</p>
+              <h3>Dal feed al negozio online.</h3>
+              <p>
+                BRB stava per aprire il nuovo e-commerce. I post uscivano, ma raccontavano il
+                marchio in modi diversi. Abbiamo lavorato sul piano editoriale, sulle immagini dei
+                prodotti e sul negozio. Ora chi scopre una linea nel feed la ritrova anche quando
+                passa all’acquisto.
+              </p>
+              {
+                brb && (
+                  <a class="social-link" href={projectPath(brb.project.slug)}>
+                    Guarda il caso BRB <IconArrowUpRight aria-hidden="true" />
+                  </a>
+                )
+              }
+            </div>
+            <div class="social-pair social-pair-brb">
+              <figure>
+                <div>
+                  <img
+                    src={media + '/brb-feed.webp'}
+                    width="526"
+                    height="702"
+                    loading="lazy"
+                    decoding="async"
+                    alt="Griglia del feed BRB con i prodotti, le ricette e i colori delle linee"
+                  />
+                </div><figcaption>Il feed Instagram</figcaption>
+              </figure>
+              <figure>
+                <div>
+                  <img
+                    src={media + '/brb-shop.webp'}
+                    width="768"
+                    height="672"
+                    loading="lazy"
+                    decoding="async"
+                    alt="Negozio online BRB con il catalogo dei prodotti"
+                  />
+                </div><figcaption>Il negozio online</figcaption>
+              </figure>
+            </div>
+          </article>
+          <article class="social-case" data-project="fitness">
+            <div class="social-case-copy">
+              <p class="nm-meta">Pilates e Altro · Studio a Padova</p>
+              <h3>Prima di prenotare una lezione.</h3>
+              <p>
+                Chi scopre lo studio ha bisogno di capire come si comincia. Abbiamo riorganizzato il
+                profilo attorno alle lezioni e alle domande di chi vuole provare. Nelle due
+                schermate originali puoi vedere come sono cambiati la presentazione dello studio, le
+                immagini e il modo di leggere i post.
+              </p>
+            </div>
+            <div class="social-pair social-pair-pilates">
+              <figure>
+                <a
+                  href={media + '/pilates-prima.webp'}
+                  aria-label="Apri lo screenshot originale del prima a dimensione intera"
+                  ><img
+                    src={media + '/pilates-prima-390.webp'}
+                    srcset={media +
+                      '/pilates-prima-390.webp 390w, ' +
+                      media +
+                      '/pilates-prima.webp 941w'}
+                    sizes="(max-width: 760px) 40vw, 220px"
+                    width="941"
+                    height="1672"
+                    loading="lazy"
+                    decoding="async"
+                    alt="Vecchio profilo Pilates e Altro, con la descrizione dei corsi e i post con titoli in blu e arancione"
+                  /></a
+                ><figcaption>Prima</figcaption>
+              </figure>
+              <figure>
+                <a
+                  href={media + '/pilates-dopo.webp'}
+                  aria-label="Apri lo screenshot originale del dopo a dimensione intera"
+                  ><img
+                    src={media + '/pilates-dopo.webp'}
+                    width="374"
+                    height="806"
+                    loading="lazy"
+                    decoding="async"
+                    alt="Profilo rinnovato con la presentazione dello studio, il link e i post coordinati sulle lezioni"
+                  /></a
+                ><figcaption>Dopo</figcaption>
+              </figure>
+            </div>
+          </article>
+        </div>
+        <div class="social-proof-action">
+          <Button href="#analisi">{cta}<IconArrowDown aria-hidden="true" /></Button>
+        </div>
+      </Container>
+    </Section>
+
+    <Section class="social-method" labelledby="method-title">
+      <Container wide>
+        <div class="social-split">
+          <SectionHeading
+            eyebrow="Come lavoriamo"
+            id="method-title"
+            title="Tu ci porti dentro la tua attività."
+            tone="inverse"
+            text="Se vuoi riempire un corso, partiamo dai posti che vuoi coprire e da quello che le persone ti chiedono prima di iscriversi."
+          />
+          <ol class="social-steps">
+            {
+              steps.map(([title, body]) => (
+                <li>
+                  <>
+                    <h3>{title}</h3>
+                    <p>{body}</p>
+                  </>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </Container>
+    </Section>
+
+    <Section labelledby="campaign-title">
+      <Container wide>
+        <div class="social-split">
+          <SectionHeading
+            id="campaign-title"
+            eyebrow="Campagne ed e-commerce"
+            title="Dopo il video, un passo concreto."
+          />
+          <div class="social-editorial">
+            <p>
+              Se vendi in showroom, l’annuncio può portare all’agenda degli appuntamenti. Se vendi
+              online, portiamo chi guarda direttamente alla scheda del prodotto che ha appena visto.
+            </p>
+            <p>
+              Scegliamo tra Meta, Google e TikTok in base all’obiettivo. Per chi vende online
+              possiamo collegare WooCommerce, Shopify o la piattaforma che usi già.
+            </p>
+            <p>
+              Il preventivo è modulare. Puoi partire dalla gestione dei social e aggiungere campagne
+              o e-commerce quando servono. Nel preventivo distinguiamo il nostro compenso dal budget
+              che destini alle piattaforme per mostrare gli annunci.
+            </p>
+          </div>
+        </div>
+        <div class="social-split social-nod">
+          <SectionHeading
+            id="nod-social-title"
+            eyebrow="NØD · Il CRM di Netmarket"
+            title="Chi richiama quel contatto?"
+          />
+          <div class="social-editorial">
+            <p>
+              Arriva una richiesta dal reel. Nel nostro CRM personalizzato, NØD, il tuo team vede da
+              dove arriva, chi deve richiamare e se la persona ha poi fissato un appuntamento o
+              ricevuto un preventivo.
+            </p>
+            <p>
+              <strong
+                >L’integrazione con NØD è attualmente inclusa nel progetto senza costi aggiuntivi.</strong
+              >
+            </p>
+            <a class="social-link" href="/nod/"
+              >Come funziona NØD <IconArrowUpRight aria-hidden="true" /></a
+            >
+          </div>
+        </div>
+      </Container>
+    </Section>
+
+    <Section id="analisi" class="social-analysis" labelledby="analisi-title">
+      <Container wide>
+        <div class="social-split">
+          <SectionHeading
+            id="analisi-title"
+            eyebrow="Prima analisi gratuita"
+            title="Da dove vuoi partire?"
+            text="Raccontaci cosa vuoi ottenere. Ti scriveremo per guardare insieme come comunichi oggi e capire su cosa ha senso lavorare per primo."
+          />
+          <SocialAnalysisForm />
+        </div>
+      </Container>
+    </Section>
+  </div>
+</BaseLayout>
+<script>
+  import { socialSector, sectors } from '@/lib/social-analysis';
+  const sector = socialSector(new URLSearchParams(location.search));
+  const opening = document.querySelector('[data-sector-opening]');
+  const example = document.querySelector('[data-sector-example]');
+  const cases = document.querySelector('[data-social-cases]');
+  const fitness = cases?.querySelector('[data-project="fitness"]');
+  if (opening) opening.textContent = sectors[sector].opening;
+  if (example) example.textContent = sectors[sector].example;
+  if (sector === 'fitness' && fitness) cases?.prepend(fitness);
+</script>
+<style>
+  .social-page {
+    --social-rule: 1px solid var(--nm-color-border);
+  }
+  .social-page figure {
+    margin: 0;
+  }
+  .social-page :global(.social-hero) {
+    padding-block: var(--nm-space-xl) var(--nm-section-space-compact);
+  }
+  .social-hero-grid,
+  .social-split,
+  .social-case {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--nm-space-2xl);
+    align-items: start;
+  }
+  .social-hero-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.85fr);
+    align-items: center;
+  }
+  .social-intro {
+    display: grid;
+    justify-items: start;
+    gap: var(--nm-space-lg);
+  }
+  .social-intro h1 {
+    font-size: var(--nm-text-h1);
+    line-height: 0.99;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .social-intro h1 span {
+    display: block;
+  }
+  .social-lead,
+  .social-example {
+    font-size: var(--nm-text-lead);
+    line-height: 1.45;
+    max-width: 47ch;
+  }
+  .social-opening {
+    color: var(--nm-color-muted);
+    margin-top: calc(-1 * var(--nm-space-sm));
+  }
+  .social-portrait {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--nm-radius-media);
+    background: var(--nm-color-ink);
+  }
+  .social-portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/4.6;
+    object-fit: cover;
+    object-position: 50% 53%;
+  }
+  .social-portrait figcaption {
+    position: absolute;
+    bottom: var(--nm-space-md);
+    left: var(--nm-space-md);
+    display: grid;
+    background: var(--nm-color-surface);
+    border-left: 4px solid var(--nm-color-blue);
+    padding: 0.5rem 0.85rem;
+    font-size: var(--nm-text-small);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .social-portrait figcaption span,
+  .social-pair figcaption {
+    color: var(--nm-color-muted);
+    font-size: var(--nm-text-label);
+    font-weight: 500;
+  }
+  .social-page :global(.social-proof) {
+    background: var(--nm-color-canvas);
+  }
+  .social-example {
+    margin-top: var(--nm-space-md);
+    color: var(--nm-color-ink-2);
+  }
+  .social-cases {
+    margin-top: var(--nm-space-xl);
+  }
+  .social-case {
+    padding-block: var(--nm-space-xl);
+    border-top: var(--social-rule);
+    align-items: center;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+  .social-proof-action {
+    margin-top: var(--nm-space-xl);
+  }
+  .social-case:last-child {
+    padding-bottom: 0;
+  }
+  .social-case-copy,
+  .social-editorial {
+    display: grid;
+    gap: var(--nm-space-md);
+    max-width: var(--nm-measure-body);
+  }
+  .social-case h3,
+  .social-steps h3 {
+    font-size: var(--nm-text-h3);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    width: fit-content;
+    color: var(--nm-color-blue-deep);
+    font-weight: 600;
+    text-underline-offset: 0.23em;
+  }
+  .social-link svg {
+    width: 1em;
+    height: 1em;
+  }
+  .social-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--nm-space-sm);
+  }
+  .social-pair figure {
+    min-width: 0;
+  }
+  .social-pair figure > :first-child {
+    background: var(--nm-color-surface);
+    border-radius: var(--nm-radius-control);
+    display: grid;
+    place-items: center;
+    padding: var(--nm-space-sm);
+  }
+  .social-pair-brb figure > div {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+  }
+  .social-pair img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    min-height: 0;
+  }
+  .social-pair-pilates figure > a {
+    height: clamp(16rem, 32vw, 27rem);
+  }
+  .social-pair figcaption {
+    padding-top: 0.5rem;
+  }
+  .social-page :global(.social-method) {
+    background: var(--nm-color-inverse);
+    color: white;
+  }
+  .social-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  .social-steps li {
+    counter-increment: step;
+    position: relative;
+    padding: var(--nm-space-md) 0 var(--nm-space-lg) 3rem;
+    border-top: 1px solid #616670;
+  }
+  .social-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .social-steps h3 {
+    color: white;
+  }
+  .social-steps p {
+    margin-top: var(--nm-space-sm);
+    color: #e1e4e9;
+  }
+  .social-nod {
+    margin-top: var(--nm-space-2xl);
+    padding-top: var(--nm-space-xl);
+    border-top: var(--social-rule);
+  }
+  .social-page :global(.social-analysis) {
+    background: var(--nm-color-blue-soft);
+    scroll-margin-top: 5rem;
+  }
+  .social-analysis :global(.contact-form) {
+    margin-top: 0;
+  }
+  @media (max-width: 760px) {
+    .social-hero-grid,
+    .social-case,
+    .social-split {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--nm-space-lg);
+    }
+    .social-page :global(.social-hero) {
+      padding-top: var(--nm-space-lg);
+    }
+    .social-intro {
+      gap: var(--nm-space-md);
+    }
+    .social-opening {
+      margin-top: 0;
+    }
+    .social-portrait img {
+      aspect-ratio: 4/3;
+      object-position: center 41%;
+    }
+    .social-pair-pilates figure > a {
+      height: clamp(14rem, 73vw, 24rem);
+    }
+    .social-case {
+      padding-block: var(--nm-space-xl);
+    }
+  }
+</style>
